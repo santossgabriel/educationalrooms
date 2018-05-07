@@ -1,0 +1,47 @@
+{
+  "rules": {
+    "semi": [
+      "error",
+      "never"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "no-unused-vars": "error",
+    "no-undef": "error",
+    "no-unused-expressions": "error",
+    "no-empty-function": "error",
+    "max-lines": "error",
+    "no-console": "error",
+    "no-var": "error",
+    "no-restricted-modules": "error",
+    "no-duplicate-imports": "error",
+    "no-func-assign": "error",
+    "no-inner-declarations": "error",
+    "no-inline-comments": "error",
+    "func-style": [
+      "error",
+      "expression",
+      {
+        "allowArrowFunctions": false
+      }
+    ]
+  },
+  "globals": {
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "test": true,
+    "__dirname": true,
+    "process": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "spread": true
+    }
+  }
+}

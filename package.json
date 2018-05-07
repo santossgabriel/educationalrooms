@@ -1,0 +1,31 @@
+{
+  "name": "quiz-room",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "babel-node src/run.js",
+    "test": "nyc --require babel-register --reporter=html --reporter=text cucumber-js __tests__",
+    "cucumber": "cucumber-js --format=json | tee wow.json",
+    "cucumber2": "cucumber-js -f summary -f json:test/report/cucumber_report.json",
+    "cucumber3": "cucumber-js __tests__ --require-module babel-register --format progress-bar --format rerun:@rerun.txt --format usage:usage.html",
+    "lint": "eslint -c .eslintrc . --ignore-path .eslintignore"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.1",
+    "cucumber": "^4.2.1",
+    "cucumber-html": "^0.2.4",
+    "cucumber-html-reporter": "^4.0.2",
+    "eslint": "^4.19.1",
+    "istanbul": "^0.4.5",
+    "nyc": "^11.7.1",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "sequelize": "^4.37.6",
+    "sequelize-cli": "^4.0.0"
+  }
+}
