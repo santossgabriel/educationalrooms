@@ -4,7 +4,7 @@
   "scripts": {
     "start": "babel-node src/run.js",
     "test": "npm run nyc && npm run cucumber",
-    "nyc": "nyc --require babel-register --reporter=html --reporter=text cucumber-js __tests__",
+    "nyc": "nyc --require babel-register cucumber-js __tests__",
     "cucumber": "npm run cucumber:json && npm run cucumber:report",
     "cucumber:report": "babel-node cucumberReport.js",
     "cucumber:json": "cucumber-js __tests__ --require-module babel-register --format=json | tee ./cucumber.json",
