@@ -27,5 +27,22 @@
     "express": "^4.16.3",
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 99,
+    "statements": 99,
+    "functions": 99,
+    "branches": 99,
+    "include": [
+      "src/**/*.js"
+    ],
+    "reporter": [
+      "text",
+      "cobertura",
+      "html"
+    ],
+    "report-dir": "./.test_output/coverage"
   }
 }
