@@ -5,10 +5,11 @@
     "start": "babel-node src/run.js",
     "test": "npm run nyc && npm run cucumber",
     "nyc": "nyc --require babel-register cucumber-js __tests__",
-    "cucumber": "npm run cucumber:json && npm run cucumber:report",
-    "cucumber:report": "babel-node cucumberReport.js",
-    "cucumber:json": "cucumber-js __tests__ --require-module babel-register --format=json | tee ./cucumber.json",
-    "lint": "eslint -c .eslintrc . --ignore-path .eslintignore"
+    "cucumber": "npm run cucumber:html && npm run cucumber:xml",
+    "cucumber:html": "cucumber-js __tests__ --require-module babel-register --format=json | tee .test_output/cucumber.json && babel-node cucumberReport.js",
+    "cucumber:xml": "cucumber-js __tests__ --require-module babel-register --format=json | cucumber-junit > .test_output/cucumber/cucumber.xml",
+    "lint": "eslint -c .eslintrc . --ignore-path .eslintignore",
+    "gulp": "babel-node cucumberReport.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -18,14 +19,17 @@
     "cucumber": "^4.2.1",
     "cucumber-html": "^0.2.4",
     "cucumber-html-reporter": "^4.0.2",
+    "cucumber-junit": "^1.7.1",
     "eslint": "^4.19.1",
     "istanbul": "^0.4.5",
     "nyc": "^11.7.1",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "xml2js": "^0.4.19"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
+    "gulp": "^3.9.1",
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0"
   },
