@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "start": "babel-node src/run.js",
-    "test": "nyc --require babel-register --reporter=html --reporter=text cucumber-js __tests__",
-    "cucumber": "cucumber-js --format=json | tee wow.json",
-    "cucumber2": "cucumber-js -f summary -f json:test/report/cucumber_report.json",
-    "cucumber3": "cucumber-js __tests__ --require-module babel-register --format progress-bar --format rerun:@rerun.txt --format usage:usage.html",
+    "test": "npm run nyc && npm run cucumber",
+    "nyc": "nyc --require babel-register --reporter=html --reporter=text cucumber-js __tests__",
+    "cucumber": "npm run cucumber:json && npm run cucumber:report",
+    "cucumber:report": "babel-node cucumberReport.js",
+    "cucumber:json": "cucumber-js __tests__ --require-module babel-register --format=json | tee ./cucumber.json",
     "lint": "eslint -c .eslintrc . --ignore-path .eslintignore"
   },
   "devDependencies": {

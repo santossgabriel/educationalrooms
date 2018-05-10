@@ -2,3 +2,4 @@ node_modules
 .nyc_output
 @rerun.txt
 .test_output
+cucumber.json

@@ -3,3 +3,4 @@ coverage
 node_modules
 src/server.js
 src/run.js
+cucumber.js
