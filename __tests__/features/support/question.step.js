@@ -20,12 +20,14 @@ Given('Dado que eu tenha criado uma questão', () => {
   }
 })
 
-When('Quando eu criar {string} atribuindo {string}', (caso, property) => {
-  if (property !== 'nenhuma alteração') {
-    const prop = JSON.parse(property)
-    const propertyName = Object.keys(prop)[0]
-    question[propertyName] = prop[propertyName]
+When('Quando eu criar {string} atribuindo {string}', (caso, p) => {
+  if (p) {
+    const props = JSON.parse(p)
+    for (let key in props)
+      question[key] = props[key]
   }
+  else
+    question = null
 })
 
 Then('Então eu devo obter a mensagem {string} depois de tentar criar', (message) => {
@@ -51,12 +53,14 @@ Given('Dado que eu tenha atualizado uma questão', () => {
   }
 })
 
-When('Quando eu atualizar {string} atribuindo {string}', (caso, property) => {
-  if (property !== 'nenhuma alteração') {
-    const prop = JSON.parse(property)
-    const propertyName = Object.keys(prop)[0]
-    question[propertyName] = prop[propertyName]
+When('Quando eu atualizar {string} atribuindo {string}', (caso, p) => {
+  if (p) {
+    const props = JSON.parse(p)
+    for (let key in props)
+      question[key] = props[key]
   }
+  else
+    question = null
 })
 
 Then('Então eu devo obter a mensagem {string} depois de tentar atualizar', (message) => {

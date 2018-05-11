@@ -36,12 +36,15 @@
   "nyc": {
     "check-coverage": true,
     "per-file": true,
-    "lines": 50,
-    "statements": 50,
-    "functions": 50,
-    "branches": 50,
+    "lines": 99,
+    "statements": 99,
+    "functions": 99,
+    "branches": 99,
     "include": [
       "src/**/*.js"
+    ],
+    "exclude":[
+      "src/helpers/error.js"
     ],
     "reporter": [
       "text",

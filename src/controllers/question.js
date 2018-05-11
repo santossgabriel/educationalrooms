@@ -1,8 +1,8 @@
 import { throwValidationError, handlerError } from '../helpers/error'
 
-const validate = (question) => {
+const validate = (question) => {  
 
-  if (!question)
+  if (!question || Object.keys(question).length == 0)
     throwValidationError('Questão inválida.')
 
   const { points, answers } = question
