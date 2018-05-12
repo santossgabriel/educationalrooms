@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "babel-node src/run.js",
+    "devstart": "nodemon --watch src --exec babel-node src/run.js",
     "test": "npm run nyc && npm run cucumber",
     "nyc": "nyc --require babel-register cucumber-js __tests__",
     "cucumber": "npm run cucumber:html && npm run cucumber:xml",
@@ -20,30 +21,33 @@
     "cucumber-html": "^0.2.4",
     "cucumber-html-reporter": "^4.0.2",
     "cucumber-junit": "^1.7.1",
+    "dotenv": "^5.0.1",
     "eslint": "^4.19.1",
     "istanbul": "^0.4.5",
+    "nodemon": "^1.17.4",
     "nyc": "^11.7.1",
-    "supertest": "^3.0.0",
-    "xml2js": "^0.4.19"
+    "sqlite3": "^4.0.0",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
-    "gulp": "^3.9.1",
+    "jsonwebtoken": "^8.2.1",
+    "morgan": "^1.9.0",
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0"
   },
   "nyc": {
     "check-coverage": true,
     "per-file": true,
-    "lines": 99,
-    "statements": 99,
-    "functions": 99,
-    "branches": 99,
+    "lines": 9,
+    "statements": 9,
+    "functions": 9,
+    "branches": 9,
     "include": [
       "src/**/*.js"
     ],
-    "exclude":[
+    "exclude": [
       "src/helpers/error.js"
     ],
     "reporter": [

@@ -6,6 +6,7 @@ import app from '../../../src/server'
 
 const request = supertest(app)
 let question = null
+let token = ''
 
 Given('Dado que eu tenha criado uma questão', () => {
   question = {
@@ -18,6 +19,13 @@ Given('Dado que eu tenha criado uma questão', () => {
     ],
     points: 8
   }
+
+  return request
+    .post('/token')
+    .send({ email: 'teste@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
 })
 
 When('Quando eu criar {string} atribuindo {string}', (caso, p) => {
@@ -33,7 +41,8 @@ When('Quando eu criar {string} atribuindo {string}', (caso, p) => {
 Then('Então eu devo obter a mensagem {string} depois de tentar criar', (message) => {
 
   return request
-    .post('/question')
+    .post('/api/question')
+    .set({ token: token })
     .send(question)
     .then((result) => {
       expect(result.body.message).to.eql(message)
@@ -51,6 +60,13 @@ Given('Dado que eu tenha atualizado uma questão', () => {
     ],
     points: 8
   }
+
+  return request
+    .post('/token')
+    .send({ email: 'teste@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
 })
 
 When('Quando eu atualizar {string} atribuindo {string}', (caso, p) => {
@@ -65,7 +81,8 @@ When('Quando eu atualizar {string} atribuindo {string}', (caso, p) => {
 
 Then('Então eu devo obter a mensagem {string} depois de tentar atualizar', (message) => {
   return request
-    .put('/question')
+    .put('/api/question')
+    .set({ token: token })
     .send(question)
     .then((result) => {
       expect(result.body.message).to.eql(message)

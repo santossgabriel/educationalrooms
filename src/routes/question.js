@@ -1,6 +1,7 @@
-import questionController from '../controllers/question'
+import question from '../controllers/question'
 
 export default (app) => {
-  app.post('/question', questionController.create)
-  app.put('/question', questionController.update)
+  app.get('/api/question', question.getByUser)
+  app.post('/api/question', question.create)
+  app.put('/api/question', question.update)
 }

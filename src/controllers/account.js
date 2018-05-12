@@ -1,9 +1,12 @@
-import { throwValidationError, handlerError } from '../helpers/error'
-import { Question } from '../infra/db/sequelize'
+import jwt from 'jsonwebtoken'
+
+import { throwValidationError, handlerError, authError } from '../helpers/error'
+import config from '../infra/config'
+import { User } from '../infra/db/sequelize'
 
 const validate = (question) => {
 
-  if (!question)
+  if (!question || Object.keys(question).length == 0)
     throwValidationError('Questão inválida.')
 
   const { points, answers } = question
@@ -27,33 +30,34 @@ const validate = (question) => {
 }
 
 export default {
-  getById: (req, res) => {
+  getData: (req, res) => {
 
   },
 
-  getByUser: (req, res) => {
-    res.json([{ id: 1 }, { id: 2 }, { id: 3 }])
+  getToken: (req, res) => {
+    const { email, password } = req.body
+    User.findOne({ where: { email: email } })
+      .then(result => {
+        if (result && result.password === password) {
+          const token = jwt.sign({ id: result.id }, config.SECRET, { expiresIn: 60 * 60 * 24 })
+          res.json({ token: token })
+        }else{
+          authError(res, 'Email ou senha inválidos.')
+        }
+      }).catch(err => handlerError(err, res))
   },
 
   create: (req, res) => {
-    const question = req.body
+    const account = req.body
     try {
-      question.userId = req.claims.id
-      validate(question)
-      Question.create(question)
-        .then(() => res.json({ message: 'Criado com sucesso.' }))
-        .catch(err => { throw err })
     } catch (ex) {
       handlerError(ex, res)
     }
   },
 
   update: (req, res) => {
-    const question = req.body
+    const account = req.body
     try {
-      question.userId = req.claims.id
-      validate(question)
-      res.json({ message: 'Atualizado com sucesso.' })
     } catch (ex) {
       handlerError(ex, res)
     }

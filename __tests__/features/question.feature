@@ -20,7 +20,7 @@ Feature: Gerenciamento de questões
       | 'a questão completa'                | '{}'                                                                                                                                                      | "Criado com sucesso."                        |
       | 'com pontos fora do intervalo'      | '{"points": 0}'                                                                                                                                           | "Os pontos devem estar entre 1 and 10."      |
       | 'com pontos fora do intervalo'      | '{"points": 11}'                                                                                                                                          | "Os pontos devem estar entre 1 and 10."      |
-      | 'com questão vazia'                 | ''                                                                                                                                                        | "Questão inválida."                          |
+
 
 
   Scenario Outline: Atualizar questão
@@ -37,7 +37,6 @@ Feature: Gerenciamento de questões
       | 'com alguma resposta sem descrição' | '{"answers": [{"description": ""}, {"description": "teste"}, {"description": "teste"}, {"description": "teste"}]}'                                        | "A questão possui respostas sem descrição."  |
       | 'sem resposta correta'              | '{"answers": [{"description": "teste"}, {"description": "teste"}, {"description": "teste"}, {"description": "teste"}]}'                                   | "A questão deve possuir 1 resposta correta." |
       | 'sem resposta correta'              | '{"answers": [{"description": "teste", "correct": true}, {"description": "teste", "correct": true}, {"description": "teste"}, {"description": "teste"}]}' | "A questão deve possuir 1 resposta correta." |
-      | 'a questão completa'                | '{}'                                                                                                                                                      | "Atualizado com sucesso."                        |
+      | 'a questão completa'                | '{}'                                                                                                                                                      | "Atualizado com sucesso."                    |
       | 'com pontos fora do intervalo'      | '{"points": 0}'                                                                                                                                           | "Os pontos devem estar entre 1 and 10."      |
       | 'com pontos fora do intervalo'      | '{"points": 11}'                                                                                                                                          | "Os pontos devem estar entre 1 and 10."      |
-      | 'com questão vazia'                 | ''                                                                                                                                                        | "Questão inválida."                          |
