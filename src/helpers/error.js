@@ -27,7 +27,6 @@ export const handlerError = (error, res) => {
       break
     default:
       res.status(500)
-      console.log(error)
       res.end({ message: 'Erro interno do servidor.' })
       break
   }

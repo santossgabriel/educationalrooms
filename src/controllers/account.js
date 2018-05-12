@@ -4,36 +4,21 @@ import { throwValidationError, handlerError, authError } from '../helpers/error'
 import config from '../infra/config'
 import { User } from '../infra/db/sequelize'
 
-const validate = (question) => {
+const validate = (account) => {
 
-  if (!question || Object.keys(question).length == 0)
-    throwValidationError('Questão inválida.')
+  if (!account)
+    throwValidationError('Usuário inválido.')
 
-  const { points, answers } = question
+  const { email, password } = account
 
-  if (!question.description)
-    throwValidationError('Descrição inválida.')
-  if (!Array.isArray(question.answers) || question.answers.length != 4)
-    throwValidationError('A questão deve ter 4 respostas.')
-  if (isNaN(points) || points < 1 || points > 10)
-    throwValidationError('Os pontos devem estar entre 1 and 10.')
-  let corrects = 0
-  for (let i = 0; i < answers.length; i++) {
-    const answer = answers[i]
-    if (answer.correct)
-      corrects++
-    if (!answer.description)
-      throwValidationError('A questão possui respostas sem descrição.')
-  }
-  if (corrects != 1)
-    throwValidationError('A questão deve possuir 1 resposta correta.')
+  if (!email)
+    throwValidationError('Email inválido.')
+
+  if (!password || password.length < 6)
+    throwValidationError('A senha deve possuir pelo menos 6 caracteres.')
 }
 
 export default {
-  getData: (req, res) => {
-
-  },
-
   getToken: (req, res) => {
     const { email, password } = req.body
     User.findOne({ where: { email: email } })
@@ -41,7 +26,7 @@ export default {
         if (result && result.password === password) {
           const token = jwt.sign({ id: result.id }, config.SECRET, { expiresIn: 60 * 60 * 24 })
           res.json({ token: token })
-        }else{
+        } else {
           authError(res, 'Email ou senha inválidos.')
         }
       }).catch(err => handlerError(err, res))
@@ -50,6 +35,7 @@ export default {
   create: (req, res) => {
     const account = req.body
     try {
+      validate(account)
     } catch (ex) {
       handlerError(ex, res)
     }
@@ -58,6 +44,7 @@ export default {
   update: (req, res) => {
     const account = req.body
     try {
+      validate(account)
     } catch (ex) {
       handlerError(ex, res)
     }

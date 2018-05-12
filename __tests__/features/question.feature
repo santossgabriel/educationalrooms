@@ -1,7 +1,7 @@
 Feature: Gerenciamento de questões
-  For management questions
-  As a teacher
-  I want to manage questions
+  Para gerenciamento de questões
+  Como usuário
+  Eu quero poder criar, atualizar e buscar questões
 
   Scenario Outline: Criar questão
     Given Dado que eu tenha criado uma questão
