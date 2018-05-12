@@ -3,3 +3,4 @@ node_modules
 @rerun.txt
 .test_output
 cucumber.json
+quiz-room.db
