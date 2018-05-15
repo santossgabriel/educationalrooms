@@ -8,7 +8,7 @@ const { User } = sequelize
 
 const validate = (account) => {
   if (!account || !account.email)
-    throwValidationError('Email inválido.')
+    throwValidationError('Email inválid.')
 
   const { password } = account
 
