@@ -4,6 +4,8 @@ import config from '../config'
 
 const sequelize = new Sequelize('quiz-room', null, null, config[config.NODE_ENV])
 
+sequelize.dropAllSchemas()
+
 export const User = sequelize.define('user', {
   id: {
     primaryKey: true,
@@ -11,7 +13,10 @@ export const User = sequelize.define('user', {
     type: Sequelize.INTEGER
   },
   name: Sequelize.STRING,
-  email: Sequelize.STRING,
+  email: {
+    type: Sequelize.STRING,
+    unique: true
+  },
   password: Sequelize.STRING
 }, {
     freezeTableName: 'user'

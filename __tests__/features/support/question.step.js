@@ -22,7 +22,7 @@ Given('Dado que eu tenha criado uma questão', () => {
 
   return request
     .post('/token')
-    .send({ email: 'teste@mail.com', password: '123qwe' })
+    .send({ email: 'questionmock1@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token
     })
@@ -51,7 +51,9 @@ Then('Então eu devo obter a mensagem {string} depois de tentar criar', (message
 
 Given('Dado que eu tenha atualizado uma questão', () => {
   question = {
+    id: 1,
     description: 'teste',
+    userId: 1,
     answers: [
       { description: 'teste' },
       { description: 'teste' },
@@ -63,7 +65,7 @@ Given('Dado que eu tenha atualizado uma questão', () => {
 
   return request
     .post('/token')
-    .send({ email: 'teste@mail.com', password: '123qwe' })
+    .send({ email: 'questionmock1@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token
     })

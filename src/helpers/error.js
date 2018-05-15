@@ -7,6 +7,10 @@ export const throwValidationError = (message) => {
   throw { type: Type.VALIDATION, message: message }
 }
 
+export const throwAuthError = (message) => {
+  throw { type: Type.AUTH, message: message }
+}
+
 export const authError = (res, err) => {
   let msg
   if (typeof err === 'string') msg = err
@@ -27,7 +31,8 @@ export const handlerError = (error, res) => {
       break
     default:
       res.status(500)
-      res.end({ message: 'Erro interno do servidor.' })
+      console.log(error)
+      res.json({ message: 'Erro interno do servidor.' })
       break
   }
 }

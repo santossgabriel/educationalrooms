@@ -10,13 +10,25 @@ if (config.NODE_ENV === 'DEV' && fs.existsSync(config.DEV.storage))
 sequelize.sync()
 
 BeforeAll(() => {
-  const user = {
-    name: 'teste',
-    email: 'teste@mail.com',
+  const user1 = {
+    name: 'question_mock_1',
+    email: 'questionmock1@mail.com',
     password: '123qwe'
   }
-  User.create(user)
+  const user2 = {
+    name: 'question_mock_2',
+    email: 'questionmock2@mail.com',
+    password: '123qwe'
+  }
+  const question = {
+    userId: 1,
+    description: 'teste',
+    points: 8
+  }
+  User.create(user1)
+  User.create(user2)
   User.sync()
+  Question.create(question)
   Question.sync()
   Answer.sync()
 })

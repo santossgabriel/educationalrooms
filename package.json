@@ -5,7 +5,7 @@
     "start": "babel-node src/run.js",
     "devstart": "nodemon --watch src --exec babel-node src/run.js",
     "test": "npm run nyc && npm run cucumber",
-    "nyc": "nyc --require babel-register cucumber-js __tests__",
+    "nyc": "nyc --require babel-register --require babel-polyfill cucumber-js __tests__",
     "cucumber": "npm run cucumber:html && npm run cucumber:xml",
     "cucumber:html": "cucumber-js __tests__ --require-module babel-register --format=json | tee .test_output/cucumber.json && babel-node cucumberReport.js",
     "cucumber:xml": "cucumber-js __tests__ --require-module babel-register --format=json | cucumber-junit > .test_output/cucumber/cucumber.xml",
@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "coveralls": "^3.0.1",
@@ -48,7 +49,8 @@
       "src/**/*.js"
     ],
     "exclude": [
-      "src/helpers/error.js"
+      "src/helpers/error.js",
+      "src/auth/auth.js"
     ],
     "reporter": [
       "text",
