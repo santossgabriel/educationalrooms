@@ -5,4 +5,5 @@ src/server.js
 src/run.js
 cucumber.js
 src/infra/config.js
-src/infra/c
+src/infra/db/migrations
+src/infra/db/seeders

@@ -1,5 +1,9 @@
 import { throwValidationError, handlerError } from '../helpers/error'
-import sequelize, { Question, Answer } from '../infra/db/sequelize'
+// import { Question, Answer } from '../infra/db/sequelize'
+
+import db from '../infra/db/models/index'
+
+const { sequelize, Question, Answer } = db
 
 const validate = (question) => {
 

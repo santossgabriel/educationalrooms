@@ -4,9 +4,7 @@ import config from '../config'
 
 const sequelize = new Sequelize('quiz-room', null, null, config[config.NODE_ENV])
 
-sequelize.dropAllSchemas()
-
-export const User = sequelize.define('user', {
+export const User = sequelize.define('User', {
   id: {
     primaryKey: true,
     autoIncrement: true,

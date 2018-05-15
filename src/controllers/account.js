@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken'
 
 import { throwValidationError, handlerError, throwAuthError } from '../helpers/error'
 import config from '../infra/config'
-import { User } from '../infra/db/sequelize'
+import sequelize from '../infra/db/models/index'
+
+const { User } = sequelize
 
 const validate = (account) => {
   if (!account || !account.email)
