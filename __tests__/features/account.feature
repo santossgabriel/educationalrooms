@@ -20,6 +20,11 @@ Feature: Gerenciamento de conta
     When Quando eu não enviar o token
     Then Então eu devo obter a mensagem "Forneça o token."
 
+  Scenario: Obter dados da conta
+    Given Dado que eu queira obter os dados da minha conta
+    When Quando eu buscar os dados
+    Then Então eu devo obter a propriedade Email igual a "questionmock1@mail.com"
+
   Scenario Outline: Cadastrar usuário
     Given Dado que eu queira me cadastrar
     When Quando eu enviar <caso> atribuindo <propriedade>
@@ -44,4 +49,4 @@ Feature: Gerenciamento de conta
       | 'sem senha'          | '{"password": null}'                  | "A senha deve possuir pelo menos 6 caracteres." |
       | 'senha insuficiente' | '{"password": "123"}'                 | "A senha deve possuir pelo menos 6 caracteres." |
       | 'email existente'    | '{"email": "questionmock2@mail.com"}' | "Este email já está em uso."                    |
-      | 'dados ok'           | '{"name": "nome atualizado"}'                                  | "Atualizado com sucesso."                       |
+      | 'dados ok'           | '{"name": "nome atualizado"}'         | "Atualizado com sucesso."                       |

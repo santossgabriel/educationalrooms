@@ -1,6 +1,6 @@
 import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
-import { expect } from 'chai'
+import { assert, expect } from 'chai'
 
 import app from '../../../src/server'
 
@@ -39,6 +39,29 @@ When('Quando eu não enviar o token', () => {
 })
 Then('Então eu devo obter a mensagem {string}', (message) => {
   expect(msg).to.eql(message)
+})
+
+/**
+ * Obter dados da conta
+ */
+Given('Dado que eu queira obter os dados da minha conta', () => {
+  return request
+    .post('/token')
+    .send({ email: 'questionmock1@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+When('Quando eu buscar os dados', () => {
+  return request
+    .get('/api/account')
+    .set({ token: token })
+    .then((result) => {
+      msg = result.body.email
+    })
+})
+Then('Então eu devo obter a propriedade Email igual a {string}', (email) => {  
+  expect(msg).to.eql(email)
 })
 
 /**
