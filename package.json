@@ -2,7 +2,7 @@
   "name": "quiz-room",
   "version": "1.0.0",
   "scripts": {
-    "start": "babel-node src/run.js",
+    "start": "pm2 start --interpreter babel-node src/run.js",
     "devstart": "nodemon --watch src --exec babel-node src/run.js",
     "test": "npm run nyc && npm run cucumber && npm run cucumber:report",
     "nyc": "npm run restoredb && nyc cucumber-js __tests__",
@@ -35,8 +35,10 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
+    "global": "^4.3.2",
     "jsonwebtoken": "^8.2.1",
     "morgan": "^1.9.0",
+    "pm2": "^2.10.3",
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0"
   },
