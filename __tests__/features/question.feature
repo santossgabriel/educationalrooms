@@ -21,8 +21,6 @@ Feature: Gerenciamento de questões
       | 'com pontos fora do intervalo'      | '{"points": 0}'                                                                                                                                           | "Os pontos devem estar entre 1 and 10."      |
       | 'com pontos fora do intervalo'      | '{"points": 11}'                                                                                                                                          | "Os pontos devem estar entre 1 and 10."      |
 
-
-
   Scenario Outline: Atualizar questão
     Given Dado que eu tenha atualizado uma questão
     When Quando eu atualizar <caso> atribuindo <propriedade>
@@ -51,3 +49,15 @@ Feature: Gerenciamento de questões
     Given Dado que eu queira obter uma questão pelo id
     When Quando eu buscar a questão
     Then Então eu devo obter uma questão
+
+
+  Scenario Outline: Remover questão
+    Given Dado que eu queira remover uma questão
+    When Quando eu enviar o id de uma questão <caso> <id>
+    Then Então eu devo obter a mensagem <mensagem> depois de tentar remover a questão
+
+    Examples:
+      | id | caso                  | mensagem                                     |
+      | 1  | 'que me pertence'     | "Questão removida com sucesso."              |
+      | 2  | 'que não me pertence' | "Usuário sem permissão para remover o item." |
+      | 10 | 'que não existe'      | "A questão não existe."                      |

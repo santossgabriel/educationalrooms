@@ -79,6 +79,28 @@ export default {
       transaction.commit()
       res.json({ message: 'Atualizado com sucesso.' })
     } catch (ex) {
+      transaction.rollback()
+      handlerError(ex, res)
+    }
+  },
+
+  remove: async (req, res) => {
+    const { id } = req.params
+    const transaction = await sequelize.transaction()
+    try {
+      const question = await Question.findOne({ where: { id: id } })
+      if (!question)
+        throwValidationError('A questão não existe.')
+      if (question.userId != req.claims.id)
+        throwValidationError('Usuário sem permissão para remover o item.')
+
+      await Answer.destroy({ where: { questionId: id }, transaction: transaction })
+      await Question.destroy({ where: { id: id }, transaction: transaction })
+
+      transaction.commit()
+      res.json({ message: 'Questão removida com sucesso.' })
+    } catch (ex) {
+      transaction.rollback()
       handlerError(ex, res)
     }
   }
