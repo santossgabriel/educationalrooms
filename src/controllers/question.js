@@ -36,7 +36,7 @@ export default {
   },
 
   getByUser: async (req, res) => {
-    res.json([{ id: 1 }, { id: 2 }, { id: 3 }])
+    res.json(await Question.findAll({ where: { userId: req.claims.id } }))
   },
 
   create: async (req, res) => {

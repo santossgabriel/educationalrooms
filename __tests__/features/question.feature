@@ -41,3 +41,13 @@ Feature: Gerenciamento de questões
       | 'com pontos fora do intervalo'      | '{"points": 0}'                                                                                                                                           | "Os pontos devem estar entre 1 and 10."      |
       | 'com pontos fora do intervalo'      | '{"points": 11}'                                                                                                                                          | "Os pontos devem estar entre 1 and 10."      |
       | 'com outro usuário'                 | '{"userId": 2}'                                                                                                                                           | "Usuário sem permissão para alterar o item." |
+
+  Scenario: Obter questões do usuário logado
+    Given Dado que eu esteja logado e queira obter minhas questões
+    When Quando eu buscar as questões
+    Then Então eu devo obter somente as minhas questões
+
+  Scenario: Obter questão por id
+    Given Dado que eu queira obter uma questão pelo id
+    When Quando eu buscar a questão
+    Then Então eu devo obter uma questão
