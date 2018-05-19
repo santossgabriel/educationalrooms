@@ -1,0 +1,11 @@
+@font-face {
+  font-family: fredericka-great;
+  src: url("../fonts/fredericka-great.ttf");
+}
+
+.main{
+  background-image: url("images/question-mark.jpg");
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
