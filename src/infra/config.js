@@ -14,10 +14,10 @@ module.exports = {
     logging: false
   },
   test: {
-    dialect: 'sqlite',
-    storage: './quiz-room.db',
-    operatorsAliases: false,
-    logging: false
+    DATABASE_URI: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL,
+    dialectOptions: { ssl: true },
+    dialect: 'postgres'
   },
   prod: {
     DATABASE_URI: process.env.DATABASE_URL,
