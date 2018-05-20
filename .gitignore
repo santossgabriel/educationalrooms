@@ -4,3 +4,5 @@ node_modules
 .test_output
 cucumber.json
 quiz-room.db
+.env
+deploy.tgz

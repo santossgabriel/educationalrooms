@@ -8,13 +8,13 @@ import router from './routes/index'
 import auth from './auth/auth'
 
 const app = express()
-
+console.log('passou aqui')
 app.use(bodyParser.json())
 app.use(express.static('public'))
 
 // app.use(morgan('dev'))
 
-app.use(auth)
+// app.use(auth)
 
 router(app)
 

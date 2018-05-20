@@ -3,6 +3,8 @@ import config from '../infra/config'
 
 import { authError } from '../helpers/error'
 
+console.log('passou aqui')
+
 const isFree = (req) => {
   const {path, method} = req
   return path === '/' || path === '/token' || (path === '/api/account' && method === 'POST')

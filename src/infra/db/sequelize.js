@@ -2,7 +2,17 @@ import Sequelize from 'sequelize'
 
 import config from '../config'
 
-const sequelize = new Sequelize('quiz-room', null, null, config[config.NODE_ENV])
+const DbConfig = config[config.NODE_ENV]
+
+const sequelize = process.env.NODE_ENV === 'development'
+  ? new Sequelize('quiz-room', null, null, DbConfig)
+  : new Sequelize(DbConfig.DATABASE_URI, {
+    dialect: 'postgres',
+    logging: false,
+    dialectOptions: {
+      ssl: true
+    }
+  })
 
 export const User = sequelize.define('User', {
   id: {

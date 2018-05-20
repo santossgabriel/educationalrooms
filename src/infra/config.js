@@ -13,12 +13,15 @@ module.exports = {
     operatorsAliases: false,
     logging: false
   },
-  TEST: {
+  test: {
     DATABASE_URI: process.env.DATABASE_URI,
-    dialectOptions: { ssl: true }
+    dialectOptions: { ssl: true },
+    dialect: process.env.DIALECT
   },
-  PROD: {
+  prod: {
     DATABASE_URI: process.env.DATABASE_URI,
-    dialectOptions: { ssl: true }
+    url: process.env.DATABASE_URI,
+    dialectOptions: { ssl: true },
+    dialect: 'postgres'
   }
 }
