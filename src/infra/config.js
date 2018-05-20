@@ -15,6 +15,7 @@ module.exports = {
   },
   test: {
     DATABASE_URI: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
     dialect: process.env.DIALECT
   },
