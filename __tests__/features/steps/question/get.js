@@ -11,7 +11,7 @@ let token = ''
 
 Given('Dado que eu esteja logado e queira obter minhas questões', () => {
   return request
-    .post('/token')
+    .post('/api/token')
     .send({ email: 'questionmock1@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token
@@ -37,7 +37,7 @@ Then('Então eu devo obter somente as minhas questões', () => {
 
 Given('Dado que eu queira obter uma questão pelo id', () => {
   return request
-    .post('/token')
+    .post('/api/token')
     .send({ email: 'questionmock1@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token

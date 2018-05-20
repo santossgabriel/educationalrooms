@@ -10,7 +10,7 @@ let msg = ''
 Given('Dado que eu esteja cadastrado', () => { msg = '' })
 When('Quando eu enviar as credenciais {string}', (credentials) => {
   return request
-    .post('/token')
+    .post('/api/token')
     .send(JSON.parse(credentials))
     .then((result) => {
       msg = result.body.message

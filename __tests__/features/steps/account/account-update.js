@@ -15,7 +15,7 @@ Given('Dado que eu queira atualizar meus dados', () => {
   }
 
   return request
-    .post('/token')
+    .post('/api/token')
     .send({ email: 'questionmock1@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token
