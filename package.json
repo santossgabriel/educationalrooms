@@ -2,7 +2,7 @@
   "name": "quiz-room",
   "version": "1.0.0",
   "scripts": {
-    "start": "pm2 start --interpreter babel-node src/run.js",
+    "start": "babel-node src/run.js",
     "dev": "babel-node src/run.js",
     "devstart": "nodemon --watch src --exec babel-node src/run.js",
     "test": "npm run nyc && npm run cucumber && npm run cucumber:report",
