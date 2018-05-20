@@ -5,14 +5,14 @@ import config from '../config'
 const DbConfig = config[config.NODE_ENV]
 
 const sequelize = process.env.NODE_ENV === 'prod'
-  ? new Sequelize('quiz-room', null, null, DbConfig)
-  : new Sequelize(DbConfig.DATABASE_URI, {
+  ? new Sequelize(DbConfig.DATABASE_URI, {
     dialect: 'postgres',
     logging: false,
     dialectOptions: {
       ssl: true
     }
   })
+  : new Sequelize('quiz-room', null, null, DbConfig)
 
 export const User = sequelize.define('User', {
   id: {
