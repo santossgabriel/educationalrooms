@@ -10,6 +10,7 @@ import auth from './auth/auth'
 const app = express()
 
 app.use(bodyParser.json())
+app.use(express.static('public'))
 
 // app.use(morgan('dev'))
 

@@ -4,7 +4,8 @@ import config from '../infra/config'
 import { authError } from '../helpers/error'
 
 const isFree = (req) => {
-  return req.path === '/token' || (req.path === '/api/account' && req.method === 'POST')
+  const {path, method} = req
+  return path === '/' || path === '/token' || (path === '/api/account' && method === 'POST')
 }
 
 export default (req, res, next) => {
