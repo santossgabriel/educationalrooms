@@ -9,7 +9,7 @@ echo "Commit: $GIT_COMMIT"
 git archive --format=tar.gz -o deploy.tgz $GIT_COMMIT
 
 HEROKU_VERSION=$GIT_COMMIT
-HEROKU_APP_NAME=quiz-room
+HEROKU_APP_NAME=quiz-room-test
 HEROKU_API_KEY=ab338e95-dd01-45f3-b215-762086154d38
 
 URL_BLOB=`curl -s -n -X POST https://api.heroku.com/apps/$HEROKU_APP_NAME/sources \
