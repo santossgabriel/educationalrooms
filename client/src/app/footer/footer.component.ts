@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { routerTransition } from '../router.transition';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  styleUrls: ['./footer.component.css'],
+  animations: [routerTransition],
+  host: { '[@routerTransition]': '' }
 })
 export class FooterComponent implements OnInit {
 

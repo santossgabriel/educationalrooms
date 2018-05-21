@@ -1,21 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { routerTransition } from '../router.transition';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './home.component.html',  
+  styleUrls: ['./home.component.css'],
+  animations: [routerTransition],
+  host: { '[@routerTransition]': '' }
 })
 
 export class HomeComponent implements OnInit {
 
-  title = ''
+  title = 'Quiz Room'
   allTitle = 'Quiz Room'
   index = 1
 
   constructor() {
     setTimeout(() => {
-        this.animateText()
-      }, 1000)
+      this.animateText()
+    }, 1000)
   }
 
   animateText() {

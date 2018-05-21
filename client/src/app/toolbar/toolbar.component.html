@@ -4,8 +4,10 @@
       <span class="qr-logo">QR</span>
       <span class="app-spacer"></span>
       <button routerLink="/" mat-button>Página inicial</button>
-      <button mat-button>Minhas Quetões</button>
-      <button mat-button>Todas Questões</button>
+      <div [hidden]="!logged">
+        <button mat-button routerLink="/my-questions">Minhas Quetões</button>
+        <button mat-button routerLink="/all-questions">Todas Questões</button>
+      </div>
       <button routerLink="/about" mat-button>Sobre</button>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
@@ -19,8 +21,13 @@
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
-      <button mat-button routerLink="/signin">Entrar</button>
-      <button mat-button routerLink="/signup">Cadastre-se</button>
+      <div [hidden]="logged">
+        <button mat-button routerLink="/signin">Entrar</button>
+        <button mat-button routerLink="/signup">Cadastre-se</button>
+      </div>
+      <div [hidden]="!logged">
+        <button mat-button (click)="logout()">Sair</button>
+      </div>
       <!-- <mat-icon class="example-icon">favorite</mat-icon>
       <mat-icon class="example-icon">delete</mat-icon> -->
     </mat-toolbar-row>

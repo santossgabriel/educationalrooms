@@ -60,7 +60,8 @@
     ],
     "exclude": [
       "src/helpers/error.js",
-      "src/auth/auth.js"
+      "src/auth/auth.js",
+      "src/server.js"
     ],
     "reporter": [
       "text",

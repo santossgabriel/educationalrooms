@@ -6,11 +6,12 @@ import { HttpClient } from '@angular/common/http'
 })
 export class AccountService {
 
-  constructor(private http: HttpClient) {
-    this.http.get('/api/token').subscribe(data => { console.log(data) })
-  }
+  constructor(private http: HttpClient) { }
 
-  login(name, password) {
-    console.log(`Login: ${name} | ${password}`)
+  login(email, password) {
+    return this.http.post('/api/token', {
+      email,
+      password
+    })
   }
 }
