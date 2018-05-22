@@ -12,7 +12,7 @@ let account = null
  */
 Given('Dado que eu queira me cadastrar', () => {
   account = {
-    email: 'teste2@mail.com',
+    email: `teste${new Date().getMilliseconds()}@mail.com`,
     password: '123qwe'
   }
 })

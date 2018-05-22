@@ -11,7 +11,7 @@ Feature: Gerenciamento de conta
     Examples:
       | credenciais                                                  | mensagem                    |
       | '{"email": "questionmock1@mail.com", "password": "123qwe" }' | 'Token gerado com sucesso.' |
-      | '{"password": "123qwe"}'                                     | 'Credenciais inválidas.'    |
+      | '{"email": "questionmock1@mail.com"}'                        | 'Credenciais inválidas.'    |
       | '{"password": "123qwe"}'                                     | 'Credenciais inválidas.'    |
       | '{"email": "teste@mail.com", "password": "123qwee"}'         | 'Credenciais inválidas.'    |
 
@@ -35,6 +35,7 @@ Feature: Gerenciamento de conta
       | 'sem email'       | '{"email": ""}'                       | "Email inválido."                               |
       | 'sem senha'       | '{"password": null}'                  | "A senha deve possuir pelo menos 6 caracteres." |
       | 'email existente' | '{"email": "questionmock1@mail.com"}' | "Este email já está em uso."                    |
+      | 'nome existente'  | '{"name": "question_mock_1"}'         | "Este nome já está em uso."                     |
       | 'email existente' | '{}'                                  | "Criado com sucesso."                           |
 
 
@@ -49,4 +50,5 @@ Feature: Gerenciamento de conta
       | 'sem senha'          | '{"password": null}'                  | "A senha deve possuir pelo menos 6 caracteres." |
       | 'senha insuficiente' | '{"password": "123"}'                 | "A senha deve possuir pelo menos 6 caracteres." |
       | 'email existente'    | '{"email": "questionmock2@mail.com"}' | "Este email já está em uso."                    |
+      | 'nome existente'     | '{"name": "question_mock_2"}'         | "Este nome já está em uso."                     |
       | 'dados ok'           | '{"name": "nome atualizado"}'         | "Atualizado com sucesso."                       |

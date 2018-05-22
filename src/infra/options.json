@@ -1,5 +1,5 @@
 {
   "migrations-path": "src/infra/db/migrations",
-  "seeders-path": "src/infra/db/seeders",
+  "seeders-path": "__tests__/mocks",
   "models-path": "src/infra/db/models"
 }

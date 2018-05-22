@@ -34,9 +34,17 @@ export default {
     const account = req.body
     try {
       validateAccount(account)
-      const exists = await User.findOne({ where: { email: account.email } })
-      if (exists)
+      const userDB = await User.findOne({
+        where: sequelize.sequelize.or(
+          { email: account.email },
+          { name: account.name })
+      })
+
+      if (userDB) {
+        if (userDB.name === account.name)
+          throwValidationError('Este nome já está em uso.')
         throwValidationError('Este email já está em uso.')
+      }
       const user = await User.create(account)
       const token = jwt.sign({ id: user.id }, config.SECRET, { expiresIn: 60 * 60 * 24 })
       res.json({ token: token, message: 'Criado com sucesso.' })
@@ -49,13 +57,27 @@ export default {
     const account = req.body
     try {
       validateAccount(account)
-      const userDB = await User.findOne({ where: { email: account.email } })
-      if (userDB && userDB.id !== req.claims.id)
-        throwValidationError('Este email já está em uso.')
 
-      const user = await User.update(account, { where: { id: userDB.id } })
-      const token = jwt.sign({ id: user.id }, config.SECRET, { expiresIn: 60 * 60 * 24 })
-      res.json({ token: token, message: 'Atualizado com sucesso.' })
+      const userDB = await User.findOne({
+        where: sequelize.sequelize.and(
+          sequelize.sequelize.or(
+            { email: account.email },
+            { name: account.name }),
+          {
+            id: {
+              [sequelize.sequelize.Op.ne]: req.claims.id
+            }
+          })
+      })
+
+      if (userDB) {
+        if (userDB.name === account.name)
+          throwValidationError('Este nome já está em uso.')
+        throwValidationError('Este email já está em uso.')
+      }
+
+      await User.update(account, { where: { id: req.claims.id } })
+      res.json({ message: 'Atualizado com sucesso.' })
     } catch (ex) {
       handlerError(ex, res)
     }

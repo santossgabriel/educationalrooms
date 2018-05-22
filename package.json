@@ -5,16 +5,13 @@
     "start": "babel-node src/run.js",
     "dev": "babel-node src/run.js",
     "devstart": "nodemon --watch src --exec babel-node src/run.js",
-    "test": "babel-node cucumberReport.js",
-    "test2": "npm run nyc && npm run cucumber && npm run cucumber:report",
-    "nyc": "npm run restoredb && nyc cucumber-js __tests__",
-    "cucumber": "npm run restoredb && cucumber-js __tests__ --require-module babel-register --require-module babel-polyfill --format=json >> .test_output/cucumber.json",
-    "cucumber:report": "babel-node cucumberReport.js && cat .test_output/cucumber.json | cucumber-junit > .test_output/cucumber/cucumber.xml",
+    "test": "node before.test.js && npm run mockdb && npm run nyc && node cucumber.report.js",
+    "nyc": "nyc cucumber-js __tests__ --format=json >> cucumber.json",
     "lint": "eslint -c .eslintrc . --ignore-path .eslintignore",
     "migrate": "sequelize db:migrate --config=./src/infra/config.js --options-path=./src/infra/options.json",
     "migrate:undo": "sequelize db:migrate:undo:all --config=./src/infra/config.js --options-path=./src/infra/options.json",
     "seeders": "sequelize db:seed:all --config=./src/infra/config.js --options-path=./src/infra/options.json",
-    "restoredb": "npm run migrate:undo && npm run migrate && npm run seeders"
+    "mockdb": "npm run migrate && npm run seeders"
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
@@ -30,6 +27,7 @@
     "istanbul": "^0.4.5",
     "nodemon": "^1.17.4",
     "nyc": "^11.7.1",
+    "rimraf": "^2.6.2",
     "sqlite3": "^4.0.0",
     "supertest": "^3.0.0"
   },

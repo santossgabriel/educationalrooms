@@ -6,4 +6,6 @@ src/run.js
 cucumber.js
 src/infra/config.js
 src/infra/db/migrations
-src/infra/db/seeders
+mocks
+before.test.js
+cucumber.report.js
