@@ -52,3 +52,9 @@ $theme:   mat-light-theme($primary, $accent);
 .error-message{
   color: red;
 }
+
+.account-component {
+  max-width: 400px; 
+  margin: 0px auto; 
+  padding: 30px;
+}

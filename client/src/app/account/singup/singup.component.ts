@@ -15,4 +15,8 @@ export class SingupComponent implements OnInit {
   ngOnInit() {
   }
 
+  createUser(){
+    
+  }
+
 }

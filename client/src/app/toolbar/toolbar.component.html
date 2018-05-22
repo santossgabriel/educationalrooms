@@ -3,12 +3,12 @@
     <mat-toolbar-row>
       <span class="qr-logo">QR</span>
       <span class="app-spacer"></span>
-      <button routerLink="/" mat-button>Página inicial</button>
+      <button [disabled]="path === '/'" routerLink="/" mat-button>Página inicial</button>
       <div [hidden]="!logged">
-        <button mat-button routerLink="/my-questions">Minhas Quetões</button>
-        <button mat-button routerLink="/all-questions">Todas Questões</button>
+        <button [disabled]="path === '/my-questions'" mat-button routerLink="/my-questions">Minhas Quetões</button>
+        <button [disabled]="path === '/all-questions'" mat-button routerLink="/all-questions">Todas Questões</button>
       </div>
-      <button routerLink="/about" mat-button>Sobre</button>
+      <button [disabled]="path === '/about'" routerLink="/about" mat-button>Sobre</button>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
@@ -22,8 +22,8 @@
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
       <div [hidden]="logged">
-        <button mat-button routerLink="/signin">Entrar</button>
-        <button mat-button routerLink="/signup">Cadastre-se</button>
+        <button [disabled]="path === '/signin'" mat-button routerLink="/signin">Entrar</button>
+        <button [disabled]="path === '/signup'" mat-button routerLink="/signup">Cadastre-se</button>
       </div>
       <div [hidden]="!logged">
         <button mat-button (click)="logout()">Sair</button>

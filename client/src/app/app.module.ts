@@ -18,8 +18,6 @@ import { SingupComponent } from './account/singup/singup.component'
 import { AllQuestionsComponent } from './questions/all-questions/all-questions.component'
 import { MyQuestionsComponent } from './questions/my-questions/my-questions.component'
 
-
-
 const components = [
   AppComponent,
   ToolbarComponent,
@@ -48,7 +46,7 @@ const routes = [
     BrowserAnimationsModule,
     AppMaterialModule,
     HttpClientModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, { useHash: true })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },

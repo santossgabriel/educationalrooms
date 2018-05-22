@@ -1,31 +1,31 @@
 import { trigger, state, animate, style, transition } from '@angular/animations';
 
-export const routerTransitionTeste =
+export const routerTransition =
   trigger('routerTransition', [
-    state('void', style({ position: 'fixed', width: '100%' })),
-    state('*', style({ position: 'fixed', width: '100%' })),
+    // state('void', style({ position: 'fixed', width: '100%' })),
+    // state('*', style({ position: 'fixed', width: '100%' })),
     transition(':enter', [  // before 2.1: transition('void => *', [
-      style({ transform: 'translateX(200%)' }),
-      animate('0.8s ease-in-out', style({ transform: 'translateX(0%)' }))
+      style({ transform: 'translateX(200%)', position: 'fixed', width: '100%' }),
+      animate('0.6s ease-in-out', style({ transform: 'translateX(0%)' }))
     ]),
     transition(':leave', [  // before 2.1: transition('* => void', [
-      style({ transform: 'translateX(0%)' }),
-      animate('0.5s ease-in-out', style({ transform: 'translateX(0%)' }))
+      style({ transform: 'translateX(0%)', position: 'fixed', width: '100%' }),
+      animate('0.6s ease-in-out', style({ transform: 'translateX(-200%)' }))
     ])
   ])
 
-export const routerTransition =
+export const routerTransition1 =
   trigger('routerTransition', [
     transition(':enter', [
       style({ opacity: 0 }),
-      animate('.3s', style({ opacity: 1 }))
+      animate('.6s', style({ opacity: 1 }))
     ])
   ]);
 
 
-export const slideInOutAnimation =
+export const routerTransition2 =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax
-  trigger('slideInOutAnimation', [
+  trigger('routerTransition', [
 
     // // end state styles for route container (host)
     // state('*', style({

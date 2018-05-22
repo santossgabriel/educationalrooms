@@ -4,9 +4,7 @@ import { routerTransition } from '../router.transition';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css'],
-  animations: [routerTransition],
-  host: { '[@routerTransition]': '' }
+  styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
 
