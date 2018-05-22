@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.transition';
+import { CreateAccountModel } from '../account.models';
 
 @Component({
   selector: 'app-singup',
@@ -10,13 +11,15 @@ import { routerTransition } from '../../router.transition';
 })
 export class SingupComponent implements OnInit {
 
+  user: CreateAccountModel = new CreateAccountModel()
+
   constructor() { }
 
   ngOnInit() {
   }
 
-  createUser(){
-    
+  createUser() {
+    console.log(this.user)
   }
 
 }

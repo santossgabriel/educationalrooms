@@ -17,7 +17,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class SinginComponent implements OnInit, TokenChangedListener {
 
   error = ''
-  user: LoginModel = <LoginModel>{}
+  user: LoginModel = new LoginModel()
 
   constructor(private service: AccountService, private router: Router) {
     Globals.addTokenListener(this)
@@ -26,8 +26,6 @@ export class SinginComponent implements OnInit, TokenChangedListener {
   }
 
   ngOnInit() {
-    this.user.email = new FormControl('', [Validators.required, Validators.email])
-    this.user.password = new FormControl('', [Validators.required, Validators.minLength(6)])
     this.user.email.valueChanges.subscribe(() => { this.error = '' })
     this.user.email.valueChanges.subscribe(() => { this.error = '' })
   }
@@ -41,16 +39,6 @@ export class SinginComponent implements OnInit, TokenChangedListener {
     }, error => {
       this.error = error.error.message
     })
-  }
-
-  getEmailErrorMessage() {
-    return this.user.email.hasError('required') ? 'Informe o email.' :
-      this.user.email.hasError('email') ? 'Não é um email válido.' :
-        '';
-  }
-
-  getPasswordErrorMessage() {
-    return this.user.email.hasError('required') ? 'Informe a senha' : ''
   }
 
   tokenChanged(newToken) { }

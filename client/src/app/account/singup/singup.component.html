@@ -1,20 +1,26 @@
-<form class="account-component">
+<form (submit)="createUser()" #accountForm="ngForm" class="account-component">
   <mat-card>
     <mat-card-title>Cadastro</mat-card-title>
     <mat-form-field>
-      <input matInput id="name" placeholder="Nome" />
+      <input matInput placeholder="Nome de usuário" [formControl]="user.name" required />
+      <mat-error *ngIf="user.name.invalid">{{user.getNameErrorMessage()}}</mat-error>
     </mat-form-field>
     <br />
     <mat-form-field>
-      <input matInput id="email" placeholder="Email" />
+      <input matInput type="email" placeholder="Seu email" [formControl]="user.email" required />
+      <mat-error *ngIf="user.email.invalid">{{user.getEmailErrorMessage()}}</mat-error>
     </mat-form-field>
     <br />
     <mat-form-field>
-      <input matInput id="password" placeholder="Senha" />
+      <input matInput #password="ngModel" name="password" type="password" placeholder="Senha" [(ngModel)]="user.password.value" required />
+      <mat-error *ngIf="user.password.invalid">{{user.getPasswordErrorMessage()}}</mat-error>
     </mat-form-field>
     <br />
-    <mat-form-field>
-      <input matInput id="confirm" placeholder="Confirme a senha" />
+     <mat-form-field>
+      <input matInput #confirm="ngModel" name="confirm" type="password"
+       appConfirmEqualValidator="password" placeholder="Confirme a senha" 
+       [(ngModel)]="user.confirm.value" />
+      <mat-error *ngIf="confirm.errors?.notequal">As senhas não batem</mat-error>
     </mat-form-field>
     <br />
     <button type="submit" mat-raised-button color="primary">Enviar</button>

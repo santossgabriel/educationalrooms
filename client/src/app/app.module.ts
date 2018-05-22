@@ -5,10 +5,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { AppMaterialModule } from './app-material.module'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
-import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 
-import { HeaderInterceptor } from './interceptors/header.interceptor';
-import { ResponseInterceptor } from './interceptors/response.interceptor';
+import { HeaderInterceptor } from './interceptors/header.interceptor'
+import { ResponseInterceptor } from './interceptors/response.interceptor'
+
+import { ConfirmEqualValidatorDirective } from './helpers/confirm-equal-validator.directive'
 
 import { AppComponent } from './app.component'
 import { ToolbarComponent } from './toolbar/toolbar.component'
@@ -29,7 +31,8 @@ const components = [
   SinginComponent,
   SingupComponent,
   AllQuestionsComponent,
-  MyQuestionsComponent
+  MyQuestionsComponent,
+  ConfirmEqualValidatorDirective
 ]
 
 const routes = [

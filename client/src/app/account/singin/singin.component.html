@@ -3,14 +3,14 @@
     <mat-card-title>Login</mat-card-title>
 
     <mat-form-field>
-      <input matInput placeholder="Seu email" [formControl]="user.email" required>
-      <mat-error *ngIf="user.email.invalid">{{getEmailErrorMessage()}}</mat-error>
+      <input matInput placeholder="Seu email" appEmail [formControl]="user.email" required>
+      <mat-error *ngIf="user.email.invalid">{{user.getEmailErrorMessage()}}</mat-error>
     </mat-form-field>
 
     <br />
     <mat-form-field>
       <input matInput placeholder="Sua senha" [formControl]="user.password" required type="password" />
-      <mat-error *ngIf="user.password.invalid">{{getPasswordErrorMessage()}}</mat-error>
+      <mat-error *ngIf="user.password.invalid">{{user.getPasswordErrorMessage()}}</mat-error>
     </mat-form-field>
     <br />
     <button [disabled]="user.email.invalid || user.password.invalid" type="submit" mat-raised-button color="primary">Enviar</button>
