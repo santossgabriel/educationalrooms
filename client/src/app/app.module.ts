@@ -1,9 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { AppMaterialModule } from './app-material.module'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 
 import { HeaderInterceptor } from './interceptors/header.interceptor';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
@@ -46,6 +48,9 @@ const routes = [
     BrowserAnimationsModule,
     AppMaterialModule,
     HttpClientModule,
+    LoadingBarHttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(routes, { useHash: true })
   ],
   providers: [
