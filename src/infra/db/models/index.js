@@ -15,6 +15,22 @@ const sequelize = process.env.NODE_ENV === 'prod'
   : new Sequelize('quiz-room', null, null, DbConfig)
 
 let db = {}
+
+db.Log = sequelize.define('Log', {
+  id: {
+    primaryKey: true,
+    autoIncrement: true,
+    type: Sequelize.INTEGER
+  },
+  description: Sequelize.STRING,
+
+}, {
+    freezeTableName: 'Log',
+    undercored: false,
+    updatedAt: false,
+    createdAt: true
+  })
+
 db.User = sequelize.define('User', {
   id: {
     primaryKey: true,

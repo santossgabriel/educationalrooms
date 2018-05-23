@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.transition';
-import { CreateAccountModel } from '../account.models';
+import { AccountModel } from '../account.models';
 import { AccountService } from '../../services/account.service';
 import { Globals } from '../../globals';
 import { Router } from '@angular/router';
@@ -14,20 +14,30 @@ import { Router } from '@angular/router';
 })
 export class SingupComponent implements OnInit {
 
-  user: CreateAccountModel = new CreateAccountModel()
+  user: AccountModel = new AccountModel()
   error: string = ''
+  message: string = ''
+  editMode: boolean = false
 
   constructor(private service: AccountService, private router: Router) { }
 
   ngOnInit() {
+    if (this.router.isActive('/sign-edit', true)) {
+      this.editMode = true
+      this.service.getAccount().subscribe(res => { this.user = <AccountModel>res })
+    }
   }
 
   createUser(form) {
-    this.service.create(this.user).subscribe(response => {
+    this.service.save(this.user, this.editMode).subscribe(response => {
       this.error = ''
-      const result: TokenResponse = <TokenResponse>response;
-      Globals.changeToken(result.token)
-      this.router.navigate(['/my-questions'])
+      const result: AccountResponse = <AccountResponse>response;
+      this.message = result.message
+      if (!this.editMode)
+        Globals.changeToken(result.token)
+      setTimeout(() => {
+        this.router.navigate(['/my-questions'])
+      }, 1500);
     }, err => {
       this.error = err.error.message
     })

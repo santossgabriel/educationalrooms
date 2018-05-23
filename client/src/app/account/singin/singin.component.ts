@@ -31,7 +31,7 @@ export class SinginComponent implements OnInit, TokenChangedListener {
   loginUser() {
     this.service.login(this.user).subscribe(response => {
       this.error = ''
-      const result: TokenResponse = <TokenResponse>response;
+      const result: AccountResponse = <AccountResponse>response;
       Globals.changeToken(result.token)
       this.router.navigate(['/my-questions'])
     }, error => {

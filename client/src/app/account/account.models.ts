@@ -19,7 +19,7 @@ export class LoginModel {
   }
 }
 
-export class CreateAccountModel {
+export class AccountModel {
   name: string
   email: string
   password: string

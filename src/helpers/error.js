@@ -11,15 +11,15 @@ export const throwAuthError = (message) => {
   throw { type: Type.AUTH, message: message }
 }
 
-export const authError = (res, err) => {
+export const authError = (err, res, req) => {
   let msg
   if (typeof err === 'string') msg = err
   else if (err && err.message === 'jwt expired') msg = 'Token expirou.'
   else msg = 'Não autorizado.'
-  handlerError({ type: Type.AUTH, message: msg }, res)
+  handlerError({ type: Type.AUTH, message: msg }, res, req)
 }
 
-export const handlerError = (error, res) => {
+export const handlerError = (error, res, req) => {
   switch (error.type) {
     case Type.VALIDATION:
       res.status(422)

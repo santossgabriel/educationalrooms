@@ -11,7 +11,7 @@ let token = ''
 Given('Dado que eu queira remover uma questão', () => {
   return request
     .post('/api/token')
-    .send({ email: 'questionmock1@mail.com', password: '123qwe' })
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token
     })

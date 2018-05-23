@@ -13,10 +13,10 @@ export default (req, res, next) => {
     return next()
   const { token } = req.headers
   if (!token)
-    return authError(res, 'Forneça o token.')
+    return authError('Forneça o token.', res, req)
   jwt.verify(token, config.SECRET, (err, data) => {
     if (err)
-      return authError(res, err)
+      return authError(err, res, req)
     req.claims = data
     next()
   })

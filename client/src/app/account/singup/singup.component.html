@@ -22,18 +22,21 @@
       <mat-error *ngIf="password.errors?.minlength">A senha deve ter pelo menos 6 caracteres</mat-error>
     </mat-form-field>
     <br />
-    <mat-form-field>
-      <input matInput #confirm="ngModel" name="confirm" type="password" appConfirmEqualValidator="password" placeholder="Confirme a senha"
-        [(ngModel)]="user.confirm" required (change)="cleanError()" />
-      <mat-error *ngIf="confirm.errors?.notequal && password.valid">As senhas não batem</mat-error>
-      <mat-error *ngIf="confirm.errors?.required && password.valid">Confirme a senha</mat-error>
-    </mat-form-field>
+    <div *ngIf="!editMode">
+      <mat-form-field>
+        <input matInput #confirm="ngModel" name="confirm" type="password" appConfirmEqualValidator="password" placeholder="Confirme a senha"
+          [(ngModel)]="user.confirm" required (change)="cleanError()" />
+        <mat-error *ngIf="confirm.errors?.notequal && password.valid">As senhas não batem</mat-error>
+        <mat-error *ngIf="confirm.errors?.required && password.valid">Confirme a senha</mat-error>
+      </mat-form-field>
+    </div>
     <br />
     <br />
     <button [disabled]="accountForm.form.invalid" type="submit" mat-raised-button color="primary">Enviar</button>
     <br />
 
     <span class="error-message">{{error}}</span>
+    <span class="success-message">{{message}}</span>
 
   </mat-card>
 </form>

@@ -40,6 +40,7 @@ const routes = [
   { path: 'about', component: AboutComponent },
   { path: 'signin', component: SinginComponent },
   { path: 'signup', component: SingupComponent },
+  { path: 'sign-edit', component: SingupComponent },
   { path: 'my-questions', component: AllQuestionsComponent },
   { path: 'all-questions', component: MyQuestionsComponent }
 ]

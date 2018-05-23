@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { LoginModel, CreateAccountModel } from '../account/account.models';
+import { LoginModel, AccountModel } from '../account/account.models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,14 @@ export class AccountService {
     })
   }
 
-  create(account: CreateAccountModel) {
-    return this.http.post('/api/account', account)
+  save(account: AccountModel, edit: boolean) {
+    if (edit)
+      return this.http.put('/api/account', account)
+    else
+      return this.http.post('/api/account', account)
+  }
+
+  getAccount() {
+    return this.http.get('/api/account')
   }
 }

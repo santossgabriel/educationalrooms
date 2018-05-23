@@ -55,7 +55,7 @@ export default {
       res.json({ message: 'Criado com sucesso.' })
     } catch (ex) {
       transaction.rollback()
-      handlerError(ex, res)
+      handlerError(ex, res, req)
     }
   },
 
@@ -80,7 +80,7 @@ export default {
       res.json({ message: 'Atualizado com sucesso.' })
     } catch (ex) {
       transaction.rollback()
-      handlerError(ex, res)
+      handlerError(ex, res, req)
     }
   },
 
@@ -101,7 +101,7 @@ export default {
       res.json({ message: 'Questão removida com sucesso.' })
     } catch (ex) {
       transaction.rollback()
-      handlerError(ex, res)
+      handlerError(ex, res, req)
     }
   }
 }

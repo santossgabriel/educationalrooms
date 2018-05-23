@@ -2,7 +2,7 @@ interface TokenChangedListener {
   tokenChanged(token: string)
 }
 
-interface TokenResponse {
+interface AccountResponse {
   token: string
   message: string
 }

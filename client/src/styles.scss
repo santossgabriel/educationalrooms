@@ -55,6 +55,12 @@ $theme:   mat-light-theme($primary, $accent);
   transition-duration: 200ms;
 }
 
+.success-message{
+  color: #4B9372;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  transition-duration: 200ms;
+}
+
 .account-component {
   max-width: 400px; 
   margin: 0px auto; 

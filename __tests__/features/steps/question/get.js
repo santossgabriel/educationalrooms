@@ -12,7 +12,7 @@ let token = ''
 Given('Dado que eu esteja logado e queira obter minhas questões', () => {
   return request
     .post('/api/token')
-    .send({ email: 'questionmock1@mail.com', password: '123qwe' })
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token
     })
@@ -30,7 +30,7 @@ When('Quando eu buscar as questões', () => {
 Then('Então eu devo obter somente as minhas questões', () => {
   let ok = true
   for (let i = 0; i < questions.length; i++)
-    if (questions[i].userId != 1)
+    if (questions[i].userId != 3)
       ok = false
   assert.isOk(ok, 'Uma das questões não pertence ao usuário logado.')
 })
@@ -38,7 +38,7 @@ Then('Então eu devo obter somente as minhas questões', () => {
 Given('Dado que eu queira obter uma questão pelo id', () => {
   return request
     .post('/api/token')
-    .send({ email: 'questionmock1@mail.com', password: '123qwe' })
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token
     })

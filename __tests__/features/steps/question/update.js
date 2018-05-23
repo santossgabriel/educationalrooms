@@ -12,7 +12,7 @@ Given('Dado que eu tenha atualizado uma questão', () => {
   question = {
     id: 1,
     description: 'teste',
-    userId: 1,
+    userId: 3,
     answers: [
       { description: 'teste' },
       { description: 'teste' },
@@ -24,7 +24,7 @@ Given('Dado que eu tenha atualizado uma questão', () => {
 
   return request
     .post('/api/token')
-    .send({ email: 'questionmock1@mail.com', password: '123qwe' })
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
     .then((result) => {
       token = result.body.token
     })
