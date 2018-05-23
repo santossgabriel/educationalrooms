@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { LoginModel } from '../account/account.models';
+import { LoginModel, CreateAccountModel } from '../account/account.models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +14,9 @@ export class AccountService {
       email: login.email.value,
       password: login.password.value
     })
+  }
+
+  create(account: CreateAccountModel) {
+    return this.http.post('/api/account', account)
   }
 }

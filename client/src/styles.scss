@@ -50,7 +50,9 @@ $theme:   mat-light-theme($primary, $accent);
 @include angular-material-theme($theme);
 
 .error-message{
-  color: red;
+  color: rgb(244, 67, 54);
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  transition-duration: 200ms;
 }
 
 .account-component {

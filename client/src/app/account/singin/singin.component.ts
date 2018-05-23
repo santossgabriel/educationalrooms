@@ -26,8 +26,6 @@ export class SinginComponent implements OnInit, TokenChangedListener {
   }
 
   ngOnInit() {
-    this.user.email.valueChanges.subscribe(() => { this.error = '' })
-    this.user.email.valueChanges.subscribe(() => { this.error = '' })
   }
 
   loginUser() {
@@ -46,5 +44,4 @@ export class SinginComponent implements OnInit, TokenChangedListener {
   cleanError() {
     this.error = ''
   }
-
 }
