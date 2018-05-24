@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import jwt from 'jsonwebtoken'
 
 import router from './routes/index'
+import socket from './socket/index'
 import auth from './auth/auth'
 
 const app = express()
@@ -25,4 +26,7 @@ app.use(auth)
 
 router(app)
 
-module.exports = http.createServer(app)
+const server = http.createServer(app)
+socket(server)
+
+module.exports = server

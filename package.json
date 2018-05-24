@@ -32,10 +32,10 @@
     "supertest": "^3.0.0"
   },
   "dependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-cli": "^6.26.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "global": "^4.3.2",
@@ -44,7 +44,8 @@
     "pg": "^7.4.3",
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0",
-    "sha1": "^1.1.1"
+    "sha1": "^1.1.1",
+    "socket.io": "^2.1.1"
   },
   "nyc": {
     "check-coverage": true,
