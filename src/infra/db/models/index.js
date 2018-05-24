@@ -1,4 +1,8 @@
 import Sequelize from 'sequelize'
+import * as User from './user'
+import * as Log from './log'
+import * as Question from './question'
+import * as Answer from './answer'
 
 import config from '../../config'
 
@@ -16,69 +20,13 @@ const sequelize = process.env.NODE_ENV === 'prod'
 
 let db = {}
 
-db.Log = sequelize.define('Log', {
-  id: {
-    primaryKey: true,
-    autoIncrement: true,
-    type: Sequelize.INTEGER
-  },
-  description: Sequelize.STRING,
+db.Log = sequelize.define(Log.modelName, Log.modelAttributes, Log.modelOptions)
 
-}, {
-    freezeTableName: 'Log',
-    undercored: false,
-    updatedAt: false,
-    createdAt: true
-  })
+db.User = sequelize.define(User.modelName, User.modelAttributes, User.modelOptions)
 
-db.User = sequelize.define('User', {
-  id: {
-    primaryKey: true,
-    autoIncrement: true,
-    type: Sequelize.INTEGER
-  },
-  name: Sequelize.STRING,
-  email: {
-    type: Sequelize.STRING,
-    unique: true
-  },
-  password: Sequelize.STRING
-}, {
-    freezeTableName: 'User',
-    undercored: false,
-    updatedAt: false,
-    createdAt: false
-  })
+db.Question = sequelize.define(Question.modelName, Question.modelAttributes, Question.modelOptions)
 
-db.Question = sequelize.define('Question', {
-  id: {
-    primaryKey: true,
-    autoIncrement: true,
-    type: Sequelize.INTEGER
-  },
-  description: Sequelize.STRING,
-  points: Sequelize.INTEGER
-}, {
-    freezeTableName: 'Question',
-    undercored: false,
-    updatedAt: false,
-    createdAt: false
-  })
-
-db.Answer = sequelize.define('Answer', {
-  id: {
-    primaryKey: true,
-    autoIncrement: true,
-    type: Sequelize.INTEGER
-  },
-  description: Sequelize.STRING,
-  correct: Sequelize.BOOLEAN
-}, {
-    freezeTableName: 'Answer',
-    undercored: false,
-    updatedAt: false,
-    createdAt: false
-  })
+db.Answer = sequelize.define(Answer.modelName, Answer.modelAttributes, Answer.modelOptions)
 
 db.Question.hasMany(db.Answer, {
   foreignKey: {

@@ -1,3 +1,5 @@
+require('babel-core/register')
+
 try {
   const dotenv = require('dotenv')
   dotenv.load()

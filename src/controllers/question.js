@@ -32,11 +32,21 @@ export default {
 
   getById: async (req, res) => {
     const { id } = req.params
-    res.json(await Question.findOne({ where: { id: id } }))
+    res.json(await Question.findOne({ include: Answer, where: { id: id } }))
   },
 
-  getByUser: async (req, res) => {
-    res.json(await Question.findAll({ where: { userId: req.claims.id } }))
+  getMy: async (req, res) => {
+    res.json(await Question.findAll({ include: Answer, where: { userId: req.claims.id } }))
+  },
+
+  getAll: async (req, res) => {
+    res.json(await Question.findAll({
+      include: Answer,
+      where: sequelize.or(
+        { userId: req.claims.id },
+        { shared: true }
+      )
+    }))
   },
 
   create: async (req, res) => {

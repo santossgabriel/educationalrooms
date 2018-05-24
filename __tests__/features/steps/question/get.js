@@ -9,6 +9,9 @@ let questions = []
 let question = null
 let token = ''
 
+/**
+ * Obter questões do usuário logado
+ */
 Given('Dado que eu esteja logado e queira obter minhas questões', () => {
   return request
     .post('/api/token')
@@ -35,6 +38,38 @@ Then('Então eu devo obter somente as minhas questões', () => {
   assert.isOk(ok, 'Uma das questões não pertence ao usuário logado.')
 })
 
+/**
+ * Obter questões do usuário logado e compartilhadas por outros usuários
+ */
+Given('Dado que eu queira obter minhas questões e as compartilhadas por outros usuários', () => {
+  return request
+    .post('/api/token')
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+
+When('Quando eu buscar as questões compartilhadas', () => {
+  return request
+    .get('/api/question-all')
+    .set({ token: token })
+    .then((result) => {
+      questions = result.body
+    })
+})
+
+Then('Então eu devo obter minhas questões e as compartilhadas', () => {
+  let ok = true
+  for (let i = 0; i < questions.length; i++)
+    if (questions[i].userId != 3)
+      ok = false
+  assert.isNotOk(ok, 'Todas as questões pertencem ao usuário logado.')
+})
+
+/**
+ * Obter questão pelo id
+ */
 Given('Dado que eu queira obter uma questão pelo id', () => {
   return request
     .post('/api/token')

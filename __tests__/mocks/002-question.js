@@ -9,6 +9,11 @@ module.exports = {
       userId: 2,
       description: 'teste2',
       points: 3
+    }, {
+      userId: 1,
+      description: 'teste',
+      points: 8,
+      shared: true
     }])
   }
 }
