@@ -45,7 +45,8 @@
     "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0",
     "sha1": "^1.1.1",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1"
   },
   "nyc": {
     "check-coverage": true,
@@ -64,7 +65,8 @@
     "exclude": [
       "src/helpers/error.js",
       "src/auth/auth.js",
-      "src/server.js"
+      "src/server.js",
+      "src/socket"
     ],
     "reporter": [
       "text",

@@ -34,7 +34,9 @@
     "expect": true,
     "test": true,
     "__dirname": true,
-    "process": true
+    "process": true,
+    "setTimeout": true,
+    "Promise": true
   },
   "parserOptions": {
     "ecmaVersion": 8,

@@ -6,3 +6,4 @@ cucumber.json
 quiz-room.db
 .env
 deploy.tgz
+yarn-error.log
