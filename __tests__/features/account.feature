@@ -36,6 +36,7 @@ Feature: Gerenciamento de conta
       | 'sem senha'       | '{"password": null}'                  | "A senha deve possuir pelo menos 6 caracteres." |
       | 'email existente' | '{"email": "questionmock1@mail.com"}' | "Este email já está em uso."                    |
       | 'nome existente'  | '{"name": "question_mock_1"}'         | "Este nome já está em uso."                     |
+      | 'nome inválido'   | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres."  |
       | 'email existente' | '{}'                                  | "Criado com sucesso."                           |
 
 
@@ -51,5 +52,6 @@ Feature: Gerenciamento de conta
       | 'senha insuficiente' | '{"password": "123"}'                 | "A senha deve possuir pelo menos 6 caracteres." |
       | 'email existente'    | '{"email": "questionmock2@mail.com"}' | "Este email já está em uso."                    |
       | 'nome existente'     | '{"name": "question_mock_2"}'         | "Este nome já está em uso."                     |
+      | 'nome inválido'      | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres."  |
       | 'dados ok'           | '{"password": "nome atualizado"}'     | "A senha informada é diferente da senha atual." |
       | 'dados ok'           | '{"name": "nome atualizado"}'         | "Atualizado com sucesso."                       |

@@ -10,6 +10,7 @@ let token = null
 
 Given('Dado que eu queira atualizar meus dados', () => {
   account = {
+    name: 'questionmock1',
     email: 'questionmock1@mail.com',
     password: '123qwe'
   }
