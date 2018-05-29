@@ -1,14 +1,34 @@
-<mat-card>
-  <mat-card-title>NOVA QUESTÃO</mat-card-title>
-  <mat-form-field>
-    <input matInput placeholder="Qual a pergunta ... ?" />
-  </mat-form-field>
-  <br />
-
-  <span style="margin-right: 10px" class="success-message">Pontos:</span>
-  <mat-slider thumbLabel [displayWith]="getLabel" tickInterval="1" min="1" max="10">Pontos</mat-slider>
-
-  <br />
-  <button mat-button color="primary">Cancelar</button>
-  <button mat-raised-button color="primary">Salvar</button>
-</mat-card>
+<div style="min-width: 400px">
+  <mat-horizontal-stepper #stepper>
+    <mat-step>
+      <ng-template matStepLabel>Pergunda</ng-template>
+      <mat-form-field style="width: 100%">
+        <input matInput [(ngModel)]="question.description" placeholder="Informe uma pergunta ... ?" />
+      </mat-form-field>
+      <div class="action-button">
+        <button mat-button mat-dialog-close>Cancelar</button>
+        <button mat-raised-button matStepperNext color="primary">Próximo</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Pontuação</ng-template>
+      <br />
+      <span style="margin-right: 10px" class="success-message">
+        {{question.points > 1 ? question.points + ' Pontos' : '1 Ponto'}}
+      </span>
+      <mat-slider thumbLabel [(ngModel)]="question.points" [displayWith]="getLabel" tickInterval="1" min="1" max="10">Pontos</mat-slider>
+      <div class="action-button">
+        <button mat-button matStepperPrevious>Voltar</button>
+        <button mat-raised-button matStepperNext color="primary">Próximo</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Alternativas</ng-template>
+      Alternativas
+      <div class="action-button">        
+        <button mat-button matStepperPrevious>Voltar</button>
+        <button mat-raised-button color="primary" [mat-dialog-close]="question">Salvar</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

@@ -76,3 +76,11 @@ $theme:   mat-light-theme($primary, $accent);
   margin: 0px auto;
   text-align: center;
 }
+
+.action-button {
+  width: 100%;
+  text-align: right;
+  button {
+    margin-left: 20px;
+  }
+}

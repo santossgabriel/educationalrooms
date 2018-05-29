@@ -12,7 +12,8 @@ import {
   MatInputModule,
   MatTableModule,
   MatDialogModule,
-  MatSliderModule
+  MatSliderModule,
+  MatStepperModule
 } from '@angular/material'
 
 @NgModule({
@@ -26,7 +27,8 @@ import {
     MatInputModule,
     MatTableModule,
     MatDialogModule,
-    MatSliderModule
+    MatSliderModule,
+    MatStepperModule
   ],
   exports: [
     MatButtonModule,
@@ -37,7 +39,8 @@ import {
     MatInputModule,
     MatTableModule,
     MatDialogModule,
-    MatSliderModule
+    MatSliderModule,
+    MatStepperModule
   ],
   declarations: []
 })

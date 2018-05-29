@@ -21,13 +21,13 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef style="width: 180px">Ações</th>
         <td mat-cell *matCellDef="let element" style="width: 180px">
-          <button mat-button color="primary">Editar</button>
+          <button mat-button color="primary" (click)="openQuestionModal(element)">Editar</button>
           <button mat-button color="warn">Excluir</button>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <button (click)="openQuestionModal({})" style="margin-top: 20px" mat-raised-button color="primary">Nova Questão</button>
   </div>

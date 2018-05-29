@@ -20,7 +20,7 @@ export class MyQuestionsComponent implements OnInit {
 
   openQuestionModal(question): void {
     const dialogRef = this.dialog.open(QuestionModalComponent, {
-      data: { question: { ...question } }
+      data: { ...question }
     })
     dialogRef.afterClosed().subscribe(result => {
       console.log(result)
