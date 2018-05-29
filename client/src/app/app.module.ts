@@ -21,6 +21,7 @@ import { SinginComponent } from './account/singin/singin.component'
 import { SingupComponent } from './account/singup/singup.component'
 import { AllQuestionsComponent } from './questions/all-questions/all-questions.component'
 import { MyQuestionsComponent } from './questions/my-questions/my-questions.component'
+import { QuestionModalComponent } from './modals/question-modal.component'
 
 const components = [
   AppComponent,
@@ -32,7 +33,8 @@ const components = [
   SingupComponent,
   AllQuestionsComponent,
   MyQuestionsComponent,
-  ConfirmEqualValidatorDirective
+  ConfirmEqualValidatorDirective,
+  QuestionModalComponent
 ]
 
 const routes = [
@@ -41,8 +43,8 @@ const routes = [
   { path: 'signin', component: SinginComponent },
   { path: 'signup', component: SingupComponent },
   { path: 'sign-edit', component: SingupComponent },
-  { path: 'my-questions', component: AllQuestionsComponent },
-  { path: 'all-questions', component: MyQuestionsComponent }
+  { path: 'my-questions', component: MyQuestionsComponent },
+  { path: 'all-questions', component: AllQuestionsComponent }
 ]
 
 @NgModule({
@@ -61,6 +63,7 @@ const routes = [
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true }
   ],
+  entryComponents: [QuestionModalComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

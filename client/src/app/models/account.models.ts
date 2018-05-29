@@ -1,6 +1,14 @@
-import { FormControl, Validators, ValidationErrors, Validator, AbstractControl, NG_VALIDATORS, ValidatorFn } from "@angular/forms";
-import { Input, Directive } from "@angular/core";
-import { notEqualValidator } from "../helpers/confirm-equal-validator.directive";
+import {
+  FormControl,
+  Validators,
+  ValidationErrors,
+  Validator,
+  AbstractControl,
+  NG_VALIDATORS,
+  ValidatorFn
+} from '@angular/forms'
+import { Input, Directive } from '@angular/core'
+import { notEqualValidator } from '../helpers/confirm-equal-validator.directive'
 
 export class LoginModel {
   email: FormControl
@@ -11,7 +19,7 @@ export class LoginModel {
   }
 
   getEmailErrorMessage() {
-    return this.email.hasError('required') ? 'Informe o email.' : '';
+    return this.email.hasError('required') ? 'Informe o email.' : ''
   }
 
   getPasswordErrorMessage() {

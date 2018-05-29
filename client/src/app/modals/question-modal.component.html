@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-title>NOVA QUESTÃO</mat-card-title>
+  <mat-form-field>
+    <input matInput placeholder="Qual a pergunta ... ?" />
+  </mat-form-field>
+  <br />
+
+  <span style="margin-right: 10px" class="success-message">Pontos:</span>
+  <mat-slider thumbLabel [displayWith]="getLabel" tickInterval="1" min="1" max="10">Pontos</mat-slider>
+
+  <br />
+  <button mat-button color="primary">Cancelar</button>
+  <button mat-raised-button color="primary">Salvar</button>
+</mat-card>

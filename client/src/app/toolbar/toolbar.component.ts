@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Globals } from '../globals';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit } from '@angular/core'
+import { Globals } from '../globals'
+import { Router, NavigationEnd } from '@angular/router'
 
 @Component({
   selector: 'app-toolbar',
@@ -10,14 +10,14 @@ import { Router, NavigationEnd } from '@angular/router';
 export class ToolbarComponent implements OnInit, TokenChangedListener {
 
   logged = false
-  path: string = '/'
+  path: string
 
   constructor(private router: Router) {
     Globals.addTokenListener(this)
     this.logged = Globals.userLogged()
     router.events.subscribe((val: any) => {
       this.path = val.url
-    });
+    })
   }
 
   ngOnInit() {

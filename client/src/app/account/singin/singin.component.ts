@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 import { AccountService } from '../../services/account.service'
-import { Globals } from '../../globals';
-import { Router } from '@angular/router';
-import { routerTransition } from '../../router.transition';
-import { LoginModel } from '../account.models';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Globals } from '../../globals'
+import { Router } from '@angular/router'
+import { routerTransition } from '../../router.transition'
+import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { LoginModel } from '../../models/account.models'
 
 @Component({
   selector: 'app-singin',
@@ -31,7 +31,7 @@ export class SinginComponent implements OnInit, TokenChangedListener {
   loginUser() {
     this.service.login(this.user).subscribe(response => {
       this.error = ''
-      const result: AccountResponse = <AccountResponse>response;
+      const result: AccountResponse = <AccountResponse>response
       Globals.changeToken(result.token)
       this.router.navigate(['/my-questions'])
     }, error => {

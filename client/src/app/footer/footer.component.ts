@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { routerTransition } from '../router.transition';
+import { Component, OnInit } from '@angular/core'
+import { routerTransition } from '../router.transition'
 
 @Component({
   selector: 'app-footer',

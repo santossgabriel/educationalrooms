@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { routerTransition } from '../../router.transition';
-import { AccountModel } from '../account.models';
-import { AccountService } from '../../services/account.service';
-import { Globals } from '../../globals';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core'
+import { routerTransition } from '../../router.transition'
+import { AccountService } from '../../services/account.service'
+import { Globals } from '../../globals'
+import { Router } from '@angular/router'
+import { AccountModel } from '../../models/account.models'
 
 @Component({
   selector: 'app-singup',
@@ -31,13 +31,13 @@ export class SingupComponent implements OnInit {
   createUser(form) {
     this.service.save(this.user, this.editMode).subscribe(response => {
       this.error = ''
-      const result: AccountResponse = <AccountResponse>response;
+      const result: AccountResponse = <AccountResponse>response
       this.message = result.message
       if (!this.editMode)
         Globals.changeToken(result.token)
       setTimeout(() => {
         this.router.navigate(['/my-questions'])
-      }, 1500);
+      }, 1500)
     }, err => {
       this.error = err.error.message
     })

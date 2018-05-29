@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { routerTransition } from '../router.transition';
+import { Component, OnInit } from '@angular/core'
+import { routerTransition } from '../router.transition'
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',  
+  templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   animations: [routerTransition],
   host: { '[@routerTransition]': '' }
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
         this.title = ''
         this.index = 1
         this.animateText()
-      }, 10000)
+      }, 5000)
     }
   }
 
