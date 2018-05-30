@@ -38,7 +38,7 @@ Feature: Gerenciamento de questões
       | 'a questão completa'                | '{}'                                                                                                                                                      | "Atualizado com sucesso."                    |
       | 'com pontos fora do intervalo'      | '{"points": 0}'                                                                                                                                           | "Os pontos devem estar entre 1 and 10."      |
       | 'com pontos fora do intervalo'      | '{"points": 11}'                                                                                                                                          | "Os pontos devem estar entre 1 and 10."      |
-      | 'com outro usuário'                 | '{"userId": 2}'                                                                                                                                           | "Usuário sem permissão para alterar o item." |
+      | 'com outro usuário'                 | '{"id": 2}'                                                                                                                                           | "Usuário sem permissão para alterar o item." |
 
   Scenario: Obter questões do usuário logado
     Given Dado que eu esteja logado e queira obter minhas questões
@@ -63,6 +63,6 @@ Feature: Gerenciamento de questões
 
     Examples:
       | id | caso                  | mensagem                                     |
-      | 1  | 'que me pertence'     | "Questão removida com sucesso."              |
+      | 4  | 'que me pertence'     | "Questão removida com sucesso."              |
       | 2  | 'que não me pertence' | "Usuário sem permissão para remover o item." |
       | 10 | 'que não existe'      | "A questão não existe."                      |

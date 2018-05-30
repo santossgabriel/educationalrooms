@@ -10,7 +10,7 @@ let token = ''
 
 Given('Dado que eu tenha atualizado uma questão', () => {
   question = {
-    id: 1,
+    id: 4,
     description: 'teste',
     userId: 3,
     answers: [

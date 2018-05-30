@@ -36,7 +36,8 @@ const toResult = (questions) => {
       description: questions.description,
       points: questions.points,
       answers: questions.Answers,
-      shared: questions.shared
+      shared: questions.shared,
+      userId: questions.userId
     }
 }
 
@@ -95,6 +96,8 @@ export default {
         throwValidationError('Usuário sem permissão para alterar o item.')
 
       validate(question)
+
+      question.userId = req.claims.id
 
       transaction = await sequelize.transaction()
       await Question.update(question, {
