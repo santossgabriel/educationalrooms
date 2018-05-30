@@ -27,25 +27,41 @@ const validate = (question) => {
     throwValidationError('A questão deve possuir 1 resposta correta.')
 }
 
+const toResult = (questions) => {
+  if (Array.isArray(questions))
+    return questions.map(q => toResult(q))
+  else
+    return {
+      id: questions.id,
+      description: questions.description,
+      points: questions.points,
+      answers: questions.Answers,
+      shared: questions.shared
+    }
+}
+
 export default {
 
   getById: async (req, res) => {
     const { id } = req.params
-    res.json(await Question.findOne({ include: Answer, where: { id: id } }))
+    const question = await Question.findOne({ include: Answer, where: { id: id } })
+    res.json(toResult(question))
   },
 
   getMy: async (req, res) => {
-    res.json(await Question.findAll({ include: Answer, where: { userId: req.claims.id } }))
+    const questions = await Question.findAll({ include: Answer, where: { userId: req.claims.id } })
+    res.json(toResult(questions))
   },
 
   getAll: async (req, res) => {
-    res.json(await Question.findAll({
+    const questions = await Question.findAll({
       include: Answer,
       where: sequelize.or(
         { userId: req.claims.id },
         { shared: true }
       )
-    }))
+    })
+    res.json(toResult(questions))
   },
 
   create: async (req, res) => {
@@ -70,11 +86,17 @@ export default {
 
   update: async (req, res) => {
     const question = req.body
-    const transaction = await sequelize.transaction()
+    let transaction = null
     try {
-      if (question.userId != req.claims.id)
+
+      const questionDb = await Question.findOne({ include: Answer, where: { id: question.id } })
+
+      if (questionDb.userId != req.claims.id)
         throwValidationError('Usuário sem permissão para alterar o item.')
+
       validate(question)
+
+      transaction = await sequelize.transaction()
       await Question.update(question, {
         where: { id: question.id },
         transaction: transaction
@@ -88,7 +110,8 @@ export default {
       transaction.commit()
       res.json({ message: 'Atualizado com sucesso.' })
     } catch (ex) {
-      transaction.rollback()
+      if (transaction)
+        transaction.rollback()
       handlerError(ex, res, req)
     }
   },

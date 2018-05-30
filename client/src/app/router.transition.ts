@@ -1,4 +1,4 @@
-import { trigger, state, animate, style, transition } from '@angular/animations';
+import { trigger, state, animate, style, transition } from '@angular/animations'
 
 export const routerTransition =
   trigger('routerTransition', [
@@ -18,4 +18,4 @@ export const fadeInTransition =
       style({ opacity: 0 }),
       animate('.6s', style({ opacity: 1 }))
     ])
-  ]);
+  ])

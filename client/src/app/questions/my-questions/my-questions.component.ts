@@ -3,6 +3,7 @@ import { MatTableDataSource, MatDialog } from '@angular/material'
 import { routerTransition } from '../../router.transition'
 import { QuestionModalComponent } from '../../modals/question-modal.component'
 import { Question } from '../../models/question.model'
+import { QuestionService } from '../../services/question.service'
 
 @Component({
   selector: 'app-my-questions',
@@ -12,47 +13,34 @@ import { Question } from '../../models/question.model'
   host: { '[@routerTransition]': '' }
 })
 export class MyQuestionsComponent implements OnInit {
+
   displayedColumns = ['id', 'description', 'points', 'actions']
-  dataSource = new MatTableDataSource(questions)
-  constructor(public dialog: MatDialog) { this.openQuestionModal(null) }
+  dataSource: MatTableDataSource<Question>
+
+  constructor(public dialog: MatDialog, private service: QuestionService) {
+    this.refresh()
+  }
 
   ngOnInit() {
   }
 
+  refresh() {
+    this.service.getMy().subscribe(questions => {
+      this.dataSource = new MatTableDataSource(<Question[]>questions)
+    })
+  }
+
   openQuestionModal(question): void {
-    console.log(question)
     const dialogRef = this.dialog.open(QuestionModalComponent, {
       data: question ? { ...question } : new Question()
     })
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+      if (result)
+        this.service.save(result).subscribe(res => this.refresh(), err => console.error(err))
     })
   }
+
+  remove(id: number): void {
+    this.service.remove(id).subscribe(res => this.refresh(), err => console.error(err))
+  }
 }
-
-const ELEMENT_DATA = [
-  { id: 1, description: 'Hydrogen' },
-  { id: 2, description: 'Helium' }
-]
-
-const questions = [{
-  id: 1,
-  description: 'Questão 1 dasdasmn dsanla s asjdas dasdas damsdas dmdas',
-  points: 8,
-  answers: [
-    { id: 1, description: 'resposta 1', correct: false, classification: 'A' },
-    { id: 2, description: 'resposta 2', correct: true, classification: 'B' },
-    { id: 3, description: 'resposta 3', correct: false, classification: 'C' },
-    { id: 4, description: 'resposta 4', correct: false, classification: 'D' }
-  ]
-}, {
-  id: 2,
-  description: 'Questão 2',
-  points: 3,
-  answers: [
-    { id: 5, description: 'resposta 1', correct: false, classification: 'A' },
-    { id: 6, description: 'resposta 2', correct: true, classification: 'B' },
-    { id: 7, description: 'resposta 3', correct: false, classification: 'C' },
-    { id: 8, description: 'resposta 4', correct: false, classification: 'D' }
-  ]
-}]
