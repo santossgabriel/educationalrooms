@@ -1,5 +1,4 @@
 import { throwValidationError, handlerError } from '../helpers/error'
-// import { Question, Answer } from '../infra/db/sequelize'
 
 import db from '../infra/db/models/index'
 

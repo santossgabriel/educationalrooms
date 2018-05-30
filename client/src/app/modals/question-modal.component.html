@@ -1,33 +1,50 @@
-<div style="min-width: 400px">
+<div style="min-width: 500px">
   <mat-horizontal-stepper #stepper>
     <mat-step>
       <ng-template matStepLabel>Pergunda</ng-template>
       <mat-form-field style="width: 100%">
-        <input matInput [(ngModel)]="question.description" placeholder="Informe uma pergunta ... ?" />
+        <input matInput [(ngModel)]="question.description" placeholder="Qual a pergunta da questão ?" />
       </mat-form-field>
       <div class="action-button">
         <button mat-button mat-dialog-close>Cancelar</button>
-        <button mat-raised-button matStepperNext color="primary">Próximo</button>
+        <button [disabled]="!question.description" mat-raised-button matStepperNext color="primary">Próximo</button>
       </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Pontuação</ng-template>
       <br />
-      <span style="margin-right: 10px" class="success-message">
-        {{question.points > 1 ? question.points + ' Pontos' : '1 Ponto'}}
+      <span class="success-message">
+        Quantos pontos valem a questão ?
       </span>
+      <br />
       <mat-slider thumbLabel [(ngModel)]="question.points" [displayWith]="getLabel" tickInterval="1" min="1" max="10">Pontos</mat-slider>
+      <span class="success-message">
+        {{question.points}}
+      </span>
       <div class="action-button">
         <button mat-button matStepperPrevious>Voltar</button>
-        <button mat-raised-button matStepperNext color="primary">Próximo</button>
+        <button [disabled]="question.points" mat-raised-button matStepperNext color="primary">Próximo</button>
       </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Alternativas</ng-template>
-      Alternativas
-      <div class="action-button">        
-        <button mat-button matStepperPrevious>Voltar</button>
-        <button mat-raised-button color="primary" [mat-dialog-close]="question">Salvar</button>
+      <mat-list>
+        <h3 mat-subheader>Alternativas</h3>
+        <mat-list-item *ngFor="let a of question.answers">
+          <button mat-mini-fab disabled>{{a.classification}}</button>
+          <span class="horizontal-space"></span>
+          <mat-form-field style="width: 100%">
+            <input matInput [(ngModel)]="a.description" placeholder="Descrição para alternativa {{a.classification}}" required />
+          </mat-form-field>
+          <span class="horizontal-space"></span>
+          <mat-slide-toggle (change)="correctClick(a)" [matTooltip]="a.correct ? 'Correta' : 'Errada'" color="primary" [(ngModel)]="a.correct"></mat-slide-toggle>
+        </mat-list-item>
+      </mat-list>
+
+      <div class="action-button">
+        <button mat-button matStepperPrevious>VOLTAR</button>
+        <button [disabled]="!question.answers[0].description || !question.answers[1].description || !question.answers[2].description || !question.answers[3].description"
+          mat-raised-button color="primary" [mat-dialog-close]="question">PRONTO</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

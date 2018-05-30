@@ -3,4 +3,5 @@ export class Answer {
   description: string
   id: number
   questionId: number
+  classification: string
 }
