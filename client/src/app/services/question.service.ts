@@ -14,7 +14,7 @@ export class QuestionService {
   }
 
   getOthers() {
-    return this.http.get('/api/question-all')
+    return this.http.get('/api/question-others')
   }
 
   save(question: Question) {

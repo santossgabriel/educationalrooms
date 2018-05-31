@@ -54,11 +54,11 @@ export default {
     res.json(toResult(questions))
   },
 
-  getAll: async (req, res) => {
+  getOthers: async (req, res) => {
     const questions = await Question.findAll({
       include: Answer,
-      where: sequelize.or(
-        { userId: req.claims.id },
+      where: sequelize.and(
+        { userId: { [sequelize.Op.ne]: req.claims.id } },
         { shared: true }
       )
     })

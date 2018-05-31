@@ -45,10 +45,10 @@ Feature: Gerenciamento de questões
     When Quando eu buscar as questões
     Then Então eu devo obter somente as minhas questões
 
-  Scenario: Obter minhas questões e as compartilhadas por outros usuários
-    Given Dado que eu queira obter minhas questões e as compartilhadas por outros usuários
+  Scenario: Obter as questões compartilhadas por outros usuários
+    Given Dado que eu queira obter as questões compartilhadas por outros usuários
     When Quando eu buscar as questões compartilhadas
-    Then Então eu devo obter minhas questões e as compartilhadas
+    Then Então eu devo obter somente as questões compartilhadas por outros usuários
 
   Scenario: Obter questão por id
     Given Dado que eu queira obter uma questão pelo id

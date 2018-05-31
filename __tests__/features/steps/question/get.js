@@ -41,7 +41,7 @@ Then('Então eu devo obter somente as minhas questões', () => {
 /**
  * Obter questões do usuário logado e compartilhadas por outros usuários
  */
-Given('Dado que eu queira obter minhas questões e as compartilhadas por outros usuários', () => {
+Given('Dado que eu queira obter as questões compartilhadas por outros usuários', () => {
   return request
     .post('/api/token')
     .send({ email: 'questionmock3@mail.com', password: '123qwe' })
@@ -52,19 +52,19 @@ Given('Dado que eu queira obter minhas questões e as compartilhadas por outros 
 
 When('Quando eu buscar as questões compartilhadas', () => {
   return request
-    .get('/api/question-all')
+    .get('/api/question-others')
     .set({ token: token })
     .then((result) => {
       questions = result.body
     })
 })
 
-Then('Então eu devo obter minhas questões e as compartilhadas', () => {
+Then('Então eu devo obter somente as questões compartilhadas por outros usuários', () => {
   let ok = true
   for (let i = 0; i < questions.length; i++)
-    if (questions[i].userId != 3)
+    if (questions[i].userId === 3 || !questions[i].shared)
       ok = false
-  assert.isNotOk(ok, 'Todas as questões pertencem ao usuário logado.')
+  assert.isOk(ok, `Uma das questões pertencem ao usuário ou não está compartilhada. ${JSON.stringify(questions)}`)
 })
 
 /**
