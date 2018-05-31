@@ -38,14 +38,14 @@
             <input matInput [(ngModel)]="a.description" placeholder="Descrição da alternativa {{a.classification}}" required />
           </mat-form-field>
           <span class="horizontal-space"></span>
-          <mat-slide-toggle (change)="correctClick(a)" [matTooltip]="a.correct ? 'Correta' : 'Errada'" color="primary" [(ngModel)]="a.correct"></mat-slide-toggle>
+          <mat-slide-toggle (click)="correctClick(a)" [matTooltip]="a.correct ? 'Correta' : 'Errada'" color="primary" [(ngModel)]="a.correct"></mat-slide-toggle>
         </mat-list-item>
       </mat-list>
 
       <div class="action-button">
         <button mat-button matStepperPrevious>VOLTAR</button>
         <button [disabled]="!question.description || !question.description || !question.answers[0].description || !question.answers[1].description || !question.answers[2].description || !question.answers[3].description"
-          mat-raised-button color="primary" [mat-dialog-close]="question">PRONTO</button>
+          mat-raised-button color="primary" (click)="saveQuestion()">PRONTO</button>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

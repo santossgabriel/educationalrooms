@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 
 @Injectable()
 export class Globals {
-  private static listeners: TokenChangedListener[] = [];
-  private static token: string = '';
+  private static listeners: TokenChangedListener[] = []
+  private static token: string = ''
 
   public static changeToken(newToken: string) {
     if (!newToken)

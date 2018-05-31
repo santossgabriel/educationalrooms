@@ -22,6 +22,7 @@ import { SingupComponent } from './account/singup/singup.component'
 import { AllQuestionsComponent } from './questions/all-questions/all-questions.component'
 import { MyQuestionsComponent } from './questions/my-questions/my-questions.component'
 import { QuestionModalComponent } from './modals/question-modal.component'
+import { ConfirmModalComponent, ErrorModalComponent } from './modals/confirm-modal.component'
 
 const components = [
   AppComponent,
@@ -34,7 +35,9 @@ const components = [
   AllQuestionsComponent,
   MyQuestionsComponent,
   ConfirmEqualValidatorDirective,
-  QuestionModalComponent
+  QuestionModalComponent,
+  ConfirmModalComponent,
+  ErrorModalComponent
 ]
 
 const routes = [
@@ -63,7 +66,7 @@ const routes = [
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true }
   ],
-  entryComponents: [QuestionModalComponent],
+  entryComponents: [QuestionModalComponent, ConfirmModalComponent, ErrorModalComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

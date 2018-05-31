@@ -88,3 +88,24 @@ $theme:   mat-light-theme($primary, $accent);
 .horizontal-space{
   width: 20px;
 }
+
+.title-confirm{
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.error-modal{
+  text-align: center;
+  span{
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 24px;
+    font-weight: 400;
+    margin: 40px; 
+  } 
+  button{
+    margin-top: 20px;
+  } 
+}
