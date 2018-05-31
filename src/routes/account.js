@@ -1,8 +1,9 @@
 import account from '../controllers/account'
+import { asyncErrorHandler } from '../helpers/error'
 
 export default (app) => {
-  app.get('/api/account', account.getUserData)
-  app.post('/api/token', account.getToken)
-  app.post('/api/account', account.create)
-  app.put('/api/account', account.update)
+  app.get('/api/account', asyncErrorHandler(account.getUserData))
+  app.post('/api/token', asyncErrorHandler(account.getToken))
+  app.post('/api/account', asyncErrorHandler(account.create))
+  app.put('/api/account', asyncErrorHandler(account.update))
 }

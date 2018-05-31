@@ -1,4 +1,4 @@
-import { throwValidationError, handlerError } from '../helpers/error'
+import { throwValidationError, throwForbiddenError } from '../helpers/error'
 
 import db from '../infra/db/models/index'
 
@@ -81,25 +81,22 @@ export default {
       res.json({ message: 'Criado com sucesso.' })
     } catch (ex) {
       transaction.rollback()
-      handlerError(ex, res, req)
+      throw ex
     }
   },
 
   update: async (req, res) => {
     const question = req.body
-    let transaction = null
+    let transaction = await sequelize.transaction()
     try {
-
       const questionDb = await Question.findOne({ include: Answer, where: { id: question.id } })
 
       if (questionDb.userId != req.claims.id)
-        throwValidationError('Usuário sem permissão para alterar o item.')
+        throwForbiddenError('Usuário sem permissão para alterar o item.')
 
       validate(question)
 
       question.userId = req.claims.id
-
-      transaction = await sequelize.transaction()
       await Question.update(question, {
         where: { id: question.id },
         transaction: transaction
@@ -115,7 +112,7 @@ export default {
     } catch (ex) {
       if (transaction)
         transaction.rollback()
-      handlerError(ex, res, req)
+      throw ex
     }
   },
 
@@ -127,7 +124,7 @@ export default {
       if (!question)
         throwValidationError('A questão não existe.')
       if (question.userId != req.claims.id)
-        throwValidationError('Usuário sem permissão para remover o item.')
+        throwForbiddenError('Usuário sem permissão para remover o item.')
 
       await Answer.destroy({ where: { questionId: id }, transaction: transaction })
       await Question.destroy({ where: { id: id }, transaction: transaction })
@@ -136,7 +133,7 @@ export default {
       res.json({ message: 'Questão removida com sucesso.' })
     } catch (ex) {
       transaction.rollback()
-      handlerError(ex, res, req)
+      throw ex
     }
   }
 }

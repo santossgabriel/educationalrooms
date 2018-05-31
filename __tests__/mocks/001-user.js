@@ -15,6 +15,11 @@ module.exports = {
       name: 'question_mock_3',
       email: 'questionmock3@mail.com',
       password: sha1('123qwe')
+    }, {
+      name: 'question_mock_4',
+      email: 'questionmock4@mail.com',
+      password: sha1('123qwe'),
+      type: 'A'
     }])
   }
 }

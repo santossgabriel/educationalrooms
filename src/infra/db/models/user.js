@@ -13,7 +13,8 @@ export const modelAttributes = {
     type: Sequelize.STRING,
     unique: true
   },
-  password: Sequelize.STRING
+  password: Sequelize.STRING,
+  type: Sequelize.CHAR(1)
 }
 
 export const modelOptions = {

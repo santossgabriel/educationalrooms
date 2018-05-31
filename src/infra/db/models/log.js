@@ -16,5 +16,5 @@ export const modelOptions = {
   freezeTableName: modelName,
   undercored: false,
   updatedAt: false,
-  createdAt: true
+  createdAt: false
 }
