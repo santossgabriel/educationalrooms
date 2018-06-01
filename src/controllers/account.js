@@ -71,7 +71,10 @@ export default {
     const user = await User.findOne({ where: { id: req.claims.id } })
     if (!account.password || user.password !== sha1(account.password))
       throwValidationError('A senha informada é diferente da senha atual.')
-    await User.update(account, { where: { id: req.claims.id } })
+    await User.update({
+      email: account.email,
+      name: account.name
+    }, { where: { id: req.claims.id } })
     res.json({ message: 'Atualizado com sucesso.' })
   }
 }
