@@ -13,7 +13,7 @@ module.exports = {
     dialect: process.env.DIALECT,
     storage: process.env.STORAGE,
     operatorsAliases: false,
-    logging: false
+    logging: true
   },
   test: {
     dialect: 'sqlite',

@@ -70,7 +70,11 @@ export default {
   },
 
   getMy: async (req, res) => {
-    const questions = await Question.findAll({ include: Answer, where: { userId: req.claims.id } })
+    const questions = await Question.findAll({
+      include: { model: Answer },
+      where: { userId: req.claims.id },
+      order: [[Answer, 'classification']]
+    })
     res.json(toResult(questions))
   },
 
