@@ -15,7 +15,8 @@ export const modelAttributes = {
   questionId: {
     type: Sequelize.INTEGER,
     references: { model: Question.modelName, key: 'id' }
-  }
+  },
+  classification: Sequelize.CHAR(1)
 }
 
 export const modelOptions = {

@@ -14,10 +14,10 @@ Given('Dado que eu tenha atualizado uma questão', () => {
     description: 'teste',
     userId: 3,
     answers: [
-      { description: 'teste' },
-      { description: 'teste' },
-      { description: 'teste', correct: true },
-      { description: 'teste' }
+      { description: 'teste1', classification: 'A' },
+      { description: 'teste2', classification: 'B' },
+      { description: 'teste3', classification: 'C', correct: true },
+      { description: 'teste4', classification: 'D' }
     ],
     points: 8
   }

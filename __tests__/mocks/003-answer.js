@@ -4,23 +4,23 @@ module.exports = {
     return queryInterface.bulkInsert('Answer', [{
       questionId: 2,
       description: 'teste1',
-      correct: false
+      correct: false,
+      classification: 'A'
     }, {
       questionId: 2,
       description: 'teste2',
-      correct: true
+      correct: true,
+      classification: 'B'
     }, {
       questionId: 2,
       description: 'teste3',
-      correct: false
+      correct: false,
+      classification: 'C'
     }, {
       questionId: 2,
       description: 'teste4',
-      correct: false
-    }, {
-      questionId: 2,
-      description: 'teste5',
-      correct: false
+      correct: false,
+      classification: 'D'
     }])
   }
 }

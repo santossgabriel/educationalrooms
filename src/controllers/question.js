@@ -4,7 +4,36 @@ import db from '../infra/db/models/index'
 
 const { sequelize, Question, Answer } = db
 
-const validate = (question) => {
+const validateAnswers = (answers) => {
+  let corrects = 0
+  let classifications = []
+  let descriptions = []
+  for (let i = 0; i < answers.length; i++) {
+    const answer = answers[i]
+    if (answer.correct)
+      corrects++
+
+    if (!answer.classification || typeof answer.classification !== 'string')
+      throwValidationError('Todas as respostas devem possuir uma classificação.')
+
+    if (!answer.description)
+      throwValidationError('A questão possui respostas sem descrição.')
+
+    classifications.push(answer.classification)
+    descriptions.push(answer.description)
+  }
+
+  if (corrects != 1)
+    throwValidationError('A questão deve possuir 1 resposta correta.')
+
+  if (classifications.filter((v, i, arr) => arr.indexOf(v) === i).length != 4)
+    throwValidationError('As respostas não possuem as classificações necessárias.')
+
+  if (descriptions.filter((v, i, arr) => arr.indexOf(v) === i).length != 4)
+    throwValidationError('Existem respostas repetidas.')
+}
+
+const validateQuestion = (question) => {
 
   if (!question || !question.description)
     throwValidationError('Descrição inválida.')
@@ -15,16 +44,7 @@ const validate = (question) => {
     throwValidationError('A questão deve ter 4 respostas.')
   if (isNaN(points) || points < 1 || points > 10)
     throwValidationError('Os pontos devem estar entre 1 and 10.')
-  let corrects = 0
-  for (let i = 0; i < answers.length; i++) {
-    const answer = answers[i]
-    if (answer.correct)
-      corrects++
-    if (!answer.description)
-      throwValidationError('A questão possui respostas sem descrição.')
-  }
-  if (corrects != 1)
-    throwValidationError('A questão deve possuir 1 resposta correta.')
+  validateAnswers(answers)
 }
 
 const toResult = (questions) => {
@@ -70,7 +90,7 @@ export default {
     const transaction = await sequelize.transaction()
     try {
       question.userId = req.claims.id
-      validate(question)
+      validateQuestion(question)
       const questionDB = await Question.create(question, { transaction: transaction })
       const { answers } = question
       for (let i = 0; i < answers.length; i++) {
@@ -94,7 +114,7 @@ export default {
       if (questionDb.userId != req.claims.id)
         throwForbiddenError('Usuário sem permissão para alterar o item.')
 
-      validate(question)
+      validateQuestion(question)
 
       question.userId = req.claims.id
       await Question.update(question, {
