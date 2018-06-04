@@ -91,6 +91,16 @@ export default {
     res.json(toResult(questions))
   },
 
+  getMyCategories: async (req, res) => {
+    const categories = await Question.findAll({
+      attributes: ['category'],
+      where: { userId: req.claims.id },
+      group: ['category'],
+      order: sequelize.literal('count(1) desc')
+    })
+    res.json(categories.map(p => p.category))
+  },
+
   create: async (req, res) => {
     const question = req.body
     const transaction = await sequelize.transaction()

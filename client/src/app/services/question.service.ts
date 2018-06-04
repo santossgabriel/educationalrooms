@@ -17,6 +17,10 @@ export class QuestionService {
     return this.http.get('/api/question-others')
   }
 
+  getCategories() {
+    return this.http.get('/api/categories')
+  }
+
   save(question: Question) {
     if (question.id > 0)
       return this.http.put('/api/question', question)

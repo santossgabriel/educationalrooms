@@ -2,6 +2,7 @@ import { Answer } from './answer.model'
 
 export class Question {
   id: number
+  category: string
   description: string
   points: number
   answers: Answer[]

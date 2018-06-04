@@ -2,8 +2,11 @@ module.exports = {
   up: function(queryInterface, Sequelize) {
     queryInterface.addColumn(
       'Question',
-      'category',
-     Sequelize.STRING
+      'category',{
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'Conhecimentos gerais'
+      }
     );
   },
 
