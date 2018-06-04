@@ -1,10 +1,21 @@
-import { modelName, modelAttributes, modelOptions } from '../models/log'
-
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    return queryInterface.createTable(modelName, modelAttributes, modelOptions)
+    return queryInterface.createTable('Log', {
+      id: {
+        primaryKey: true,
+        autoIncrement: true,
+        type: Sequelize.INTEGER
+      },
+      description: Sequelize.STRING,
+      date: Sequelize.DATE
+    }, {
+        freezeTableName: 'Log',
+        undercored: false,
+        updatedAt: false,
+        createdAt: false
+      })
   },
   down: function (queryInterface) {
-    return queryInterface.dropTable(modelName)
+    return queryInterface.dropTable('Log')
   }
 }

@@ -38,8 +38,10 @@ const validateQuestion = (question) => {
   if (!question || !question.description)
     throwValidationError('Descrição inválida.')
 
-  const { points, answers } = question
+  const { points, answers, category } = question
 
+  if (!category)
+    throwValidationError('A questão deve ter uma área.')
   if (!Array.isArray(question.answers) || question.answers.length != 4)
     throwValidationError('A questão deve ter 4 respostas.')
   if (isNaN(points) || points < 1 || points > 10)
@@ -126,11 +128,14 @@ export default {
         transaction: transaction
       })
       const { answers } = question
-      for (let i = 0; i < answers.length; i++)
-        await Answer.update(answers[i], {
-          where: { id: answers[i].id },
+      for (let i = 0; i < answers.length; i++) {
+        let answer = answers[i]
+        answer.questionId = question.id
+        await Answer.update(answer, {
+          where: { id: answer.id },
           transaction: transaction
         })
+      }
       transaction.commit()
       res.json({ message: 'Atualizado com sucesso.' })
     } catch (ex) {

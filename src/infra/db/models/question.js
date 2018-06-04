@@ -14,7 +14,8 @@ export const modelAttributes = {
     type: Sequelize.INTEGER,
     references: { model: 'User', key: 'id' }
   },
-  shared: Sequelize.BOOLEAN
+  shared: Sequelize.BOOLEAN,
+  category: Sequelize.STRING
 }
 
 export const modelOptions = {

@@ -13,6 +13,7 @@ Given('Dado que eu tenha atualizado uma questão', () => {
     id: 4,
     description: 'teste',
     userId: 3,
+    category: 'Matemárica',
     answers: [
       { description: 'teste1', classification: 'A' },
       { description: 'teste2', classification: 'B' },

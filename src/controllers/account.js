@@ -42,6 +42,8 @@ export default {
       throwValidationError('Este email já está em uso.')
     }
     account.password = sha1(account.password)
+    account.createAt = new Date()
+    account.updateAt = new Date()
     const user = await User.create(account)
     const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 })
     res.json({ token: token, message: 'Criado com sucesso.' })
@@ -73,7 +75,8 @@ export default {
       throwValidationError('A senha informada é diferente da senha atual.')
     await User.update({
       email: account.email,
-      name: account.name
+      name: account.name,
+      createAt: new Date()
     }, { where: { id: req.claims.id } })
     res.json({ message: 'Atualizado com sucesso.' })
   }
