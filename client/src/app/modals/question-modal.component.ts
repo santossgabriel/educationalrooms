@@ -27,13 +27,6 @@ export class QuestionModalComponent {
       this.categories = <Array<string>>res
       this.selectedCategory = this.categories[0]
       this.categoryChanged()
-    }, err => {
-      console.log(err)
-      // if (!this.editMode)
-      //   Globals.changeToken(result.token)
-      // setTimeout(() => {
-      //   this.router.navigate(['/my-questions'])
-      // }, 1500)
     })
   }
 

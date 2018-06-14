@@ -174,5 +174,10 @@ export default {
       transaction.rollback()
       throw ex
     }
+  },
+
+  sync: async (req, res) => {
+    console.log(req.body)
+    res.json(req.body)
   }
 }
