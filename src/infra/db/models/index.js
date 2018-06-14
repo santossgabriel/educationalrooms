@@ -16,7 +16,7 @@ const sequelize = process.env.NODE_ENV === 'prod'
       ssl: true
     }
   })
-  : new Sequelize('quiz-room', null, null, DbConfig)
+  : new Sequelize('postgres', 'postgres', '123', DbConfig)
 
 let db = {}
 

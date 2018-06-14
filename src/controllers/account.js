@@ -23,7 +23,7 @@ export default {
     const user = await User.findOne({ where: { email: email } })
     if (!user || !password || user.password !== sha1(password))
       throwAuthError('Credenciais inválidas.')
-    const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 })
+    const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
     res.json({ token: token, message: 'Token gerado com sucesso.' })
   },
 
@@ -45,7 +45,7 @@ export default {
     account.createAt = new Date()
     account.updateAt = new Date()
     const user = await User.create(account)
-    const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 })
+    const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
     res.json({ token: token, message: 'Criado com sucesso.' })
   },
 

@@ -9,11 +9,12 @@ module.exports = {
   NODE_ENV: process.env.NODE_ENV,
   SECRET: process.env.SECRET,
   development: {
-    host: process.env.host,
-    dialect: process.env.DIALECT,
-    storage: process.env.STORAGE,
+    host: '127.0.0.1',
+    dialect: 'postgres',
     operatorsAliases: false,
-    logging: true
+    logging: true,
+    // dialectOptions: { ssl: true },
+    dialect: 'postgres'
   },
   test: {
     dialect: 'sqlite',
