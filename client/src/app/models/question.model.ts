@@ -5,6 +5,7 @@ export class Question {
   category: string
   description: string
   points: number
+  shared: boolean
   answers: Answer[]
 
   constructor() {

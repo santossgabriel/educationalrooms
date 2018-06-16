@@ -1,7 +1,7 @@
 Feature: Gerenciamento de questões
-  Para gerenciamento de questões
-  Como usuário
-  Eu quero poder criar, atualizar e buscar questões
+Para gerenciamento de questões
+Como usuário
+Eu quero poder criar, atualizar e buscar questões
 
   Scenario Outline: Criar questão
     Given Dado que eu tenha criado uma questão
@@ -59,7 +59,7 @@ Feature: Gerenciamento de questões
   Scenario: Obter questão por id
     Given Dado que eu queira obter uma questão pelo id
     When Quando eu buscar a questão
-    Then Então eu devo obter uma questão
+      Then Então eu devo obter uma questão
 
 
   Scenario Outline: Remover questão
@@ -71,4 +71,15 @@ Feature: Gerenciamento de questões
       | id | caso                  | mensagem                                     |
       | 4  | 'que me pertence'     | "Questão removida com sucesso."              |
       | 2  | 'que não me pertence' | "Usuário sem permissão para remover o item." |
-      | 10 | 'que não existe'      | "A questão não existe."                      |
+      | 99 | 'que não existe'      | "A questão não existe."                      |
+
+  Scenario Outline: Compartilhamento da questão
+    Given Dado que eu queira alterar o compartilhamento de uma questão
+    When Quando eu enviar o id de uma <caso> <id> a ser ou não compartilhada
+    Then Então eu devo obter a mensagem <mensagem> depois de alterar o compartilhamento
+
+    Examples:
+      | id | caso                          | mensagem                                     |
+      | 6  | 'questão que me pertence'     | "Compartilhada com sucesso."                 |
+      | 5  | 'questão que não me pertence' | "Usuário sem permissão para alterar o item." |
+      | 99 | 'questão que não existe'      | "A questão não existe."                      |

@@ -21,6 +21,6 @@ module.exports = {
       })
   },
   down: function (queryInterface) {
-    return queryInterface.dropTable('User')
+    return queryInterface.dropTable('Question')
   }
 }

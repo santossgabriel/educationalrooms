@@ -29,6 +29,12 @@ module.exports = {
       points: 8,
       shared: true,
       category: 'categoria 1'
+    }, {
+      userId: 3,
+      description: 'teste',
+      points: 8,
+      shared: false,
+      category: 'categoria 1'
     }])
   }
 }

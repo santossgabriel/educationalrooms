@@ -15,7 +15,7 @@ import { ConfirmModalComponent, ErrorModalComponent } from '../../modals/confirm
 })
 export class MyQuestionsComponent implements OnInit {
 
-  displayedColumns = ['id', 'description', 'points', 'actions']
+  displayedColumns = ['id', 'category', 'description', 'points', 'shared', 'actions']
   dataSource: MatTableDataSource<Question>
 
   constructor(public dialog: MatDialog, private service: QuestionService) {
@@ -56,5 +56,10 @@ export class MyQuestionsComponent implements OnInit {
           })
         })
     })
+  }
+
+  sharedChanged(q: Question) {
+    console.log(q)
+    this.service.save(q).subscribe(res => console.log(res), err => console.log(err))
   }
 }

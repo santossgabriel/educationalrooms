@@ -15,10 +15,6 @@ Feature: Gerenciamento de conta
       | '{"password": "123qwe"}'                                     | 'Credenciais inválidas.'    |
       | '{"email": "teste@mail.com", "password": "123qwee"}'         | 'Credenciais inválidas.'    |
 
-  Scenario: Não enviar o token
-    Given Dado que eu queira acessar um endpoint permissionado
-    When Quando eu não enviar o token
-    Then Então eu devo obter a mensagem "Forneça o token."
 
   Scenario: Obter dados da conta
     Given Dado que eu queira obter os dados da minha conta
@@ -55,3 +51,8 @@ Feature: Gerenciamento de conta
       | 'nome inválido'      | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres."  |
       | 'dados ok'           | '{"password": "nome atualizado"}'     | "A senha informada é diferente da senha atual." |
       | 'dados ok'           | '{"name": "nome atualizado"}'         | "Atualizado com sucesso."                       |
+
+  Scenario: Não enviar o token
+    Given Dado que eu queira acessar um endpoint permissionado
+    When Quando eu não enviar o token
+    Then Então eu devo obter a mensagem "Forneça o token."

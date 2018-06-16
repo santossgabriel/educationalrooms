@@ -5,8 +5,8 @@
       <span class="app-spacer"></span>
       <button [disabled]="path === '/'" routerLink="/" mat-button>Página inicial</button>
       <div [hidden]="!logged">
-        <button [disabled]="path === '/my-questions'" mat-button routerLink="/my-questions">Minhas Questões</button>
-        <button [disabled]="path === '/all-questions'" mat-button routerLink="/all-questions">Outras Questões</button>
+        <button [disabled]="path === '/my-questions'" mat-button routerLink="/my-questions">Questões Minhas</button>
+        <button [disabled]="path === '/all-questions'" mat-button routerLink="/all-questions">Questões Públicas</button>
       </div>
       <button [disabled]="path === '/about'" routerLink="/about" mat-button>Sobre</button>
       <span class="app-spacer"></span>

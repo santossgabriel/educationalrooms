@@ -7,6 +7,7 @@ import app from '../../../../src/server'
 const request = supertest(app)
 let question = null
 let token = ''
+let msgShare = 'teste'
 
 Given('Dado que eu tenha atualizado uma questão', () => {
   question = {
@@ -49,4 +50,25 @@ Then('Então eu devo obter a mensagem {string} depois de tentar atualizar', (mes
     .then((result) => {
       expect(result.body.message).to.eql(message)
     })
+})
+
+Given('Dado que eu queira alterar o compartilhamento de uma questão', () => {
+  return request
+    .post('/api/token')
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+
+When('Quando eu enviar o id de uma {string} {int} a ser ou não compartilhada', (caso, id) => {
+  return request
+    .put('/api/question-share')
+    .set({ token: token })
+    .send({ id: id, shared: true })
+    .then((result) => { msgShare = result.body.message })
+})
+
+Then('Então eu devo obter a mensagem {string} depois de alterar o compartilhamento', (message) => {
+  expect(msgShare).to.eql(message)
 })

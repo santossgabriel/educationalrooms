@@ -13,7 +13,7 @@
     "migrate:undo": "sequelize db:migrate:undo:all --config=./src/infra/config.js --options-path=./src/infra/options.json",
     "seeders": "sequelize db:seed:all --config=./src/infra/config.js --options-path=./src/infra/options.json",
     "mockdb": "npm run migrate && npm run seeders",
-    "restoredb": "node before.test.js && npm run migrate && npm run seeders"
+    "restoredb": "node before.test.js && npm run migrate:undo && npm run migrate && npm run seeders"
   },
   "devDependencies": {
     "chai": "^4.1.2",

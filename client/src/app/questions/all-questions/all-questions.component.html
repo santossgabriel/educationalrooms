@@ -1,20 +1,30 @@
-<form>
+<mat-card style="width: 80%; margin: 0 auto; margin-top: 50px">
+  <mat-card-title>Questões Públicas</mat-card-title>
+  <div class="question-component">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-  <mat-card>
+      <ng-container matColumnDef="id">
+        <th style="width: 100px" mat-header-cell *matHeaderCellDef> Número </th>
+        <td style="width: 100px" mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
 
-    <mat-card-title>ALL QUESTIONS WORKS! </mat-card-title>
+      <ng-container matColumnDef="category">
+        <th style="width: 100px" mat-header-cell *matHeaderCellDef> Área </th>
+        <td style="width: 100px" mat-cell *matCellDef="let element"> {{element.category}} </td>
+      </ng-container>
 
-    <mat-form-field>
-      <input matInput placeholder="Seu email" />
-    </mat-form-field>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Descrição </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
 
-    <br />
-    <mat-form-field>
-      <input matInput placeholder="Sua senha" />
-    </mat-form-field>
-    <br />
-    <button mat-raised-button color="primary">Enviar</button>
-    <br />
+      <ng-container matColumnDef="points">
+        <th mat-header-cell *matHeaderCellDef> Pontos </th>
+        <td mat-cell *matCellDef="let element"> {{element.points}} </td>
+      </ng-container>
 
-  </mat-card>
-</form>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</mat-card>

@@ -9,11 +9,9 @@ module.exports = {
   NODE_ENV: process.env.NODE_ENV,
   SECRET: process.env.SECRET,
   development: {
-    host: '127.0.0.1',
-    dialect: 'postgres',
-    operatorsAliases: false,
-    logging: true,
-    // dialectOptions: { ssl: true },
+    DATABASE_URI: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL,
+    dialectOptions: { ssl: true },
     dialect: 'postgres'
   },
   test: {

@@ -1,4 +1,4 @@
-<mat-card style="width: 80%; margin: 0 auto; margin-top: 50px">  
+<mat-card style="width: 80%; margin: 0 auto; margin-top: 50px">
   <mat-card-title>Minhas Questões</mat-card-title>
   <div class="question-component">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -6,6 +6,11 @@
       <ng-container matColumnDef="id">
         <th style="width: 100px" mat-header-cell *matHeaderCellDef> Número </th>
         <td style="width: 100px" mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef> Área </th>
+        <td mat-cell *matCellDef="let element"> {{element.category}} </td>
       </ng-container>
 
       <ng-container matColumnDef="description">
@@ -16,6 +21,15 @@
       <ng-container matColumnDef="points">
         <th mat-header-cell *matHeaderCellDef> Pontos </th>
         <td mat-cell *matCellDef="let element"> {{element.points}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="shared">
+        <th mat-header-cell *matHeaderCellDef> Compartilhada? </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox (change)="sharedChanged(element)" color="primary" [(ngModel)]="element.shared">
+            {{element.shared ? 'Sim' : 'Não'}}
+          </mat-checkbox>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">

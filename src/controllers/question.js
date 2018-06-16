@@ -56,6 +56,7 @@ const toResult = (questions) => {
     return {
       id: questions.id,
       description: questions.description,
+      category: questions.category,
       points: questions.points,
       answers: questions.Answers,
       shared: questions.shared,
@@ -174,6 +175,22 @@ export default {
       transaction.rollback()
       throw ex
     }
+  },
+
+  share: async (req, res) => {
+    const question = req.body
+    const questionDb = await Question.findOne({ where: { id: question.id } })
+
+    if (!questionDb)
+      throwValidationError('A questão não existe.')
+
+    if (questionDb.userId != req.claims.id)
+      throwForbiddenError('Usuário sem permissão para alterar o item.')
+
+    await Question.update({ shared: question.shared }, {
+      where: { id: question.id }
+    })
+    res.json({ message: 'Compartilhada com sucesso.' })
   },
 
   sync: async (req, res) => {
