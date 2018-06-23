@@ -15,7 +15,8 @@ export const modelAttributes = {
     references: { model: 'User', key: 'id' }
   },
   shared: Sequelize.BOOLEAN,
-  category: Sequelize.STRING
+  category: Sequelize.STRING,
+  sync: Sequelize.CHAR(1),
 }
 
 export const modelOptions = {

@@ -1,4 +1,7 @@
 import Sequelize from 'sequelize'
+import * as UserS from './models/user'
+import * as AnswerS from './models/answer'
+import * as QuestionS from './models/question'
 
 import config from '../config'
 
@@ -14,45 +17,14 @@ const sequelize = process.env.NODE_ENV === 'prod'
   })
   : new Sequelize('quiz-room', null, null, DbConfig)
 
-export const User = sequelize.define('User', {
-  id: {
-    primaryKey: true,
-    autoIncrement: true,
-    type: Sequelize.INTEGER
-  },
-  name: Sequelize.STRING,
-  email: {
-    type: Sequelize.STRING,
-    unique: true
-  },
-  password: Sequelize.STRING
-}, {
-    freezeTableName: 'user'
-  })
 
-export const Question = sequelize.define('question', {
-  id: {
-    primaryKey: true,
-    autoIncrement: true,
-    type: Sequelize.INTEGER
-  },
-  description: Sequelize.STRING,
-  points: Sequelize.INTEGER
-}, {
-    freezeTableName: 'question'
-  })
 
-export const Answer = sequelize.define('answer', {
-  id: {
-    primaryKey: true,
-    autoIncrement: true,
-    type: Sequelize.INTEGER
-  },
-  description: Sequelize.STRING,
-  correct: Sequelize.BOOLEAN
-}, {
-    freezeTableName: 'answer'
-  })
+export const User = sequelize.define('User', UserS.modelAttributes, UserS.modelOptions)
+
+export const Question = sequelize.define('question', QuestionS.modelAttributes, QuestionS.modelOptions)
+
+
+export const Answer = sequelize.define('answer', AnswerS.modelAttributes, AnswerS.modelOptions)
 
 Question.hasMany(Answer, {
   foreignKey: {
