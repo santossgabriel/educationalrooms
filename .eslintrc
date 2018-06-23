@@ -12,7 +12,6 @@
     "no-undef": "error",
     "no-unused-expressions": "error",
     "no-empty-function": "error",
-    "max-lines": "error",
     "no-console": "error",
     "no-var": "error",
     "no-restricted-modules": "error",

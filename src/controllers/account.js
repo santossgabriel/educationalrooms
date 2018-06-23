@@ -8,6 +8,10 @@ import { validateAccount } from '../helpers/validation'
 
 const { User } = sequelize
 
+export const isMobile = async (userId) => {
+  return await User.findOne({ attributes: ['mobile'], where: { id: userId } })
+}
+
 export default {
   getUserData: async (req, res) => {
     const user = await User.findOne({ where: { id: req.claims.id } })
@@ -19,11 +23,13 @@ export default {
   },
 
   getToken: async (req, res) => {
-    const { email, password } = req.body
+    const { email, password, mobile } = req.body
     const user = await User.findOne({ where: { email: email } })
     if (!user || !password || user.password !== sha1(password))
       throwAuthError('Credenciais inválidas.')
     const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
+    if (mobile)
+      User.update({ mobile: true }, { where: { email: email } })
     res.json({ token: token, message: 'Token gerado com sucesso.' })
   },
 
@@ -76,7 +82,7 @@ export default {
     await User.update({
       email: account.email,
       name: account.name,
-      createAt: new Date()
+      updateAt: new Date()
     }, { where: { id: req.claims.id } })
     res.json({ message: 'Atualizado com sucesso.' })
   }

@@ -14,7 +14,10 @@ export const modelAttributes = {
     unique: true
   },
   password: Sequelize.STRING,
-  type: Sequelize.CHAR(1)
+  type: Sequelize.CHAR(1),
+  mobile: Sequelize.BOOLEAN,
+  createdAt: Sequelize.DATE,
+  updatedAt: Sequelize.DATE
 }
 
 export const modelOptions = {

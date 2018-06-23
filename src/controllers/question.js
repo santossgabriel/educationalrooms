@@ -1,6 +1,6 @@
 import { throwValidationError, throwForbiddenError } from '../helpers/error'
-
 import db from '../infra/db/models/index'
+import { isMobile } from './account'
 
 const { sequelize, Question, Answer } = db
 
@@ -103,11 +103,12 @@ export default {
   },
 
   create: async (req, res) => {
-    const question = req.body
+    let question = req.body
     const transaction = await sequelize.transaction()
     try {
       question.userId = req.claims.id
       validateQuestion(question)
+      question.sync = 'N'
       const questionDB = await Question.create(question, { transaction: transaction })
       const { answers } = question
       for (let i = 0; i < answers.length; i++) {
@@ -134,6 +135,10 @@ export default {
       validateQuestion(question)
 
       question.userId = req.claims.id
+
+      if (isMobile(req.claims.id))
+        question.sync = 'U'
+
       await Question.update(question, {
         where: { id: question.id },
         transaction: transaction
@@ -166,8 +171,12 @@ export default {
       if (question.userId != req.claims.id)
         throwForbiddenError('Usuário sem permissão para remover o item.')
 
-      await Answer.destroy({ where: { questionId: id }, transaction: transaction })
-      await Question.destroy({ where: { id: id }, transaction: transaction })
+      if (isMobile(req.claims.id)) {
+        await Question.update({ sync: 'R' }, { where: { id: id }, transaction: transaction })
+      } else {
+        await Answer.destroy({ where: { questionId: id }, transaction: transaction })
+        await Question.destroy({ where: { id: id }, transaction: transaction })
+      }
 
       transaction.commit()
       res.json({ message: 'Questão removida com sucesso.' })
@@ -194,7 +203,100 @@ export default {
   },
 
   sync: async (req, res) => {
-    console.log(req.body)
-    res.json(req.body)
+    if (!req.body || !Array.isArray(req.body))
+      throwValidationError('Informe as questões para sincronização.')
+
+    let errors = []
+
+    const changedIds = req.body.filter(t => t.id > 0).map(p => p.id)
+    const news = req.body.filter(t => !t.id)
+
+    const dbQuestions = await Question.findAll({
+      include: Answer,
+      where: sequelize.and(
+        { userId: req.claims.id },
+        sequelize.or(
+          { sync: 'N' },
+          { id: changedIds }))
+    })
+
+    const changedQuestions = dbQuestions.filter(p => p.sync !== 'N')
+    let questionsResult = dbQuestions.filter(p => p.sync === 'N')
+
+    await Question.update({ sync: null }, { where: { userId: req.claims.id } })
+
+    changedQuestions.forEach(async q => {
+
+      const mq = req.body.filter(p => p.id == q.id).shift()
+      if (mq != null) {
+
+        let transaction = await sequelize.transaction()
+        try {
+          if (mq.updatedAt > q.updatedAt) {
+            questionsResult.push(mq)
+            if (mq.sync === 'R') {
+              await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
+              await Question.destroy({ where: { id: q.id }, transaction: transaction })
+            } else {
+              validateQuestion(mq)
+              mq.sync = null
+              await Question.update(mq, {
+                where: { id: mq.id },
+                transaction: transaction
+              })
+              const { answers } = mq
+              for (let i = 0; i < answers.length; i++) {
+                let answer = answers[i]
+                answer.questionId = mq.id
+                await Answer.update(answer, {
+                  where: { id: answer.id },
+                  transaction: transaction
+                })
+              }
+            }
+          } else {
+            questionsResult.push(q)
+            if (q.sync === 'R') {
+              await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
+              await Question.destroy({ where: { id: q.id }, transaction: transaction })
+            }
+          }
+
+          transaction.commit()
+        } catch (ex) {
+          transaction.rollback()
+          errors.push({
+            exception: typeof (ex) === 'string' ? ex : ex.message,
+            question: mq,
+            message: 'Erro ao atualizar questão'
+          })
+        }
+      }
+    })
+
+    news.forEach(async q => {
+      const transaction = await sequelize.transaction()
+      try {
+        q.userId = req.claims.id
+        validateQuestion(q)
+        q.sync = null
+        const questionDB = await Question.create(q, { transaction: transaction })
+        const { answers } = q
+        for (let i = 0; i < answers.length; i++) {
+          answers[i].questionId = questionDB.id
+          await Answer.create(answers[i], { transaction: transaction })
+        }
+        transaction.commit()
+      } catch (ex) {
+        transaction.rollback()
+        errors.push({
+          exception: typeof (ex) === 'string' ? ex : ex.message,
+          question: q,
+          message: 'Erro ao criar questão'
+        })
+      }
+    })
+
+    res.json({ erros: errors, questions: questionsResult })
   }
 }

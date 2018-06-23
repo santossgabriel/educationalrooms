@@ -17,6 +17,8 @@ export const modelAttributes = {
   shared: Sequelize.BOOLEAN,
   category: Sequelize.STRING,
   sync: Sequelize.CHAR(1),
+  createdAt: Sequelize.DATE,
+  updatedAt: Sequelize.DATE
 }
 
 export const modelOptions = {
