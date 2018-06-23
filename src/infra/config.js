@@ -8,11 +8,12 @@ try {
 module.exports = {
   NODE_ENV: process.env.NODE_ENV,
   SECRET: process.env.SECRET,
-  development: {
+  dev: {
     DATABASE_URI: process.env.DATABASE_URL,
     url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
-    dialect: 'postgres'
+    dialect: 'postgres',
+    logging: true
   },
   test: {
     dialect: 'sqlite',
@@ -24,6 +25,7 @@ module.exports = {
     DATABASE_URI: process.env.DATABASE_URL,
     url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
-    dialect: 'postgres'
+    dialect: 'postgres',
+    logging: true
   }
 }

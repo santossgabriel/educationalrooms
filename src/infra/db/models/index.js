@@ -6,17 +6,16 @@ import * as Answer from './answer'
 
 import config from '../../config'
 
-const DbConfig = config[config.NODE_ENV]
+const env = config.NODE_ENV
+const DbConfig = config[env]
 
-const sequelize = process.env.NODE_ENV === 'prod'
+const sequelize = env !== 'test'
   ? new Sequelize(DbConfig.DATABASE_URI, {
-    dialect: 'postgres',
-    logging: false,
-    dialectOptions: {
-      ssl: true
-    }
+    dialect: config[env].dialect,
+    logging: config[env].logging,
+    dialectOptions: config[env].dialectOptions
   })
-  : new Sequelize('postgres', 'postgres', '123', DbConfig)
+  : new Sequelize('quizroom', null, null, DbConfig)
 
 let db = {}
 

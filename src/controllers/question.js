@@ -1,6 +1,17 @@
-import { throwValidationError, throwForbiddenError } from '../helpers/error'
+import {
+  throwValidationError,
+  throwForbiddenError,
+  answerErros,
+  questionErros
+} from '../helpers/error'
 import db from '../infra/db/models/index'
 import { isMobile } from './account'
+
+export const questionStatus = {
+  NEW: 'N',
+  UPDATED: 'U',
+  REMOVED: 'R'
+}
 
 const { sequelize, Question, Answer } = db
 
@@ -14,38 +25,41 @@ const validateAnswers = (answers) => {
       corrects++
 
     if (!answer.classification || typeof answer.classification !== 'string')
-      throwValidationError('Todas as respostas devem possuir uma classificação.')
+      throwValidationError(answerErros.HAS_CLASSIFICATION)
 
     if (!answer.description)
-      throwValidationError('A questão possui respostas sem descrição.')
+      throwValidationError(answerErros.HAS_DESCRIPTION)
 
     classifications.push(answer.classification)
     descriptions.push(answer.description)
   }
 
   if (corrects != 1)
-    throwValidationError('A questão deve possuir 1 resposta correta.')
+    throwValidationError(answerErros.HAS_CORRECT_ANSWER)
 
   if (classifications.filter((v, i, arr) => arr.indexOf(v) === i).length != 4)
-    throwValidationError('As respostas não possuem as classificações necessárias.')
+    throwValidationError(answerErros.HAS_CLASSIFICATION_NEEDED)
 
   if (descriptions.filter((v, i, arr) => arr.indexOf(v) === i).length != 4)
-    throwValidationError('Existem respostas repetidas.')
+    throwValidationError(answerErros.NO_ANSWER_REPEATED)
 }
 
 const validateQuestion = (question) => {
 
   if (!question || !question.description)
-    throwValidationError('Descrição inválida.')
+    throwValidationError(questionErros.HAS_DESCRIPTION)
 
   const { points, answers, category } = question
 
   if (!category)
-    throwValidationError('A questão deve ter uma área.')
-  if (!Array.isArray(question.answers) || question.answers.length != 4)
-    throwValidationError('A questão deve ter 4 respostas.')
+    throwValidationError(questionErros.HAS_CATEGORY)
+
   if (isNaN(points) || points < 1 || points > 10)
-    throwValidationError('Os pontos devem estar entre 1 and 10.')
+    throwValidationError(questionErros.BETWEEN_POINTS)
+
+  if (!Array.isArray(question.answers) || question.answers.length != 4)
+    throwValidationError(questionErros.HAS_FOUR_ANSWERS)
+
   validateAnswers(answers)
 }
 
@@ -108,7 +122,7 @@ export default {
     try {
       question.userId = req.claims.id
       validateQuestion(question)
-      question.sync = 'N'
+      question.sync = questionStatus.NEW
       question.createdAt = new Date()
       question.updatedAt = new Date()
       const questionDB = await Question.create(question, { transaction: transaction })
@@ -140,7 +154,7 @@ export default {
       question.updatedAt = new Date()
 
       if (isMobile(req.claims.id))
-        question.sync = 'U'
+        question.sync = questionStatus.UPDATED
 
       await Question.update(question, {
         where: { id: question.id },
@@ -175,7 +189,10 @@ export default {
         throwForbiddenError('Usuário sem permissão para remover o item.')
 
       if (isMobile(req.claims.id)) {
-        await Question.update({ sync: 'R' }, { where: { id: id }, transaction: transaction })
+        await Question.update(
+          { sync: questionStatus.REMOVED },
+          { where: { id: id }, transaction: transaction }
+        )
       } else {
         await Answer.destroy({ where: { questionId: id }, transaction: transaction })
         await Question.destroy({ where: { id: id }, transaction: transaction })
@@ -210,70 +227,68 @@ export default {
       throwValidationError('Informe as questões para sincronização.')
 
     let errors = []
+    const appQuestions = req.body
 
-    const changedIds = req.body.filter(t => t.id > 0).map(p => p.id)
+    const appChangesIds = req.body.filter(t => t.id > 0).map(p => p.id)
     const news = req.body.filter(t => !t.id)
 
-    const dbQuestions = await Question.findAll({
+    const dbChanges = await Question.findAll({
       include: Answer,
       where: sequelize.and(
         { userId: req.claims.id },
         sequelize.or(
-          { sync: 'N' },
-          { id: changedIds }))
+          { sync: { [sequelize.Op.ne]: null } },
+          { id: appChangesIds }))
     })
 
-    const changedQuestions = dbQuestions.filter(p => p.sync !== 'N')
-    let questionsResult = dbQuestions.filter(p => p.sync === 'N')
+    let questionsResult = dbChanges.filter(p => appChangesIds.indexOf(p.id) === -1 && p.sync !== questionStatus.REMOVED)
+    const dbUpdates = dbChanges.filter(p => appChangesIds.indexOf(p.id) !== -1)
 
-    await Question.update({ sync: null }, { where: { userId: req.claims.id } })
+    dbUpdates.forEach(async q => {
 
-    changedQuestions.forEach(async q => {
+      const mq = appQuestions.filter(p => p.id == q.id).shift()
 
-      const mq = req.body.filter(p => p.id == q.id).shift()
-      if (mq != null) {
-
-        let transaction = await sequelize.transaction()
-        try {
-          if (mq.updatedAt > q.updatedAt) {
-            questionsResult.push(mq)
-            if (mq.sync === 'R') {
-              await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
-              await Question.destroy({ where: { id: q.id }, transaction: transaction })
-            } else {
-              validateQuestion(mq)
-              mq.sync = null
-              await Question.update(mq, {
-                where: { id: mq.id },
+      const transaction = await sequelize.transaction()
+      try {
+        if (!mq.updatedAt)
+          throwValidationError(questionErros.SYNC_NO_UPDATED_DATE)
+        if (!q.updatedAt || mq.updatedAt > q.updatedAt) {
+          if (mq.sync === 'R') {
+            await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
+            await Question.destroy({ where: { id: q.id }, transaction: transaction })
+          } else {
+            validateQuestion(mq)
+            await Question.update(mq, {
+              where: { id: mq.id },
+              transaction: transaction
+            })
+            const { answers } = mq
+            for (let i = 0; i < answers.length; i++) {
+              let answer = answers[i]
+              answer.questionId = mq.id
+              await Answer.update(answer, {
+                where: { id: answer.id },
                 transaction: transaction
               })
-              const { answers } = mq
-              for (let i = 0; i < answers.length; i++) {
-                let answer = answers[i]
-                answer.questionId = mq.id
-                await Answer.update(answer, {
-                  where: { id: answer.id },
-                  transaction: transaction
-                })
-              }
-            }
-          } else {
-            questionsResult.push(q)
-            if (q.sync === 'R') {
-              await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
-              await Question.destroy({ where: { id: q.id }, transaction: transaction })
             }
           }
-
-          transaction.commit()
-        } catch (ex) {
-          transaction.rollback()
-          errors.push({
-            exception: typeof (ex) === 'string' ? ex : ex.message,
-            question: mq,
-            message: 'Erro ao atualizar questão'
-          })
+          questionsResult.push(mq)
+        } else {
+          questionsResult.push(q)
+          if (q.sync === 'R') {
+            await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
+            await Question.destroy({ where: { id: q.id }, transaction: transaction })
+          }
         }
+
+        transaction.commit()
+      } catch (ex) {
+        transaction.rollback()
+        errors.push({
+          exception: typeof (ex) === 'string' ? ex : ex.message,
+          question: mq,
+          message: 'Erro ao atualizar questão'
+        })
       }
     })
 
@@ -299,7 +314,7 @@ export default {
         })
       }
     })
-
-    res.json({ erros: errors, questions: questionsResult })
+    await Question.update({ sync: null }, { where: { userId: req.claims.id } })
+    res.json({ errors: errors, questions: questionsResult })
   }
 }

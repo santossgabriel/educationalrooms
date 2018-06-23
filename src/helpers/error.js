@@ -49,7 +49,7 @@ const handlerError = async (error, res, req) => {
       log.error.message = error.message
       log.error.stack = error.stack
     }
-    
+
     const logDB = await Log.create({ date: new Date(), description: JSON.stringify(log) })
     res.status(httpStatus.INTERNAL_SERVER_ERROR)
       .json(`Ocorreu um erro interno. Nos envie uma solicitação enviando o código ${logDB.id}`)
@@ -60,4 +60,21 @@ export const asyncErrorHandler = fn => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch((err) => {
     handlerError(err, res, req)
   })
+}
+
+
+export const questionErros = {
+  HAS_DESCRIPTION: 'Descrição inválida.',
+  HAS_CATEGORY: 'A questão deve ter uma área.',
+  HAS_FOUR_ANSWERS: 'A questão deve ter 4 respostas.',
+  BETWEEN_POINTS: 'Os pontos devem estar entre 1 and 10.',
+  SYNC_NO_UPDATED_DATE: 'Questão sem data de atualização'
+}
+
+export const answerErros = {
+  HAS_CLASSIFICATION: 'Todas as respostas devem possuir uma classificação.',
+  HAS_DESCRIPTION: 'A questão possui respostas sem descrição.',
+  HAS_CORRECT_ANSWER: 'A questão deve possuir 1 resposta correta.',
+  HAS_CLASSIFICATION_NEEDED: 'As respostas não possuem as classificações necessárias.',
+  NO_ANSWER_REPEATED: 'Existem respostas repetidas.'
 }
