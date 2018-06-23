@@ -109,8 +109,8 @@ export default {
       question.userId = req.claims.id
       validateQuestion(question)
       question.sync = 'N'
-      question.createAt = new Date()
-      question.updateAt = new Date()
+      question.createdAt = new Date()
+      question.updatedAt = new Date()
       const questionDB = await Question.create(question, { transaction: transaction })
       const { answers } = question
       for (let i = 0; i < answers.length; i++) {
@@ -137,7 +137,7 @@ export default {
       validateQuestion(question)
 
       question.userId = req.claims.id
-      question.updateAt = new Date()
+      question.updatedAt = new Date()
 
       if (isMobile(req.claims.id))
         question.sync = 'U'

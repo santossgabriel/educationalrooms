@@ -48,8 +48,8 @@ export default {
       throwValidationError('Este email já está em uso.')
     }
     account.password = sha1(account.password)
-    account.createAt = new Date()
-    account.updateAt = new Date()
+    account.createdAt = new Date()
+    account.updatedAt = new Date()
     const user = await User.create(account)
     const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
     res.json({ token: token, message: 'Criado com sucesso.' })
@@ -82,7 +82,7 @@ export default {
     await User.update({
       email: account.email,
       name: account.name,
-      updateAt: new Date()
+      updatedAt: new Date()
     }, { where: { id: req.claims.id } })
     res.json({ message: 'Atualizado com sucesso.' })
   }
