@@ -48,6 +48,10 @@ module.exports = {
     { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1' },
     // id = 12
     { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1' },
+    // id = 13
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: 'R', updatedAt: new Date('6/26/2018') },
+    // id = 14
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date('6/26/2017') },
       // Questões corretas
       // {
       //   description: 'teste',

@@ -228,6 +228,7 @@ export default {
 
     let errors = []
     const appQuestions = req.body
+    let i
 
     const appChangesIds = req.body.filter(t => t.id > 0).map(p => p.id)
     const news = req.body.filter(t => !t.id)
@@ -244,15 +245,17 @@ export default {
     let questionsResult = dbChanges.filter(p => appChangesIds.indexOf(p.id) === -1 && p.sync !== questionStatus.REMOVED)
     const dbUpdates = dbChanges.filter(p => appChangesIds.indexOf(p.id) !== -1)
 
-    dbUpdates.forEach(async q => {
-
+    for (i = 0; i < dbUpdates.length; i++) {
+      const q = dbUpdates[i]
       const mq = appQuestions.filter(p => p.id == q.id).shift()
 
       const transaction = await sequelize.transaction()
+
       try {
         if (!mq.updatedAt)
           throwValidationError(questionErros.SYNC_NO_UPDATED_DATE)
-        if (!q.updatedAt || mq.updatedAt > q.updatedAt) {
+
+        if (!q.updatedAt || (new Date(mq.updatedAt) > new Date(q.updatedAt.toString()))) {
           if (mq.sync === 'R') {
             await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
             await Question.destroy({ where: { id: q.id }, transaction: transaction })
@@ -290,9 +293,10 @@ export default {
           message: 'Erro ao atualizar questão'
         })
       }
-    })
+    }
 
-    news.forEach(async q => {
+    for (i = 0; i < news.length; i++) {
+      let q = news[i]
       const transaction = await sequelize.transaction()
       try {
         q.userId = req.claims.id
@@ -313,8 +317,8 @@ export default {
           message: 'Erro ao criar questão'
         })
       }
-    })
-    await Question.update({ sync: null }, { where: { userId: req.claims.id } })
+    }
+    Question.update({ sync: null }, { where: { userId: req.claims.id } })
     res.json({ errors: errors, questions: questionsResult })
   }
 }
