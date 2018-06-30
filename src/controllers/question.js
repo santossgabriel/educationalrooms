@@ -13,6 +13,17 @@ export const questionStatus = {
   REMOVED: 'R'
 }
 
+const questionToDb = (q) => {
+  return {
+    category: q.category,
+    description: q.description,
+    points: q.points,
+    shared: q.shared,
+    sync: q.sync,
+    updatedAt: q.updatedAt
+  }
+}
+
 const { sequelize, Question, Answer } = db
 
 const validateAnswers = (answers) => {
@@ -262,15 +273,14 @@ export default {
       try {
         if (!mq.updatedAt)
           throwValidationError(questionErros.SYNC_NO_UPDATED_DATE)
-        // console.log(`${mq.description} | ${mq.updatedAt} | ${q.updatedAt.toString()}`)
-        // console.log('')
-        if (!q.updatedAt || (new Date(mq.updatedAt) > new Date(q.updatedAt.toString()))) {
+        mq.updatedAt = new Date(mq.updatedAt)
+        if (!q.updatedAt || (mq.updatedAt > new Date(q.updatedAt.toString()))) {
           if (mq.sync === 'R') {
             await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
             await Question.destroy({ where: { id: q.id }, transaction: transaction })
           } else {
             validateQuestion(mq)
-            await Question.update(mq, {
+            await Question.update(questionToDb(mq), {
               where: { id: mq.id },
               transaction: transaction
             })
@@ -332,7 +342,7 @@ export default {
       include: Answer,
       where: { userId: req.claims.id }
     })
-
+    
     res.json({ errors: errors, questions: questionsResult })
   }
 }
