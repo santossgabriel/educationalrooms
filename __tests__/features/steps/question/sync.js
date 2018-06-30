@@ -19,9 +19,11 @@ const questions = [
   // Pontos inválidos
   { id: 9, description: 'teste', category: 'Matemárica', points: 11, updatedAt: new Date() },
   { id: 10, description: 'teste', category: 'Matemárica', points: 0, updatedAt: new Date() },
-  { id: 11, description: 'teste', category: 'Matemárica', updatedAt: new Date() },
+  { id: 11, description: 'teste', category: 'Matemárica', updatedAt: new Date() },  
   // Número incorreto de respostas
   { id: 12, description: 'teste', category: 'Matemárica', points: 5, updatedAt: new Date() },
+  // Sem data de atualização
+  { id: 15, description: 'teste', category: 'Matemárica' },
   // Questão removida que será usada a versão do banco
   {
     id: 13,
@@ -135,9 +137,11 @@ Then('Então devo obter o retorno da sincronização', () => {
   assert.isTrue(errors.filter(p => p.exception === questionErros.HAS_CATEGORY).length == 1, 'Deve ter 1 erro de categoria inválida')
   assert.isTrue(errors.filter(p => p.exception === questionErros.HAS_DESCRIPTION).length == 1, 'Deve ter 1 erro de descrição da questão')
   assert.isTrue(errors.filter(p => p.exception === questionErros.HAS_FOUR_ANSWERS).length == 1, 'Deve ter 1 erro de questão com número de respostas inválido')
+  assert.isTrue(errors.filter(p => p.exception === questionErros.SYNC_NO_UPDATED_DATE).length == 1, 'Deve ter 1 erro de questão sem data de atualização')
   assert.isTrue(errors.filter(p => p.exception === answerErros.HAS_DESCRIPTION).length == 1, 'Deve ter 1 erro de resposta sem descrição')
   assert.isTrue(errors.filter(p => p.exception === answerErros.HAS_CLASSIFICATION).length == 1, 'Deve ter 1 erro de resposta sem classificação')
   assert.isTrue(errors.filter(p => p.exception === answerErros.HAS_CLASSIFICATION_NEEDED).length == 1, 'Deve ter 1 erro de resposta com classificação divergente')
+  assert.isTrue(errors.filter(p => p.exception === answerErros.HAS_CORRECT_ANSWER).length == 1, 'Deve ter 1 erro de questão sem resposta correta')
   assert.isTrue(errors.filter(p => p.exception === answerErros.HAS_CORRECT_ANSWER).length == 1, 'Deve ter 1 erro de questão sem resposta correta')
 
   assert.isTrue(questions.filter(p => p.id === 13 && p.sync === 'R').length === 0, 'Questão 13 deve ser removida.')

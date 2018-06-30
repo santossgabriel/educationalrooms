@@ -8,6 +8,7 @@ const request = supertest(app)
 let questions = []
 let question = null
 let token = ''
+let categories = []
 
 /**
  * Obter questões do usuário logado
@@ -90,4 +91,29 @@ When('Quando eu buscar a questão', () => {
 
 Then('Então eu devo obter uma questão', () => {
   expect(question.description).to.eql('teste')
+})
+
+/**
+ * Obter questão pelo id
+ */
+Given('Dado que eu queira obter minhas categorias', () => {
+  return request
+    .post('/api/token')
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+
+When('Quando eu buscar as categorias', () => {
+  return request
+    .get('/api/categories')
+    .set({ token: token })
+    .then((result) => {
+      categories = result.body
+    })
+})
+
+Then('Então eu quero obter uma lista das categorias', () => {
+  assert.isTrue(categories.length > 0, 'Deve retornar mais de uma categoria')
 })
