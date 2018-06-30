@@ -91,10 +91,7 @@ export default {
       include: { model: Answer },
       where: sequelize.and(
         { userId: req.claims.id },
-        sequelize.or(          
-          { sync: { [sequelize.Op.ne]: questionStatus.REMOVED } },
-          { sync: null }
-        ),
+        { sync: { [sequelize.Op.ne]: questionStatus.REMOVED } },
       ),
       order: [[Answer, 'classification']]
     })
@@ -106,9 +103,7 @@ export default {
       include: Answer,
       where: sequelize.and(
         { userId: { [sequelize.Op.ne]: req.claims.id } },
-        sequelize.or(
-          { sync: { [sequelize.Op.ne]: questionStatus.REMOVED } },
-          { sync: null }),
+        { sync: { [sequelize.Op.ne]: questionStatus.REMOVED } },
         { shared: true }
       )
     })
@@ -162,8 +157,7 @@ export default {
       question.userId = req.claims.id
       question.updatedAt = new Date()
 
-      if (isMobile(req.claims.id))
-        question.sync = questionStatus.UPDATED
+      question.sync = isMobile(req.claims.id) ? questionStatus.UPDATED : ''
 
       await Question.update(question, {
         where: { id: question.id },
@@ -216,7 +210,7 @@ export default {
   },
 
   share: async (req, res) => {
-    const question = req.body    
+    const question = req.body
     const questionDb = await Question.findOne({ where: { id: question.id } })
 
     if (!questionDb)
@@ -232,15 +226,18 @@ export default {
   },
 
   sync: async (req, res) => {
-    
+
     if (!req.body || !req.body.questions || !Array.isArray(req.body.questions))
       throwValidationError('Informe as questões para sincronização.')
 
-    const appQuestions = req.body.questions
-    let errors = []    
+    const appQuestions = req.body.questions.map(p => {
+      p.sync = p.sync ? p.sync : ''
+      return p
+    })
+    let errors = []
     let i
 
-    console.log(appQuestions)
+    // console.log(appQuestions)
 
     const appChangesIds = appQuestions.filter(t => t.id > 0).map(p => p.id)
     const news = appQuestions.filter(t => !t.id)
@@ -250,10 +247,10 @@ export default {
       where: sequelize.and(
         { userId: req.claims.id },
         sequelize.or(
-          { sync: { [sequelize.Op.ne]: null } },
+          { sync: { [sequelize.Op.ne]: '' } },
           { id: appChangesIds }))
     })
-   
+
     const dbUpdates = dbChanges.filter(p => appChangesIds.indexOf(p.id) !== -1)
 
     for (i = 0; i < dbUpdates.length; i++) {
@@ -265,8 +262,8 @@ export default {
       try {
         if (!mq.updatedAt)
           throwValidationError(questionErros.SYNC_NO_UPDATED_DATE)
-        console.log(`${mq.description} | ${mq.updatedAt} | ${q.updatedAt.toString()}`)
-        console.log('')
+        // console.log(`${mq.description} | ${mq.updatedAt} | ${q.updatedAt.toString()}`)
+        // console.log('')
         if (!q.updatedAt || (new Date(mq.updatedAt) > new Date(q.updatedAt.toString()))) {
           if (mq.sync === 'R') {
             await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
@@ -311,7 +308,7 @@ export default {
       try {
         q.userId = req.claims.id
         validateQuestion(q)
-        q.sync = null
+        q.sync = ''
         const questionDB = await Question.create(q, { transaction: transaction })
         const { answers } = q
         for (let i = 0; i < answers.length; i++) {
@@ -329,7 +326,7 @@ export default {
       }
     }
 
-    Question.update({ sync: null }, { where: { userId: req.claims.id } })
+    Question.update({ sync: '' }, { where: { userId: req.claims.id } })
 
     const questionsResult = await Question.findAll({
       include: Answer,

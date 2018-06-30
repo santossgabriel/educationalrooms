@@ -42,7 +42,7 @@ const questions = [
   {
     userId: 5,
     id: 14,
-    description: 'teste',
+    description: 'questão 14',
     points: 8,
     shared: false,
     category: 'categoria 1',
@@ -118,7 +118,7 @@ When('Quando enviar as questões para o servidor', () => {
   return request
     .post('/api/question-sync')
     .set({ token: token })
-    .send(questions)
+    .send({ questions: questions })
     .then((result) => {
       synced = result.body
     })
@@ -140,8 +140,6 @@ Then('Então devo obter o retorno da sincronização', () => {
   assert.isTrue(errors.filter(p => p.exception === answerErros.HAS_CLASSIFICATION_NEEDED).length == 1, 'Deve ter 1 erro de resposta com classificação divergente')
   assert.isTrue(errors.filter(p => p.exception === answerErros.HAS_CORRECT_ANSWER).length == 1, 'Deve ter 1 erro de questão sem resposta correta')
 
-  assert.isTrue(questions.filter(p => p.id === 13 && p.sync === 'R').length === 1, 'Questão 13 deve ser excluída no servidor')
-  assert.isTrue(questions.filter(p => p.id === 14 && p.sync === 'U').length === 1, 'Questão 14 deve ser atualizada pelo App')
-  // assert.isTrue(JSON.stringify(questions), '')
-  //assert.isTrue(questions.length > 0, 'Deve retornar questões')
+  assert.isTrue(questions.filter(p => p.id === 13 && p.sync === 'R').length === 0, 'Questão 13 deve ser removida.')
+  assert.isTrue(questions.filter(p => p.description === 'questão 14').length === 1, 'Questão 14 deve ser atualizada pelo App.')
 })

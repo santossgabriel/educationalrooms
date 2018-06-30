@@ -1,6 +1,10 @@
 Melhorias do App:
   - Substituir id da questão pelos pontos
   - Alterar cor padrão da caixa do id para exibir conforme a cor da categoria
+  - Adicionar filtro na lista de questões
 
 Melhorias do Site:
   - Alterar o nome de 'Minhas Questões' para 'Questões Públicas'
+
+https://www.youtube.com/watch?v=nOivQEBjXII
+https://www.youtube.com/watch?v=yz316cWscqI
