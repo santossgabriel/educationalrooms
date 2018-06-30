@@ -23,6 +23,8 @@ import { AllQuestionsComponent } from './questions/all-questions/all-questions.c
 import { MyQuestionsComponent } from './questions/my-questions/my-questions.component'
 import { QuestionModalComponent } from './modals/question-modal.component'
 import { ConfirmModalComponent, ErrorModalComponent } from './modals/confirm-modal.component'
+import { RoomsComponent } from './rooms/rooms.component';
+import { RoomsOnlineComponent } from './rooms-online/rooms-online.component';
 
 const components = [
   AppComponent,
@@ -37,7 +39,9 @@ const components = [
   ConfirmEqualValidatorDirective,
   QuestionModalComponent,
   ConfirmModalComponent,
-  ErrorModalComponent
+  ErrorModalComponent,
+  RoomsComponent,
+  RoomsOnlineComponent
 ]
 
 const routes = [
@@ -47,7 +51,9 @@ const routes = [
   { path: 'signup', component: SingupComponent },
   { path: 'sign-edit', component: SingupComponent },
   { path: 'my-questions', component: MyQuestionsComponent },
-  { path: 'all-questions', component: AllQuestionsComponent }
+  { path: 'all-questions', component: AllQuestionsComponent },
+  { path: 'rooms', component: RoomsComponent },
+  { path: 'rooms-online', component: RoomsOnlineComponent }
 ]
 
 @NgModule({

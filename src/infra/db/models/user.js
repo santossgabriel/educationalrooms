@@ -22,19 +22,23 @@ export const modelAttributes = {
   password: {
     type: Sequelize.STRING,
     allowNull: false,
-    defaultValue: '',
-  },
-  type: {    
-    type: Sequelize.CHAR(1),
-    allowNull: false,
     defaultValue: ''
   },
-  mobile: {    
+  type: {
+    type: Sequelize.CHAR(1),
+    allowNull: false,
+    defaultValue: 'U'
+  },
+  mobile: {
     type: Sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   },
-  createdAt: Sequelize.DATE,
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    defaultValue: new Date('01/01/1970')
+  },
   updatedAt: Sequelize.DATE
 }
 

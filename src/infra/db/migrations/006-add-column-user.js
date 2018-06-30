@@ -1,13 +1,16 @@
 module.exports = {
-  up: function(queryInterface, Sequelize) {
+  up: function (queryInterface, Sequelize) {
     queryInterface.addColumn(
       'User',
-      'createAt',
-     Sequelize.DATE
+      'createAt', {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: new Date('01/01/1970')
+      }
     );
   },
 
-  down: function(queryInterface, Sequelize) {
+  down: function (queryInterface, Sequelize) {
     queryInterface.removeColumn(
       'User',
       'createAt'

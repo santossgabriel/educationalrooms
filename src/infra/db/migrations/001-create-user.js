@@ -6,13 +6,26 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER
       },
-      name: Sequelize.STRING,
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: ''
+      },
       email: {
         type: Sequelize.STRING,
-        unique: true
+        unique: true,
+        allowNull: false,
+        defaultValue: ''
       },
-      password: Sequelize.STRING,
-      type: Sequelize.CHAR(1)
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: '',
+      },
+      type: {
+        type: Sequelize.CHAR(1),
+        defaultValue: ''
+      }
     }, {
         freezeTableName: 'User',
         undercored: false,

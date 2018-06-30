@@ -6,56 +6,74 @@ module.exports = {
       description: 'teste',
       points: 8,
       category: 'categoria teste 1',
-      shared: false
+      shared: false,
+      sync: '',
+      createdAt: Date(),
+      updatedAt: Date()
     }, {
       userId: 2, // id = 2
       description: 'teste2',
       points: 3,
       category: 'categoria 1',
-      shared: false
+      shared: false,
+      sync: '',
+      createdAt: Date(),
+      updatedAt: Date()
     }, {
       userId: 1, // id = 3
       description: 'teste',
       points: 8,
       shared: true,
-      category: 'categoria 1'
+      category: 'categoria 1',
+      sync: '',
+      createdAt: Date(),
+      updatedAt: Date()
     }, {
       userId: 3, // id = 4
       description: 'teste',
       points: 8,
       shared: true,
-      category: 'categoria 1'
+      category: 'categoria 1',
+      sync: '',
+      createdAt: Date(),
+      updatedAt: Date()
     }, {
       userId: 2, // id = 5
       description: 'teste',
       points: 8,
       shared: true,
-      category: 'categoria 1'
+      category: 'categoria 1',
+      sync: '',
+      createdAt: Date(),
+      updatedAt: Date()
     }, {
       userId: 3, // id = 6
       description: 'teste',
       points: 8,
       shared: false,
-      category: 'categoria 1'
+      category: 'categoria 1',
+      sync: '',
+      createdAt: Date(),
+      updatedAt: Date()
     },
     // id = 7
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1' },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: '', createdAt: Date(), updatedAt: Date() },
     // id = 8
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1' },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: '', createdAt: Date(), updatedAt: Date() },
     // id = 9
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1' },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: '', createdAt: Date(), updatedAt: Date() },
     // id = 10
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1' },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: '', createdAt: Date(), updatedAt: Date() },
     // id = 11
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1' },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: '', createdAt: Date(), updatedAt: Date() },
     // id = 12
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1' },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: '', createdAt: Date(), updatedAt: Date() },
     // id = 13
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: 'R', updatedAt: new Date('6/26/2018') },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: 'R', updatedAt: new Date('6/26/2018'), createdAt: Date() },
     // id = 14
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date('6/26/2017') },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date('6/26/2017'), createdAt: Date() },
     // id = 14
-    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date('6/26/2017') },
+    { userId: 5, description: 'teste', points: 8, shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date('6/26/2017'), createdAt: Date() },
       // Questões corretas
       // {
       //   description: 'teste',

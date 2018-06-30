@@ -6,19 +6,12 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER
       },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: ''
-      },
-      points: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
+      description: Sequelize.STRING,
+      points: Sequelize.INTEGER,
       userId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: 'User', key: 'id' }
+        references: { model: 'User', key: 'id' },
+        allowNull: false
       },
       shared: {
         type: Sequelize.BOOLEAN,
@@ -26,7 +19,7 @@ module.exports = {
         defaultValue: false
       }
     }, {
-        freezeTableName: 'User',
+        freezeTableName: 'Room',
         undercored: false,
         updatedAt: false,
         createdAt: false

@@ -6,7 +6,11 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER
       },
-      description: Sequelize.STRING,
+      description: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: ''
+      },
       correct: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
@@ -14,9 +18,14 @@ module.exports = {
       },
       questionId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: { model: 'Question', key: 'id' }
       },
-      classification: Sequelize.CHAR(1)
+      classification: {
+        type: Sequelize.CHAR(1),
+        allowNull: false,
+        defaultValue: ''
+      }
     }, {
         freezeTableName: 'Answer',
         undercored: false,

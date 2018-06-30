@@ -7,6 +7,8 @@
       <div [hidden]="!logged">
         <button [disabled]="path === '/my-questions'" mat-button routerLink="/my-questions">Questões Minhas</button>
         <button [disabled]="path === '/all-questions'" mat-button routerLink="/all-questions">Questões Públicas</button>
+        <button [disabled]="path === '/rooms'" mat-button routerLink="/rooms">Salas</button>
+        <button [disabled]="path === '/rooms-online'" mat-button routerLink="/rooms-online">Salas Online</button>
       </div>
       <button [disabled]="path === '/about'" routerLink="/about" mat-button>Sobre</button>
       <span class="app-spacer"></span>
