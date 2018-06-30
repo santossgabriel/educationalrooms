@@ -8,8 +8,16 @@ export const modelAttributes = {
     autoIncrement: true,
     type: Sequelize.INTEGER
   },
-  description: Sequelize.STRING,
-  date: Sequelize.DATE
+  description: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  date: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    defaultValue: ''
+  }
 }
 
 export const modelOptions = {

@@ -12,7 +12,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'User', key: 'id' }
       },
-      shared: Sequelize.BOOLEAN
+      shared: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      }
     }, {
         freezeTableName: 'User',
         undercored: false,

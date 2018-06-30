@@ -7,7 +7,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       description: Sequelize.STRING,
-      correct: Sequelize.BOOLEAN,
+      correct: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       questionId: {
         type: Sequelize.INTEGER,
         references: { model: 'Question', key: 'id' }

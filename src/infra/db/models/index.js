@@ -13,7 +13,8 @@ const sequelize = env !== 'test'
   ? new Sequelize(DbConfig.DATABASE_URI, {
     dialect: config[env].dialect,
     logging: config[env].logging,
-    dialectOptions: config[env].dialectOptions
+    dialectOptions: config[env].dialectOptions,
+    operatorsAliases: false
   })
   : new Sequelize('quizroom', null, null, DbConfig)
 

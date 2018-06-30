@@ -5,12 +5,14 @@ module.exports = {
       userId: 1, // id = 1
       description: 'teste',
       points: 8,
-      category: 'categoria teste 1'
+      category: 'categoria teste 1',
+      shared: false
     }, {
       userId: 2, // id = 2
       description: 'teste2',
       points: 3,
-      category: 'categoria 1'
+      category: 'categoria 1',
+      shared: false
     }, {
       userId: 1, // id = 3
       description: 'teste',

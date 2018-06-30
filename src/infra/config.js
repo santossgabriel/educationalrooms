@@ -13,7 +13,7 @@ module.exports = {
     url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
     dialect: 'postgres',
-    logging: true
+    logging: false
   },
   test: {
     dialect: 'sqlite',

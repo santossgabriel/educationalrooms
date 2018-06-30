@@ -8,14 +8,32 @@ export const modelAttributes = {
     autoIncrement: true,
     type: Sequelize.INTEGER
   },
-  name: Sequelize.STRING,
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
   email: {
     type: Sequelize.STRING,
-    unique: true
+    unique: true,
+    allowNull: false,
+    defaultValue: ''
   },
-  password: Sequelize.STRING,
-  type: Sequelize.CHAR(1),
-  mobile: Sequelize.BOOLEAN,
+  password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: '',
+  },
+  type: {    
+    type: Sequelize.CHAR(1),
+    allowNull: false,
+    defaultValue: ''
+  },
+  mobile: {    
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE
 }

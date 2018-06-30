@@ -89,7 +89,13 @@ export default {
   getMy: async (req, res) => {
     const questions = await Question.findAll({
       include: { model: Answer },
-      where: { userId: req.claims.id },
+      where: sequelize.and(
+        { userId: req.claims.id },
+        sequelize.or(          
+          { sync: { [sequelize.Op.ne]: questionStatus.REMOVED } },
+          { sync: null }
+        ),
+      ),
       order: [[Answer, 'classification']]
     })
     res.json(toResult(questions))
@@ -100,6 +106,9 @@ export default {
       include: Answer,
       where: sequelize.and(
         { userId: { [sequelize.Op.ne]: req.claims.id } },
+        sequelize.or(
+          { sync: { [sequelize.Op.ne]: questionStatus.REMOVED } },
+          { sync: null }),
         { shared: true }
       )
     })
@@ -207,7 +216,7 @@ export default {
   },
 
   share: async (req, res) => {
-    const question = req.body
+    const question = req.body    
     const questionDb = await Question.findOne({ where: { id: question.id } })
 
     if (!questionDb)
@@ -223,15 +232,18 @@ export default {
   },
 
   sync: async (req, res) => {
-    if (!req.body || !Array.isArray(req.body))
+    
+    if (!req.body || !req.body.questions || !Array.isArray(req.body.questions))
       throwValidationError('Informe as questões para sincronização.')
 
-    let errors = []
-    const appQuestions = req.body
+    const appQuestions = req.body.questions
+    let errors = []    
     let i
 
-    const appChangesIds = req.body.filter(t => t.id > 0).map(p => p.id)
-    const news = req.body.filter(t => !t.id)
+    console.log(appQuestions)
+
+    const appChangesIds = appQuestions.filter(t => t.id > 0).map(p => p.id)
+    const news = appQuestions.filter(t => !t.id)
 
     const dbChanges = await Question.findAll({
       include: Answer,
@@ -241,8 +253,7 @@ export default {
           { sync: { [sequelize.Op.ne]: null } },
           { id: appChangesIds }))
     })
-
-    let questionsResult = dbChanges.filter(p => appChangesIds.indexOf(p.id) === -1 && p.sync !== questionStatus.REMOVED)
+   
     const dbUpdates = dbChanges.filter(p => appChangesIds.indexOf(p.id) !== -1)
 
     for (i = 0; i < dbUpdates.length; i++) {
@@ -254,7 +265,8 @@ export default {
       try {
         if (!mq.updatedAt)
           throwValidationError(questionErros.SYNC_NO_UPDATED_DATE)
-
+        console.log(`${mq.description} | ${mq.updatedAt} | ${q.updatedAt.toString()}`)
+        console.log('')
         if (!q.updatedAt || (new Date(mq.updatedAt) > new Date(q.updatedAt.toString()))) {
           if (mq.sync === 'R') {
             await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
@@ -275,9 +287,7 @@ export default {
               })
             }
           }
-          questionsResult.push(mq)
         } else {
-          questionsResult.push(q)
           if (q.sync === 'R') {
             await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
             await Question.destroy({ where: { id: q.id }, transaction: transaction })
@@ -318,7 +328,14 @@ export default {
         })
       }
     }
+
     Question.update({ sync: null }, { where: { userId: req.claims.id } })
+
+    const questionsResult = await Question.findAll({
+      include: Answer,
+      where: { userId: req.claims.id }
+    })
+
     res.json({ errors: errors, questions: questionsResult })
   }
 }

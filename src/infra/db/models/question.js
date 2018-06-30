@@ -8,15 +8,35 @@ export const modelAttributes = {
     autoIncrement: true,
     type: Sequelize.INTEGER
   },
-  description: Sequelize.STRING,
-  points: Sequelize.INTEGER,
+  description: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  points: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
   userId: {
     type: Sequelize.INTEGER,
+    allowNull: false,
     references: { model: 'User', key: 'id' }
   },
-  shared: Sequelize.BOOLEAN,
-  category: Sequelize.STRING,
-  sync: Sequelize.CHAR(1),
+  shared: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  category: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
+  sync: {
+    type: Sequelize.CHAR(1),
+    allowNull: false,
+    defaultValue: ''
+  },
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE
 }
