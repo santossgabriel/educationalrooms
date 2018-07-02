@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 
-export const modelName = 'Log'
+export const modelName = 'RoomUser'
 
 export const modelAttributes = {
   id: {
@@ -8,16 +8,23 @@ export const modelAttributes = {
     autoIncrement: true,
     type: Sequelize.INTEGER
   },
-  description: {
-    type: Sequelize.STRING(2000),
+  roomId: {
+    type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: ''
+    references: { model: 'Room', key: 'id' }
   },
-  date: {
+  userId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: { model: 'User', key: 'id' }
+  },
+  enteredIn: {
     type: Sequelize.DATE,
     allowNull: false,
-    defaultValue: ''
-  }
+    defaultValue: new Date('01/01/1970')
+  },
+  accepted: Sequelize.BOOLEAN,
+  score: Sequelize.INTEGER
 }
 
 export const modelOptions = {

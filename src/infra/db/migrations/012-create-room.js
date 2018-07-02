@@ -1,23 +1,31 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    return queryInterface.createTable('Question', {
+    return queryInterface.createTable('Room', {
       id: {
         primaryKey: true,
         autoIncrement: true,
         type: Sequelize.INTEGER
       },
-      description: Sequelize.STRING,
-      points: Sequelize.INTEGER,
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      secondsStep: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+      },
       userId: {
         type: Sequelize.INTEGER,
         references: { model: 'User', key: 'id' },
         allowNull: false
       },
-      shared: {
-        type: Sequelize.BOOLEAN,
+      createdAt: {
+        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: false
-      }
+        defaultValue: new Date('01/01/1970')
+      },
+      endedAt: Sequelize.DATE
     }, {
         freezeTableName: 'Room',
         undercored: false,
@@ -26,6 +34,6 @@ module.exports = {
       })
   },
   down: function (queryInterface) {
-    return queryInterface.dropTable('Question')
+    return queryInterface.dropTable('Room')
   }
 }

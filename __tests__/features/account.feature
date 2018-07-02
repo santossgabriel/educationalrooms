@@ -15,7 +15,6 @@ Feature: Gerenciamento de conta
       | '{"password": "123qwe"}'                                     | 'Credenciais inválidas.'    |
       | '{"email": "teste@mail.com", "password": "123qwee"}'         | 'Credenciais inválidas.'    |
 
-
   Scenario: Obter dados da conta
     Given Dado que eu queira obter os dados da minha conta
     When Quando eu buscar os dados

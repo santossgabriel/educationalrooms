@@ -13,11 +13,13 @@ module.exports = {
     url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
     dialect: 'postgres',
-    logging: false
+    operatorsAliases: false,
+    logging: true
   },
   test: {
     dialect: 'sqlite',
     storage: './quiz-room.db',
+    operatorsAliases: false,
     operatorsAliases: false,
     logging: false
   },
@@ -26,6 +28,7 @@ module.exports = {
     url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
     dialect: 'postgres',
+    operatorsAliases: false,
     logging: true
   }
 }

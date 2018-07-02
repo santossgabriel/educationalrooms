@@ -7,14 +7,14 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(2000),
         allowNull: false,
         defaultValue: ''
       },
       date: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: ''
+        defaultValue: new Date('01/01/1970')
       }
     }, {
         freezeTableName: 'Log',

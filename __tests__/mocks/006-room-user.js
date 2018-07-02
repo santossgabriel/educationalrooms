@@ -1,0 +1,17 @@
+module.exports = {
+  up: function (queryInterface, Sequelize) {
+    return queryInterface.bulkInsert('RoomUser', [{
+      userId: 1,
+      roomId: 1,
+      accepted: true,
+      score: 8,
+      enteredIn: new Date()
+    }, {
+      userId: 6,
+      roomId: 1,
+      accepted: true,
+      score: 8,
+      enteredIn: new Date()
+    }])
+  }
+}

@@ -7,3 +7,4 @@ quiz-room.db
 .env
 deploy.tgz
 yarn-error.log
+test.json
