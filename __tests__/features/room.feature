@@ -39,6 +39,22 @@ Feature: Sala
       | 'Que não exista'      | 99 | "A sala não existe."          |
       | 'Que eu possa entrar' | 2  | "Entrou na sala."             |
 
+  Scenario Outline: Adicionar questões
+    Given Dado eu que queira adicionar questões à uma sala
+    When Quando adicionar as questões <caso> atribuindo <propriedades>
+    Then Então eu devo obter a mensagem <mensagem> depois de tentar adicionar as questões
+
+    Examples:
+      | caso                                      | propriedades                     | mensagem                                               |
+      | 'sem nome da sala'                        | '{"name": ""}'                   | "Informe o nome da sala."                              |
+      | 'sem id da sala'                          | '{"roomId": 0}'                  | "Informe a sala."                                      |
+      | 'sem as questões'                         | '{"questions": []}'              | "Informe as questões."                                 |
+      | 'que não existem'                         | '{"questions": [{ "id": 99 }] }' | "Há questões informadas que não existem."              |
+      | 'que não pertencem ao usuário'            | '{"questions": [{ "id": 1 }] }'  | "Há questões informadas que não pertencem ao usuário." |
+      | 'à uma sala que não existe'               | '{"roomId": 99}'                 | "A sala não existe."                                   |
+      | 'à uma sala que não pertencem ao usuário' | '{"roomId": 3}'                  | "A sala informada não pertence ao usuário."            |
+      | 'questão completa'                        | '{}'                             | "Questões adicionadas com sucesso."                    |
+
   Scenario Outline: Remover sala
     Given Dado que eu queira remover uma sala
     When Quando eu enviar o id de uma sala <caso> <id>

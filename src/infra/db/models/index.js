@@ -5,6 +5,7 @@ import * as Question from './question'
 import * as Answer from './answer'
 import * as Room from './room'
 import * as RoomUser from './roomUser'
+import * as RoomQuestion from './roomQuestion'
 
 import config from '../../config'
 
@@ -34,6 +35,8 @@ db.Room = sequelize.define(Room.modelName, Room.modelAttributes, Room.modelOptio
 
 db.RoomUser = sequelize.define(RoomUser.modelName, RoomUser.modelAttributes, RoomUser.modelOptions)
 
+db.RoomQuestion = sequelize.define(RoomQuestion.modelName, RoomQuestion.modelAttributes, RoomQuestion.modelOptions)
+
 db.Question.hasMany(db.Answer, {
   foreignKey: {
     name: 'questionId',
@@ -52,7 +55,11 @@ db.User.hasMany(db.Room, { foreignKey: 'userId' })
 
 db.Room.hasMany(db.RoomUser, { foreignKey: 'roomId' })
 
-db.RoomUser.belongsTo(db.User, { foreignKey: 'userId', targetKey: 'id'})
+db.RoomUser.belongsTo(db.User, { foreignKey: 'userId', targetKey: 'id' })
+
+db.Room.hasMany(db.RoomQuestion, { foreignKey: 'roomId' })
+
+db.RoomQuestion.belongsTo(db.Question, { foreignKey: 'questionId', targetKey: 'id' })
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize

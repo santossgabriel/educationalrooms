@@ -1,8 +1,8 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addConstraint('RoomUser', ['userId', 'roomId'], {
+    return queryInterface.addConstraint('RoomQuestion', ['roomId', 'questionId'], {
       type: 'unique',
-      name: 'pk_room_user'
+      name: 'pk_room_question'
     })
   },
   down: function (queryInterface, Sequelize) { }

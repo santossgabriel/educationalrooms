@@ -1,7 +1,7 @@
 import db from '../infra/db/models/index'
 import { throwForbiddenError, throwValidationError } from '../helpers/error'
 
-const { Room, RoomUser, User } = db
+const { Room, RoomUser, RoomQuestion, User, Question } = db
 
 const toMy = (rooms) => {
   return rooms.map(p => ({
@@ -17,6 +17,16 @@ const toMy = (rooms) => {
       accepted: p.accepted,
       name: p.User.name,
       email: p.User.email
+    })),
+    questions: p.RoomQuestions.map(p => ({
+      id: p.Question.id,
+      description: p.Question.description,
+      points: p.Question.points,
+      shared: p.Question.shared,
+      category: p.Question.category,
+      sync: p.Question.sync,
+      createdAt: p.Question.createdAt,
+      updatedAt: p.Question.updatedAt
     }))
   }))
 }
@@ -37,7 +47,10 @@ export default {
   getMy: async (req, res) => {
     const rooms = await Room.findAll({
       where: { userId: req.claims.id },
-      include: [{ model: RoomUser, include: [{ model: User }] }]
+      include: [
+        { model: RoomUser, include: [{ model: User }] },
+        { model: RoomQuestion, include: [{ model: Question }] }
+      ]
     })
     res.json(toMy(rooms))
   },
@@ -78,6 +91,7 @@ export default {
     if (room.userId != req.claims.id)
       throwForbiddenError('Usuário sem permissão para remover o item.')
     await RoomUser.destroy({ where: { roomId: id } })
+    await RoomQuestion.destroy({ where: { roomId: id } })
     await Room.destroy({ where: { id: id } })
     res.json({ message: 'Sala removida com sucesso.' })
   },
@@ -94,5 +108,56 @@ export default {
       throwValidationError('Usuário já incluso na sala.')
     await RoomUser.create({ roomId: id, userId: req.claims.id })
     res.json({ message: 'Entrou na sala.' })
+  },
+
+  update: async (req, res) => {
+    const { questions, roomId, name, secondsStep } = req.body
+    const questionIds = questions.map(p => p.id)
+    if (!name)
+      throwValidationError('Informe o nome da sala.')
+
+    if (!roomId)
+      throwValidationError('Informe a sala.')
+
+    if (!questionIds || !Array.isArray(questionIds) || questionIds.length == 0)
+      throwValidationError('Informe as questões.')
+
+    const questionsDb = await Question.findAll({ where: { id: questionIds } })
+    const questionsIdsDb = questionsDb.map(p => p.id)
+    if (questionIds.filter(p => questionsIdsDb.indexOf(p) === -1).length > 0)
+      throwValidationError('Há questões informadas que não existem.')
+
+    if (questionsDb.filter(p => p.userId !== req.claims.id).length > 0)
+      throwValidationError('Há questões informadas que não pertencem ao usuário.')
+
+    const room = await Room.findOne({
+      include: [{ model: RoomQuestion }],
+      where: { id: roomId }
+    })
+
+    if (!room)
+      throwValidationError('A sala não existe.')
+
+    if (room.userId !== req.claims.id)
+      throwValidationError('A sala informada não pertence ao usuário.')
+
+    const alreadySelectedIds = room.RoomQuestions.map(p => p.questionId)
+    const pendingQuestionIds = questionIds.filter(p => alreadySelectedIds.indexOf(p) === -1)
+    for (let i = 0; i < pendingQuestionIds.length; i++) {
+      const q = questions.filter(p => p.id === pendingQuestionIds[i]).shift()
+      await RoomQuestion.create({
+        roomId: roomId,
+        questionId: q.id,
+        order: q.order || 0
+      })
+    }
+    await Room.update(
+      { name: name, secondsStep: secondsStep || 30 },
+      { where: { id: roomId } }
+    )
+
+    res.json({
+      message: 'Questões adicionadas com sucesso.'
+    })
   }
 }

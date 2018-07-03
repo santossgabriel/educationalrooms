@@ -1,6 +1,5 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
-
     return queryInterface.bulkInsert('Room', [{
       name: 'test_room', // id = 1
       createdAt: new Date(),
