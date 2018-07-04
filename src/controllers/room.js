@@ -11,22 +11,23 @@ const toMy = (rooms) => {
     createdAt: p.createdAt,
     endedAt: p.endedAt,
     userId: p.userId,
-    users: p.RoomUsers.map(p => ({
-      roomUserId: p.id,
-      userId: p.userId,
-      accepted: p.accepted,
-      name: p.User.name,
-      email: p.User.email
+    users: p.RoomUsers.map(x => ({
+      roomUserId: x.id,
+      userId: x.userId,
+      accepted: x.accepted,
+      name: x.User.name,
+      email: x.User.email
     })),
-    questions: p.RoomQuestions.map(p => ({
-      id: p.Question.id,
-      description: p.Question.description,
-      points: p.Question.points,
-      shared: p.Question.shared,
-      category: p.Question.category,
-      sync: p.Question.sync,
-      createdAt: p.Question.createdAt,
-      updatedAt: p.Question.updatedAt
+    questions: p.RoomQuestions.map(x => ({
+      id: x.Question.id,
+      description: x.Question.description,
+      points: x.Question.points,
+      shared: x.Question.shared,
+      category: x.Question.category,
+      sync: x.Question.sync,
+      createdAt: x.Question.createdAt,
+      updatedAt: x.Question.updatedAt,
+      order: x.order
     }))
   }))
 }

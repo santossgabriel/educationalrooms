@@ -132,10 +132,18 @@ export default {
   },
 
   create: async (req, res) => {
-    let question = req.body
+    let question = {}
     const transaction = await sequelize.transaction()
     try {
+
+      question.id = req.body.id
+      question.category = req.body.description
+      question.description = req.body.description
+      question.points = req.body.points
+      question.shared = req.body.shared
+      question.answers = req.body.answers
       question.userId = req.claims.id
+
       validateQuestion(question)
       question.sync = questionStatus.NEW
       question.createdAt = new Date()
@@ -155,9 +163,17 @@ export default {
   },
 
   update: async (req, res) => {
-    const question = req.body
+    let question = {}
     let transaction = await sequelize.transaction()
     try {
+
+      question.id = req.body.id
+      question.category = req.body.description
+      question.description = req.body.description
+      question.points = req.body.points
+      question.shared = req.body.shared
+      question.answers = req.body.answers
+
       const questionDb = await Question.findOne({ include: Answer, where: { id: question.id } })
 
       if (questionDb.userId != req.claims.id)
@@ -342,7 +358,7 @@ export default {
       include: Answer,
       where: { userId: req.claims.id }
     })
-    
+
     res.json({ errors: errors, questions: questionsResult })
   }
 }

@@ -17,6 +17,7 @@ export class MyQuestionsComponent implements OnInit {
 
   displayedColumns = ['id', 'category', 'description', 'points', 'shared', 'actions']
   dataSource: MatTableDataSource<Question>
+  hasQuestions: boolean = false
 
   constructor(public dialog: MatDialog, private service: QuestionService) {
     this.refresh()
@@ -28,6 +29,7 @@ export class MyQuestionsComponent implements OnInit {
   refresh() {
     this.service.getMy().subscribe(questions => {
       this.dataSource = new MatTableDataSource(<Question[]>questions)
+      this.hasQuestions = (<Question[]>questions).length > 0
     })
   }
 

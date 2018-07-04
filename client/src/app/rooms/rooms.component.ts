@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core'
-import { AccountService } from '../services/account.service'
 import { Globals } from '../globals'
 import { Router } from '@angular/router'
 import { routerTransition } from '../router.transition'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { LoginModel } from '../models/account.models'
+import { MatTableDataSource } from '@angular/material';
+import { Room } from '../models/room.model';
+import { RoomService } from '../services/room.service';
 
 @Component({
   selector: 'app-rooms',
@@ -17,9 +19,22 @@ import { LoginModel } from '../models/account.models'
 export class RoomsComponent implements OnInit, TokenChangedListener {
 
   error = ''
+  displayedColumns = ['id', 'name', 'users', 'questions', 'seconds', 'actions']
+  // displayedColumns = ['id', 'name']
+  dataSource: MatTableDataSource<Room>
+  hasRooms: boolean = false
 
-  constructor(private service: AccountService, private router: Router) {
-    Globals.addTokenListener(this)
+  constructor(private service: RoomService, private router: Router) {
+    this.refresh()
+  }
+
+  refresh() {
+    this.service.getMy().subscribe(questions => {
+      const qs = <Room[]>questions
+      console.log(qs)
+      this.dataSource = new MatTableDataSource(<Room[]>questions)
+      this.hasRooms = (<Room[]>questions).length > 0
+    })
   }
 
   ngOnInit() {
@@ -29,5 +44,13 @@ export class RoomsComponent implements OnInit, TokenChangedListener {
 
   cleanError() {
     this.error = ''
+  }
+
+  remove(id) {
+
+  }
+
+  openRoomModal(room: Room) {
+
   }
 }

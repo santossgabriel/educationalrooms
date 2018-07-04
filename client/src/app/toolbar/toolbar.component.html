@@ -5,12 +5,18 @@
       <span class="app-spacer"></span>
       <button [disabled]="path === '/'" routerLink="/" mat-button>Página inicial</button>
       <div [hidden]="!logged">
-        <button [disabled]="path === '/my-questions'" mat-button routerLink="/my-questions">Questões Minhas</button>
-        <button [disabled]="path === '/all-questions'" mat-button routerLink="/all-questions">Questões Públicas</button>
-        <button [disabled]="path === '/rooms'" mat-button routerLink="/rooms">Salas</button>
-        <button [disabled]="path === '/rooms-online'" mat-button routerLink="/rooms-online">Salas Online</button>
+        <button mat-button [matMenuTriggerFor]="questionMenu">Questões</button>
+        <button mat-button [matMenuTriggerFor]="roomMenu">Salas</button>
       </div>
       <button [disabled]="path === '/about'" routerLink="/about" mat-button>Sobre</button>
+      <mat-menu #roomMenu="matMenu" yPosition="below">
+        <button [disabled]="path === '/rooms'" mat-menu-item routerLink="/rooms">Salas Criadas</button>
+        <button [disabled]="path === '/rooms-online'" mat-menu-item routerLink="/rooms-online">Salas Online</button>
+      </mat-menu>
+      <mat-menu #questionMenu="matMenu" yPosition="below">
+        <button [disabled]="path === '/my-questions'" mat-menu-item routerLink="/my-questions">Questões Criadas</button>
+        <button [disabled]="path === '/all-questions'" mat-menu-item routerLink="/all-questions">Questões Públicas</button>
+      </mat-menu>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
@@ -29,10 +35,8 @@
       </div>
       <div [hidden]="!logged">
         <button mat-button (click)="logout()">Sair</button>
-        <button [disabled]="path === '/sign-edit'" mat-button routerLink="/sign-edit">Minha conta</button>        
+        <button [disabled]="path === '/sign-edit'" mat-button routerLink="/sign-edit">Minha conta</button>
       </div>
-      <!-- <mat-icon class="example-icon">favorite</mat-icon>
-      <mat-icon class="example-icon">delete</mat-icon> -->
     </mat-toolbar-row>
   </mat-toolbar>
   <ngx-loading-bar diameter="40px" fixed="false" color="green" height="5px"></ngx-loading-bar>

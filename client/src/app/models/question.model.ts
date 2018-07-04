@@ -7,6 +7,7 @@ export class Question {
   points: number
   shared: boolean
   answers: Answer[]
+  order: number
 
   constructor() {
     this.answers = [

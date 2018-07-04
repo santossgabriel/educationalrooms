@@ -1,7 +1,10 @@
 <mat-card style="width: 80%; margin: 0 auto; margin-top: 50px">
-  <mat-card-title>Minhas Questões</mat-card-title>
+  <mat-card-title>MINHAS QUESTÕES</mat-card-title>
+  <div class="question-component" [hidden]="hasQuestions">
+    <span>Você ainda não criou questões.</span>
+  </div>
   <div class="question-component">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" [hidden]="!hasQuestions">
 
       <ng-container matColumnDef="id">
         <th style="width: 100px" mat-header-cell *matHeaderCellDef> Número </th>
