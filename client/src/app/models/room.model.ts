@@ -4,7 +4,7 @@ import { Question } from "./question.model";
 export class Room {
   id: number
   name: string
-  secondsStep: number
+  time: number
   createdAt: Date
   endedAt: Date
   userId: number

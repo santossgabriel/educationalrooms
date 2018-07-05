@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core'
-import { MatTableDataSource, MatDialog } from '@angular/material'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { MatTableDataSource, MatDialog, MatSort, MatPaginator } from '@angular/material'
 import { routerTransition } from '../../router.transition'
 import { QuestionModalComponent } from '../../modals/question-modal.component'
 import { Question } from '../../models/question.model'
@@ -9,9 +9,7 @@ import { ConfirmModalComponent, ErrorModalComponent } from '../../modals/confirm
 @Component({
   selector: 'app-my-questions',
   templateUrl: './my-questions.component.html',
-  styleUrls: ['./my-questions.component.css'],
-  animations: [routerTransition],
-  host: { '[@routerTransition]': '' }
+  styleUrls: ['./my-questions.component.css']
 })
 export class MyQuestionsComponent implements OnInit {
 
@@ -23,12 +21,18 @@ export class MyQuestionsComponent implements OnInit {
     this.refresh()
   }
 
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   ngOnInit() {
+    
   }
 
   refresh() {
     this.service.getMy().subscribe(questions => {
       this.dataSource = new MatTableDataSource(<Question[]>questions)
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
       this.hasQuestions = (<Question[]>questions).length > 0
     })
   }

@@ -1,8 +1,39 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div class="main">
+<div>
   <app-toolbar></app-toolbar>
-  <div style="min-height: 80%">
-    <router-outlet></router-outlet>
+  <div fxLayout="row">
+    <div fxFlex="200px" class="sidenav" [hidden]="!logged">
+
+      <div class="menu-sidenav">
+        <span>SALAS</span>
+      </div>
+      <mat-nav-list>
+        <mat-list-item>
+          <button [disabled]="path === '/rooms'" mat-raised-button color="primary" routerLink="/rooms">MINHAS</button>
+        </mat-list-item>
+        <mat-list-item>
+          <button [disabled]="path === '/rooms-associate'" mat-raised-button color="primary" routerLink="/rooms-associate">PARTICIPEI</button>
+        </mat-list-item>
+        <mat-list-item>
+          <button [disabled]="path === '/rooms-online'" mat-raised-button color="primary" routerLink="/rooms-online">ONLINE</button>
+        </mat-list-item>
+      </mat-nav-list>
+
+      <div class="menu-sidenav">
+        <span>QUESTÕES</span>
+      </div>
+      <mat-nav-list>
+        <mat-list-item>
+          <button [disabled]="path === '/my-questions'" mat-raised-button color="primary" routerLink="/my-questions">MINHAS</button>
+        </mat-list-item>
+        <mat-list-item>
+          <button [disabled]="path === '/all-questions'" mat-raised-button color="primary" routerLink="/all-questions">PÚBLICAS</button>
+        </mat-list-item>
+      </mat-nav-list>
+
+    </div>
+    <div fxFlex="100%">
+      <router-outlet></router-outlet>
+    </div>
   </div>
   <app-footer></app-footer>
 </div>

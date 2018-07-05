@@ -4,27 +4,25 @@ import { Router } from '@angular/router'
 import { routerTransition } from '../router.transition'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { LoginModel } from '../models/account.models'
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Room } from '../models/room.model';
 import { RoomService } from '../services/room.service';
+import { RoomModalComponent } from '../modals/room-modal.component';
 
 @Component({
   selector: 'app-rooms',
   templateUrl: './rooms.component.html',
-  styleUrls: ['./rooms.component.css'],
-  animations: [routerTransition],
-  host: { '[@routerTransition]': '' }
+  styleUrls: ['./rooms.component.css']
 })
 
 export class RoomsComponent implements OnInit, TokenChangedListener {
 
   error = ''
   displayedColumns = ['id', 'name', 'users', 'questions', 'seconds', 'actions']
-  // displayedColumns = ['id', 'name']
   dataSource: MatTableDataSource<Room>
   hasRooms: boolean = false
 
-  constructor(private service: RoomService, private router: Router) {
+  constructor(private service: RoomService, private router: Router, private dialog: MatDialog) {
     this.refresh()
   }
 
@@ -47,10 +45,17 @@ export class RoomsComponent implements OnInit, TokenChangedListener {
   }
 
   remove(id) {
-
+    this.service.remove(id)
   }
 
   openRoomModal(room: Room) {
-
+    this.dialog.open(RoomModalComponent, {
+      data: {
+        room: room || new Room(),
+        callback: this.refresh
+      }
+    }).afterClosed().subscribe(() => {
+      this.refresh()
+    })
   }
 }

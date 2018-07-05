@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router'
 import { AppMaterialModule } from './app-material.module'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { HeaderInterceptor } from './interceptors/header.interceptor'
 import { ResponseInterceptor } from './interceptors/response.interceptor'
@@ -25,6 +26,7 @@ import { QuestionModalComponent } from './modals/question-modal.component'
 import { ConfirmModalComponent, ErrorModalComponent } from './modals/confirm-modal.component'
 import { RoomsComponent } from './rooms/rooms.component';
 import { RoomsOnlineComponent } from './rooms-online/rooms-online.component';
+import { RoomModalComponent } from './modals/room-modal.component';
 
 const components = [
   AppComponent,
@@ -41,7 +43,8 @@ const components = [
   ConfirmModalComponent,
   ErrorModalComponent,
   RoomsComponent,
-  RoomsOnlineComponent
+  RoomsOnlineComponent,
+  RoomModalComponent
 ]
 
 const routes = [
@@ -66,13 +69,19 @@ const routes = [
     LoadingBarHttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes, { useHash: true })
+    RouterModule.forRoot(routes, { useHash: true }),
+    FlexLayoutModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true }
   ],
-  entryComponents: [QuestionModalComponent, ConfirmModalComponent, ErrorModalComponent],
+  entryComponents: [
+    QuestionModalComponent,
+    ConfirmModalComponent,
+    ErrorModalComponent,
+    RoomModalComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -72,9 +72,16 @@ $theme:   mat-light-theme($primary, $accent);
 }
 
 .question-component {  
-  // width: 100%; 
   margin: 0px auto;
   text-align: center;
+}
+
+.mat-pseudo-checkbox{
+  color: #4B9372;
+}
+
+.mat-pseudo-checkbox-checked {
+  background-color: #4B9372;
 }
 
 .action-button {
@@ -108,4 +115,38 @@ $theme:   mat-light-theme($primary, $accent);
   button{
     margin-top: 20px;
   } 
+}
+
+body {
+  background-image: url("app/images/question-mark.jpg");
+  background-repeat: repeat-y;
+}
+
+.sidenav {
+  background-color: #4B9372;
+  width: 40px;
+  height: 370px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 0 0 10px 0;
+  margin-right: 10px;
+  
+  button{
+    color: white;
+    width: 100%;
+    background-color: #0000 !important; 
+    border: none !important;
+    box-shadow: 0 0 0 0 !important;
+  }
+  
+  mat-nav-list{
+    text-align: center;
+  }
+
+  .menu-sidenav{
+    color: white;
+    font-weight: bold;  
+    margin-left: 20px;
+    margin-top: 20px;
+  }
 }

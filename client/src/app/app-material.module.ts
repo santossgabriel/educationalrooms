@@ -18,7 +18,10 @@ import {
   MatTooltipModule,
   MatSelectModule,
   MatCheckboxModule,
-  MatMenuModule
+  MatMenuModule,
+  MatSortModule,
+  MatPaginatorModule,
+  MatSidenavModule
 } from '@angular/material'
 
 @NgModule({
@@ -39,7 +42,10 @@ import {
     MatTooltipModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatSidenavModule
   ],
   exports: [
     MatButtonModule,
@@ -57,7 +63,10 @@ import {
     MatTooltipModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatSidenavModule
   ],
   declarations: []
 })

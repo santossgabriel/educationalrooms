@@ -7,7 +7,7 @@ const toMy = (rooms) => {
   return rooms.map(p => ({
     id: p.id,
     name: p.name,
-    secondsStep: p.secondsStep,
+    time: p.time,
     createdAt: p.createdAt,
     endedAt: p.endedAt,
     userId: p.userId,
@@ -36,7 +36,7 @@ const toMyAssoc = (rooms) => {
   return rooms.map(p => ({
     id: p.id,
     name: p.name,
-    secondsStep: p.secondsStep,
+    time: p.time,
     createdAt: p.createdAt,
     endedAt: p.endedAt,
     score: p.RoomUsers[0].score
@@ -72,12 +72,12 @@ export default {
   },
 
   create: async (req, res) => {
-    const { name, secondsStep } = req.body
+    const { name, time } = req.body
     if (!name)
       throwValidationError('A sala deve ter um nome.')
     const room = {
       name: name,
-      secondsStep: secondsStep || 0,
+      time: time || 0,
       userId: req.claims.id
     }
     const created = await Room.create(room)
@@ -112,7 +112,7 @@ export default {
   },
 
   update: async (req, res) => {
-    const { questions, roomId, name, secondsStep } = req.body
+    const { questions, roomId, name, time } = req.body
     const questionIds = questions.map(p => p.id)
     if (!name)
       throwValidationError('Informe o nome da sala.')
@@ -153,7 +153,7 @@ export default {
       })
     }
     await Room.update(
-      { name: name, secondsStep: secondsStep || 30 },
+      { name: name, time: time || 30 },
       { where: { id: roomId } }
     )
 

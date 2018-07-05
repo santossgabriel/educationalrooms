@@ -14,10 +14,10 @@ export class RoomService {
   }
 
   save(room: Room) {
-    // if (question.id > 0)
-    //   return this.http.put('/api/question', question)
-    // else
-    //   return this.http.post('/api/question', question)
+    if (room.id > 0)
+      return this.http.put('/api/room', room)
+    else
+      return this.http.post('/api/room', room)
   }
 
   remove(id: number) {

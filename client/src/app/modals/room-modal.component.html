@@ -1,0 +1,40 @@
+<div style="min-width: 500px">
+  <mat-horizontal-stepper #stepper>
+    <mat-step>
+      <ng-template matStepLabel>Nome</ng-template>
+      <mat-form-field style="width: 100%">
+        <input matInput [(ngModel)]="room.name" placeholder="Informe um nome para a sala" required />
+      </mat-form-field>
+      <div class="action-button">
+        <button mat-button mat-dialog-close>Cancelar</button>
+        <button [disabled]="!room.name" mat-raised-button matStepperNext color="primary">Próximo</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Tempo</ng-template>
+      <mat-form-field style="width: 100%">
+        <input matInput [(ngModel)]="room.time" placeholder="Infome o tempo de cada pergunta (segundos)" required type="number" />
+      </mat-form-field>
+      <div class="action-button">
+        <button mat-button matStepperPrevious>Voltar</button>
+        <button [disabled]="!room.time" mat-raised-button matStepperNext color="primary">Próximo</button>
+      </div>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Questões</ng-template>
+
+      <mat-selection-list #shoes color="primary">
+        <mat-list-option *ngFor="let q of questions" color="primary">
+          {{q.description}}
+        </mat-list-option>
+      </mat-selection-list>
+
+
+      <div class="action-button">
+        <button mat-button matStepperPrevious>VOLTAR</button>
+        <button [disabled]="!room.name || !room.time" mat-raised-button color="primary" (click)="saveRoom()">PRONTO</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

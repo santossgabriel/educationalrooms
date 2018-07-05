@@ -17,10 +17,13 @@ export class QuestionModalComponent {
   selectedCategory
   categories: Array<string>
   customCategory: boolean
+  callback: Function
 
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<QuestionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private service: QuestionService) {
     this.question = data.question
+    this.callback = data.callback
+    console.log(data.callback)
     this.question.points = this.question.points || 1
     service.getCategories().subscribe(res => {
       (<Array<string>>res).push('Outra ...')
@@ -53,10 +56,12 @@ export class QuestionModalComponent {
     answer.correct = true
   }
 
-  saveQuestion() {
+  saveQuestion() {    
     if (!this.customCategory)
       this.question.category = this.selectedCategory
-    this.service.save(this.question).subscribe(res => this.dialogRef.close(), err => {
+    this.service.save(this.question).subscribe(res => {
+      this.dialogRef.close()
+    }, err => {
       console.error(err.error.message)
       this.dialog.open(ErrorModalComponent, {
         data: {

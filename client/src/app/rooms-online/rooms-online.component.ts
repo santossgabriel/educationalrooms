@@ -9,9 +9,7 @@ import { LoginModel } from '../models/account.models'
 @Component({
   selector: 'app-rooms',
   templateUrl: './rooms-online.component.html',
-  styleUrls: ['./rooms-online.component.css'],
-  animations: [routerTransition],
-  host: { '[@routerTransition]': '' }
+  styleUrls: ['./rooms-online.component.css']
 })
 
 export class RoomsOnlineComponent implements OnInit, TokenChangedListener {

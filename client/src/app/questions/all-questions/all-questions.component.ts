@@ -7,9 +7,7 @@ import { MatTableDataSource } from '@angular/material'
 @Component({
   selector: 'app-all-questions',
   templateUrl: './all-questions.component.html',
-  styleUrls: ['./all-questions.component.css'],
-  animations: [routerTransition],
-  host: { '[@routerTransition]': '' }
+  styleUrls: ['./all-questions.component.css']
 })
 export class AllQuestionsComponent implements OnInit {
 

@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      secondsStep: {
+      time: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0

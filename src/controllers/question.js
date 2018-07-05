@@ -137,7 +137,7 @@ export default {
     try {
 
       question.id = req.body.id
-      question.category = req.body.description
+      question.category = req.body.category
       question.description = req.body.description
       question.points = req.body.points
       question.shared = req.body.shared
@@ -168,7 +168,7 @@ export default {
     try {
 
       question.id = req.body.id
-      question.category = req.body.description
+      question.category = req.body.category
       question.description = req.body.description
       question.points = req.body.points
       question.shared = req.body.shared
