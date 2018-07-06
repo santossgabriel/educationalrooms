@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { routerTransition } from '../../router.transition'
+import { fadeInTransition } from '../../router.transition'
 import { QuestionService } from '../../services/question.service'
 import { Question } from '../../models/question.model'
 import { MatTableDataSource } from '@angular/material'
@@ -7,7 +7,9 @@ import { MatTableDataSource } from '@angular/material'
 @Component({
   selector: 'app-all-questions',
   templateUrl: './all-questions.component.html',
-  styleUrls: ['./all-questions.component.css']
+  styleUrls: ['./all-questions.component.css'],
+  animations: [fadeInTransition],
+  host: { '[@fadeInTransition]': '' }
 })
 export class AllQuestionsComponent implements OnInit {
 

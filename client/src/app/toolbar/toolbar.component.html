@@ -5,10 +5,6 @@
       <span class="app-spacer"></span>
       <button [disabled]="path === '/'" routerLink="/" mat-button>Página inicial</button>
       <button [disabled]="path === '/about'" routerLink="/about" mat-button>Sobre</button>
-      <mat-menu #roomMenu="matMenu" yPosition="below">
-        <button [disabled]="path === '/rooms'" mat-menu-item routerLink="/rooms">Salas Criadas</button>
-        <button [disabled]="path === '/rooms-online'" mat-menu-item routerLink="/rooms-online">Salas Online</button>
-      </mat-menu>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>

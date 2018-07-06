@@ -5,6 +5,7 @@
 *{
   margin: 0;
   padding: 0;
+  font-family: Arial,Helvetica,sans-serif;
 }
 
 @include mat-core();
@@ -149,4 +150,7 @@ body {
     margin-left: 20px;
     margin-top: 20px;
   }
+}
+mat-nav-list mat-list-item {
+  height: 30px !important;
 }

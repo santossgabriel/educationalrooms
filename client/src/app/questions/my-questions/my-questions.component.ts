@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { MatTableDataSource, MatDialog, MatSort, MatPaginator } from '@angular/material'
-import { routerTransition } from '../../router.transition'
+import { fadeInTransition } from '../../router.transition'
 import { QuestionModalComponent } from '../../modals/question-modal.component'
 import { Question } from '../../models/question.model'
 import { QuestionService } from '../../services/question.service'
@@ -9,7 +9,10 @@ import { ConfirmModalComponent, ErrorModalComponent } from '../../modals/confirm
 @Component({
   selector: 'app-my-questions',
   templateUrl: './my-questions.component.html',
-  styleUrls: ['./my-questions.component.css']
+  styleUrls: ['./my-questions.component.css'],
+  animations: [fadeInTransition],
+  host: { '[@fadeInTransition]': '' }
+  
 })
 export class MyQuestionsComponent implements OnInit {
 

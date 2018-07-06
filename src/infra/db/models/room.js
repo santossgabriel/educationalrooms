@@ -27,7 +27,9 @@ export const modelAttributes = {
     allowNull: false,
     defaultValue: new Date('01/01/1970')
   },
-  endedAt: Sequelize.DATE
+  endedAt: Sequelize.DATE,
+  openedAt: Sequelize.DATE,
+  startedAt: Sequelize.DATE
 }
 
 export const modelOptions = {

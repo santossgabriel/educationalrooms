@@ -1,0 +1,42 @@
+<div style="min-width: 800px">
+  <div class="question-component" [hidden]="hasQuestions">
+    <span>Crie questões para que possam ser adicionadas à esta sala.</span>
+    <div class="action-button">
+      <button mat-raised-button mat-dialog-close>OK</button>
+    </div>
+  </div>
+
+  <div [hidden]="!hasQuestions">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="width: 100%">
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef> Área </th>
+        <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Descrição </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="points">
+        <th mat-header-cell *matHeaderCellDef> Pontos </th>
+        <td mat-cell *matCellDef="let element"> {{element.points}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="selected">
+        <th mat-header-cell *matHeaderCellDef> Selecionada ? </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox color="primary" [(ngModel)]="element.selected"></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+    <div class="action-button">
+      <button mat-raised-button color="primary" (click)="finishSelection()">PRONTO</button>
+    </div>
+  </div>
+</div>

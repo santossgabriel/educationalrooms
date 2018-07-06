@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "scripts": {
     "start": "babel-node src/run.js",
-    "dev": "babel-node src/run.js",
     "devstart": "nodemon --watch src --exec babel-node src/run.js",
     "test": "node before.test.js && npm run mockdb && npm run nyc && node cucumber.report.js",
     "nyc": "nyc cucumber-js __tests__ --format=json >> cucumber.json",

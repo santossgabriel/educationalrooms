@@ -1,5 +1,5 @@
 import { User } from "./user.model";
-import { Question } from "./question.model";
+import { RoomQuestion } from "./room-question.model";
 
 export class Room {
   id: number
@@ -8,6 +8,11 @@ export class Room {
   createdAt: Date
   endedAt: Date
   userId: number
-  questions: Question[]
+  questions: RoomQuestion[]
   users: User[]
+
+  constructor() {
+    this.users = []
+    this.questions = []
+  }
 }

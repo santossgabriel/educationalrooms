@@ -1,15 +1,18 @@
 import db from '../infra/db/models/index'
 import { throwForbiddenError, throwValidationError } from '../helpers/error'
+import { questionStatus } from './question';
 
 const { Room, RoomUser, RoomQuestion, User, Question } = db
 
-const toMy = (rooms) => {
-  return rooms.map(p => ({
+const toMy = (p) => {
+  return {
     id: p.id,
     name: p.name,
     time: p.time,
     createdAt: p.createdAt,
     endedAt: p.endedAt,
+    openedAt: p.openedAt,
+    startedAt: p.startedAt,
     userId: p.userId,
     users: p.RoomUsers.map(x => ({
       roomUserId: x.id,
@@ -28,8 +31,8 @@ const toMy = (rooms) => {
       createdAt: x.Question.createdAt,
       updatedAt: x.Question.updatedAt,
       order: x.order
-    }))
-  }))
+    })).filter(p => p.sync !== questionStatus.REMOVED)
+  }
 }
 
 const toMyAssoc = (rooms) => {
@@ -45,6 +48,17 @@ const toMyAssoc = (rooms) => {
 
 export default {
 
+  get: async (req, res) => {
+    const room = await Room.findOne({
+      where: { userId: req.claims.id, id: req.params.id },
+      include: [
+        { model: RoomUser, include: [{ model: User }] },
+        { model: RoomQuestion, include: [{ model: Question }] }
+      ]
+    })
+    res.json(toMy(room))
+  },
+
   getMy: async (req, res) => {
     const rooms = await Room.findAll({
       where: { userId: req.claims.id },
@@ -53,7 +67,7 @@ export default {
         { model: RoomQuestion, include: [{ model: Question }] }
       ]
     })
-    res.json(toMy(rooms))
+    res.json(rooms.map(p => toMy(p)))
   },
 
   getMyAssociated: async (req, res) => {
@@ -71,19 +85,6 @@ export default {
     res.json(rooms)
   },
 
-  create: async (req, res) => {
-    const { name, time } = req.body
-    if (!name)
-      throwValidationError('A sala deve ter um nome.')
-    const room = {
-      name: name,
-      time: time || 0,
-      userId: req.claims.id
-    }
-    const created = await Room.create(room)
-    res.json({ room: created, message: 'Sala criada com sucesso.' })
-  },
-
   remove: async (req, res) => {
     const { id } = req.params
     const room = await Room.findOne({ where: { id: id } })
@@ -91,6 +92,8 @@ export default {
       throwValidationError('A sala não existe.')
     if (room.userId != req.claims.id)
       throwForbiddenError('Usuário sem permissão para remover o item.')
+    if (room.startedAt && !room.endedAt)
+      throwValidationError('Uma sala iniciada que não finalizou não pode ser removida.')
     await RoomUser.destroy({ where: { roomId: id } })
     await RoomQuestion.destroy({ where: { roomId: id } })
     await Room.destroy({ where: { id: id } })
@@ -111,17 +114,12 @@ export default {
     res.json({ message: 'Entrou na sala.' })
   },
 
-  update: async (req, res) => {
-    const { questions, roomId, name, time } = req.body
-    const questionIds = questions.map(p => p.id)
+  save: async (req, res) => {
+    const { questions, id, name, time } = req.body
+    const questionIds = Array.isArray(questions) ? questions.map(p => p.id) : []
+
     if (!name)
       throwValidationError('Informe o nome da sala.')
-
-    if (!roomId)
-      throwValidationError('Informe a sala.')
-
-    if (!questionIds || !Array.isArray(questionIds) || questionIds.length == 0)
-      throwValidationError('Informe as questões.')
 
     const questionsDb = await Question.findAll({ where: { id: questionIds } })
     const questionsIdsDb = questionsDb.map(p => p.id)
@@ -131,34 +129,50 @@ export default {
     if (questionsDb.filter(p => p.userId !== req.claims.id).length > 0)
       throwValidationError('Há questões informadas que não pertencem ao usuário.')
 
-    const room = await Room.findOne({
-      include: [{ model: RoomQuestion }],
-      where: { id: roomId }
-    })
+    let room = null
+    let msgResult = ''
 
-    if (!room)
-      throwValidationError('A sala não existe.')
+    if (id > 0) {
 
-    if (room.userId !== req.claims.id)
-      throwValidationError('A sala informada não pertence ao usuário.')
+      room = await Room.findOne({
+        include: [{ model: RoomQuestion }],
+        where: { id: id }
+      })
 
-    const alreadySelectedIds = room.RoomQuestions.map(p => p.questionId)
-    const pendingQuestionIds = questionIds.filter(p => alreadySelectedIds.indexOf(p) === -1)
-    for (let i = 0; i < pendingQuestionIds.length; i++) {
-      const q = questions.filter(p => p.id === pendingQuestionIds[i]).shift()
+      if (!room)
+        throwValidationError('A sala não existe.')
+
+      if (room.userId !== req.claims.id)
+        throwValidationError('A sala informada não pertence ao usuário.')
+
+      await Room.update(
+        { name: name, time: time },
+        { where: { id: id } }
+      )
+
+      msgResult = 'Sala atualizada com sucesso.'
+
+    } else {
+      room = {
+        name: name,
+        time: time,
+        userId: req.claims.id
+      }
+      room = await Room.create(room)
+      msgResult = 'Sala criada com sucesso.'
+    }
+
+    await RoomQuestion.destroy({ where: { roomId: id } })
+
+    for (let i = 0; i < questionIds.length; i++) {
+      const q = questions.filter(p => p.id === questionIds[i]).shift()
       await RoomQuestion.create({
-        roomId: roomId,
+        roomId: id || room.id,
         questionId: q.id,
         order: q.order || 0
       })
     }
-    await Room.update(
-      { name: name, time: time || 30 },
-      { where: { id: roomId } }
-    )
 
-    res.json({
-      message: 'Questões adicionadas com sucesso.'
-    })
+    res.json({ message: msgResult })
   }
 }

@@ -30,6 +30,15 @@
         </mat-list-item>
       </mat-nav-list>
 
+      <div class="menu-sidenav">
+        <span>NOTIFICAÇÔES</span>
+      </div>
+      <mat-nav-list>
+        <mat-list-item>
+          <button [disabled]="path === '/notifications'" mat-raised-button color="primary" routerLink="/notifications">VER</button>
+        </mat-list-item>
+      </mat-nav-list>
+
     </div>
     <div fxFlex="100%">
       <router-outlet></router-outlet>

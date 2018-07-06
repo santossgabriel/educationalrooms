@@ -13,11 +13,12 @@ export class RoomService {
     return this.http.get('/api/room-my')
   }
 
+  get(id: number) {
+    return this.http.get(`/api/room/${id}`)
+  }
+
   save(room: Room) {
-    if (room.id > 0)
-      return this.http.put('/api/room', room)
-    else
-      return this.http.post('/api/room', room)
+    return this.http.post('/api/room', room)
   }
 
   remove(id: number) {

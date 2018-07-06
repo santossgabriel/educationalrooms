@@ -1,7 +1,7 @@
 <mat-card style="margin: 0 auto; margin-top: 10px">
   <mat-card-title>MINHAS QUESTÕES</mat-card-title>
   <div class="question-component" [hidden]="hasQuestions">
-    <span>Você ainda não criou questões.</span>
+    <span>Você não possui questões.</span>
   </div>
   <div class="question-component">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" [hidden]="!hasQuestions">
@@ -46,7 +46,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    <button (click)="openQuestionModal(null)" style="margin-top: 20px" mat-raised-button color="primary">Nova Questão</button>
+    <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons [hidden]="!hasQuestions"></mat-paginator>
+    <button (click)="openQuestionModal(null)" style="margin-top: 20px" mat-raised-button color="primary">CRIAR QUESTÃO</button>
   </div>
 </mat-card>

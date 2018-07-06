@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core'
 import { Globals } from '../globals'
 import { Router } from '@angular/router'
-import { routerTransition } from '../router.transition'
+import { fadeInTransition } from '../router.transition'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { LoginModel } from '../models/account.models'
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Room } from '../models/room.model';
 import { RoomService } from '../services/room.service';
-import { RoomModalComponent } from '../modals/room-modal.component';
+import { ErrorModalComponent } from '../modals/confirm-modal.component';
 
 @Component({
   selector: 'app-rooms',
   templateUrl: './rooms.component.html',
-  styleUrls: ['./rooms.component.css']
+  styleUrls: ['./rooms.component.css'],
+  animations: [fadeInTransition],
+  host: { '[@fadeInTransition]': '' }
 })
 
 export class RoomsComponent implements OnInit, TokenChangedListener {
@@ -22,16 +24,14 @@ export class RoomsComponent implements OnInit, TokenChangedListener {
   dataSource: MatTableDataSource<Room>
   hasRooms: boolean = false
 
-  constructor(private service: RoomService, private router: Router, private dialog: MatDialog) {
-    this.refresh()
-  }
+  constructor(private service: RoomService,
+    private router: Router,
+    private dialog: MatDialog) { this.refresh() }
 
   refresh() {
-    this.service.getMy().subscribe(questions => {
-      const qs = <Room[]>questions
-      console.log(qs)
-      this.dataSource = new MatTableDataSource(<Room[]>questions)
-      this.hasRooms = (<Room[]>questions).length > 0
+    this.service.getMy().subscribe(rooms => {
+      this.dataSource = new MatTableDataSource(<Room[]>rooms)
+      this.hasRooms = (<Room[]>rooms).length > 0
     })
   }
 
@@ -45,17 +45,19 @@ export class RoomsComponent implements OnInit, TokenChangedListener {
   }
 
   remove(id) {
-    this.service.remove(id)
+    this.service.remove(id).subscribe(res => {
+      this.refresh()
+    }, err => {
+      console.error(err.error.message)
+      this.dialog.open(ErrorModalComponent, {
+        data: {
+          error: err.error.message
+        }
+      })
+    })
   }
 
-  openRoomModal(room: Room) {
-    this.dialog.open(RoomModalComponent, {
-      data: {
-        room: room || new Room(),
-        callback: this.refresh
-      }
-    }).afterClosed().subscribe(() => {
-      this.refresh()
-    })
+  editRoom(id: number) {
+    this.router.navigate([`/edit-room/${id}`])
   }
 }

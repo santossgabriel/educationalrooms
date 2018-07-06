@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router'
 import { AppMaterialModule } from './app-material.module'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule } from '@angular/flex-layout'
 
 import { HeaderInterceptor } from './interceptors/header.interceptor'
 import { ResponseInterceptor } from './interceptors/response.interceptor'
@@ -26,7 +26,8 @@ import { QuestionModalComponent } from './modals/question-modal.component'
 import { ConfirmModalComponent, ErrorModalComponent } from './modals/confirm-modal.component'
 import { RoomsComponent } from './rooms/rooms.component';
 import { RoomsOnlineComponent } from './rooms-online/rooms-online.component';
-import { RoomModalComponent } from './modals/room-modal.component';
+import { EditRoomComponent } from './rooms/edit-room.component';
+import { RoomQuestionModalComponent } from './modals/room-question-modal.component';
 
 const components = [
   AppComponent,
@@ -44,7 +45,8 @@ const components = [
   ErrorModalComponent,
   RoomsComponent,
   RoomsOnlineComponent,
-  RoomModalComponent
+  RoomQuestionModalComponent,
+  EditRoomComponent
 ]
 
 const routes = [
@@ -56,7 +58,8 @@ const routes = [
   { path: 'my-questions', component: MyQuestionsComponent },
   { path: 'all-questions', component: AllQuestionsComponent },
   { path: 'rooms', component: RoomsComponent },
-  { path: 'rooms-online', component: RoomsOnlineComponent }
+  { path: 'rooms-online', component: RoomsOnlineComponent },
+  { path: 'edit-room/:id', component: EditRoomComponent }
 ]
 
 @NgModule({
@@ -80,7 +83,7 @@ const routes = [
     QuestionModalComponent,
     ConfirmModalComponent,
     ErrorModalComponent,
-    RoomModalComponent
+    RoomQuestionModalComponent
   ],
   bootstrap: [AppComponent]
 })
