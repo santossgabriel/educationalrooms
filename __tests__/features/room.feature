@@ -18,6 +18,18 @@ Feature: Sala
     When Quando eu buscar as salas que participei
     Then Então eu devo obter uma lista de salas que participei
 
+  Scenario Outline: Obter minha sala
+    Given Dado eu que queira obter minha sala
+    When Quando eu obter uma sala com id <id>
+    Then Então a sala deve ter status <status>
+
+    Examples:
+      | id | status       |
+      | 2  | 'FINALIZADA' |
+      | 4  | 'INICIADA'   |
+      | 7  | 'ABERTA'     |
+      | 8  | 'FECHADA'    |
+
   Scenario Outline: Entrar ou sair da sala
     Given Dado eu que queira entrar ou sair de uma sala
     When Quando eu entrar ou sair de uma sala <caso> atribuindo <propriedades>
@@ -32,8 +44,6 @@ Feature: Sala
       | 'que eu possa entrar' | '{ "id": 6, "associate": false }' | "Saiu da sala."                           |
       | 'que eu não esteja'   | '{ "id": 2, "associate": false }' | "Usuário não incluso na sala."            |
       | 'que eu possa entrar' | '{ "id": 6, "associate": true }'  | "Entrou na sala."                         |
-
-
 
   Scenario Outline: Salvar Sala
     Given Dado eu que queira salvar uma sala

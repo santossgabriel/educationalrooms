@@ -1,12 +1,13 @@
 import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
-import { assert } from 'chai'
+import { expect, assert } from 'chai'
 
 import app from '../../../../src/server'
 
 const request = supertest(app)
 let rooms = []
 let token = ''
+let room = null
 
 /**
  * Obter salas abertas
@@ -90,5 +91,30 @@ When('Quando eu buscar as salas que participei', () => {
 })
 
 Then('Então eu devo obter uma lista de salas que participei', () => {
-  assert.isTrue(rooms.length > 0, `Deve retornar pelo menos uma sala que o usuário participou. ${JSON.stringify(rooms)}`)
+  assert.isOk(rooms.length > 0, `Deve retornar pelo menos uma sala que o usuário participou. ${JSON.stringify(rooms)}`)
+})
+
+/**
+ * Obter minha sala
+ */
+Given('Dado eu que queira obter minha sala', () => {
+  return request
+    .post('/api/token')
+    .send({ email: 'test_room@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+
+When('Quando eu obter uma sala com id {int}', (id) => {
+  return request
+    .get(`/api/room/${id}`)
+    .set({ token: token })
+    .then((result) => {
+      room = result.body
+    })
+})
+
+Then('Então a sala deve ter status {string}', (status) => {
+  expect(room.status).to.eql(status)
 })

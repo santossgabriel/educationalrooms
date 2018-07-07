@@ -13,6 +13,7 @@ const toMy = (p) => {
     endedAt: p.endedAt,
     openedAt: p.openedAt,
     startedAt: p.startedAt,
+    status: getStatusRoom(p),
     userId: p.userId,
     users: p.RoomUsers.map(x => ({
       roomUserId: x.id,
