@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Room } from '../models/room.model'
+import { RoomOpened } from '../models/opened-room.models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,13 @@ export class RoomService {
 
   getMy() {
     return this.http.get('/api/room-my')
+  }
+
+  associate(room: RoomOpened) {
+    return this.http.put(`/api/room-associate`, {
+      associate: !room.associate,
+      id: room.id
+    })
   }
 
   getOpened() {

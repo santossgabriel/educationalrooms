@@ -124,18 +124,30 @@ export default {
     res.json({ message: 'Sala removida com sucesso.' })
   },
 
-  enter: async (req, res) => {
-    const { id } = req.params
+  associate: async (req, res) => {
+    const { id, associate } = req.body
     const room = await Room.findOne({
       include: [{ model: RoomUser }],
       where: { id: id }
     })
     if (!room)
       throwValidationError('A sala não existe.')
-    else if (room.RoomUsers.filter(p => p.userId === req.claims.id).length > 0)
-      throwValidationError('Usuário já incluso na sala.')
-    await RoomUser.create({ roomId: id, userId: req.claims.id })
-    res.json({ message: 'Entrou na sala.' })
+
+    const associated = room.RoomUsers.filter(p => p.userId === req.claims.id).length > 0
+
+    if (associate) {
+      if (associated)
+        throwValidationError('Usuário já incluso na sala.')
+      if (!room.openedAt || room.startedAt)
+        throwValidationError('Sala não foi aberta ou já foi finalizada.')
+      await RoomUser.create({ roomId: id, userId: req.claims.id })
+      res.json({ message: 'Entrou na sala.' })
+    } else {
+      if (!associated)
+        throwValidationError('Usuário não incluso na sala.')
+      await RoomUser.destroy({ where: { roomId: id, userId: req.claims.id } })
+      res.json({ message: 'Saiu da sala.' })
+    }
   },
 
   save: async (req, res) => {

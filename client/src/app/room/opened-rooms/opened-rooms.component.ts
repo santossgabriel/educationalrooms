@@ -33,6 +33,13 @@ export class OpenedRoomsComponent implements OnInit, TokenChangedListener {
   ngOnInit() {
   }
 
+  associate(room: RoomOpened) {
+    this.service.associate(room).subscribe(res => {
+      room.associate = !room.associate
+      room.users += (room.associate ? 1 : -1)
+    })
+  }
+
   tokenChanged(newToken) { }
 
   cleanError() {
