@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core'
-import { Globals } from '../globals'
+import { Globals } from '../../globals'
 import { Router } from '@angular/router'
-import { fadeInTransition } from '../router.transition'
+import { fadeInTransition } from '../../router.transition'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
-import { LoginModel } from '../models/account.models'
+import { LoginModel } from '../../models/account.models'
 import { MatTableDataSource, MatDialog } from '@angular/material';
-import { Room } from '../models/room.model';
-import { RoomService } from '../services/room.service';
-import { ErrorModalComponent } from '../modals/confirm-modal.component';
+import { Room } from '../../models/room.model';
+import { RoomService } from '../../services/room.service';
+import { ErrorModalComponent } from '../../modals/confirm-modal.component';
 
 @Component({
-  selector: 'app-rooms',
-  templateUrl: './rooms.component.html',
-  styleUrls: ['./rooms.component.css'],
+  selector: 'app-my-rooms',
+  templateUrl: './my-rooms.component.html',
+  styleUrls: ['./my-rooms.component.css'],
   animations: [fadeInTransition],
   host: { '[@fadeInTransition]': '' }
 })
 
-export class RoomsComponent implements OnInit, TokenChangedListener {
+export class MyRoomsComponent implements OnInit, TokenChangedListener {
 
   error = ''
   displayedColumns = ['id', 'name', 'users', 'questions', 'seconds', 'actions']

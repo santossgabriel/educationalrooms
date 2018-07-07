@@ -24,10 +24,12 @@ import { AllQuestionsComponent } from './questions/all-questions/all-questions.c
 import { MyQuestionsComponent } from './questions/my-questions/my-questions.component'
 import { QuestionModalComponent } from './modals/question-modal.component'
 import { ConfirmModalComponent, ErrorModalComponent } from './modals/confirm-modal.component'
-import { RoomsComponent } from './rooms/rooms.component';
-import { RoomsOnlineComponent } from './rooms-online/rooms-online.component';
-import { EditRoomComponent } from './rooms/edit-room.component';
+import { MyRoomsComponent } from './room/my-rooms/my-rooms.component';
+import { OpenedRoomsComponent } from './room/opened-rooms/opened-rooms.component';
+import { EditRoomComponent } from './room/edit-room/edit-room.component';
+import { ParticipatedRoomsComponent } from './room/participated-rooms/participated-rooms.component';
 import { RoomQuestionModalComponent } from './modals/room-question-modal.component';
+import { AllNotificationsComponent } from './notifications/all-notifications/all-notifications.component';
 
 const components = [
   AppComponent,
@@ -43,10 +45,12 @@ const components = [
   QuestionModalComponent,
   ConfirmModalComponent,
   ErrorModalComponent,
-  RoomsComponent,
-  RoomsOnlineComponent,
+  MyRoomsComponent,
+  OpenedRoomsComponent,
   RoomQuestionModalComponent,
-  EditRoomComponent
+  EditRoomComponent,
+  ParticipatedRoomsComponent,
+  AllNotificationsComponent
 ]
 
 const routes = [
@@ -57,9 +61,11 @@ const routes = [
   { path: 'sign-edit', component: SingupComponent },
   { path: 'my-questions', component: MyQuestionsComponent },
   { path: 'all-questions', component: AllQuestionsComponent },
-  { path: 'rooms', component: RoomsComponent },
-  { path: 'rooms-online', component: RoomsOnlineComponent },
-  { path: 'edit-room/:id', component: EditRoomComponent }
+  { path: 'my-rooms', component: MyRoomsComponent },
+  { path: 'opened-rooms', component: OpenedRoomsComponent },
+  { path: 'edit-room/:id', component: EditRoomComponent },
+  { path: 'participated-rooms', component: ParticipatedRoomsComponent },
+  { path: 'all-notifications', component: AllNotificationsComponent }
 ]
 
 @NgModule({

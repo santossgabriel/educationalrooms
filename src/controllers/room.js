@@ -1,8 +1,8 @@
 import db from '../infra/db/models/index'
 import { throwForbiddenError, throwValidationError } from '../helpers/error'
-import { questionStatus } from './question';
+import { questionStatus } from './question'
 
-const { Room, RoomUser, RoomQuestion, User, Question } = db
+const { Room, RoomUser, RoomQuestion, User, Question, sequelize } = db
 
 const toMy = (p) => {
   return {
@@ -46,6 +46,20 @@ const toMyAssoc = (rooms) => {
   }))
 }
 
+const toOpened = (room, userId) => {
+  return {
+    id: room.id,
+    name: room.name,
+    time: room.time,
+    createdAt: room.createdAt,
+    openedAt: room.openedAt,
+    users: room.RoomUsers.length,
+    questions: room.RoomQuestions.length,
+    owner: room.User.name,
+    associate: room.RoomUsers.filter(p => p.userId === userId).length > 0
+  }
+}
+
 export default {
 
   get: async (req, res) => {
@@ -80,9 +94,19 @@ export default {
     res.json(toMyAssoc(rooms))
   },
 
-  getAvaliables: async (req, res) => {
-    const rooms = await Room.findAll({ where: { endedAt: null } })
-    res.json(rooms)
+  getOpened: async (req, res) => {
+    const rooms = await Room.findAll({
+      include: [
+        { model: RoomUser },
+        { model: User },
+        { model: RoomQuestion }
+      ],
+      where: {
+        openedAt: { [sequelize.Op.ne]: null },
+        startedAt: null
+      }
+    })
+    res.json(rooms.map(p => toOpened(p, req.claims.id)))
   },
 
   remove: async (req, res) => {

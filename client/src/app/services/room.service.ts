@@ -9,12 +9,16 @@ export class RoomService {
 
   constructor(private http: HttpClient) { }
 
+  get(id: number) {
+    return this.http.get(`/api/room/${id}`)
+  }
+
   getMy() {
     return this.http.get('/api/room-my')
   }
 
-  get(id: number) {
-    return this.http.get(`/api/room/${id}`)
+  getOpened() {
+    return this.http.get('/api/room-opened')
   }
 
   save(room: Room) {

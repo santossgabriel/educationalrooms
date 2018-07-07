@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core'
-import { Globals } from '../globals'
+import { Globals } from '../../globals'
 import { Router, ActivatedRoute, Params } from '@angular/router'
-import { fadeInTransition } from '../router.transition'
-import { Room } from '../models/room.model';
-import { RoomService } from '../services/room.service';
-import { RoomQuestionModalComponent } from '../modals/room-question-modal.component';
+import { fadeInTransition } from '../../router.transition'
+import { Room } from '../../models/room.model';
+import { RoomService } from '../../services/room.service';
+import { RoomQuestionModalComponent } from '../../modals/room-question-modal.component';
 import { MatDialog, MatTableDataSource } from '@angular/material';
-import { RoomQuestion } from '../models/room-question.model';
-import { ErrorModalComponent } from '../modals/confirm-modal.component';
+import { RoomQuestion } from '../../models/room-question.model';
+import { ErrorModalComponent } from '../../modals/confirm-modal.component';
 
 @Component({
   selector: 'app-rooms',

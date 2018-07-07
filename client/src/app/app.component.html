@@ -8,13 +8,13 @@
       </div>
       <mat-nav-list>
         <mat-list-item>
-          <button [disabled]="path === '/rooms'" mat-raised-button color="primary" routerLink="/rooms">MINHAS</button>
+          <button [disabled]="path === '/my-rooms'" mat-raised-button color="primary" routerLink="/my-rooms">CRIADAS</button>
         </mat-list-item>
         <mat-list-item>
-          <button [disabled]="path === '/rooms-associate'" mat-raised-button color="primary" routerLink="/rooms-associate">PARTICIPEI</button>
+          <button [disabled]="path === '/participated-rooms'" mat-raised-button color="primary" routerLink="/participated-rooms">PARTICIPAÇÕES</button>
         </mat-list-item>
         <mat-list-item>
-          <button [disabled]="path === '/rooms-online'" mat-raised-button color="primary" routerLink="/rooms-online">ONLINE</button>
+          <button [disabled]="path === '/opened-rooms'" mat-raised-button color="primary" routerLink="/opened-rooms">ABERTAS</button>
         </mat-list-item>
       </mat-nav-list>
 
@@ -23,7 +23,7 @@
       </div>
       <mat-nav-list>
         <mat-list-item>
-          <button [disabled]="path === '/my-questions'" mat-raised-button color="primary" routerLink="/my-questions">MINHAS</button>
+          <button [disabled]="path === '/my-questions'" mat-raised-button color="primary" routerLink="/my-questions">CRIADAS</button>
         </mat-list-item>
         <mat-list-item>
           <button [disabled]="path === '/all-questions'" mat-raised-button color="primary" routerLink="/all-questions">PÚBLICAS</button>
@@ -31,16 +31,16 @@
       </mat-nav-list>
 
       <div class="menu-sidenav">
-        <span>NOTIFICAÇÔES</span>
+        <span>NOTIFICAÇÕES</span>
       </div>
       <mat-nav-list>
         <mat-list-item>
-          <button [disabled]="path === '/notifications'" mat-raised-button color="primary" routerLink="/notifications">VER</button>
+          <button [disabled]="path === '/all-notifications'" mat-raised-button color="primary" routerLink="/all-notifications">VIZUALIZAR</button>
         </mat-list-item>
       </mat-nav-list>
 
     </div>
-    <div fxFlex="100%">
+    <div fxFlex="100%" style="padding-right: 10px">
       <router-outlet></router-outlet>
     </div>
   </div>

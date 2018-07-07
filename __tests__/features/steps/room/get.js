@@ -22,7 +22,7 @@ Given('Dado eu que queira obter as salas disponiveis', () => {
 
 When('Quando eu buscar as salas disponíveis', () => {
   return request
-    .get('/api/room-available')
+    .get('/api/room-opened')
     .set({ token: token })
     .then((result) => {
       rooms = result.body
@@ -82,7 +82,7 @@ Given('Dado eu que queira obter as salas que participei', () => {
 
 When('Quando eu buscar as salas que participei', () => {
   return request
-    .get('/api/room-associated')
+    .get('/api/room-participated')
     .set({ token: token })
     .then((result) => {
       rooms = result.body

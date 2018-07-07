@@ -53,6 +53,8 @@ db.User.hasMany(db.Question, {
 
 db.User.hasMany(db.Room, { foreignKey: 'userId' })
 
+db.Room.belongsTo(db.User, { foreignKey: 'userId', targetKey: 'id' })
+
 db.Room.hasMany(db.RoomUser, { foreignKey: 'roomId' })
 
 db.RoomUser.belongsTo(db.User, { foreignKey: 'userId', targetKey: 'id' })

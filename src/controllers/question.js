@@ -264,8 +264,6 @@ export default {
     let errors = []
     let i
 
-    // console.log(appQuestions)
-
     const appChangesIds = appQuestions.filter(t => t.id > 0).map(p => p.id)
     const news = appQuestions.filter(t => !t.id)
 
