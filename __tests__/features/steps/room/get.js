@@ -9,9 +9,9 @@ let rooms = []
 let token = ''
 
 /**
- * Obter salas disponíveis
+ * Obter salas abertas
  */
-Given('Dado eu que queira obter as salas disponiveis', () => {
+Given('Dado eu que queira obter as salas abertas', () => {
   return request
     .post('/api/token')
     .send({ email: 'test_room@mail.com', password: '123qwe' })
@@ -20,7 +20,7 @@ Given('Dado eu que queira obter as salas disponiveis', () => {
     })
 })
 
-When('Quando eu buscar as salas disponíveis', () => {
+When('Quando eu buscar as salas abertas', () => {
   return request
     .get('/api/room-opened')
     .set({ token: token })
@@ -29,13 +29,13 @@ When('Quando eu buscar as salas disponíveis', () => {
     })
 })
 
-Then('Então eu devo obter uma lista de salas disponíveis', () => {
+Then('Então eu devo obter uma lista de salas abertas', () => {
   let ok = true
   for (let i = 0; i < rooms.length; i++)
-    if (rooms[i].ended)
+    if (!rooms[i].openedAt || rooms[i].startedAt || rooms[i].endedAt)
       ok = false
   assert.isOk(ok, 'Uma das salas retornadas não está disponível.')
-  assert.isTrue(rooms.length > 0, 'Deve retornar pelo menos uma sala disponível.')
+  assert.isOk(rooms.length > 0, 'Deve retornar pelo menos uma sala disponível.')
 })
 
 /**
@@ -82,7 +82,7 @@ Given('Dado eu que queira obter as salas que participei', () => {
 
 When('Quando eu buscar as salas que participei', () => {
   return request
-    .get('/api/room-participated')
+    .get('/api/room-associated')
     .set({ token: token })
     .then((result) => {
       rooms = result.body

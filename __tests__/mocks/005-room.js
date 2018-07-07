@@ -8,6 +8,7 @@ module.exports = {
     }, {
       name: 'test_room_2', // id = 2
       createdAt: new Date('01/01/2018'),
+      startedAt: new Date('01/01/2018'),
       endedAt: new Date('02/02/2018'),
       time: 8,
       userId: 6
@@ -21,6 +22,29 @@ module.exports = {
       createdAt: new Date('01/01/2018'),
       startedAt: new Date('01/01/2018'),
       openedAt: new Date('01/01/2018'),
+      time: 8,
+      userId: 6
+    }, {
+      name: 'test_room_5', // id = 5
+      createdAt: new Date('01/01/2018'),
+      openedAt: new Date('01/01/2018'),
+      time: 8,
+      userId: 6
+    }, {
+      name: 'test_room_6', // id = 6
+      createdAt: new Date('01/01/2018'),
+      openedAt: new Date('01/01/2018'),
+      time: 8,
+      userId: 6
+    }, {
+      name: 'test_room_7', // id = 7
+      createdAt: new Date('01/01/2018'),
+      openedAt: new Date('01/01/2018'),
+      time: 8,
+      userId: 6
+    }, {
+      name: 'test_room_8', // id = 8
+      createdAt: new Date('01/01/2018'),
       time: 8,
       userId: 6
     }])

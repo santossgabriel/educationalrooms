@@ -152,7 +152,7 @@ export default {
       if (associated)
         throwValidationError('Usuário já incluso na sala.')
       if (!room.openedAt || room.startedAt)
-        throwValidationError('Sala não foi aberta ou já foi finalizada.')
+        throwValidationError('Sala não foi aberta ou já foi iniciada.')
       await RoomUser.create({ roomId: id, userId: req.claims.id })
       res.json({ message: 'Entrou na sala.' })
     } else {

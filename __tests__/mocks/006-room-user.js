@@ -12,6 +12,12 @@ module.exports = {
       accepted: true,
       score: 8,
       enteredIn: new Date()
+    }, {
+      userId: 1,
+      roomId: 6,
+      accepted: true,
+      score: 8,
+      enteredIn: new Date()
     }])
   }
 }

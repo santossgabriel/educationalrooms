@@ -3,10 +3,10 @@ Feature: Sala
   Como usuário do sistema
   Quero gerenciar minhas salas e entrar em outras salas
 
-  Scenario: Obter salas disponíveis
-    Given Dado eu que queira obter as salas disponiveis
-    When Quando eu buscar as salas disponíveis
-    Then Então eu devo obter uma lista de salas disponíveis
+  Scenario: Obter salas abertas
+    Given Dado eu que queira obter as salas abertas
+    When Quando eu buscar as salas abertas
+    Then Então eu devo obter uma lista de salas abertas
 
   Scenario: Obter salas que me pertencem
     Given Dado que eu queira obter as salas que me pertencem
@@ -18,16 +18,22 @@ Feature: Sala
     When Quando eu buscar as salas que participei
     Then Então eu devo obter uma lista de salas que participei
 
-  Scenario Outline: Entrar em uma sala
-    Given Dado eu que queira entrar em uma sala
-    When Quando eu entrar em uma sala <caso> usando id <id>
-    Then Então eu devo obter a mensagem <mensagem> depois de tentar entrar na sala
+  Scenario Outline: Entrar ou sair da sala
+    Given Dado eu que queira entrar ou sair de uma sala
+    When Quando eu entrar ou sair de uma sala <caso> atribuindo <propriedades>
+    Then Então eu devo obter a mensagem <mensagem> depois de entrar ou sair da sala
 
     Examples:
-      | caso                  | id | mensagem                      |
-      | 'Que eu já esteja'    | 1  | "Usuário já incluso na sala." |
-      | 'Que não exista'      | 99 | "A sala não existe."          |
-      | 'Que eu possa entrar' | 2  | "Entrou na sala."             |
+      | caso                  | propriedades                      | mensagem                                  |
+      | 'que não exista'      | '{ "id": 99 }'                    | "A sala não existe."                      |
+      | 'que eu esteja'       | '{ "id": 6, "associate": true }'  | "Usuário já incluso na sala."             |
+      | 'sala não aberta'     | '{ "id": 8, "associate": true }'  | "Sala não foi aberta ou já foi iniciada." |
+      | 'sala já iniciada'    | '{ "id": 4, "associate": true }'  | "Sala não foi aberta ou já foi iniciada." |
+      | 'que eu possa entrar' | '{ "id": 6, "associate": false }' | "Saiu da sala."                           |
+      | 'que eu não esteja'   | '{ "id": 2, "associate": false }' | "Usuário não incluso na sala."            |
+      | 'que eu possa entrar' | '{ "id": 6, "associate": true }'  | "Entrou na sala."                         |
+
+
 
   Scenario Outline: Salvar Sala
     Given Dado eu que queira salvar uma sala
