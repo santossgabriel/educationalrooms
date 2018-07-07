@@ -27,7 +27,7 @@ import { ConfirmModalComponent, ErrorModalComponent } from './modals/confirm-mod
 import { MyRoomsComponent } from './room/my-rooms/my-rooms.component';
 import { OpenedRoomsComponent } from './room/opened-rooms/opened-rooms.component';
 import { EditRoomComponent } from './room/edit-room/edit-room.component';
-import { ParticipatedRoomsComponent } from './room/participated-rooms/participated-rooms.component';
+import { AssociatedRoomsComponent } from './room/associated-rooms/associated-rooms.component'
 import { RoomQuestionModalComponent } from './modals/room-question-modal.component';
 import { AllNotificationsComponent } from './notifications/all-notifications/all-notifications.component';
 
@@ -49,7 +49,7 @@ const components = [
   OpenedRoomsComponent,
   RoomQuestionModalComponent,
   EditRoomComponent,
-  ParticipatedRoomsComponent,
+  AssociatedRoomsComponent,
   AllNotificationsComponent
 ]
 
@@ -64,7 +64,7 @@ const routes = [
   { path: 'my-rooms', component: MyRoomsComponent },
   { path: 'opened-rooms', component: OpenedRoomsComponent },
   { path: 'edit-room/:id', component: EditRoomComponent },
-  { path: 'participated-rooms', component: ParticipatedRoomsComponent },
+  { path: 'associated-rooms', component: AssociatedRoomsComponent },
   { path: 'all-notifications', component: AllNotificationsComponent }
 ]
 

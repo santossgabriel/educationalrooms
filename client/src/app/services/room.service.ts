@@ -18,6 +18,10 @@ export class RoomService {
     return this.http.get('/api/room-my')
   }
 
+  getAssociated() {
+    return this.http.get('/api/room-associated')
+  }
+
   associate(room: RoomOpened) {
     return this.http.put(`/api/room-associate`, {
       associate: !room.associate,

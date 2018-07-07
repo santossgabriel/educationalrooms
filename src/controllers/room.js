@@ -41,9 +41,22 @@ const toMyAssoc = (rooms) => {
     name: p.name,
     time: p.time,
     createdAt: p.createdAt,
+    startedAt: p.startedAt,
+    openedAt: p.openedAt,
     endedAt: p.endedAt,
-    score: p.RoomUsers[0].score
+    score: p.RoomUsers[0].score,
+    status: getStatusRoom(p)
   }))
+}
+
+const getStatusRoom = (room) => {
+  if (room.endedAt)
+    return 'FINALIZADA'
+  if (room.startedAt)
+    return 'INICIADA'
+  if (room.openedAt)
+    return 'ABERTA'
+  return 'FECHADA'
 }
 
 const toOpened = (room, userId) => {

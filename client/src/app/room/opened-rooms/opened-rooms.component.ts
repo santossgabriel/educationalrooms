@@ -17,7 +17,6 @@ import { RoomOpened } from '../../models/opened-room.models';
 
 export class OpenedRoomsComponent implements OnInit, TokenChangedListener {
 
-  error = ''
   displayedColumns = ['owner', 'name', 'users', 'questions', 'time', 'actions']
   dataSource: MatTableDataSource<RoomOpened>
   hasRooms: boolean = false
@@ -42,7 +41,4 @@ export class OpenedRoomsComponent implements OnInit, TokenChangedListener {
 
   tokenChanged(newToken) { }
 
-  cleanError() {
-    this.error = ''
-  }
 }
