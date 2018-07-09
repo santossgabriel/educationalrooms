@@ -70,7 +70,8 @@
       "src/auth/auth.js",
       "src/server.js",
       "src/socket",
-      "src/infra/db/models/index.js"
+      "src/infra/db/models/index.js",
+      "src/controllers/google.js"
     ],
     "reporter": [
       "text",
