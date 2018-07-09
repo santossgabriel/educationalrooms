@@ -5,7 +5,11 @@ import { authError } from '../helpers/error'
 
 const isFree = (req) => {
   const { path, method } = req
-  return path.indexOf('/api/') === -1 || path === '/api/token' || (path === '/api/account' && method === 'POST')
+  return path.indexOf('/api/') === -1
+    || path === '/api/token-google'
+    || path === '/api/token'
+    || (path === '/api/account' && method === 'POST')
+
 }
 
 export default (req, res, next) => {

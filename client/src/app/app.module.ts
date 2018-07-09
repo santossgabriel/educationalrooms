@@ -30,6 +30,7 @@ import { EditRoomComponent } from './room/edit-room/edit-room.component';
 import { AssociatedRoomsComponent } from './room/associated-rooms/associated-rooms.component'
 import { RoomQuestionModalComponent } from './modals/room-question-modal.component';
 import { AllNotificationsComponent } from './notifications/all-notifications/all-notifications.component';
+import { GoogleButtonComponent } from './account/google-button/google-button.component';
 
 const components = [
   AppComponent,
@@ -50,7 +51,8 @@ const components = [
   RoomQuestionModalComponent,
   EditRoomComponent,
   AssociatedRoomsComponent,
-  AllNotificationsComponent
+  AllNotificationsComponent,
+  GoogleButtonComponent
 ]
 
 const routes = [

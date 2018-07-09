@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { AccountService } from '../../services/account.service'
 import { Globals } from '../../globals'
 import { Router } from '@angular/router'
 import { fadeInTransition } from '../../router.transition'

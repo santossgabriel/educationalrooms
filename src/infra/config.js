@@ -8,6 +8,7 @@ try {
 module.exports = {
   NODE_ENV: process.env.NODE_ENV,
   SECRET: process.env.SECRET,
+  GOOGLE_SECRET: process.env.GOOGLE_SECRET,
   dev: {
     DATABASE_URI: process.env.DATABASE_URL,
     url: process.env.DATABASE_URL,

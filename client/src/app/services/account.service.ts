@@ -26,4 +26,10 @@ export class AccountService {
   getAccount() {
     return this.http.get('/api/account')
   }
+
+  sendGoogleToken(token: string) {
+    return this.http.post('/api/token-google', {
+      googleToken: token
+    })
+  }
 }

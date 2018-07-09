@@ -40,6 +40,7 @@
     "boom": "^7.2.0",
     "express": "^4.16.3",
     "global": "^4.3.2",
+    "google-auth-library": "^1.6.1",
     "http-status": "^1.1.2",
     "jsonwebtoken": "^8.2.1",
     "morgan": "^1.9.0",

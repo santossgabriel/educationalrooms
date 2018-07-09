@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxyconfig.json --poll=2000",
+    "start": "ng serve --proxy-config proxyconfig.json --poll=2000 --port 80",
     "build": "ng build --prod --output-path=../public",
     "test": "ng test",
     "lint": "ng lint",

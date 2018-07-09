@@ -28,4 +28,8 @@ export class Globals {
   }
 
   public static userLogged(): boolean { return this.currentToken() ? true : false }
+
+  public static getGoogleClientId(): string {
+    return '177211292368-ro5aar6klvjkustdlga8616m8cds2iru.apps.googleusercontent.com'
+  }
 }

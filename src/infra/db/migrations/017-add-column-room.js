@@ -4,8 +4,5 @@ module.exports = {
     queryInterface.addColumn('Room', 'startedAt', Sequelize.DATE)
   },
 
-  down: function (queryInterface, Sequelize) {
-    queryInterface.removeColumn('User', 'openedAt')
-    queryInterface.removeColumn('User', 'startedAt')
-  }
+  down: function (queryInterface, Sequelize) { }
 }

@@ -1,7 +1,7 @@
 <div style="text-align: center; width: 100%">
   <form (submit)="createUser(accountForm)" #accountForm="ngForm" class="account-component">
     <mat-card>
-      <mat-card-title>Cadastro</mat-card-title>
+
       <mat-form-field>
         <input matInput #name="ngModel" name="name" minlength="3" placeholder="Nome de usuário" [(ngModel)]="user.name" required
           (change)="cleanError()" />
@@ -33,7 +33,7 @@
       </div>
       <br />
       <br />
-      <button [disabled]="accountForm.form.invalid" type="submit" mat-raised-button color="primary">Enviar</button>
+      <button [disabled]="accountForm.form.invalid" type="submit" mat-raised-button color="primary">PRÓXIMO</button>
       <br />
 
       <span class="error-message">{{error}}</span>

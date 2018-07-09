@@ -67,8 +67,11 @@ $theme:   mat-light-theme($primary, $accent);
   margin: 0px auto; 
   padding: 30px;
   text-align: center;
-  mat-form-field{
+  mat-form-field {
     width: 90%;
+  }
+  mat-card {
+    padding: 50px;
   }
 }
 
@@ -162,4 +165,10 @@ mat-nav-list mat-list-item {
 
 th.mat-header-cell {
   text-align: center !important;
+}
+
+.or-elem{
+  margin: 20px;
+  color: #aaa;
+
 }

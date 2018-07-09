@@ -39,7 +39,13 @@ export const modelAttributes = {
     allowNull: false,
     defaultValue: new Date('01/01/1970')
   },
-  updatedAt: Sequelize.DATE
+  updatedAt: Sequelize.DATE,
+  picture: Sequelize.STRING(1000),
+  google: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  }
 }
 
 export const modelOptions = {

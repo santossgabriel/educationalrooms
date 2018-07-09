@@ -34,3 +34,20 @@
   background-color: #ff0;
   height: 100%;
 }
+
+mat-divider{
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.account-data span {
+  color: #666;
+}
+
+.account-name{
+  font-weight: bold;
+}
+
+.account-email{
+  font-size: 12px;
+}

@@ -1,6 +1,10 @@
 <form (submit)="loginUser()" #loginForm="ngForm" class="account-component">
   <mat-card>
-    <mat-card-title>Login</mat-card-title>
+    <app-google-button></app-google-button>
+
+    <div class="or-elem">
+      <span>OU</span>
+    </div>
 
     <mat-form-field>
       <input matInput placeholder="Seu email" appEmail [formControl]="user.email" required (change)="cleanError()" />
