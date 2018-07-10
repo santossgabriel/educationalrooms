@@ -11,8 +11,11 @@ import { Globals } from '../globals'
 export class HeaderInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
+    const token = Globals.currentToken()
+
     const useToken = () => {
-      return req.url !== '/api/token-google' && req.url !== '/api/token' && !(req.url === '/api/account' && req.method === 'POST')
+
+      return token && req.url !== '/api/token-google' && req.url !== '/api/token' && !(req.url === '/api/account' && req.method === 'POST')
     }
 
     const headers = useToken() ? { token: Globals.currentToken() } : {}

@@ -42,11 +42,9 @@ export default {
       where: { email: account.email }
     })
 
-    if (userDB) {
-      if (userDB.name === account.name)
-        throwValidationError('Este nome já está em uso.')
+    if (userDB)
       throwValidationError('Este email já está em uso.')
-    }
+
     account.password = sha1(account.password)
     account.createdAt = new Date()
     account.updatedAt = new Date()
@@ -57,13 +55,16 @@ export default {
 
   update: async (req, res) => {
     const account = req.body
-    validateAccount(account)
+
+    if (!account || !account.email || !/.{3,}@.{3,}/.test(account.email))
+      throwValidationError('Email inválido.')
+
+    if (!account.name || account.name.length < 3)
+      throwValidationError('O nome deve possuir pelo menos 3 caracteres.')
 
     const userDB = await User.findOne({
       where: sequelize.sequelize.and(
-        sequelize.sequelize.or(
-          { email: account.email },
-          { name: account.name }),
+        { email: account.email },
         {
           id: {
             [sequelize.sequelize.Op.ne]: req.claims.id
@@ -71,14 +72,8 @@ export default {
         })
     })
 
-    if (userDB) {
-      if (userDB.name === account.name)
-        throwValidationError('Este nome já está em uso.')
+    if (userDB)
       throwValidationError('Este email já está em uso.')
-    }
-    const user = await User.findOne({ where: { id: req.claims.id } })
-    if (!account.password || user.password !== sha1(account.password))
-      throwValidationError('A senha informada é diferente da senha atual.')
     await User.update({
       email: account.email,
       name: account.name,

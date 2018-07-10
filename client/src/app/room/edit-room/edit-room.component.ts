@@ -72,7 +72,7 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
 
   saveRoom() {
     this.roomService.save(this.room).subscribe(res => {
-      this.router.navigate(['/rooms'])
+      this.router.navigate(['/my-rooms'])
     }, err => {
       console.error(err.error.message)
       this.dialog.open(ErrorModalComponent, {

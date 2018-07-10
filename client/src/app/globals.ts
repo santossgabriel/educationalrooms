@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core'
 export class Globals {
   private static listeners: TokenChangedListener[] = []
   private static token: string = ''
+  private static socketIo: any
 
   public static changeToken(newToken: string) {
     if (!newToken)
@@ -19,6 +20,12 @@ export class Globals {
     if (!this.token)
       this.token = localStorage.getItem('token')
     return this.token
+  }
+
+  public static getSocket() {
+    if (!this.socketIo)
+      this.socketIo = (<any>window).io()
+    return this.socketIo
   }
 
   public static addTokenListener(listener: TokenChangedListener) {

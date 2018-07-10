@@ -4,6 +4,7 @@ import { AccountService } from '../../services/account.service'
 import { Globals } from '../../globals'
 import { Router } from '@angular/router'
 import { AccountModel } from '../../models/account.models'
+import { UserDataModel } from '../../models/user-data.models';
 
 @Component({
   selector: 'app-singup',
@@ -18,14 +19,20 @@ export class SingupComponent implements OnInit {
   error: string = ''
   message: string = ''
   editMode: boolean = false
+  userAccount = <UserDataModel>{}
+  token = ''
 
   constructor(private service: AccountService, private router: Router) { }
 
   ngOnInit() {
     if (this.router.isActive('/sign-edit', true)) {
       this.editMode = true
-      this.service.getAccount().subscribe(res => { this.user = <AccountModel>res })
+      this.service.getAccount().subscribe(res => {
+        this.user = <AccountModel>res
+        this.userAccount = <UserDataModel>res
+      })
     }
+    this.token = Globals.currentToken()
   }
 
   createUser(form) {
@@ -41,6 +48,21 @@ export class SingupComponent implements OnInit {
     }, err => {
       this.error = err.error.message
     })
+  }
+
+  onUploadFinished(event) {
+    const response = event.serverResponse.response
+    if (!response.ok) {
+      console.log(response)
+      this.error = response._body
+    } else {
+      console.log(response)
+      Globals.changeToken(Globals.currentToken())
+      this.service.getAccount().subscribe(res => {
+        this.user = <AccountModel>res
+        this.userAccount = <UserDataModel>res
+      })
+    }
   }
 
   cleanError() { this.error = '' }

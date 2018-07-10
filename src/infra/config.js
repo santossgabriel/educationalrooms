@@ -9,13 +9,14 @@ module.exports = {
   NODE_ENV: process.env.NODE_ENV,
   SECRET: process.env.SECRET,
   GOOGLE_SECRET: process.env.GOOGLE_SECRET,
+  DROPBOX_TOKEN: process.env.DROPBOX_TOKEN,
   dev: {
     DATABASE_URI: process.env.DATABASE_URL,
     url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
     dialect: 'postgres',
     operatorsAliases: false,
-    logging: true
+    logging: false
   },
   test: {
     dialect: 'sqlite',

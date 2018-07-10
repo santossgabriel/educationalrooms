@@ -21,7 +21,8 @@ import {
   MatMenuModule,
   MatSortModule,
   MatPaginatorModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatBadgeModule
 } from '@angular/material'
 
 @NgModule({
@@ -66,7 +67,8 @@ import {
     MatMenuModule,
     MatSortModule,
     MatPaginatorModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatBadgeModule
   ],
   declarations: []
 })

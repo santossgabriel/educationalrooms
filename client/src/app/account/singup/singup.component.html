@@ -2,6 +2,12 @@
   <form (submit)="createUser(accountForm)" #accountForm="ngForm" class="account-component">
     <mat-card>
 
+      <div *ngIf="editMode">
+        <img src="{{userAccount.picture}}" class="user-picture" height="80" width="80">
+        <image-upload max="10" [dropBoxMessage]="''" [clearButtonCaption]="''" url="/api/image" (uploadFinished)="onUploadFinished($event)"
+          [headers]="{token: token}" [preview]="false" [extensions]="['jpg', 'jpeg', 'png','gif']" [buttonCaption]="'Alterar imagem'"></image-upload>
+      </div>
+
       <mat-form-field>
         <input matInput #name="ngModel" name="name" minlength="3" placeholder="Nome de usuário" [(ngModel)]="user.name" required
           (change)="cleanError()" />
@@ -10,13 +16,13 @@
       </mat-form-field>
       <br />
       <mat-form-field>
-        <input matInput #email="ngModel" name="email" type="email" minlength="8" placeholder="Seu email" [(ngModel)]="user.email"
-          required (change)="cleanError()" />
+        <input matInput [disabled]="userAccount.google" #email="ngModel" name="email" type="email" minlength="8" placeholder="Seu email"
+          [(ngModel)]="user.email" required (change)="cleanError()" />
         <mat-error *ngIf="email.errors?.required">Informe o email</mat-error>
         <mat-error *ngIf="email.errors?.email || email.errors?.minlength">Informe um email válido</mat-error>
       </mat-form-field>
       <br />
-      <mat-form-field>
+      <mat-form-field *ngIf="!editMode">
         <input matInput #password="ngModel" name="password" type="password" minlength="6" placeholder="Senha" [(ngModel)]="user.password"
           required (change)="cleanError()" />
         <mat-error *ngIf="password.errors?.required">Informe a senha</mat-error>
@@ -33,7 +39,7 @@
       </div>
       <br />
       <br />
-      <button [disabled]="accountForm.form.invalid" type="submit" mat-raised-button color="primary">PRÓXIMO</button>
+      <button [disabled]="accountForm.form.invalid" type="submit" mat-raised-button color="primary">OK</button>
       <br />
 
       <span class="error-message">{{error}}</span>

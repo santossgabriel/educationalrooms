@@ -10,14 +10,15 @@ import { LoginModel } from '../../models/account.models'
   selector: 'app-singin',
   templateUrl: './singin.component.html',
   styleUrls: ['./singin.component.css'],
-  animations: [routerTransition],
-  host: { '[@routerTransition]': '' }
+  // animations: [routerTransition],
+  // host: { '[@routerTransition]': '' }
 })
 
 export class SinginComponent implements OnInit, TokenChangedListener {
 
   error = ''
   user: LoginModel = new LoginModel()
+  google: boolean
 
   constructor(private service: AccountService, private router: Router) {
     Globals.addTokenListener(this)
@@ -26,6 +27,7 @@ export class SinginComponent implements OnInit, TokenChangedListener {
   }
 
   ngOnInit() {
+    this.startGoogleApi()
   }
 
   loginUser() {
@@ -40,6 +42,44 @@ export class SinginComponent implements OnInit, TokenChangedListener {
   }
 
   tokenChanged(newToken) { }
+
+  startGoogleApi() {
+    let auth2
+    const googleApi = (<any>window).gapi
+    googleApi.load('auth2', () => {
+      auth2 = googleApi.auth2.init({
+        client_id: Globals.getGoogleClientId(),
+        cookiepolicy: 'single_host_origin'
+      })
+      auth2.attachClickHandler(document.getElementById('btnGoogle'), {},
+        (googleUser) => {
+          this.googleCallback(googleUser)
+        }, (error) => {
+          console.log(JSON.stringify(error, undefined, 2))
+        })
+    })
+  }
+
+  googleCallback(googleUser) {
+    const perfil = googleUser.getBasicProfile();
+    const user = {
+      id: perfil.getId(),
+      name: perfil.getName(),
+      email: perfil.getEmail(),
+      image: perfil.getImageUrl(),
+      googleToken: googleUser.getAuthResponse().id_token
+    }
+    this.service.sendGoogleToken(user.googleToken).subscribe(res => {
+      const result: AccountResponse = <AccountResponse>res
+      Globals.changeToken(result.token)
+      location.hash = '#/my-questions'
+      
+
+      // this.google = true
+      // this.user.email.setValue(<string>user.email)
+      // this.user.password.setValue('123456')
+    })
+  }
 
   cleanError() {
     this.error = ''

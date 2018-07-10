@@ -14,12 +14,19 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   logged = false
   path: string
   user = <UserDataModel>{}
+  notifications = 0
 
   constructor(private router: Router, private accountService: AccountService) {
     Globals.addTokenListener(this)
     this.refresh()
     router.events.subscribe((val: any) => {
       this.path = val.url
+    })
+
+    const socket = Globals.getSocket()
+    socket.on('notificationReceived', () => {
+      this.notifications++
+      console.log(this.notifications)
     })
   }
 
@@ -30,10 +37,7 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   refresh() {
     this.logged = Globals.userLogged()
     if (this.logged) {
-      this.accountService.getAccount().subscribe(res => {
-        this.user = <UserDataModel>res
-        console.log(res)
-      })
+      this.accountService.getAccount().subscribe(res => { this.user = <UserDataModel>res })
     }
   }
 
@@ -43,4 +47,6 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   }
 
   tokenChanged(newToken) { this.refresh() }
+
+  clearNotifications() { this.notifications = 0 }
 }

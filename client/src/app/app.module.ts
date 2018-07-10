@@ -7,6 +7,7 @@ import { AppMaterialModule } from './app-material.module'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { FlexLayoutModule } from '@angular/flex-layout'
+import { ImageUploadModule } from "angular2-image-upload";
 
 import { HeaderInterceptor } from './interceptors/header.interceptor'
 import { ResponseInterceptor } from './interceptors/response.interceptor'
@@ -30,7 +31,6 @@ import { EditRoomComponent } from './room/edit-room/edit-room.component';
 import { AssociatedRoomsComponent } from './room/associated-rooms/associated-rooms.component'
 import { RoomQuestionModalComponent } from './modals/room-question-modal.component';
 import { AllNotificationsComponent } from './notifications/all-notifications/all-notifications.component';
-import { GoogleButtonComponent } from './account/google-button/google-button.component';
 
 const components = [
   AppComponent,
@@ -51,8 +51,7 @@ const components = [
   RoomQuestionModalComponent,
   EditRoomComponent,
   AssociatedRoomsComponent,
-  AllNotificationsComponent,
-  GoogleButtonComponent
+  AllNotificationsComponent
 ]
 
 const routes = [
@@ -81,7 +80,8 @@ const routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes, { useHash: true }),
-    FlexLayoutModule
+    FlexLayoutModule,
+    ImageUploadModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },

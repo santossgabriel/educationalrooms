@@ -8,6 +8,7 @@ const isFree = (req) => {
   return path.indexOf('/api/') === -1
     || path === '/api/token-google'
     || path === '/api/token'
+    || path.indexOf('/api/image') !== -1 && method === 'GET'
     || (path === '/api/account' && method === 'POST')
 
 }

@@ -1,0 +1,6 @@
+.user-picture{
+  border-radius: 50%;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: 100ms;  
+}

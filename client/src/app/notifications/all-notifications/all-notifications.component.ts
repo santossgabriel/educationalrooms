@@ -20,6 +20,8 @@ export class AllNotificationsComponent implements OnInit, TokenChangedListener {
 
   constructor(private service: AccountService, private router: Router) {
     Globals.addTokenListener(this)
+    const socket = Globals.getSocket()
+    socket.emit('notificationReceived', { text: 'minha própria notificação' })
   }
 
   ngOnInit() {

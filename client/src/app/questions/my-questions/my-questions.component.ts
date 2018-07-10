@@ -10,9 +10,8 @@ import { ConfirmModalComponent, ErrorModalComponent } from '../../modals/confirm
   selector: 'app-my-questions',
   templateUrl: './my-questions.component.html',
   styleUrls: ['./my-questions.component.css'],
-  animations: [fadeInTransition],
-  host: { '[@fadeInTransition]': '' }
-  
+  // animations: [fadeInTransition],
+  // host: { '[@fadeInTransition]': '' }
 })
 export class MyQuestionsComponent implements OnInit {
 

@@ -32,4 +32,8 @@ export class AccountService {
       googleToken: token
     })
   }
+
+  changePicture(file: File) {
+
+  }
 }

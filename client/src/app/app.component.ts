@@ -18,7 +18,15 @@ export class AppComponent {
     router.events.subscribe((val: any) => {
       this.path = val.url
     })
+
+    const socket = Globals.getSocket()
+    socket.on('receiveRooms', rooms => {
+      console.log(rooms)
+      socket.emit('joinRoom', rooms[0])
+    })
   }
 
-  tokenChanged(newToken) { this.logged = Globals.userLogged() }
+  tokenChanged(newToken) {
+    this.logged = Globals.userLogged()
+  }
 }

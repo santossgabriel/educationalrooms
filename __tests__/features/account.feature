@@ -42,12 +42,8 @@ Feature: Gerenciamento de conta
     Examples:
       | caso                 | propriedade                           | mensagem                                        |
       | 'sem email'          | '{"email": ""}'                       | "Email inválido."                               |
-      | 'sem senha'          | '{"password": null}'                  | "A senha deve possuir pelo menos 6 caracteres." |
-      | 'senha insuficiente' | '{"password": "123"}'                 | "A senha deve possuir pelo menos 6 caracteres." |
       | 'email existente'    | '{"email": "questionmock2@mail.com"}' | "Este email já está em uso."                    |
-      | 'nome existente'     | '{"name": "question_mock_2"}'         | "Este nome já está em uso."                     |
       | 'nome inválido'      | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres."  |
-      | 'dados ok'           | '{"password": "nome atualizado"}'     | "A senha informada é diferente da senha atual." |
       | 'dados ok'           | '{"name": "nome atualizado"}'         | "Atualizado com sucesso."                       |
 
   Scenario: Não enviar o token
