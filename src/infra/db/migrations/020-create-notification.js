@@ -20,7 +20,9 @@ module.exports = {
         allowNull: false,
         defaultValue: new Date('01/01/1970')
       },
-      read: Sequelize.BOOLEAN
+      read: Sequelize.BOOLEAN,
+      type: Sequelize.STRING,
+      origin: Sequelize.STRING
     }, {
         freezeTableName: 'Notification',
         undercored: false,

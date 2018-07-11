@@ -27,6 +27,6 @@ app.use(auth)
 router(app)
 
 const server = http.createServer(app)
-// socket(server)
+socket(server)
 
 module.exports = server

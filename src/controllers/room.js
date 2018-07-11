@@ -1,8 +1,11 @@
 import db from '../infra/db/models/index'
 import { throwForbiddenError, throwValidationError } from '../helpers/error'
 import { questionStatus } from './question'
+import { getSockets } from '../socket'
 
-const { Room, RoomUser, RoomQuestion, User, Question, sequelize } = db
+import { NotificationTypes } from './notification'
+
+const { Room, RoomUser, RoomQuestion, User, Question, sequelize, Notification } = db
 
 const toMy = (p) => {
   return {
@@ -156,11 +159,36 @@ export default {
         throwValidationError('Sala não foi aberta ou já foi iniciada.')
       await RoomUser.create({ roomId: id, userId: req.claims.id })
       res.json({ message: 'Entrou na sala.' })
+
+      const notification = {
+        description: `Usuário ${req.claims.name} entrou na sala.`,
+        userId: room.userId,
+        createdAt: new Date(),
+        type: NotificationTypes.IN_ROOM,
+        origin: req.claims.name
+      }
+      Notification.create(notification)
+
+      const sockets = getSockets().filter(p => p.userId === room.userId)
+      sockets.forEach(p => p.emit('notificationReceived', notification))
+
     } else {
       if (!associated)
         throwValidationError('Usuário não incluso na sala.')
       await RoomUser.destroy({ where: { roomId: id, userId: req.claims.id } })
       res.json({ message: 'Saiu da sala.' })
+
+      const notification = {
+        description: `Usuário ${req.claims.name} saiu da sala.`,
+        userId: room.userId,
+        type: NotificationTypes.OUT_ROOM,
+        createdAt: new Date(),
+        origin: req.claims.name
+      }
+      Notification.create(notification)
+
+      const sockets = getSockets().filter(p => p.userId === room.userId)
+      sockets.forEach(p => p.emit('notificationReceived', notification))
     }
   },
 

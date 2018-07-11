@@ -36,7 +36,11 @@ export default {
       userDB = await User.create(user)
     }
 
-    const token = jwt.sign({ id: userDB.id, type: userDB.type }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
+    const token = jwt.sign({
+      id: userDB.id,
+      type: userDB.type,
+      name: user.name
+    }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
     res.json({ token: token, message: 'Criado com sucesso.' })
   }
 }

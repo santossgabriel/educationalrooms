@@ -4,12 +4,15 @@ import { HttpClient } from '@angular/common/http'
 @Injectable({
   providedIn: 'root'
 })
-export class QuestionService {
+export class NotifService {
 
   constructor(private http: HttpClient) { }
 
   get() {
-    return this.http.get('/api/notification')
+    return this.http.get('/api/notification').map((p: any) => {
+      p.createdAt = ''
+      return p
+    })
   }
 
   remove(id: number) {

@@ -40,8 +40,7 @@ export class SingupComponent implements OnInit {
       this.error = ''
       const result: AccountResponse = <AccountResponse>response
       this.message = result.message
-      if (!this.editMode)
-        Globals.changeToken(result.token)
+      Globals.changeToken(result.token)
       setTimeout(() => {
         this.router.navigate(['/my-questions'])
       }, 1500)

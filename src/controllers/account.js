@@ -12,6 +12,16 @@ export const isMobile = async (userId) => {
   return await User.findOne({ attributes: ['mobile'], where: { id: userId } })
 }
 
+const generateToken = (user) => {
+  return jwt.sign({
+    id: user.id,
+    type: user.type,
+    name: user.name
+  },
+    config.SECRET,
+    { expiresIn: 60 * 60 * 24 * 360 })
+}
+
 export default {
   getUserData: async (req, res) => {
     const user = await User.findOne({ where: { id: req.claims.id } })
@@ -29,7 +39,7 @@ export default {
     const user = await User.findOne({ where: { email: email } })
     if (!user || !password || user.password !== sha1(password))
       throwAuthError('Credenciais inválidas.')
-    const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
+    const token = generateToken(user)
     if (mobile)
       User.update({ mobile: true }, { where: { email: email } })
     res.json({ token: token, message: 'Token gerado com sucesso.' })
@@ -49,12 +59,12 @@ export default {
     account.createdAt = new Date()
     account.updatedAt = new Date()
     const user = await User.create(account)
-    const token = jwt.sign({ id: user.id, type: user.type }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
+    const token = generateToken(user)
     res.json({ token: token, message: 'Criado com sucesso.' })
   },
 
   update: async (req, res) => {
-    const account = req.body
+    let account = req.body
 
     if (!account || !account.email || !/.{3,}@.{3,}/.test(account.email))
       throwValidationError('Email inválido.')
@@ -79,6 +89,8 @@ export default {
       name: account.name,
       updatedAt: new Date()
     }, { where: { id: req.claims.id } })
-    res.json({ message: 'Atualizado com sucesso.' })
+    account.id = req.claims.id
+    const token = generateToken(account)
+    res.json({ token: token, message: 'Atualizado com sucesso.' })
   }
 }

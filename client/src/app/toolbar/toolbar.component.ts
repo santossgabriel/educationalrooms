@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 import { Globals } from '../globals'
 import { Router, NavigationEnd } from '@angular/router'
-import { UserDataModel } from '../models/user-data.models';
-import { AccountService } from '../services/account.service';
+import { UserDataModel } from '../models/user-data.models'
+import { AccountService } from '../services/account.service'
+import { MatDialog } from '@angular/material'
+import { NotificationModalComponent } from '../modals/notification-modal.component'
 
 @Component({
   selector: 'app-toolbar',
@@ -16,7 +18,9 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   user = <UserDataModel>{}
   notifications = 0
 
-  constructor(private router: Router, private accountService: AccountService) {
+  constructor(private router: Router,
+    private accountService: AccountService,
+    public dialog: MatDialog) {
     Globals.addTokenListener(this)
     this.refresh()
     router.events.subscribe((val: any) => {
@@ -24,9 +28,9 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
     })
 
     const socket = Globals.getSocket()
-    socket.on('notificationReceived', () => {
+    socket.on('notificationReceived', (n) => {
       this.notifications++
-      console.log(this.notifications)
+      console.log(n)
     })
   }
 
@@ -48,5 +52,8 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
 
   tokenChanged(newToken) { this.refresh() }
 
-  clearNotifications() { this.notifications = 0 }
+  openNotifications() {
+    this.notifications = 0
+    const dialogRef = this.dialog.open(NotificationModalComponent, {})
+  }
 }

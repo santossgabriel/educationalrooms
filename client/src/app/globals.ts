@@ -23,8 +23,14 @@ export class Globals {
   }
 
   public static getSocket() {
-    if (!this.socketIo)
+    if (!this.socketIo) {
       this.socketIo = (<any>window).io()
+      this.socketIo.emit('subscribe', this.currentToken())
+      this.socketIo.on('error', (message) => {
+        console.log(message);
+      });
+    }
+
     return this.socketIo
   }
 

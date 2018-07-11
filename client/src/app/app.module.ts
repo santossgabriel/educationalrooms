@@ -31,6 +31,7 @@ import { EditRoomComponent } from './room/edit-room/edit-room.component';
 import { AssociatedRoomsComponent } from './room/associated-rooms/associated-rooms.component'
 import { RoomQuestionModalComponent } from './modals/room-question-modal.component';
 import { AllNotificationsComponent } from './notifications/all-notifications/all-notifications.component';
+import { NotificationModalComponent } from './modals/notification-modal.component';
 
 const components = [
   AppComponent,
@@ -51,7 +52,8 @@ const components = [
   RoomQuestionModalComponent,
   EditRoomComponent,
   AssociatedRoomsComponent,
-  AllNotificationsComponent
+  AllNotificationsComponent,
+  NotificationModalComponent
 ]
 
 const routes = [
@@ -90,6 +92,7 @@ const routes = [
   entryComponents: [
     QuestionModalComponent,
     ConfirmModalComponent,
+    NotificationModalComponent,
     ErrorModalComponent,
     RoomQuestionModalComponent
   ],
