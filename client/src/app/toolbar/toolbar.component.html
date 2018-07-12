@@ -22,9 +22,27 @@
         <button [disabled]="path === '/signup'" mat-button routerLink="/signup">Cadastre-se</button>
       </div>
       <div [hidden]="!logged">
-        <button mat-icon-button (click)="openNotifications()">
-          <mat-icon [matBadge]="notifications" [matBadgeHidden]="notifications == 0" matBadgeColor="warn">notifications</mat-icon>
+        <button mat-icon-button (click)="updateTimeNotifications()" [matMenuTriggerFor]="notificationMenu">
+          <mat-icon [matBadge]="notifPendings" [matBadgeHidden]="notifPendings == 0" matBadgeColor="warn">notifications</mat-icon>
         </button>
+        <mat-menu #notificationMenu="matMenu">
+          <span class="no-content-message" [hidden]="notifications.length > 0">Sem notificações</span>
+          <mat-divider></mat-divider>
+          <div *ngFor="let n of notifications" class="notification-content">
+            <div>
+              <div>
+                <div class="icon-actions">
+                  <mat-icon style="color:aqua;" *ngIf="!n.read">lens</mat-icon>
+                  <mat-icon (click)="removeNotification(n)" style="color:#B44;cursor: pointer; width: 3px">close</mat-icon>
+                </div>
+              </div>
+              <span style="font-weight: bold">{{n.origin}} </span>
+              <span>{{n.description}}</span>
+            </div>
+            <div class="elapsed-time">{{n.elapsedTime}}</div>
+            <mat-divider></mat-divider>
+          </div>
+        </mat-menu>
         <button mat-icon-button [matMenuTriggerFor]="accountMenu">
           <mat-icon>person</mat-icon>
         </button>

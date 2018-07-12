@@ -51,3 +51,29 @@ mat-divider{
 .account-email{
   font-size: 12px;
 }
+
+.no-content-message{
+  color: #666;
+  margin: 10px;
+}
+
+.notification-content{
+  margin: 0 10px 0 10px; 
+  color:#666;
+  font-size: 12px;
+}
+
+.elapsed-time{
+  text-align:end;
+}
+
+.icon-actions{
+  text-align: end;
+  font-size:10px;
+  height: 10px;
+}
+
+.icon-actions mat-icon{
+  font-size:10px;
+  margin-right: 5px;
+}

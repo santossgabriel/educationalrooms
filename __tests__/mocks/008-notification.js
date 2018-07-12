@@ -10,6 +10,16 @@ module.exports = {
       userId: 6,
       createdAt: new Date(),
       read: true
+    }, {
+      description: 'descrição da notificação 2',
+      userId: 1,
+      createdAt: new Date(),
+      read: true
+    }, {
+      description: 'descrição da notificação 2',
+      userId: 6,
+      createdAt: new Date(),
+      read: true
     }])
   }
 }

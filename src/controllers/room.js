@@ -151,7 +151,7 @@ export default {
       throwValidationError('A sala não existe.')
 
     const associated = room.RoomUsers.filter(p => p.userId === req.claims.id).length > 0
-
+    let notification = null
     if (associate) {
       if (associated)
         throwValidationError('Usuário já incluso na sala.')
@@ -160,17 +160,13 @@ export default {
       await RoomUser.create({ roomId: id, userId: req.claims.id })
       res.json({ message: 'Entrou na sala.' })
 
-      const notification = {
-        description: `Usuário ${req.claims.name} entrou na sala.`,
+      notification = await Notification.create({
+        description: 'entrou na sala.',
         userId: room.userId,
         createdAt: new Date(),
         type: NotificationTypes.IN_ROOM,
         origin: req.claims.name
-      }
-      Notification.create(notification)
-
-      const sockets = getSockets().filter(p => p.userId === room.userId)
-      sockets.forEach(p => p.emit('notificationReceived', notification))
+      })
 
     } else {
       if (!associated)
@@ -178,18 +174,17 @@ export default {
       await RoomUser.destroy({ where: { roomId: id, userId: req.claims.id } })
       res.json({ message: 'Saiu da sala.' })
 
-      const notification = {
-        description: `Usuário ${req.claims.name} saiu da sala.`,
+      notification = await Notification.create({
+        description: 'saiu da sala.',
         userId: room.userId,
         type: NotificationTypes.OUT_ROOM,
         createdAt: new Date(),
         origin: req.claims.name
-      }
-      Notification.create(notification)
-
-      const sockets = getSockets().filter(p => p.userId === room.userId)
-      sockets.forEach(p => p.emit('notificationReceived', notification))
+      })
     }
+
+    const sockets = getSockets().filter(p => p.userId === room.userId)
+    sockets.forEach(p => p.emit('notificationReceived', notification))
   },
 
   save: async (req, res) => {
