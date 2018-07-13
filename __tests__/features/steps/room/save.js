@@ -7,6 +7,7 @@ import app from '../../../../src/server'
 const request = supertest(app)
 let room = null
 let token = ''
+let msg
 
 Given('Dado eu que queira entrar ou sair de uma sala', () => {
 
@@ -78,4 +79,27 @@ Then('Então eu devo obter a mensagem {string} depois de salvar a sala', (messag
     .then((result) => {
       expect(result.body.message).to.eql(message)
     })
+})
+
+Given('Dado que eu queira alterar o status de uma sala', () => {
+  return request
+    .post('/api/token')
+    .send({ email: 'test_room@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+
+When('Quando eu enviar o status {string} para a sala de id {int}', (status, id) => {
+  return request
+    .put('/api/room-status')
+    .set({ token: token })
+    .send({ id: id, status: status })
+    .then((result) => {
+      msg = result.body.message
+    })
+})
+
+Then('Então eu devo obter a mensagem {string} depois de alterar o status', (message) => {
+  expect(msg).to.eql(message)
 })

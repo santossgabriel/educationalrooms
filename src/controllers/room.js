@@ -7,6 +7,13 @@ import { NotificationTypes } from './notification'
 
 const { Room, RoomUser, RoomQuestion, User, Question, sequelize, Notification } = db
 
+export const roomStatus = {
+  CLOSED: 'CLOSED',
+  OPENED: 'OPENED',
+  STARTED: 'STARTED',
+  ENDED: 'ENDED',
+}
+
 const toMy = (p) => {
   return {
     id: p.id,
@@ -55,12 +62,12 @@ const toMyAssoc = (rooms) => {
 
 const getStatusRoom = (room) => {
   if (room.endedAt)
-    return 'FINALIZADA'
+    return roomStatus.ENDED
   if (room.startedAt)
-    return 'INICIADA'
+    return roomStatus.STARTED
   if (room.openedAt)
-    return 'ABERTA'
-  return 'FECHADA'
+    return roomStatus.OPENED
+  return roomStatus.CLOSED
 }
 
 const toOpened = (room, userId) => {
@@ -247,5 +254,51 @@ export default {
     }
 
     res.json({ message: msgResult })
+  },
+
+  changeStatus: async (req, res) => {
+    const { status, id } = req.body
+    let room = {}
+    let msg
+    switch (status) {
+      case roomStatus.CLOSED:
+        room.endedAt = room.startedAt = room.openedAt = null
+        msg = 'Sala fechada com sucesso'
+        break
+      case roomStatus.OPENED:
+        room.openedAt = new Date()
+        room.endedAt = room.startedAt = null
+        msg = 'Sala aberta com sucesso'
+        break
+      case roomStatus.STARTED:
+        room.startedAt = new Date()
+        room.endedAt = null
+        msg = 'Sala iniciada com sucesso'
+        break
+      case roomStatus.ENDED:
+        room.endedAt = new Date()
+        msg = 'Sala finalizada com sucesso'
+        break
+      default:
+        throwValidationError('Status inválido.')
+    }
+
+    const roomDb = await Room.findOne({
+      include: [{ model: RoomQuestion }],
+      where: { id: id }
+    })
+
+    if (!roomDb)
+      throwValidationError('A sala não existe.')
+
+    if (roomDb.userId !== req.claims.id)
+      throwValidationError('A sala informada não pertence ao usuário.')
+
+    if (roomDb.endedAt)
+      throwValidationError('A sala já foi finalizada.')
+
+    await Room.update(room, { where: { id: id } })
+    res.json({ message: msg })
   }
 }
+

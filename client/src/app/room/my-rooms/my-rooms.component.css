@@ -5,3 +5,7 @@ table th, table td{
 table{
   width: 100%;  
 }
+
+.actions button {
+  margin-left: 10px;
+}

@@ -24,11 +24,11 @@ Feature: Sala
     Then Então a sala deve ter status <status>
 
     Examples:
-      | id | status       |
-      | 2  | 'FINALIZADA' |
-      | 4  | 'INICIADA'   |
-      | 7  | 'ABERTA'     |
-      | 8  | 'FECHADA'    |
+      | id | status    |
+      | 2  | 'ENDED'   |
+      | 4  | 'STARTED' |
+      | 7  | 'OPENED'  |
+      | 8  | 'CLOSED'  |
 
   Scenario Outline: Entrar ou sair da sala
     Given Dado eu que queira entrar ou sair de uma sala
@@ -71,3 +71,19 @@ Feature: Sala
       | 3  | 'que não me pertence' | "Usuário sem permissão para remover o item."                 |
       | 99 | 'que não existe'      | "A sala não existe."                                         |
       | 4  | 'que não existe'      | "Uma sala iniciada que não finalizou não pode ser removida." |
+
+  Scenario Outline: Alterar status da sala
+    Given Dado que eu queira alterar o status de uma sala
+    When Quando eu enviar o status <status> para a sala de id <id>
+    Then Então eu devo obter a mensagem <mensagem> depois de alterar o status
+
+    Examples:
+      | id | status    | mensagem                                    |
+      | 99 | 'ENDED'   | 'A sala não existe.'                        |
+      | 3  | 'ENDED'   | 'A sala informada não pertence ao usuário.' |
+      | 9  | 'ENDED'   | 'A sala já foi finalizada.'                 |
+      | 8  | 'CLOSED'  | 'Sala fechada com sucesso'                  |
+      | 8  | 'OPENED'  | 'Sala aberta com sucesso'                   |
+      | 8  | 'STARTED' | 'Sala iniciada com sucesso'                 |
+      | 8  | 'ENDEDD'  | 'Status inválido.'                          |
+      | 8  | 'ENDED'   | 'Sala finalizada com sucesso'               |

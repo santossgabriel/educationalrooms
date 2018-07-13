@@ -11,3 +11,14 @@ export const dateToElapsedTime = (date) => {
     return `${hour} horas atrás`
   return `${Math.floor(hour / 24)} dias atrás`
 }
+
+export const getStatusDescriptionRoom = (room) => {
+  if (room.status === 'CLOSED')
+    return 'FECHADA'
+  if (room.status === 'OPENED')
+    return 'ABERTA'
+  if (room.status === 'STARTED')
+    return 'INICIADA'
+  if (room.status === 'ENDED')
+    return 'FINALIZADA'
+}

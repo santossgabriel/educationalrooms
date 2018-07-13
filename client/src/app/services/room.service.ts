@@ -23,9 +23,16 @@ export class RoomService {
   }
 
   associate(room: RoomOpened) {
-    return this.http.put(`/api/room-associate`, {
+    return this.http.put('/api/room-associate', {
       associate: !room.associate,
       id: room.id
+    })
+  }
+
+  changeStatus(id: number, status: string) {
+    return this.http.put('/api/room-status', {
+      id: id,
+      status: status
     })
   }
 

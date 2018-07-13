@@ -8,6 +8,7 @@ import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Room } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
 import { ErrorModalComponent } from '../../modals/confirm-modal.component';
+import { getStatusDescriptionRoom } from '../../helpers/utils';
 
 @Component({
   selector: 'app-my-rooms',
@@ -20,19 +21,24 @@ import { ErrorModalComponent } from '../../modals/confirm-modal.component';
 export class MyRoomsComponent implements OnInit, TokenChangedListener {
 
   error = ''
-  displayedColumns = ['id', 'name', 'users', 'questions', 'seconds', 'actions']
+  displayedColumns = ['id', 'name', 'status', 'users', 'questions', 'seconds', 'actions']
   dataSource: MatTableDataSource<Room>
   hasRooms: boolean = false
+  rooms: Room[] = []
 
   constructor(private service: RoomService,
     private router: Router,
-    private dialog: MatDialog) { this.refresh() }
+    private dialog: MatDialog) {
+    this.service.getMy().subscribe((rooms: Room[]) => {
+      this.rooms = rooms
+      this.refresh()
+    })
+  }
 
   refresh() {
-    this.service.getMy().subscribe(rooms => {
-      this.dataSource = new MatTableDataSource(<Room[]>rooms)
-      this.hasRooms = (<Room[]>rooms).length > 0
-    })
+    this.rooms.map(p => p.descriptionStatus = getStatusDescriptionRoom(p))
+    this.dataSource = new MatTableDataSource(this.rooms)
+    this.hasRooms = this.rooms.length > 0
   }
 
   ngOnInit() {
@@ -46,6 +52,7 @@ export class MyRoomsComponent implements OnInit, TokenChangedListener {
 
   remove(id) {
     this.service.remove(id).subscribe(res => {
+      this.rooms = this.rooms.filter(p => p.id !== id)
       this.refresh()
     }, err => {
       console.error(err.error.message)
@@ -59,5 +66,13 @@ export class MyRoomsComponent implements OnInit, TokenChangedListener {
 
   editRoom(id: number) {
     this.router.navigate([`/edit-room/${id}`])
+  }
+
+  changeStatus(room: Room, status: string) {
+    this.service.changeStatus(room.id, status).subscribe(res => {
+      let r = this.rooms.find(p => p.id === room.id)
+      r.status = status
+      this.refresh()
+    })
   }
 }

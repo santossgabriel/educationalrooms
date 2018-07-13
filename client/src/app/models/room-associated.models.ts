@@ -8,4 +8,5 @@ export class RoomAssociated {
   endedAt: Date
   score: number
   status: string
+  descriptionStatus: string
 }

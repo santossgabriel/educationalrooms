@@ -8,6 +8,7 @@ import { LoginModel } from '../../models/account.models'
 import { MatTableDataSource } from '@angular/material'
 import { RoomService } from '../../services/room.service'
 import { RoomAssociated } from '../../models/room-associated.models';
+import { getStatusDescriptionRoom } from '../../helpers/utils';
 
 @Component({
   selector: 'app-rooms',
@@ -26,6 +27,7 @@ export class AssociatedRoomsComponent implements OnInit, TokenChangedListener {
   constructor(private service: RoomService, private router: Router) {
     Globals.addTokenListener(this)
     service.getAssociated().subscribe((rooms: RoomAssociated[]) => {
+      rooms.map(p => p.descriptionStatus = getStatusDescriptionRoom(rooms))
       this.dataSource = new MatTableDataSource(rooms)
       this.hasRooms = (rooms).length > 0
     })

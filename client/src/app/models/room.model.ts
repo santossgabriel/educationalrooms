@@ -10,6 +10,8 @@ export class Room {
   userId: number
   questions: RoomQuestion[]
   users: User[]
+  descriptionStatus: string
+  status: string
 
   constructor() {
     this.users = []

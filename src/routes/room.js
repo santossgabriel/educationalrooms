@@ -8,5 +8,6 @@ export default (app) => {
   app.get('/api/room-opened', asyncErrorHandler(room.getOpened))
   app.post('/api/room', asyncErrorHandler(room.save))
   app.put('/api/room-associate', asyncErrorHandler(room.associate))
+  app.put('/api/room-status', asyncErrorHandler(room.changeStatus))
   app.delete('/api/room/:id', asyncErrorHandler(room.remove))
 }
