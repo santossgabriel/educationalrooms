@@ -61,6 +61,9 @@ mat-divider{
   margin: 0 10px 0 10px; 
   color:#666;
   font-size: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .elapsed-time{

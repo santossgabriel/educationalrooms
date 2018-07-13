@@ -21,6 +21,7 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   user = <UserDataModel>{}
   notifications: Notif[] = []
   notifPendings: number = 0
+  hasNoRead = false
 
   constructor(private router: Router,
     private accountService: AccountService,
@@ -67,18 +68,30 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   }
 
   updateTimeNotifications() {
-    this.notifications.map(p => {
-      if (!p.elapsedTime)
-        p.elapsedTime = dateToElapsedTime(new Date(p.createdAt))
-    })
+    this.notifications.map(p => p.elapsedTime = dateToElapsedTime(new Date(p.createdAt)))
     this.notifPendings = this.notifications.filter(p => !p.read).length
+    this.hasNoRead = this.notifPendings > 0
+    console.log('updated')
+  }
+
+  maskAsRead() {
+    this.notificationService.maskAsRead().subscribe(res => {
+      this.notifications.map(p => p.read = true)
+      this.updateTimeNotifications()
+    })
   }
 
   removeNotification(n: Notif) {
-    this.notifications = this.notifications.filter(p => p.id !== n.id)
-    this.updateTimeNotifications()
     this.notificationService.remove(n.id).subscribe(res => {
-      console.log(res)
+      this.notifications = this.notifications.filter(p => p.id !== n.id)
+      this.updateTimeNotifications()
+    })
+  }
+
+  removeAllnotifications() {
+    this.notificationService.removeAll().subscribe(res => {
+      this.notifications = []
+      this.updateTimeNotifications()
     })
   }
 }

@@ -3,7 +3,7 @@
     <mat-card>
 
       <div *ngIf="editMode">
-        <img src="{{userAccount.picture}}" class="user-picture" height="80" width="80">
+        <img src="{{userAccount.picture || 'api/image/user-image.png'}}" class="user-picture" height="80" width="80">
         <image-upload max="10" [dropBoxMessage]="''" [clearButtonCaption]="''" url="/api/image" (uploadFinished)="onUploadFinished($event)"
           [headers]="{token: token}" [preview]="false" [extensions]="['jpg', 'jpeg', 'png','gif']" [buttonCaption]="'Alterar imagem'"></image-upload>
       </div>

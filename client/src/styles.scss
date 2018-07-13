@@ -94,6 +94,11 @@ $theme:   mat-light-theme($primary, $accent);
   button {
     margin-left: 20px;
   }
+  a{
+    color:#666;
+    font-size: 12px;
+    margin-right: 20px;
+  }
 }
 
 .horizontal-space{
@@ -129,7 +134,6 @@ body {
 .sidenav {
   background-color: #4B9372;
   width: 40px;
-  height: 370px;
   padding-top: 20px;
   padding-bottom: 20px;
   border-radius: 0 0 10px 0;
@@ -170,5 +174,4 @@ th.mat-header-cell {
 .or-elem{
   margin: 20px;
   color: #aaa;
-
 }

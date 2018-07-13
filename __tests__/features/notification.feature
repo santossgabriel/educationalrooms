@@ -18,3 +18,13 @@ Feature: Notificações
       | 99 | 'A notificação não existe..'         |
       | 3  | 'Sem permissão para remover o item.' |
       | 4  | 'Removido com sucesso.'              |
+
+  Scenario: Marcar notificações como lidas
+    Given Dado que eu queira marcar minhas notificações como lidas
+    When Quando eu marcar minhas notificações como lidas
+    Then Então eu devo obter um retorno de sucesso de notificações lidas
+
+  Scenario: Remover todas as notificações
+    Given Dado remover todas minhas notificações
+    When Quando eu remover todas minhas notificações
+    Then Então eu devo obter um retorno de sucesso de notificações removidas

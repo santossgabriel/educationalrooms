@@ -3,6 +3,7 @@
   <div fxLayout="row">
     <div fxFlex="200px" class="sidenav" [hidden]="!logged">
 
+      <mat-divider></mat-divider>
       <div class="menu-sidenav">
         <span>SALAS</span>
       </div>
@@ -18,6 +19,8 @@
         </mat-list-item>
       </mat-nav-list>
 
+      <mat-divider></mat-divider>
+      
       <div class="menu-sidenav">
         <span>QUESTÕES</span>
       </div>
@@ -27,15 +30,6 @@
         </mat-list-item>
         <mat-list-item>
           <button [disabled]="path === '/all-questions'" mat-raised-button color="primary" routerLink="/all-questions">PÚBLICAS</button>
-        </mat-list-item>
-      </mat-nav-list>
-
-      <div class="menu-sidenav">
-        <span>NOTIFICAÇÕES</span>
-      </div>
-      <mat-nav-list>
-        <mat-list-item>
-          <button [disabled]="path === '/all-notifications'" mat-raised-button color="primary" routerLink="/all-notifications">VIZUALIZAR</button>
         </mat-list-item>
       </mat-nav-list>
 

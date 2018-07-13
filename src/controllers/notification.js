@@ -9,6 +9,7 @@ export const NotificationTypes = {
 }
 
 export default {
+
   getAll: async (req, res) => {
     res.json(await Notification.findAll({
       where: {
@@ -17,6 +18,7 @@ export default {
       order: sequelize.literal('"createdAt" desc')
     }))
   },
+
   remove: async (req, res) => {
     const { id } = req.params
     const notification = await Notification.findOne({ where: { id: id } })
@@ -29,5 +31,15 @@ export default {
 
     await Notification.destroy({ where: { id: id } })
     res.json({ message: 'Removido com sucesso.' })
+  },
+
+  removeAll: async (req, res) => {
+    await Notification.destroy({ where: { userId: req.claims.id } })
+    res.json({ message: 'Removidas com sucesso.' })
+  },
+
+  maskAsRead: async (req, res) => {
+    await Notification.update({ read: true }, { where: { userId: req.claims.id } })
+    res.json({ message: 'Todas questões marcadas como lidas' })
   }
 }

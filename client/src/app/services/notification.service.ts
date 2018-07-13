@@ -18,4 +18,12 @@ export class NotifService {
   remove(id: number) {
     return this.http.delete('/api/notification/' + id)
   }
+
+  removeAll() {
+    return this.http.delete('/api/notification')
+  }
+
+  maskAsRead() {
+    return this.http.put('/api/notification-read', null)
+  }
 }
