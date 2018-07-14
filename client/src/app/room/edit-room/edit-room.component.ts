@@ -21,7 +21,7 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
   error = ''
   room = <Room>{}
   dataSource: MatTableDataSource<RoomQuestion>
-  displayedColumns = ['order', 'category', 'description', 'points', 'actions']
+  displayedColumns = ['category', 'description', 'order', 'points', 'actions']
   hasQuestions: boolean
 
   constructor(private roomService: RoomService,
@@ -45,6 +45,7 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
   }
 
   refresh() {
+    this.room.questions.sort((n1, n2) => n1.order > n2.order ? 1 : n1.order < n2.order ? -1 : 0)
     this.dataSource = new MatTableDataSource(this.room.questions)
     this.hasQuestions = this.room.questions.length > 0
   }
@@ -81,5 +82,28 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
         }
       })
     })
+  }
+
+  changeIndex(index, step) {
+
+    const left = this.room.questions.filter(p => this.room.questions.indexOf(p) < index)
+    const right = this.room.questions.filter(p => this.room.questions.indexOf(p) > index)
+    const elem = this.room.questions.filter(p => this.room.questions.indexOf(p) === index).shift()
+
+    if (step == 1) {
+      const elemChange = right.shift()
+      elemChange.order = index + 1
+      elem.order = index + 2
+      right.unshift(elemChange)
+      right.unshift(elem)
+    } else {
+      const elemChange = left.pop()
+      elemChange.order = index + 1
+      elem.order = index
+      left.push(elem)
+      left.push(elemChange)
+    }
+    this.room.questions = left.concat(right)
+    this.refresh()
   }
 }
