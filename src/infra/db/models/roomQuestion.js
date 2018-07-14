@@ -18,10 +18,15 @@ export const modelAttributes = {
     allowNull: false,
     references: { model: 'Question', key: 'id' }
   },
-  order:{
+  order: {
     type: Sequelize.INTEGER,
     allowNull: false,
     defaultValue: 0
+  },
+  points: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: 50
   }
 }
 

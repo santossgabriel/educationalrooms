@@ -46,9 +46,9 @@ Given('Dado eu que queira salvar uma sala', () => {
   room = {
     name: 'sala de mock test',
     questions: [
-      { id: 16, order: 1 },
-      { id: 17, order: 2 },
-      { id: 18, order: 3 }
+      { id: 16, order: 1, points: 80 },
+      { id: 17, order: 2, points: 90 },
+      { id: 18, order: 3, points: 100 }
     ],
     roomId: 1
   }

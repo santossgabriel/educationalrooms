@@ -35,7 +35,7 @@ const toMy = (p) => {
     questions: p.RoomQuestions.map(x => ({
       id: x.Question.id,
       description: x.Question.description,
-      points: x.Question.points,
+      points: x.points,
       shared: x.Question.shared,
       category: x.Question.category,
       sync: x.Question.sync,
@@ -227,10 +227,23 @@ export default {
 
   save: async (req, res) => {
     const { questions, id, name, time } = req.body
-    const questionIds = Array.isArray(questions) ? questions.map(p => p.id) : []
 
     if (!name)
       throwValidationError('Informe o nome da sala.')
+
+    if (!Array.isArray(questions) || questions.length == 0)
+      throwValidationError('Informe as questões.')
+
+    const questionIds = questions.map(p => {
+      p.points = Math.floor(p.points / 10) * 10
+      return p.id
+    })
+
+    if (questions.filter(p => !p.points).length > 0)
+      throwValidationError('Há questões sem pontuação.')
+
+    if (questions.filter(p => p.points < 10 || p.points > 100).length > 0)
+      throwValidationError('Há questões com pontuação fora do intervalo 10-100.')
 
     const questionsDb = await Question.findAll({ where: { id: questionIds } })
     const questionsIdsDb = questionsDb.map(p => p.id)

@@ -13,10 +13,6 @@ export const modelAttributes = {
     allowNull: false,
     defaultValue: ''
   },
-  points: {
-    type: Sequelize.INTEGER,
-    allowNull: false
-  },
   userId: {
     type: Sequelize.INTEGER,
     allowNull: false,

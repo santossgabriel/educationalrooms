@@ -39,7 +39,7 @@ Feature: Sala
       | caso                  | propriedades                      | mensagem                       |
       | 'que não exista'      | '{ "id": 99 }'                    | "A sala não existe."           |
       | 'que eu esteja'       | '{ "id": 6, "associate": true }'  | "Usuário já incluso na sala."  |
-      | 'sala não aberta'     | '{ "id": 8, "associate": true }'  | "A sala não foi aberta."       |
+      | 'sala não aberta'     | '{ "id": 8, "associate": true }'  | "A sala ainda não foi aberta." |
       | 'sala já iniciada'    | '{ "id": 4, "associate": true }'  | "A sala já foi iniciada."      |
       | 'que eu possa entrar' | '{ "id": 6, "associate": false }' | "Saiu da sala."                |
       | 'que eu não esteja'   | '{ "id": 2, "associate": false }' | "Usuário não incluso na sala." |
@@ -51,14 +51,17 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de salvar a sala
 
     Examples:
-      | caso                                      | propriedades                     | mensagem                                               |
-      | 'sem nome da sala'                        | '{"name": ""}'                   | "Informe o nome da sala."                              |
-      | 'que não existem'                         | '{"questions": [{ "id": 99 }] }' | "Há questões informadas que não existem."              |
-      | 'que não pertencem ao usuário'            | '{"questions": [{ "id": 1 }] }'  | "Há questões informadas que não pertencem ao usuário." |
-      | 'à uma sala que não existe'               | '{"id": 99}'                     | "A sala não existe."                                   |
-      | 'à uma sala que não pertencem ao usuário' | '{"id": 3}'                      | "A sala informada não pertence ao usuário."            |
-      | 'para atualização'                        | '{"id": 2}'                      | "Sala atualizada com sucesso."                         |
-      | 'sem id da sala'                          | '{"id": 0}'                      | "Sala criada com sucesso."                             |
+      | caso                                      | propriedades                                    | mensagem                                               |
+      | 'sem nome da sala'                        | '{"name": ""}'                                  | "Informe o nome da sala."                              |
+      | 'que não existem'                         | '{"questions": [{ "id": 99, "points": 20 }] }'  | "Há questões informadas que não existem."              |
+      | 'que não pertencem ao usuário'            | '{"questions": [{ "id": 1, "points": 20 }] }'   | "Há questões informadas que não pertencem ao usuário." |
+      | 'à uma sala que não existe'               | '{"id": 99}'                                    | "A sala não existe."                                   |
+      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 0 }] }'   | "Há questões sem pontuação."                           |
+      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 200 }] }' | "Há questões com pontuação fora do intervalo 10-100."  |
+      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 180 }] }'   | "Há questões com pontuação fora do intervalo 10-100."  |
+      | 'à uma sala que não pertencem ao usuário' | '{"id": 3}'                                     | "A sala informada não pertence ao usuário."            |
+      | 'para atualização'                        | '{"id": 2}'                                     | "Sala atualizada com sucesso."                         |
+      | 'sem id da sala'                          | '{"id": 0}'                                     | "Sala criada com sucesso."                             |
 
   Scenario Outline: Remover sala
     Given Dado que eu queira remover uma sala

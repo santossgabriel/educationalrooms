@@ -17,7 +17,6 @@ const questionToDb = (q) => {
   return {
     category: q.category,
     description: q.description,
-    points: q.points,
     shared: q.shared,
     sync: q.sync,
     updatedAt: q.updatedAt
@@ -60,13 +59,10 @@ const validateQuestion = (question) => {
   if (!question || !question.description)
     throwValidationError(questionErros.HAS_DESCRIPTION)
 
-  const { points, answers, category } = question
+  const { answers, category } = question
 
   if (!category)
     throwValidationError(questionErros.HAS_CATEGORY)
-
-  if (isNaN(points) || points < 1 || points > 10)
-    throwValidationError(questionErros.BETWEEN_POINTS)
 
   if (!Array.isArray(question.answers) || question.answers.length != 4)
     throwValidationError(questionErros.HAS_FOUR_ANSWERS)
@@ -82,7 +78,6 @@ const toResult = (questions) => {
       id: questions.id,
       description: questions.description,
       category: questions.category,
-      points: questions.points,
       answers: questions.Answers,
       shared: questions.shared,
       userId: questions.userId
@@ -139,7 +134,6 @@ export default {
       question.id = req.body.id
       question.category = req.body.category
       question.description = req.body.description
-      question.points = req.body.points
       question.shared = req.body.shared
       question.answers = req.body.answers
       question.userId = req.claims.id
@@ -170,7 +164,6 @@ export default {
       question.id = req.body.id
       question.category = req.body.category
       question.description = req.body.description
-      question.points = req.body.points
       question.shared = req.body.shared
       question.answers = req.body.answers
 

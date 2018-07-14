@@ -16,10 +16,6 @@ const questions = [
   { id: 7, description: '', updatedAt: new Date() },
   // Categoria inválida
   { id: 8, description: 'teste', category: '', updatedAt: new Date() },
-  // Pontos inválidos
-  { id: 9, description: 'teste', category: 'Matemárica', points: 11, updatedAt: new Date() },
-  { id: 10, description: 'teste', category: 'Matemárica', points: 0, updatedAt: new Date() },
-  { id: 11, description: 'teste', category: 'Matemárica', updatedAt: new Date() },  
   // Número incorreto de respostas
   { id: 12, description: 'teste', category: 'Matemárica', points: 5, updatedAt: new Date() },
   // Sem data de atualização
@@ -133,7 +129,6 @@ Then('Então devo obter o retorno da sincronização', () => {
 
   assert.isTrue(errors.length > 0, 'Deve retornar erros')
 
-  assert.isTrue(errors.filter(p => p.exception === questionErros.BETWEEN_POINTS).length == 3, 'Deve ter 3 erros de pontos inválidos')
   assert.isTrue(errors.filter(p => p.exception === questionErros.HAS_CATEGORY).length == 1, 'Deve ter 1 erro de categoria inválida')
   assert.isTrue(errors.filter(p => p.exception === questionErros.HAS_DESCRIPTION).length == 1, 'Deve ter 1 erro de descrição da questão')
   assert.isTrue(errors.filter(p => p.exception === questionErros.HAS_FOUR_ANSWERS).length == 1, 'Deve ter 1 erro de questão com número de respostas inválido')
