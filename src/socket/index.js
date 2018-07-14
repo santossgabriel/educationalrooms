@@ -2,8 +2,9 @@ import socketIo from 'socket.io'
 import jwt from 'jsonwebtoken'
 import config from '../infra/config'
 import db from '../infra/db/models/index'
+import { cloneObject } from '../helpers/utils'
 
-const { Log } = db
+const { Log, Notification } = db
 
 const rooms = {}
 rooms['Room 1'] = { sockets: [] }
@@ -13,6 +14,17 @@ let sockets = []
 
 export const getSockets = () => {
   return sockets
+}
+
+export const sendNotifications = (users, notification) => {
+  notification.createdAt = new Date()
+  users.forEach(async userId => {
+    const notif = cloneObject(notification)
+    notif.userId = userId
+    await Notification.create(notif)
+    const sockets = getSockets().filter(p => p.userId === userId)
+    sockets.forEach(p => p.emit('notificationReceived', notif))
+  })
 }
 
 // setInterval(() => {

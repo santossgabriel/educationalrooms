@@ -68,6 +68,7 @@
     ],
     "exclude": [
       "src/helpers/error.js",
+      "src/helpers/utils.js",
       "src/auth/auth.js",
       "src/server.js",
       "src/socket",

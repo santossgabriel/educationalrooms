@@ -1,11 +1,11 @@
 import db from '../infra/db/models/index'
 import { throwForbiddenError, throwValidationError } from '../helpers/error'
 import { questionStatus } from './question'
-import { getSockets } from '../socket'
+import { sendNotifications } from '../socket'
 
 import { NotificationTypes } from './notification'
 
-const { Room, RoomUser, RoomQuestion, User, Question, sequelize, Notification } = db
+const { Room, RoomUser, RoomQuestion, User, Question, sequelize } = db
 
 export const roomStatus = {
   CLOSED: 'CLOSED',
@@ -154,17 +154,13 @@ export default {
     await Room.destroy({ where: { id: id } })
     res.json({ message: 'Sala removida com sucesso.' })
 
-    room.RoomUsers.map(p => p.userId).forEach(async userId => {
-      let notification = await Notification.create({
-        description: 'sala foi removida.',
-        userId: userId,
-        type: NotificationTypes.ROOM_REMOVED,
-        createdAt: new Date(),
-        origin: room.name
-      })
-      const sockets = getSockets().filter(p => p.userId === userId)
-      sockets.forEach(p => p.emit('notificationReceived', notification))
-    })
+    const users = room.RoomUsers.map(p => p.userId)
+    const notification = {
+      description: 'sala foi removida.',
+      type: NotificationTypes.ROOM_REMOVED,
+      origin: room.name
+    }
+    sendNotifications(users, notification)
   },
 
   associate: async (req, res) => {
@@ -177,7 +173,9 @@ export default {
       throwValidationError('A sala não existe.')
 
     const associated = room.RoomUsers.filter(p => p.userId === req.claims.id).length > 0
-    let notification = null
+
+    let notification = { origin: req.claims.name }
+
     if (associate) {
       if (associated)
         throwValidationError('Usuário já incluso na sala.')
@@ -186,13 +184,9 @@ export default {
       await RoomUser.create({ roomId: id, userId: req.claims.id })
       res.json({ message: 'Entrou na sala.' })
 
-      notification = await Notification.create({
-        description: 'entrou na sala.',
-        userId: room.userId,
-        createdAt: new Date(),
-        type: NotificationTypes.IN_ROOM,
-        origin: req.claims.name
-      })
+      notification.description = 'entrou na sala.'
+      notification.type = NotificationTypes.IN_ROOM
+      sendNotifications([room.userId], notification)
 
     } else {
       if (!associated)
@@ -200,17 +194,10 @@ export default {
       await RoomUser.destroy({ where: { roomId: id, userId: req.claims.id } })
       res.json({ message: 'Saiu da sala.' })
 
-      notification = await Notification.create({
-        description: 'saiu da sala.',
-        userId: room.userId,
-        type: NotificationTypes.OUT_ROOM,
-        createdAt: new Date(),
-        origin: req.claims.name
-      })
+      notification.description = 'saiu na sala.'
+      notification.type = NotificationTypes.OUT_ROOM
+      sendNotifications([room.userId], notification)
     }
-
-    const sockets = getSockets().filter(p => p.userId === room.userId)
-    sockets.forEach(p => p.emit('notificationReceived', notification))
   },
 
   save: async (req, res) => {
@@ -320,17 +307,13 @@ export default {
     res.json({ message: msg })
 
     if (status === roomStatus.STARTED) {
-      roomDb.RoomUsers.map(p => p.userId).forEach(async userId => {
-        let notification = await Notification.create({
-          description: 'sala foi iniciada.',
-          userId: userId,
-          type: NotificationTypes.ROOM_STARTED,
-          createdAt: new Date(),
-          origin: roomDb.name
-        })
-        const sockets = getSockets().filter(p => p.userId === userId)
-        sockets.forEach(p => p.emit('notificationReceived', notification))
-      })
+      const notif = {
+        description: 'foi iniciada.',
+        type: NotificationTypes.ROOM_STARTED,
+        origin: roomDb.name
+      }
+      const users = roomDb.RoomUsers.map(p => p.userId)
+      sendNotifications(users, notif)
     }
   }
 }
