@@ -45,30 +45,8 @@ export default (server) => {
 
         socket.userId = data.id
         sockets.push(socket)
-        // console.log(io.sockets.length)
-        // for (let key in io.sockets.sockets)
-        //   console.log(io.sockets.sockets[key].userId)
-
-
-        // let s = sockets.filter(p => p.id === data.id).shift()
-        // if (!s)
-        //   s = { id: data.id, sockets: [] }
-        // s.sockets.push(socket)
-        // sockets.push(s)
-        // console.log(sockets)
       })
     })
-
-    // sockets.push(socket)
-    // if (process.env.NODE_ENV !== 'test')
-    //   console.log(`Connected socket: ${socket.id}`)
-    // socket.emit('receiveRooms', rooms)
-    // socket.on('joinRoom', (roomName) => {
-    //   if (rooms.hasOwnProperty(roomName)) {
-    //     console.log(`Socket ${socket.id} joined in ${roomName}`)
-    //     rooms[roomName].sockets.push(socket.id)
-    //   }
-    // })
 
     socket.on('notificationReceived', (n) => {
       socket.emit('notificationReceived', n)

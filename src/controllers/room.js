@@ -97,6 +97,25 @@ export default {
     res.json(toMy(room))
   },
 
+  getQuiz: async (req, res) => {
+    const room = await Room.findOne({
+      where: {
+        id: req.params.id,
+        startedAt: { [sequelize.Op.ne]: null },
+        endedAt: null,
+      },
+      include: [
+        {
+          model: RoomUser,
+          where: {
+            userId: req.claims.id
+          }
+        }
+      ]
+    })
+    res.json(room)
+  },
+
   getMy: async (req, res) => {
     const rooms = await Room.findAll({
       where: { userId: req.claims.id },
@@ -177,10 +196,16 @@ export default {
     let notification = { origin: req.claims.name }
 
     if (associate) {
+
       if (associated)
         throwValidationError('Usuário já incluso na sala.')
-      if (!room.openedAt || room.startedAt)
-        throwValidationError('Sala não foi aberta ou já foi iniciada.')
+
+      if (!room.openedAt)
+        throwValidationError('A sala ainda não foi aberta.')
+
+      if (room.startedAt)
+        throwValidationError('A sala já foi iniciada.')
+
       await RoomUser.create({ roomId: id, userId: req.claims.id })
       res.json({ message: 'Entrou na sala.' })
 
@@ -306,10 +331,11 @@ export default {
     await Room.update(room, { where: { id: id } })
     res.json({ message: msg })
 
-    if (status === roomStatus.STARTED) {
+    if (status === roomStatus.STARTED || status === roomStatus.CLOSED) {
+      const started = status === roomStatus.STARTED
       const notif = {
-        description: 'foi iniciada.',
-        type: NotificationTypes.ROOM_STARTED,
+        description: started ? 'foi iniciada.' : 'foi fechada',
+        type: started ? NotificationTypes.ROOM_STARTED : NotificationTypes.ROOM_CLOSED,
         origin: roomDb.name
       }
       const users = roomDb.RoomUsers.map(p => p.userId)

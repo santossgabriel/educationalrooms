@@ -99,6 +99,7 @@ $theme:   mat-light-theme($primary, $accent);
     font-size: 12px;
     margin-right: 10px;
     margin-left: 10px;
+    font-weight: bold;
   }
 }
 
@@ -204,4 +205,15 @@ i {
 .down {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+}
+
+.room-status{
+  color:#666;
+  font-weight: bold;
+}
+
+.loading{
+  margin: 0 auto;
+  width: 200px;
+  padding: 20px;
 }

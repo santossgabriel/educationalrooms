@@ -27,7 +27,7 @@ export class AssociatedRoomsComponent implements OnInit, TokenChangedListener {
   constructor(private service: RoomService, private router: Router) {
     Globals.addTokenListener(this)
     service.getAssociated().subscribe((rooms: RoomAssociated[]) => {
-      rooms.map(p => p.descriptionStatus = getStatusDescriptionRoom(rooms))
+      rooms.map(p => p.descriptionStatus = getStatusDescriptionRoom(p))
       this.dataSource = new MatTableDataSource(rooms)
       this.hasRooms = (rooms).length > 0
     })

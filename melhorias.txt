@@ -5,6 +5,8 @@ Melhorias do App:
 
 Melhorias do Site:
   - Alterar o nome de 'Minhas Questões' para 'Questões Públicas'
+  - Adicionar imagem nas questões, para substituir perguntas
 
 https://www.youtube.com/watch?v=nOivQEBjXII
 https://www.youtube.com/watch?v=yz316cWscqI
+

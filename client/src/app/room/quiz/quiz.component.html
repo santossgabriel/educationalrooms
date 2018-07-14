@@ -1,0 +1,47 @@
+<div class="quiz-card">
+  <div class="quiz-title">{{room.name}}</div>
+  <div *ngIf="mode == ANSWER">
+    <mat-progress-bar [value]="time" mode="determinate"></mat-progress-bar>
+    <div class="quiz-points">Valendo {{question.points}} pontos</div>
+    <div class="quiz-ask">{{question.description}}</div>
+    <div class="quiz-answer-content">
+      <div *ngFor="let a of question.answers">
+        <div class="quiz-answer" (click)="answer(a)">
+          {{a.description}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mode == TIME_OVER" class="quiz-feedback time-over">
+    <div style="margin: 0 auto">
+      <mat-icon>sentiment_very_dissatisfied</mat-icon>
+    </div>
+    <span>tempo acabou!</span>
+  </div>
+
+  <div *ngIf="mode == SENT" class="quiz-feedback sent">
+    <div style="margin: 0 auto">
+      <mat-icon>send</mat-icon>
+    </div>
+    <span>resposta enviada!</span>
+  </div>
+
+  <div *ngIf="mode == CORRECT" class="quiz-feedback correct">
+    <div style="margin: 0 auto">
+      <mat-icon>check</mat-icon>
+    </div>
+    <span>correto!</span>
+  </div>
+
+  <div *ngIf="mode === WRONG" class="quiz-feedback wrong">
+    <div style="margin: 0 auto">
+      <mat-icon>close</mat-icon>
+    </div>
+    <span>errado!</span>
+  </div>
+
+  <div *ngIf="mode == LOADING" class="loading">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+</div>

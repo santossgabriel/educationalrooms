@@ -8,7 +8,8 @@ export const NotificationTypes = {
   OUT_ROOM: 'OUT_ROOM',
   ROOM_STARTED: 'ROOM_START',
   ROOM_ENDED: 'ROOM_ENDED',
-  ROOM_REMOVED: 'ROOM_REMOVED'
+  ROOM_REMOVED: 'ROOM_REMOVED',
+  ROOM_CLOSED: 'ROOM_CLOSED'
 }
 
 export default {

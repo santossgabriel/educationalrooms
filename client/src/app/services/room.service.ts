@@ -14,6 +14,10 @@ export class RoomService {
     return this.http.get(`/api/room/${id}`)
   }
 
+  getQuiz(id: number) {
+    return this.http.get(`/api/room-quiz/${id}`)
+  }
+
   getMy() {
     return this.http.get('/api/room-my')
   }

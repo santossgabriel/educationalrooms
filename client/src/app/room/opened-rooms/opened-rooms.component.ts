@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core'
 import { Globals } from '../../globals'
 import { Router } from '@angular/router'
 import { fadeInTransition } from '../../router.transition'
-import { RoomService } from '../../services/room.service';
-import { MatTableDataSource } from '@angular/material';
-import { RoomOpened } from '../../models/opened-room.models';
+import { RoomService } from '../../services/room.service'
+import { MatTableDataSource } from '@angular/material'
+import { RoomOpened } from '../../models/opened-room.models'
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-rooms',
@@ -35,7 +36,7 @@ export class OpenedRoomsComponent implements OnInit, TokenChangedListener {
     this.service.associate(room).subscribe(res => {
       room.associate = !room.associate
       room.users += (room.associate ? 1 : -1)
-    })
+    }, err => Swal('Oops...', err.error.message, 'error'))
   }
 
   tokenChanged(newToken) { }

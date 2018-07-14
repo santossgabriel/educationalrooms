@@ -1,5 +1,5 @@
 <mat-card class="root-card">
-  <mat-card-title>SALAS QUE PARTICIPEI</mat-card-title>
+  <mat-card-title>PARTICIPAÇÕES</mat-card-title>
   <div class="question-component" [hidden]="hasRooms">
     <span>Você não participou de nenhuma sala.</span>
   </div>
@@ -13,7 +13,9 @@
 
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef> Situação </th>
-        <td mat-cell *matCellDef="let element"> {{element.descriptionStatus}} </td>
+        <td mat-cell *matCellDef="let element"> 
+          <span class="room-status">{{element.descriptionStatus}}</span>
+         </td>
       </ng-container>
 
       <ng-container matColumnDef="time">
@@ -29,7 +31,10 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef style="width: 180px">Ações</th>
         <td mat-cell *matCellDef="let element" style="width: 180px">
-          <button mat-button color="primary" (click)="associate(element)">PONTUAÇÕES</button>
+          <button *ngIf="element.status === 'ENDED'" mat-button color="primary">PONTUAÇÕES</button>
+          <button routerLink="/quiz/{{element.id}}" *ngIf="element.status === 'STARTED'" matTooltip="ACESSAR"  mat-icon-button mat-raised-button>
+            <mat-icon color="primary">trending_flat</mat-icon>
+          </button>
         </td>
       </ng-container>
 

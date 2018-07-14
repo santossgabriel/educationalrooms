@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core'
 import { Globals } from '../../globals'
 import { Router, ActivatedRoute, Params } from '@angular/router'
+import Swal from 'sweetalert2'
+import { MatDialog, MatTableDataSource } from '@angular/material'
+
 import { fadeInTransition } from '../../router.transition'
 import { Room } from '../../models/room.model'
 import { RoomService } from '../../services/room.service'
 import { RoomQuestionModalComponent } from '../../modals/room-question-modal.component'
-import { MatDialog, MatTableDataSource } from '@angular/material'
 import { RoomQuestion } from '../../models/room-question.model'
 
-import Swal from 'sweetalert2'
+
 
 @Component({
   selector: 'app-rooms',
@@ -61,7 +63,10 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
   openQuestionModal() {
     const self = this
     const callback = (questions) => {
-      questions.map(p => self.room.questions.push(p))
+      questions.map(p => {
+        p.points = 50
+        self.room.questions.push(p)
+      })
       self.refresh()
     }
     this.dialog.open(RoomQuestionModalComponent, {
@@ -115,5 +120,15 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
         q.order = i + 1
       })
     this.refresh()
+  }
+
+  changePoints(q: RoomQuestion, points) {
+    if (q.points % 10 !== 0)
+      q.points = Math.floor(q.points / 10) * 10
+    q.points += points
+    if (q.points > 100)
+      q.points = 100
+    else if (q.points < 10)
+      q.points = 10
   }
 }

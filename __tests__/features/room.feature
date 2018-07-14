@@ -36,14 +36,14 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de entrar ou sair da sala
 
     Examples:
-      | caso                  | propriedades                      | mensagem                                  |
-      | 'que não exista'      | '{ "id": 99 }'                    | "A sala não existe."                      |
-      | 'que eu esteja'       | '{ "id": 6, "associate": true }'  | "Usuário já incluso na sala."             |
-      | 'sala não aberta'     | '{ "id": 8, "associate": true }'  | "Sala não foi aberta ou já foi iniciada." |
-      | 'sala já iniciada'    | '{ "id": 4, "associate": true }'  | "Sala não foi aberta ou já foi iniciada." |
-      | 'que eu possa entrar' | '{ "id": 6, "associate": false }' | "Saiu da sala."                           |
-      | 'que eu não esteja'   | '{ "id": 2, "associate": false }' | "Usuário não incluso na sala."            |
-      | 'que eu possa entrar' | '{ "id": 6, "associate": true }'  | "Entrou na sala."                         |
+      | caso                  | propriedades                      | mensagem                       |
+      | 'que não exista'      | '{ "id": 99 }'                    | "A sala não existe."           |
+      | 'que eu esteja'       | '{ "id": 6, "associate": true }'  | "Usuário já incluso na sala."  |
+      | 'sala não aberta'     | '{ "id": 8, "associate": true }'  | "A sala não foi aberta."       |
+      | 'sala já iniciada'    | '{ "id": 4, "associate": true }'  | "A sala já foi iniciada."      |
+      | 'que eu possa entrar' | '{ "id": 6, "associate": false }' | "Saiu da sala."                |
+      | 'que eu não esteja'   | '{ "id": 2, "associate": false }' | "Usuário não incluso na sala." |
+      | 'que eu possa entrar' | '{ "id": 6, "associate": true }'  | "Entrou na sala."              |
 
   Scenario Outline: Salvar Sala
     Given Dado eu que queira salvar uma sala
@@ -70,7 +70,7 @@ Feature: Sala
       | 3  | 'que não me pertence' | "Usuário sem permissão para remover o item." |
       | 99 | 'que não existe'      | "A sala não existe."                         |
       | 4  | 'iniciada'            | "Uma sala iniciada não pode ser removida."   |
-      | 10  | 'que me pertence'     | "Sala removida com sucesso."                 |
+      | 10 | 'que me pertence'     | "Sala removida com sucesso."                 |
 
   Scenario Outline: Alterar status da sala
     Given Dado que eu queira alterar o status de uma sala
