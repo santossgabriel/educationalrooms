@@ -149,9 +149,6 @@ export default {
     if (room.startedAt)
       throwValidationError('Uma sala iniciada não pode ser removida.')
 
-    if (room.endedAt)
-      throwValidationError('Uma sala finalizada não pode ser removida.')
-
     await RoomUser.destroy({ where: { roomId: id } })
     await RoomQuestion.destroy({ where: { roomId: id } })
     await Room.destroy({ where: { id: id } })

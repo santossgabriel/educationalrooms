@@ -66,11 +66,11 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de tentar remover a sala
 
     Examples:
-      | id | caso                  | mensagem                                                     |
-      | 2  | 'que me pertence'     | "Sala removida com sucesso."                                 |
-      | 3  | 'que não me pertence' | "Usuário sem permissão para remover o item."                 |
-      | 99 | 'que não existe'      | "A sala não existe."                                         |
-      | 4  | 'que não existe'      | "Uma sala iniciada que não finalizou não pode ser removida." |
+      | id | caso                  | mensagem                                     |
+      | 3  | 'que não me pertence' | "Usuário sem permissão para remover o item." |
+      | 99 | 'que não existe'      | "A sala não existe."                         |
+      | 4  | 'iniciada'            | "Uma sala iniciada não pode ser removida."   |
+      | 10  | 'que me pertence'     | "Sala removida com sucesso."                 |
 
   Scenario Outline: Alterar status da sala
     Given Dado que eu queira alterar o status de uma sala

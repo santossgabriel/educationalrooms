@@ -54,6 +54,11 @@ module.exports = {
       endedAt: new Date('02/02/2018'),
       time: 8,
       userId: 6
+    }, {
+      name: 'test_room_10', // id = 10
+      createdAt: new Date('01/01/2018'),
+      time: 8,
+      userId: 6
     }])
   }
 }
