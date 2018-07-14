@@ -9,6 +9,7 @@ import { Room } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
 import { ErrorModalComponent } from '../../modals/confirm-modal.component';
 import { getStatusDescriptionRoom } from '../../helpers/utils';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-my-rooms',
@@ -54,18 +55,15 @@ export class MyRoomsComponent implements OnInit, TokenChangedListener {
     this.service.remove(id).subscribe(res => {
       this.rooms = this.rooms.filter(p => p.id !== id)
       this.refresh()
-    }, err => {
-      console.error(err.error.message)
-      this.dialog.open(ErrorModalComponent, {
-        data: {
-          error: err.error.message
-        }
-      })
-    })
+    }, err => Swal('Oops...', err.error.message, 'error'))
   }
 
-  editRoom(id: number) {
-    this.router.navigate([`/edit-room/${id}`])
+  editRoom(room: Room) {
+    if (room.descriptionStatus === 'FINALIZADA' || room.descriptionStatus === 'INICIADA') {
+      Swal('Oops...', 'Uma sala Iniciada ou Finalizada não pode ser editada.', 'error')
+      return
+    }
+    this.router.navigate([`/edit-room/${room.id}`])
   }
 
   changeStatus(room: Room, status: string) {

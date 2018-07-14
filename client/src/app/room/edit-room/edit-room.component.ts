@@ -9,6 +9,8 @@ import { MatDialog, MatTableDataSource } from '@angular/material';
 import { RoomQuestion } from '../../models/room-question.model';
 import { ErrorModalComponent } from '../../modals/confirm-modal.component';
 
+import Swal from 'sweetalert2'
+
 @Component({
   selector: 'app-rooms',
   templateUrl: './edit-room.component.html',
@@ -21,7 +23,7 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
   error = ''
   room = <Room>{}
   dataSource: MatTableDataSource<RoomQuestion>
-  displayedColumns = ['category', 'description', 'order', 'points', 'actions']
+  displayedColumns = ['order', 'category', 'description', 'points', 'actions']
   hasQuestions: boolean
 
   constructor(private roomService: RoomService,
@@ -72,6 +74,12 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
   }
 
   saveRoom() {
+
+    if (this.room.questions.filter(p => !p.order).length > 0) {
+      Swal('', 'Ordene as questões antes de prosseguir!', 'error')
+      return
+    }
+
     this.roomService.save(this.room).subscribe(res => {
       this.router.navigate(['/my-rooms'])
     }, err => {
@@ -104,6 +112,14 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
       left.push(elemChange)
     }
     this.room.questions = left.concat(right)
+    this.refresh()
+  }
+
+  sortQuestions() {
+    this.room.questions.sort((n1, n2) => n1.id > n2.id ? 1 : n1.id < n2.id ? -1 : 0)
+      .forEach((q, i) => {
+        q.order = i + 1
+      })
     this.refresh()
   }
 }

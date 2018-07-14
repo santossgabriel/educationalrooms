@@ -2,14 +2,14 @@
   <mat-card-title>{{room.name}}</mat-card-title>
   <div>
     <mat-form-field>
-      <input matInput [(ngModel)]="room.name" placeholder="Nome da sala" required />
+      <input matInput [(ngModel)]="room.name" maxlength="255" placeholder="Nome da sala" required />
     </mat-form-field>
     <span class="app-spacer"></span>
     <span class="app-spacer"></span>
     <span class="app-spacer"></span>
     <span class="app-spacer"></span>
-    <mat-form-field style="margin-left: 50px">
-      <input matInput [(ngModel)]="room.time" placeholder="Tempo (segundos)" required type="number" />
+    <mat-form-field style="margin-left: 50px; width: 220px">
+      <input type="tel" maxlength="3" matInput [(ngModel)]="room.time" placeholder="Tempo de cada questão (segundos)" required/>
     </mat-form-field>
   </div>
 
@@ -63,11 +63,11 @@
   </table>
   <br />
   <div class="action-button">
+    <button mat-raised-button (click)="sortQuestions()">ORDENAR</button>
     <button mat-raised-button color="primary" (click)="openQuestionModal()">ADICIONAR QUESTÕES</button>
   </div>
   <br />
   <div class="action-button">
-    <button mat-button>CANCELAR</button>
     <button [disabled]="!room.name || !room.time" mat-raised-button color="primary" (click)="saveRoom()">SALVAR</button>
   </div>
 </mat-card>
