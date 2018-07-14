@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core'
 import { Globals } from '../../globals'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { fadeInTransition } from '../../router.transition'
-import { Room } from '../../models/room.model';
-import { RoomService } from '../../services/room.service';
-import { RoomQuestionModalComponent } from '../../modals/room-question-modal.component';
-import { MatDialog, MatTableDataSource } from '@angular/material';
-import { RoomQuestion } from '../../models/room-question.model';
-import { ErrorModalComponent } from '../../modals/confirm-modal.component';
+import { Room } from '../../models/room.model'
+import { RoomService } from '../../services/room.service'
+import { RoomQuestionModalComponent } from '../../modals/room-question-modal.component'
+import { MatDialog, MatTableDataSource } from '@angular/material'
+import { RoomQuestion } from '../../models/room-question.model'
 
 import Swal from 'sweetalert2'
 
@@ -80,16 +79,11 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
       return
     }
 
-    this.roomService.save(this.room).subscribe(res => {
-      this.router.navigate(['/my-rooms'])
-    }, err => {
-      console.error(err.error.message)
-      this.dialog.open(ErrorModalComponent, {
-        data: {
-          error: err.error.message
-        }
+    this.roomService.save(this.room).subscribe((res: any) => {
+      Swal('Sucesso!', res.message, 'success').then(() => {
+        this.router.navigate(['/my-rooms'])
       })
-    })
+    }, err => Swal('Oops...', err.error.message, 'error'))
   }
 
   changeIndex(index, step) {

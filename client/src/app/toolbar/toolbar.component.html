@@ -26,8 +26,8 @@
           <mat-icon [matBadge]="notifPendings" [matBadgeHidden]="notifPendings == 0" matBadgeColor="warn">notifications</mat-icon>
         </button>
         <button mat-icon-button (click)="updateTimeNotifications()" [matMenuTriggerFor]="notificationMenu">
-            <mat-icon [matBadge]="notifPendings" [matBadgeHidden]="notifPendings == 0" matBadgeColor="warn">local_post_office</mat-icon>
-          </button>
+          <mat-icon [matBadge]="notifPendings" [matBadgeHidden]="notifPendings == 0" matBadgeColor="warn">local_post_office</mat-icon>
+        </button>
         <button mat-icon-button [matMenuTriggerFor]="accountMenu">
           <img style="background-color: white;border-radius: 50%;box-shadow: 0 0 15px #999" height="60" width="60" src="{{user.picture || 'api/image/user-image.png'}}"
           />
@@ -52,8 +52,8 @@
             </div>
           </div>
           <div class="action-button" [hidden]="notifications.length == 0">
-            <a *ngIf="hasNoRead" (click)="maskAsRead()" href="#">Marcar como lidas</a>
-            <a (click)="removeAllnotifications()" href="#">Remover Todas</a>
+            <a *ngIf="hasNoRead" (click)="maskAsRead()" href="javascript:void(0)">Marcar como lidas</a>
+            <a (click)="removeAllnotifications()" href="javascript:void(0)">Remover Todas</a>
           </div>
         </mat-menu>
         <mat-menu #accountMenu="matMenu">

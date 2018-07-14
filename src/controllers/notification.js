@@ -5,7 +5,10 @@ const { sequelize, Notification } = db
 
 export const NotificationTypes = {
   IN_ROOM: 'IN_ROOM',
-  OUT_ROOM: 'OUT_ROOM'
+  OUT_ROOM: 'OUT_ROOM',
+  ROOM_STARTED: 'ROOM_START',
+  ROOM_ENDED: 'ROOM_ENDED',
+  ROOM_REMOVED: 'ROOM_REMOVED'
 }
 
 export default {

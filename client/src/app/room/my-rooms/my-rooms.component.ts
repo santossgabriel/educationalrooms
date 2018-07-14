@@ -51,19 +51,23 @@ export class MyRoomsComponent implements OnInit, TokenChangedListener {
     this.error = ''
   }
 
-  remove(id) {
-    this.service.remove(id).subscribe(res => {
-      this.rooms = this.rooms.filter(p => p.id !== id)
+  remove(room: Room) {
+    this.service.remove(room.id).subscribe((res: any) => {
+      this.rooms = this.rooms.filter(p => p.id !== room.id)
       this.refresh()
+      Swal('Removido!', res.message, 'success')
     }, err => Swal('Oops...', err.error.message, 'error'))
   }
 
   editRoom(room: Room) {
-    if (room.descriptionStatus === 'FINALIZADA' || room.descriptionStatus === 'INICIADA') {
-      Swal('Oops...', 'Uma sala Iniciada ou Finalizada não pode ser editada.', 'error')
-      return
-    }
-    this.router.navigate([`/edit-room/${room.id}`])
+    if (room) {
+      if (room.descriptionStatus === 'FINALIZADA' || room.descriptionStatus === 'INICIADA') {
+        Swal('Oops...', 'Uma sala Iniciada ou Finalizada não pode ser editada.', 'error')
+        return
+      }
+      this.router.navigate([`/edit-room/${room.id}`])
+    } else
+      this.router.navigate(['/edit-room/0'])
   }
 
   changeStatus(room: Room, status: string) {

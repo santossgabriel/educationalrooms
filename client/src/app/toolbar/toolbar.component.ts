@@ -71,7 +71,6 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
     this.notifications.map(p => p.elapsedTime = dateToElapsedTime(new Date(p.createdAt)))
     this.notifPendings = this.notifications.filter(p => !p.read).length
     this.hasNoRead = this.notifPendings > 0
-    console.log('updated')
   }
 
   maskAsRead() {

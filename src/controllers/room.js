@@ -135,17 +135,39 @@ export default {
 
   remove: async (req, res) => {
     const { id } = req.params
-    const room = await Room.findOne({ where: { id: id } })
+    const room = await Room.findOne({
+      include: [{ model: RoomUser }],
+      where: { id: id }
+    })
+
     if (!room)
       throwValidationError('A sala não existe.')
+
     if (room.userId != req.claims.id)
       throwForbiddenError('Usuário sem permissão para remover o item.')
-    if (room.startedAt && !room.endedAt)
-      throwValidationError('Uma sala iniciada que não finalizou não pode ser removida.')
+
+    if (room.startedAt)
+      throwValidationError('Uma sala iniciada não pode ser removida.')
+
+    if (room.endedAt)
+      throwValidationError('Uma sala finalizada não pode ser removida.')
+
     await RoomUser.destroy({ where: { roomId: id } })
     await RoomQuestion.destroy({ where: { roomId: id } })
     await Room.destroy({ where: { id: id } })
     res.json({ message: 'Sala removida com sucesso.' })
+
+    room.RoomUsers.map(p => p.userId).forEach(async userId => {
+      let notification = await Notification.create({
+        description: 'sala foi removida.',
+        userId: userId,
+        type: NotificationTypes.ROOM_REMOVED,
+        createdAt: new Date(),
+        origin: room.name
+      })
+      const sockets = getSockets().filter(p => p.userId === userId)
+      sockets.forEach(p => p.emit('notificationReceived', notification))
+    })
   },
 
   associate: async (req, res) => {
@@ -284,7 +306,7 @@ export default {
     }
 
     const roomDb = await Room.findOne({
-      include: [{ model: RoomQuestion }],
+      include: [{ model: RoomQuestion }, { model: RoomUser }],
       where: { id: id }
     })
 
@@ -299,6 +321,19 @@ export default {
 
     await Room.update(room, { where: { id: id } })
     res.json({ message: msg })
+
+    if (status === roomStatus.STARTED) {
+      roomDb.RoomUsers.map(p => p.userId).forEach(async userId => {
+        let notification = await Notification.create({
+          description: 'sala foi iniciada.',
+          userId: userId,
+          type: NotificationTypes.ROOM_STARTED,
+          createdAt: new Date(),
+          origin: roomDb.name
+        })
+        const sockets = getSockets().filter(p => p.userId === userId)
+        sockets.forEach(p => p.emit('notificationReceived', notification))
+      })
+    }
   }
 }
-
