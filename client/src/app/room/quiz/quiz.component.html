@@ -1,13 +1,24 @@
 <div class="quiz-card">
-  <div class="quiz-title">{{room.name}}</div>
-  <div *ngIf="mode == ANSWER">
-    <mat-progress-bar [value]="time" mode="determinate"></mat-progress-bar>
-    <div class="quiz-points">Valendo {{question.points}} pontos</div>
-    <div class="quiz-ask">{{question.description}}</div>
-    <div class="quiz-answer-content">
-      <div *ngFor="let a of question.answers">
-        <div class="quiz-answer" (click)="answer(a)">
-          {{a.description}}
+
+  <div *ngIf="mode == UNAVAILABLE" class="unavailable">
+    <span>Sala indisponível no momento</span>
+  </div>
+
+  <div *ngIf="mode == ENDED" class="unavailable">
+    <span>Sala finalizada</span>
+  </div>
+
+  <div *ngIf="mode != UNAVAILABLE && mode != ENDED">
+    <div class="quiz-title">{{room.name}}</div>
+    <div *ngIf="mode == ANSWER">
+      <mat-progress-bar [value]="progress" mode="determinate"></mat-progress-bar>
+      <div class="quiz-points">Valendo {{question.points}} pontos</div>
+      <div class="quiz-ask">{{question.description}}</div>
+      <div class="quiz-answer-content">
+        <div *ngFor="let a of question.answers">
+          <div class="quiz-answer" (click)="answer(a)">
+            {{a.description}}
+          </div>
         </div>
       </div>
     </div>

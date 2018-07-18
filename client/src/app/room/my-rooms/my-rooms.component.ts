@@ -75,6 +75,6 @@ export class MyRoomsComponent implements OnInit, TokenChangedListener {
       let r = this.rooms.find(p => p.id === room.id)
       r.status = status
       this.refresh()
-    })
+    }, err => Swal('Oops...', err.error.message, 'error'))
   }
 }

@@ -35,6 +35,7 @@
     "__dirname": true,
     "process": true,
     "setTimeout": true,
+    "setInterval": true,
     "Promise": true
   },
   "parserOptions": {

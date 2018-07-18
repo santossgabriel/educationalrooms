@@ -26,18 +26,14 @@ export class Globals {
     if (!this.socketIo) {
       this.socketIo = (<any>window).io()
       this.socketIo.emit('subscribe', this.currentToken())
-      this.socketIo.on('error', (message) => {
-        console.log(message);
-      });
+      this.socketIo.on('error', (message) => console.log(message))
     }
-
     return this.socketIo
   }
 
   public static addTokenListener(listener: TokenChangedListener) {
-    if (this.listeners.indexOf(listener) === -1) {
+    if (this.listeners.indexOf(listener) === -1)
       this.listeners.push(listener)
-    }
   }
 
   public static userLogged(): boolean { return this.currentToken() ? true : false }

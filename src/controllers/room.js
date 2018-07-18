@@ -1,11 +1,20 @@
 import db from '../infra/db/models/index'
 import { throwForbiddenError, throwValidationError } from '../helpers/error'
 import { questionStatus } from './question'
-import { sendNotifications } from '../socket'
+import { sendNotifications, updateOnlineRooms } from '../socket'
 
 import { NotificationTypes } from './notification'
 
-const { Room, RoomUser, RoomQuestion, User, Question, sequelize } = db
+const {
+  Room,
+  RoomUser,
+  RoomQuestion,
+  User,
+  Question,
+  sequelize,
+  OnlineRoom,
+  RoomAnswer
+} = db
 
 export const roomStatus = {
   CLOSED: 'CLOSED',
@@ -346,6 +355,20 @@ export default {
 
     if (status === roomStatus.STARTED || status === roomStatus.CLOSED) {
       const started = status === roomStatus.STARTED
+      if (started) {
+        await OnlineRoom.create({
+          id: id,
+          currentOrder: 1,
+          changedAt: new Date()
+        })
+        await RoomAnswer.destroy({ where: { id: id } })
+      } else {
+        await OnlineRoom.destroy({ where: { id: id } })
+        await RoomAnswer.destroy({ where: { id: id } })
+      }
+
+      updateOnlineRooms()
+
       const notif = {
         description: started ? 'foi iniciada.' : 'foi fechada',
         type: started ? NotificationTypes.ROOM_STARTED : NotificationTypes.ROOM_CLOSED,

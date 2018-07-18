@@ -1,4 +1,4 @@
-<mat-card style="margin: 0 auto; margin-top: 10px">
+<mat-card class="root-card">
   <mat-card-title>MINHAS QUESTÕES</mat-card-title>
   <div class="question-component" [hidden]="hasQuestions">
     <span>Você não possui questões.</span>
@@ -19,11 +19,6 @@
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </th>
         <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="points">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pontos </th>
-        <td mat-cell *matCellDef="let element"> {{element.points}} </td>
       </ng-container>
 
       <ng-container matColumnDef="shared">
@@ -50,7 +45,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons [hidden]="!hasQuestions"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
     <button (click)="openQuestionModal(null)" style="margin-top: 20px" mat-raised-button color="primary">CRIAR QUESTÃO</button>
   </div>
 </mat-card>

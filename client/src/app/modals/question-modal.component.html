@@ -1,5 +1,6 @@
 <div style="min-width: 500px">
   <mat-horizontal-stepper #stepper>
+
     <mat-step>
       <ng-template matStepLabel>Área</ng-template>
       <mat-form-field>
@@ -17,6 +18,7 @@
         <button [disabled]="customCategory && !question.category" mat-raised-button matStepperNext color="primary">Próximo</button>
       </div>
     </mat-step>
+
     <mat-step>
       <ng-template matStepLabel>Pergunda</ng-template>
       <mat-form-field style="width: 100%">
@@ -25,22 +27,6 @@
       <div class="action-button">
         <button mat-button matStepperPrevious>Voltar</button>
         <button [disabled]="!question.description" mat-raised-button matStepperNext color="primary">Próximo</button>
-      </div>
-    </mat-step>
-    <mat-step>
-      <ng-template disabled matStepLabel>Pontuação</ng-template>
-      <br />
-      <span class="success-message">
-        Quantos pontos valem a questão ?
-      </span>
-      <br />
-      <mat-slider thumbLabel [(ngModel)]="question.points" [displayWith]="getLabel" tickInterval="1" min="1" max="10">Pontos</mat-slider>
-      <span class="success-message">
-        {{question.points}}
-      </span>
-      <div class="action-button">
-        <button mat-button matStepperPrevious>Voltar</button>
-        <button [disabled]="!question.points" mat-raised-button matStepperNext color="primary">Próximo</button>
       </div>
     </mat-step>
 
@@ -65,5 +51,6 @@
           mat-raised-button color="primary" (click)="saveQuestion()">PRONTO</button>
       </div>
     </mat-step>
+    
   </mat-horizontal-stepper>
 </div>

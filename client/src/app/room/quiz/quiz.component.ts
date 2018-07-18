@@ -6,6 +6,8 @@ import { RoomService } from '../../services/room.service'
 import { MatDialog, MatTableDataSource } from '@angular/material'
 import { Question } from '../../models/question.model';
 import { Answer } from '../../models/answer.model';
+import { Globals } from '../../globals';
+import { SocketEvents } from '../../helpers/utils';
 
 @Component({
   selector: 'app-quiz',
@@ -23,74 +25,83 @@ export class QuizComponent implements OnInit, TokenChangedListener {
   CORRECT = 'CORRECT'
   WRONG = 'WRONG'
   SENT = 'SENT'
+  UNAVAILABLE = 'UNAVAILABLE'
+  ENDED = 'ENDED'
 
   room = <Room>{}
   question = <Question>{}
   mode = 'LOADING'
-  time = 0
+  progress = 0
   answered = false
+  socket: any
+  step = 0
 
   constructor(private roomService: RoomService,
     private router: Router,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute) {
+    this.socket = Globals.getSocket()
     activatedRoute.params.subscribe((res: Params) => {
-      roomService.getQuiz(res.id).subscribe((res: Room) => this.room = res)
+      roomService.getQuiz(res.id).subscribe((res: Room) => {
+        this.room = res
+        if (this.room) {
+          this.socket.emit(SocketEvents.Server.IN_ROOM, res.id)
+          this.step = 10 / this.room.time
+        }
+        else
+          this.mode = this.UNAVAILABLE
+      })
     })
-    this.question = this.getQuestion()
 
-    setTimeout(() => {
-      this.mode = this.ANSWER
-      this.runTimer()
-    }, 1000);
+    this.socket.on(SocketEvents.Client.QUESTION_RECEIVED, (q) => {
+      console.log('QUESTION_RECEIVED')
+      console.log(q)
+      if (q.roomId == this.room.id) {
+        this.question = q
+        this.mode = q.answered ? this.SENT : this.ANSWER
+        this.runTimer()
+        this.progress = 0
+      }
+    })
+
+    this.socket.on(SocketEvents.Client.FEEDBACK_ANSWER, (q) => {
+      console.log('FEEDBACK')
+      console.log(q)
+      if (q.roomId == this.room.id) {
+        this.question = q
+        this.mode = q.feedback
+      }
+    })
+
+    this.socket.on(SocketEvents.Client.FINISH_ROOM, (roomId) => {
+      this.mode = this.ENDED
+    })
   }
 
   ngOnInit() {
   }
 
   runTimer() {
-    this.time++
-    if (this.time < 100 && !this.answered)
+    this.progress += this.step
+    if (this.progress < 100 && !this.answered)
       setTimeout(() => {
         this.runTimer()
       }, 100)
     else if (!this.answered) {
-      this.time = 0
+      this.progress = 0
       this.mode = this.TIME_OVER
-      setTimeout(() => {
-        this.restart()
-      }, 2000)
     }
   }
 
   tokenChanged(newToken) { }
 
-  getQuestion(): Question {
-    return <Question>{
-      description: 'Quanto é 2 x 2 ?',
-      points: 30,
-      category: 'Matemática',
-      answers: [
-        <Answer>{ description: '4', classification: 'A', correct: true },
-        <Answer>{ description: '2', classification: 'B' },
-        <Answer>{ description: '6', classification: 'C' },
-        <Answer>{ description: '8', classification: 'D' }
-      ]
-    }
-  }
-
-  restart() {
-    this.answered = false
-    this.mode = this.ANSWER
-    this.runTimer()
-  }
-
   answer(a: Answer) {
     this.answered = true
-    this.mode = a.correct ? this.CORRECT : this.WRONG
-    this.time = 0
-    setTimeout(() => {
-      this.restart()
-    }, 2000)
+    this.mode = this.SENT
+    this.socket.emit(SocketEvents.Server.SEND_ANSWER, {
+      roomId: this.room.id,
+      questionId: this.question.id,
+      answerId: a.id
+    })
   }
 }

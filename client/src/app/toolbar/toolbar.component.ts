@@ -38,11 +38,6 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
       this.notifications.unshift(n)
       this.updateTimeNotifications()
     })
-
-    notificationService.get().subscribe((res: Notif[]) => {
-      this.notifications = res
-      this.updateTimeNotifications()
-    })
   }
 
   ngOnInit() {
@@ -53,6 +48,10 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
     this.logged = Globals.userLogged()
     if (this.logged) {
       this.accountService.getAccount().subscribe(res => { this.user = <UserDataModel>res })
+      this.notificationService.get().subscribe((res: Notif[]) => {
+        this.notifications = res
+        this.updateTimeNotifications()
+      })
     }
   }
 

@@ -28,8 +28,8 @@ export class LoginModel {
 }
 
 export class AccountModel {
-  name: string
-  email: string
-  password: string
-  confirm: string
+  name = ''
+  email = ''
+  password = ''
+  confirm = ''
 }

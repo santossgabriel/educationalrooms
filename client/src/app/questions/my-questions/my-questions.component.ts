@@ -15,7 +15,7 @@ import { ConfirmModalComponent, ErrorModalComponent } from '../../modals/confirm
 })
 export class MyQuestionsComponent implements OnInit {
 
-  displayedColumns = ['id', 'category', 'description', 'points', 'shared', 'actions']
+  displayedColumns = ['id', 'category', 'description', 'shared', 'actions']
   dataSource: MatTableDataSource<Question>
   hasQuestions: boolean = false
 

@@ -24,7 +24,6 @@ export class QuestionModalComponent {
     this.question = data.question
     this.callback = data.callback
     console.log(data.callback)
-    this.question.points = this.question.points || 1
     service.getCategories().subscribe(res => {
       (<Array<string>>res).push('Outra ...')
       this.categories = <Array<string>>res

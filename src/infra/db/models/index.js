@@ -7,6 +7,8 @@ import * as Room from './room'
 import * as RoomUser from './roomUser'
 import * as RoomQuestion from './roomQuestion'
 import * as Notif from './notification'
+import * as OnlineRoom from './onlineRoom'
+import * as RoomAnswer from './roomAnswer'
 
 import config from '../../config'
 
@@ -39,6 +41,10 @@ db.RoomUser = sequelize.define(RoomUser.modelName, RoomUser.modelAttributes, Roo
 db.RoomQuestion = sequelize.define(RoomQuestion.modelName, RoomQuestion.modelAttributes, RoomQuestion.modelOptions)
 
 db.Notification = sequelize.define(Notif.modelName, Notif.modelAttributes, Notif.modelOptions)
+
+db.OnlineRoom = sequelize.define(OnlineRoom.modelName, OnlineRoom.modelAttributes, OnlineRoom.modelOptions)
+
+db.RoomAnswer = sequelize.define(RoomAnswer.modelName, RoomAnswer.modelAttributes, RoomAnswer.modelOptions)
 
 db.Question.hasMany(db.Answer, {
   foreignKey: {

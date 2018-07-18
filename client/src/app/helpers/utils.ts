@@ -22,3 +22,17 @@ export const getStatusDescriptionRoom = (room) => {
   if (room.status === 'ENDED')
     return 'FINALIZADA'
 }
+
+export const SocketEvents = {
+  Server: {
+    SUBSCRIBE: 'subscribe',
+    SEND_ANSWER: 'sendAnswer',
+    IN_ROOM: 'inRoom',
+  },
+  Client: {
+    NOTIFICATION_RECEIVED: 'notificationReceived',
+    QUESTION_RECEIVED: 'questionReceived',
+    FEEDBACK_ANSWER: 'feedbackAnswer',
+    FINISH_ROOM: 'finishRoom'
+  }
+}
