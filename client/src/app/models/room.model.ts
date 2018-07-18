@@ -12,6 +12,7 @@ export class Room {
   users: User[]
   descriptionStatus: string
   status: string
+  score: number
 
   constructor() {
     this.users = []

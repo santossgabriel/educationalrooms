@@ -44,10 +44,11 @@ export class QuizComponent implements OnInit, TokenChangedListener {
     activatedRoute.params.subscribe((res: Params) => {
       roomService.getQuiz(res.id).subscribe((res: Room) => {
         this.room = res
-        if (this.room) {
+        if (this.room && !this.room.endedAt) {
           this.socket.emit(SocketEvents.Server.IN_ROOM, res.id)
           this.step = 10 / this.room.time
-        }
+        } else if (this.room.endedAt)
+          this.mode = this.ENDED
         else
           this.mode = this.UNAVAILABLE
       })
@@ -73,8 +74,11 @@ export class QuizComponent implements OnInit, TokenChangedListener {
       }
     })
 
-    this.socket.on(SocketEvents.Client.FINISH_ROOM, (roomId) => {
-      this.mode = this.ENDED
+    this.socket.on(SocketEvents.Client.FINISH_ROOM, res => {
+      if (res.roomId == this.room.id) {
+        this.room.score = res.score || 0
+        this.mode = this.ENDED
+      }
     })
   }
 

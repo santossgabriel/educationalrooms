@@ -107,11 +107,10 @@ export default {
   },
 
   getQuiz: async (req, res) => {
-    const room = await Room.findOne({
+    let room = await Room.findOne({
       where: {
         id: req.params.id,
-        startedAt: { [sequelize.Op.ne]: null },
-        endedAt: null,
+        startedAt: { [sequelize.Op.ne]: null }
       },
       include: [
         {
@@ -122,7 +121,24 @@ export default {
         }
       ]
     })
-    res.json(room)
+    let score = 0
+    if (room && room.endedAt) {
+      const answers = await RoomAnswer.findAll({
+        where: { id: req.params.id, userId: req.claims.id }
+      })
+      score = answers.map(p => p.score).reduce((x, y) => x + y)
+    }
+
+    res.json({
+      createdAt: room.createdAt,
+      endedAt: room.endedAt,
+      id: room.id,
+      name: room.name,
+      openedAt: room.openedAt,
+      startedAt: room.startedAt,
+      time: room.time,
+      score: score
+    })
   },
 
   getMy: async (req, res) => {

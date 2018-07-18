@@ -4,11 +4,7 @@
     <span>Sala indisponível no momento</span>
   </div>
 
-  <div *ngIf="mode == ENDED" class="unavailable">
-    <span>Sala finalizada</span>
-  </div>
-
-  <div *ngIf="mode != UNAVAILABLE && mode != ENDED">
+  <div *ngIf="mode != UNAVAILABLE">
     <div class="quiz-title">{{room.name}}</div>
     <div *ngIf="mode == ANSWER">
       <mat-progress-bar [value]="progress" mode="determinate"></mat-progress-bar>
@@ -21,6 +17,15 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div *ngIf="mode == ENDED" class="unavailable">
+    <span>esta sala foi finalizada</span>
+    <br />
+    <div class="score">
+      Você fez
+      <span>{{room.score}}</span> pontos.
     </div>
   </div>
 

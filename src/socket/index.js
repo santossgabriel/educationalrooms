@@ -113,14 +113,11 @@ const updateCurrentQuestions = async () => {
 }
 
 const startTimer = async () => {
-  console.log('startTimer')
   onlineRooms.forEach(async r => {
     const q = currentQuestions.filter(p => p.roomId == r.id).shift()
     const diff = Math.floor((new Date()).getTime() - q.changedAt.getTime())
     const seconds = Math.floor(diff / 1000)
     const users = r.users.map(p => p.id)
-    console.log('')
-    console.log(`SALA ${r.id} : ${seconds}-${q.time}`)
     if (seconds > q.time) {
       const nextQuestion = r.questions.filter(p => p.order == (q.order + 1)).shift()
       if (nextQuestion) {
@@ -147,7 +144,6 @@ const startTimer = async () => {
 }
 
 const sendFeedback = async (roomId, questionId, users) => {
-  console.log('sendFeedback')
   const correctAnswer = await Answer.findOne({
     where: {
       questionId: questionId,
@@ -175,18 +171,24 @@ const sendFeedback = async (roomId, questionId, users) => {
 }
 
 const notifyChangedQuestion = (question, users) => {
-  console.log('notifyChangedQuestion')
   users.forEach(u => {
     sockets.filter(p => p.userId === u)
       .forEach(p => p.emit(SocketEvents.Client.QUESTION_RECEIVED, question))
   })
 }
 
-const notifyFinish = (roomId, users) => {
-  console.log('notifyFinish')
+const notifyFinish = async (roomId, users) => {
+  const userAnswers = await RoomAnswer.findAll({
+    where: { id: roomId }
+  })
   users.forEach(u => {
-    sockets.filter(p => p.userId === u)
-      .forEach(p => p.emit(SocketEvents.Client.FINISH_ROOM, roomId))
+    const score = userAnswers.filter(p => p.userId == u)
+      .map(p => p.score).reduce((x, y) => x + y)
+    sockets.filter(p => p.userId == u)
+      .forEach(p => p.emit(SocketEvents.Client.FINISH_ROOM, {
+        roomId: roomId,
+        score: score
+      }))
   })
 }
 
@@ -203,14 +205,9 @@ export const sendNotifications = (users, notification) => {
 
 export const runJob = async () => {
   if (process.env.NODE_ENV !== 'test') {
-    console.log('')
-    console.log('STARTING JOB...')
     await updateOnlineRooms()
     await updateCurrentQuestions()
     setInterval(startTimer, 1000)
-    console.log('JOB STARTED')
-    console.log('')
-    console.log('')
   }
 }
 
@@ -232,17 +229,17 @@ export default (server) => {
     socket.on(SocketEvents.Server.IN_ROOM, async (roomId) => {
       const room = onlineRooms.filter(p => p.id == roomId).shift()
       if (!room) {
-        socket.emit('error', `Sala não está online: ${roomId}`)
+        socket.emit('onError', `Sala não está online: ${roomId}`)
         return
       }
 
       if (!socket.userId) {
-        socket.emit('error', 'Socket sem UserId')
+        socket.emit('onError', 'Socket sem UserId')
         return
       }
 
       if (room.users.filter(p => p.id === socket.userId).length == 0) {
-        socket.emit('error', 'Usuário não está escrito na sala.')
+        socket.emit('onError', 'Usuário não está escrito na sala.')
         return
       }
 
@@ -265,7 +262,7 @@ export default (server) => {
     socket.on(SocketEvents.Server.SEND_ANSWER, (answer) => {
       const question = getCurrentQuestion(answer.roomId)
       if (question.id != answer.questionId) {
-        socket.emit('error', 'O tempo acabou.')
+        socket.emit('onError', 'O tempo acabou.')
         return
       }
       const diff = Math.floor((new Date()).getTime() - question.changedAt.getTime())
