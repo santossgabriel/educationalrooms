@@ -202,11 +202,16 @@ export const sendNotifications = (users, notification) => {
 }
 
 export const runJob = async () => {
+  console.log('')
+  console.log('STARTING JOB...')
   if (process.env.NODE_ENV !== 'test') {
+    console.log('JOB STARTED')
     await updateOnlineRooms()
     await updateCurrentQuestions()
     setInterval(startTimer, 1000)
   }
+  console.log('')
+  console.log('')
 }
 
 export default (server) => {
