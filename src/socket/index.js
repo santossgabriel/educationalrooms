@@ -104,8 +104,6 @@ const updateCorrectAnswers = () => {
       correctAnswers.push(q.answers.filter(a => a.correct).shift())
     })
   })
-  console.log(':CORRECT_ANWERS:')
-  console.log(correctAnswers)
 }
 
 const updateCurrentQuestions = async () => {
