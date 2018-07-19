@@ -124,7 +124,7 @@ export default {
     let score = 0
     if (room && room.endedAt) {
       const answers = await RoomAnswer.findAll({
-        where: { id: req.params.id, userId: req.claims.id }
+        where: { roomId: req.params.id, userId: req.claims.id }
       })
       if (answers.length > 0)
         score = answers.map(p => p.score).reduce((x, y) => x + y)
@@ -378,10 +378,10 @@ export default {
           currentOrder: 1,
           changedAt: new Date()
         })
-        await RoomAnswer.destroy({ where: { id: id } })
+        await RoomAnswer.destroy({ where: { roomId: id } })
       } else {
         await OnlineRoom.destroy({ where: { id: id } })
-        await RoomAnswer.destroy({ where: { id: id } })
+        await RoomAnswer.destroy({ where: { roomId: id } })
       }
 
       updateOnlineRooms()

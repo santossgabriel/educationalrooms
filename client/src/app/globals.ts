@@ -12,9 +12,7 @@ export class Globals {
   }
 
   public static currentToken(): string {
-    if (!this.token)
-      this.token = localStorage.getItem('TOKEN')
-    return this.token
+    return localStorage.getItem('TOKEN')
   }
 
   public static getSocket() {

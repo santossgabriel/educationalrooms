@@ -28,6 +28,7 @@ export class StorageService {
     } else {
       localStorage.removeItem('USER')
       localStorage.removeItem('TOKEN')
+      Globals.notifyUserChanged(null)
     }
   }
 }

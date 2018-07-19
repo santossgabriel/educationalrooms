@@ -4,7 +4,12 @@ export const modelName = 'RoomAnswer'
 
 export const modelAttributes = {
   id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
     primaryKey: true,
+    autoIncrement: true
+  },
+  roomId: {
     type: Sequelize.INTEGER,
     allowNull: false,
     references: { model: 'Room', key: 'id' }
@@ -34,5 +39,12 @@ export const modelOptions = {
   freezeTableName: modelName,
   undercored: false,
   updatedAt: false,
-  createdAt: false
+  createdAt: false,
+  indexes: [
+    {
+      name: 'room_answer_pk',
+      type: 'unique',
+      fields: ['id', 'questionId', 'userId']
+    }
+  ]
 }

@@ -159,7 +159,7 @@ const sendFeedback = async (roomId, questionId, users) => {
   //     correct: true
   //   }
   // })
-  const answers = await RoomAnswer.findAll({ where: { id: roomId, questionId: questionId } })
+  const answers = await RoomAnswer.findAll({ where: { roomId: roomId, questionId: questionId } })
   users.forEach(u => {
     const userAnswer = answers.filter(p => p.userId == u).shift()
     let feedback = ''
@@ -188,7 +188,7 @@ const notifyChangedQuestion = (question, users) => {
 
 const notifyFinish = async (roomId, users) => {
   const usersAnswers = await RoomAnswer.findAll({
-    where: { id: roomId }
+    where: { roomId: roomId }
   })
   users.forEach(u => {
     let score = 0
@@ -259,7 +259,7 @@ export default (server) => {
       if (currentQuestion) {
         const answered = await RoomAnswer.findOne({
           where: {
-            id: roomId,
+            roomId: roomId,
             questionId: currentQuestion.id,
             userId: socket.userId
           }
@@ -289,7 +289,7 @@ export default (server) => {
           score = minScore
       }
       const roomAnswer = {
-        id: answer.roomId,
+        roomId: answer.roomId,
         questionId: answer.questionId,
         answerId: answer.answerId,
         userId: socket.userId,

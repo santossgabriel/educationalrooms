@@ -31,6 +31,7 @@ export class SignupComponent implements OnInit, UserChangedListener {
     if (this.router.isActive('/sign-edit', true)) {
       this.editMode = true
       this.userAccount = this.storageService.getUser()
+      this.user = <any>this.userAccount
     }
     this.token = Globals.currentToken()
   }

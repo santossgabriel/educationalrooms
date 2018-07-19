@@ -4,6 +4,12 @@ module.exports = {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      roomId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
         references: { model: 'Room', key: 'id' }
       },
       questionId: {
@@ -29,7 +35,7 @@ module.exports = {
         tableName: 'RoomAnswer',
         uniqueKeys: {
           actions_unique: {
-            fields: ['id', 'questionId', 'userId']
+            fields: ['roomId', 'questionId', 'userId']
           }
         }
       })

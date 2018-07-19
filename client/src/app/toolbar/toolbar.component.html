@@ -26,7 +26,7 @@
           <mat-icon [matBadge]="notifPendings" [matBadgeHidden]="notifPendings == 0" matBadgeColor="warn">notifications</mat-icon>
         </button>
         <button mat-icon-button [matMenuTriggerFor]="accountMenu">
-          <img style="background-color: white;border-radius: 50%;box-shadow: 0 0 15px #999" height="60" width="60" src="{{user.picture || 'api/image/user-image.png'}}"
+          <img style="background-color: white;border-radius: 50%;box-shadow: 0 0 15px #999" height="60" width="60" src="{{user?.picture || 'api/image/user-image.png'}}"
           />
         </button>
         <mat-menu #notificationMenu="matMenu" style="overflow: hidden;">
@@ -57,13 +57,13 @@
           <div class="account-data" style="padding: 10px">
             <div fxLayout="row">
               <div fxFlex="60px">
-                <img style="border-radius: 50%" height="50" width="50" src="{{user.picture || 'api/image/user-image.png'}}" />
+                <img style="border-radius: 50%" height="50" width="50" src="{{user?.picture || 'api/image/user-image.png'}}" />
               </div>
               <div>
-                <span class="account-name">{{user.name}}</span>
+                <span class="account-name">{{user?.name}}</span>
                 <br />
                 <br />
-                <span class="account-email">{{user.email}}</span>
+                <span class="account-email">{{user?.email}}</span>
               </div>
             </div>
             <mat-divider></mat-divider>

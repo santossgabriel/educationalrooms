@@ -74,6 +74,10 @@ db.RoomQuestion.belongsTo(db.Question, { foreignKey: 'questionId', targetKey: 'i
 
 db.User.hasMany(db.Notification, { foreignKey: 'userId' })
 
+db.Room.hasMany(db.RoomAnswer, { foreignKey: 'roomId' })
+
+db.RoomAnswer.belongsTo(db.User, { foreignKey: 'userId' })
+
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 

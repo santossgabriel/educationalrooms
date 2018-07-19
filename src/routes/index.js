@@ -4,6 +4,7 @@ import log from './log'
 import room from './room'
 import image from './image'
 import notification from './notification'
+import score from './score'
 export default (app) => {
   question(app)
   account(app)
@@ -11,4 +12,5 @@ export default (app) => {
   room(app)
   image(app)
   notification(app)
+  score(app)
 }

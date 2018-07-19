@@ -45,8 +45,7 @@ export class ToolbarComponent implements OnInit, UserChangedListener {
       if (this.user.email !== user.email)
         this.logout()
     }, err => {
-      storageService.setToken(null)
-      console.log(err)
+      this.logout()
     })
   }
 
