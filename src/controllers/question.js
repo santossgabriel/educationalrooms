@@ -119,7 +119,6 @@ export default {
   getMyCategories: async (req, res) => {
     const categories = await Question.findAll({
       attributes: ['category'],
-      where: { userId: req.claims.id },
       group: ['category'],
       order: sequelize.literal('count(1) desc')
     })

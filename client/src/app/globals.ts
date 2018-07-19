@@ -1,24 +1,19 @@
 import { Injectable } from '@angular/core'
+import { UserDataModel } from './models/user-data.models';
 
 @Injectable()
 export class Globals {
-  private static listeners: TokenChangedListener[] = []
+  private static listeners: UserChangedListener[] = []
   private static token: string = ''
   private static socketIo: any
 
-  public static changeToken(newToken: string) {
-    if (!newToken)
-      localStorage.removeItem('token')
-    else
-      localStorage.setItem('token', newToken)
-    this.token = newToken
-    for (let i = 0; i < this.listeners.length; i++)
-      this.listeners[i].tokenChanged(newToken)
+  public static notifyUserChanged(user: UserDataModel) {
+    this.listeners.forEach(p => p.userChanged(user))
   }
 
   public static currentToken(): string {
     if (!this.token)
-      this.token = localStorage.getItem('token')
+      this.token = localStorage.getItem('TOKEN')
     return this.token
   }
 
@@ -31,7 +26,7 @@ export class Globals {
     return this.socketIo
   }
 
-  public static addTokenListener(listener: TokenChangedListener) {
+  public static addUserChangedListener(listener: UserChangedListener) {
     if (this.listeners.indexOf(listener) === -1)
       this.listeners.push(listener)
   }

@@ -49,6 +49,7 @@ const getCurrentQuestion = (roomId) => {
 let sockets = []
 let onlineRooms = []
 let currentQuestions = []
+let correctAnswers = []
 
 export const updateOnlineRooms = async () => {
   const rooms = await Room.findAll({
@@ -92,8 +93,19 @@ export const updateOnlineRooms = async () => {
       answers: p.Question.Answers.map(x => x)
     }))
   }))
-
+  updateCorrectAnswers()
   await updateCurrentQuestions()
+}
+
+const updateCorrectAnswers = () => {
+  correctAnswers = []
+  onlineRooms.forEach(r => {
+    r.questions.forEach(q => {
+      correctAnswers.push(q.answers.filter(a => a.correct).shift())
+    })
+  })
+  console.log(':CORRECT_ANWERS:')
+  console.log(correctAnswers)
 }
 
 const updateCurrentQuestions = async () => {
@@ -121,7 +133,6 @@ const startTimer = async () => {
     if (seconds > q.time) {
       const nextQuestion = r.questions.filter(p => p.order == (q.order + 1)).shift()
       if (nextQuestion) {
-
         await OnlineRoom.update({
           currentOrder: nextQuestion.order,
           changedAt: new Date()
@@ -144,18 +155,18 @@ const startTimer = async () => {
 }
 
 const sendFeedback = async (roomId, questionId, users) => {
-  const correctAnswer = await Answer.findOne({
-    where: {
-      questionId: questionId,
-      correct: true
-    }
-  })
+  // const correctAnswer = await Answer.findOne({
+  //   where: {
+  //     questionId: questionId,
+  //     correct: true
+  //   }
+  // })
   const answers = await RoomAnswer.findAll({ where: { id: roomId, questionId: questionId } })
   users.forEach(u => {
     const userAnswer = answers.filter(p => p.userId == u).shift()
     let feedback = ''
     if (userAnswer) {
-      if (userAnswer.answerId == correctAnswer.id)
+      if (correctAnswers.filter(p => p.id == userAnswer.answerId).length > 0)
         feedback = 'CORRECT'
       else
         feedback = 'WRONG'
@@ -178,12 +189,14 @@ const notifyChangedQuestion = (question, users) => {
 }
 
 const notifyFinish = async (roomId, users) => {
-  const userAnswers = await RoomAnswer.findAll({
+  const usersAnswers = await RoomAnswer.findAll({
     where: { id: roomId }
   })
   users.forEach(u => {
-    const score = userAnswers.filter(p => p.userId == u)
-      .map(p => p.score).reduce((x, y) => x + y)
+    let score = 0
+    const userAnswers = usersAnswers.filter(p => p.userId == u)
+    if (userAnswers.length > 0)
+      score = userAnswers.map(p => p.score).reduce((x, y) => x + y) || 0
     sockets.filter(p => p.userId == u)
       .forEach(p => p.emit(SocketEvents.Client.FINISH_ROOM, {
         roomId: roomId,
@@ -267,14 +280,16 @@ export default (server) => {
       }
       const diff = Math.floor((new Date()).getTime() - question.changedAt.getTime())
       const seconds = Math.floor(diff / 1000)
-      let score
-      if (seconds <= (question.time / 2))
-        score = question.points
-      else
-        score = (question.points - (question.points * (seconds / question.time))) * 2
-      const minScore = question.points * .05
-      if (score < minScore)
-        score = minScore
+      let score = 0
+      if (correctAnswers.filter(p => p.id == answer.answerId).length > 0) {
+        if (seconds <= (question.time / 2))
+          score = question.points
+        else
+          score = (question.points - (question.points * (seconds / question.time))) * 2
+        const minScore = question.points * .05
+        if (score < minScore)
+          score = minScore
+      }
       const roomAnswer = {
         id: answer.roomId,
         questionId: answer.questionId,

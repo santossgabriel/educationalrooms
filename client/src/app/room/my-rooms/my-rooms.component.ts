@@ -19,7 +19,7 @@ import Swal from 'sweetalert2'
   host: { '[@fadeInTransition]': '' }
 })
 
-export class MyRoomsComponent implements OnInit, TokenChangedListener {
+export class MyRoomsComponent implements OnInit {
 
   error = ''
   displayedColumns = ['id', 'name', 'status', 'users', 'questions', 'seconds', 'actions']
@@ -44,8 +44,6 @@ export class MyRoomsComponent implements OnInit, TokenChangedListener {
 
   ngOnInit() {
   }
-
-  tokenChanged(newToken) { }
 
   cleanError() {
     this.error = ''

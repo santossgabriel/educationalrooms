@@ -7,7 +7,7 @@
   <div *ngIf="mode != UNAVAILABLE">
     <div class="quiz-title">{{room.name}}</div>
     <div *ngIf="mode == ANSWER">
-      <mat-progress-bar [value]="progress" mode="determinate"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       <div class="quiz-points">Valendo {{question.points}} pontos</div>
       <div class="quiz-ask">{{question.description}}</div>
       <div class="quiz-answer-content">

@@ -8,13 +8,14 @@ import { NotificationModalComponent } from '../modals/notification-modal.compone
 import { NotifService } from '../services/notification.service';
 import { Notif } from '../models/notification.models';
 import { dateToElapsedTime } from '../helpers/utils';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.css']
 })
-export class ToolbarComponent implements OnInit, TokenChangedListener {
+export class ToolbarComponent implements OnInit, UserChangedListener {
 
   logged = false
   path: string
@@ -26,8 +27,9 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   constructor(private router: Router,
     private accountService: AccountService,
     private notificationService: NotifService,
+    private storageService: StorageService,
     public dialog: MatDialog) {
-    Globals.addTokenListener(this)
+    Globals.addUserChangedListener(this)
     this.refresh()
     router.events.subscribe((val: any) => {
       this.path = val.url
@@ -38,6 +40,14 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
       this.notifications.unshift(n)
       this.updateTimeNotifications()
     })
+
+    accountService.getAccount().subscribe((user: UserDataModel) => {
+      if (this.user.email !== user.email)
+        this.logout()
+    }, err => {
+      storageService.setToken(null)
+      console.log(err)
+    })
   }
 
   ngOnInit() {
@@ -45,9 +55,9 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   }
 
   refresh() {
-    this.logged = Globals.userLogged()
+    this.user = this.storageService.getUser()
+    this.logged = this.user ? true : false
     if (this.logged) {
-      this.accountService.getAccount().subscribe(res => { this.user = <UserDataModel>res })
       this.notificationService.get().subscribe((res: Notif[]) => {
         this.notifications = res
         this.updateTimeNotifications()
@@ -56,11 +66,11 @@ export class ToolbarComponent implements OnInit, TokenChangedListener {
   }
 
   logout() {
-    Globals.changeToken(null)
+    this.storageService.setToken(null)
     this.router.navigate(['/signin'])
   }
 
-  tokenChanged(newToken) { this.refresh() }
+  userChanged(newToken) { this.refresh() }
 
   openNotifications() {
     const dialogRef = this.dialog.open(NotificationModalComponent, {})

@@ -56,10 +56,12 @@
             (click)="changeStatus(element, 'CLOSED')">
             <mat-icon color="primary">power_settings_new</mat-icon>
           </button>
-          <button matTooltip="EDITAR" style="margin-right: 10px" mat-icon-button mat-raised-button (click)="editRoom(element)">
+          <button *ngIf="element.status !== 'STARTED' && element.status !== 'ENDED'" matTooltip="EDITAR" style="margin-right: 10px"
+            mat-icon-button mat-raised-button (click)="editRoom(element)">
             <mat-icon color="primary">edit</mat-icon>
           </button>
-          <button matTooltip="REMOVER" mat-icon-button mat-raised-button (click)="remove(element)">
+          <button *ngIf="element.status !== 'STARTED' && element.status !== 'ENDED'" matTooltip="REMOVER" mat-icon-button mat-raised-button
+            (click)="remove(element)">
             <mat-icon color="warn">delete</mat-icon>
           </button>
         </td>

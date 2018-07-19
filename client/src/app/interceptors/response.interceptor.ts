@@ -14,10 +14,13 @@ import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/throw'
 import { Router } from '@angular/router'
 import { Globals } from '../globals';
+import { StorageService } from '../services/storage.service';
 
 @Injectable()
 export class ResponseInterceptor implements HttpInterceptor {
-  constructor(private route: Router) { }
+
+  constructor(private route: Router, private storageService: StorageService) { }
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req)
       .map((event: HttpEvent<any>) => {
@@ -28,7 +31,7 @@ export class ResponseInterceptor implements HttpInterceptor {
           if (err.status === 401
             && req.url !== '/api/token'
             && !(req.url === '/api/account' && req.method === 'POST')) {
-            Globals.changeToken(null)
+            this.storageService.setToken(null)
             this.route.navigate(['/signin'])
           }
           return Observable.throw(err)

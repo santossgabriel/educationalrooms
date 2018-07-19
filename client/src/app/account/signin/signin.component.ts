@@ -5,24 +5,26 @@ import { Router } from '@angular/router'
 import { routerTransition } from '../../router.transition'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { LoginModel } from '../../models/account.models'
+import { StorageService } from '../../services/storage.service';
 
 @Component({
-  selector: 'app-singin',
-  templateUrl: './singin.component.html',
-  styleUrls: ['./singin.component.css'],
-  // animations: [routerTransition],
-  // host: { '[@routerTransition]': '' }
+  selector: 'app-signin',
+  templateUrl: './signin.component.html',
+  styleUrls: ['./signin.component.css'],
+  animations: [routerTransition],
+  host: { '[@routerTransition]': '' }
 })
 
-export class SinginComponent implements OnInit, TokenChangedListener {
+export class SigninComponent implements OnInit {
 
   error = ''
   user: LoginModel = new LoginModel()
   google: boolean
 
-  constructor(private service: AccountService, private router: Router) {
-    Globals.addTokenListener(this)
-    if (Globals.currentToken())
+  constructor(private service: AccountService,
+    private router: Router,
+    private storageService: StorageService) {
+    if (Globals.userLogged())
       router.navigate(['/'])
   }
 
@@ -34,14 +36,12 @@ export class SinginComponent implements OnInit, TokenChangedListener {
     this.service.login(this.user).subscribe(response => {
       this.error = ''
       const result: AccountResponse = <AccountResponse>response
-      Globals.changeToken(result.token)
+      this.storageService.setToken(result.token)
       this.router.navigate(['/my-questions'])
     }, error => {
       this.error = error.error.message
     })
   }
-
-  tokenChanged(newToken) { }
 
   startGoogleApi() {
     let auth2
@@ -69,15 +69,9 @@ export class SinginComponent implements OnInit, TokenChangedListener {
       image: perfil.getImageUrl(),
       googleToken: googleUser.getAuthResponse().id_token
     }
-    this.service.sendGoogleToken(user.googleToken).subscribe(res => {
-      const result: AccountResponse = <AccountResponse>res
-      Globals.changeToken(result.token)
+    this.service.sendGoogleToken(user.googleToken).subscribe((user: AccountResponse) => {
+      this.storageService.setToken(user.token)
       location.hash = '#/my-questions'
-      
-
-      // this.google = true
-      // this.user.email.setValue(<string>user.email)
-      // this.user.password.setValue('123456')
     })
   }
 

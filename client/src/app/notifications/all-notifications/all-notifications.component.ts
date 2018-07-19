@@ -14,20 +14,17 @@ import { LoginModel } from '../../models/account.models'
   host: { '[@fadeInTransition]': '' }
 })
 
-export class AllNotificationsComponent implements OnInit, TokenChangedListener {
+export class AllNotificationsComponent implements OnInit {
 
   error = ''
 
   constructor(private service: AccountService, private router: Router) {
-    Globals.addTokenListener(this)
     const socket = Globals.getSocket()
     socket.emit('notificationReceived', { text: 'minha própria notificação' })
   }
 
   ngOnInit() {
   }
-
-  tokenChanged(newToken) { }
 
   cleanError() {
     this.error = ''

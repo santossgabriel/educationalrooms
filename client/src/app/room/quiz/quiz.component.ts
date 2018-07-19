@@ -17,7 +17,7 @@ import { SocketEvents } from '../../helpers/utils';
   host: { '[@fadeInTransition]': '' }
 })
 
-export class QuizComponent implements OnInit, TokenChangedListener {
+export class QuizComponent implements OnInit {
 
   TIME_OVER = 'TIME_OVER'
   ANSWER = 'ANSWER'
@@ -86,18 +86,16 @@ export class QuizComponent implements OnInit, TokenChangedListener {
   }
 
   runTimer() {
-    this.progress += this.step
-    if (this.progress < 100 && !this.answered)
-      setTimeout(() => {
-        this.runTimer()
-      }, 100)
-    else if (!this.answered) {
-      this.progress = 0
-      this.mode = this.TIME_OVER
-    }
+    // this.progress += this.step
+    // if (this.progress < 100 && !this.answered)
+    //   setTimeout(() => {
+    //     this.runTimer()
+    //   }, 100)
+    // else if (!this.answered) {
+    //   this.progress = 0
+    //   this.mode = this.TIME_OVER
+    // }
   }
-
-  tokenChanged(newToken) { }
 
   answer(a: Answer) {
     this.answered = true

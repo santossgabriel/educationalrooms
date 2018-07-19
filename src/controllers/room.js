@@ -126,7 +126,8 @@ export default {
       const answers = await RoomAnswer.findAll({
         where: { id: req.params.id, userId: req.claims.id }
       })
-      score = answers.map(p => p.score).reduce((x, y) => x + y)
+      if (answers.length > 0)
+        score = answers.map(p => p.score).reduce((x, y) => x + y)
     }
 
     res.json({

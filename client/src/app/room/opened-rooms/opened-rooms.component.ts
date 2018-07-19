@@ -15,14 +15,13 @@ import Swal from 'sweetalert2'
   host: { '[@fadeInTransition]': '' }
 })
 
-export class OpenedRoomsComponent implements OnInit, TokenChangedListener {
+export class OpenedRoomsComponent implements OnInit {
 
   displayedColumns = ['owner', 'name', 'users', 'questions', 'time', 'actions']
   dataSource: MatTableDataSource<RoomOpened>
   hasRooms: boolean = false
 
   constructor(private service: RoomService, private router: Router) {
-    Globals.addTokenListener(this)
     service.getOpened().subscribe((rooms: RoomOpened[]) => {
       this.dataSource = new MatTableDataSource(rooms)
       this.hasRooms = (rooms).length > 0
@@ -38,7 +37,5 @@ export class OpenedRoomsComponent implements OnInit, TokenChangedListener {
       room.users += (room.associate ? 1 : -1)
     }, err => Swal('Oops...', err.error.message, 'error'))
   }
-
-  tokenChanged(newToken) { }
 
 }

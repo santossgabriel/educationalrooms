@@ -20,7 +20,7 @@ import { RoomQuestion } from '../../models/room-question.model'
   host: { '[@fadeInTransition]': '' }
 })
 
-export class EditRoomComponent implements OnInit, TokenChangedListener {
+export class EditRoomComponent implements OnInit {
   error = ''
   room = <Room>{}
   dataSource: MatTableDataSource<RoomQuestion>
@@ -57,8 +57,6 @@ export class EditRoomComponent implements OnInit, TokenChangedListener {
     this.room.questions = this.room.questions.filter(p => p.id !== id)
     this.refresh()
   }
-
-  tokenChanged(newToken) { }
 
   openQuestionModal() {
     const self = this

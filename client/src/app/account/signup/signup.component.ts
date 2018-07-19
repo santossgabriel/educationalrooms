@@ -4,16 +4,17 @@ import { AccountService } from '../../services/account.service'
 import { Globals } from '../../globals'
 import { Router } from '@angular/router'
 import { AccountModel } from '../../models/account.models'
-import { UserDataModel } from '../../models/user-data.models';
+import { UserDataModel } from '../../models/user-data.models'
+import { StorageService } from '../../services/storage.service'
 
 @Component({
-  selector: 'app-singup',
-  templateUrl: './singup.component.html',
-  styleUrls: ['./singup.component.css'],
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css'],
   animations: [routerTransition],
   host: { '[@routerTransition]': '' }
 })
-export class SingupComponent implements OnInit {
+export class SignupComponent implements OnInit, UserChangedListener {
 
   user: AccountModel = new AccountModel()
   error: string = ''
@@ -22,25 +23,23 @@ export class SingupComponent implements OnInit {
   userAccount = <UserDataModel>{}
   token = ''
 
-  constructor(private service: AccountService, private router: Router) { }
+  constructor(private accountService: AccountService,
+    private router: Router,
+    private storageService: StorageService) { }
 
   ngOnInit() {
     if (this.router.isActive('/sign-edit', true)) {
       this.editMode = true
-      this.service.getAccount().subscribe(res => {
-        this.user = <AccountModel>res
-        this.userAccount = <UserDataModel>res
-      })
+      this.userAccount = this.storageService.getUser()
     }
     this.token = Globals.currentToken()
   }
 
   createUser(form) {
-    this.service.save(this.user, this.editMode).subscribe(response => {
+    this.accountService.save(this.user, this.editMode).subscribe((res: AccountResponse) => {
       this.error = ''
-      const result: AccountResponse = <AccountResponse>response
-      this.message = result.message
-      Globals.changeToken(result.token)
+      this.message = res.message
+      this.storageService.setToken(res.token)
       setTimeout(() => {
         this.router.navigate(['/my-questions'])
       }, 1500)
@@ -51,17 +50,15 @@ export class SingupComponent implements OnInit {
 
   onUploadFinished(event) {
     const response = event.serverResponse.response
-    if (!response.ok) {
-      console.log(response)
+    if (!response.ok)
       this.error = response._body
-    } else {
-      console.log(response)
-      Globals.changeToken(Globals.currentToken())
-      this.service.getAccount().subscribe(res => {
-        this.user = <AccountModel>res
-        this.userAccount = <UserDataModel>res
-      })
-    }
+    else
+      this.storageService.setToken(Globals.currentToken())
+  }
+
+  userChanged(user) {
+    this.user = <AccountModel>user
+    this.userAccount = <UserDataModel>user
   }
 
   cleanError() { this.error = '' }

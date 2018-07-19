@@ -19,8 +19,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component'
 import { FooterComponent } from './footer/footer.component'
 import { HomeComponent } from './home/home.component'
 import { AboutComponent } from './about/about.component'
-import { SinginComponent } from './account/singin/singin.component'
-import { SingupComponent } from './account/singup/singup.component'
+import { SigninComponent } from './account/signin/signin.component'
+import { SignupComponent } from './account/signup/signup.component'
 import { AllQuestionsComponent } from './questions/all-questions/all-questions.component'
 import { MyQuestionsComponent } from './questions/my-questions/my-questions.component'
 import { QuestionModalComponent } from './modals/question-modal.component'
@@ -40,8 +40,8 @@ const components = [
   FooterComponent,
   HomeComponent,
   AboutComponent,
-  SinginComponent,
-  SingupComponent,
+  SigninComponent,
+  SignupComponent,
   AllQuestionsComponent,
   MyQuestionsComponent,
   ConfirmEqualValidatorDirective,
@@ -61,9 +61,9 @@ const components = [
 const routes = [
   { path: '', component: HomeComponent },
   { path: 'about', component: AboutComponent },
-  { path: 'signin', component: SinginComponent },
-  { path: 'signup', component: SingupComponent },
-  { path: 'sign-edit', component: SingupComponent },
+  { path: 'signin', component: SigninComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'sign-edit', component: SignupComponent },
   { path: 'my-questions', component: MyQuestionsComponent },
   { path: 'all-questions', component: AllQuestionsComponent },
   { path: 'my-rooms', component: MyRoomsComponent },

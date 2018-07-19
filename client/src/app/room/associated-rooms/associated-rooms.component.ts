@@ -18,14 +18,13 @@ import { getStatusDescriptionRoom } from '../../helpers/utils';
   host: { '[@fadeInTransition]': '' }
 })
 
-export class AssociatedRoomsComponent implements OnInit, TokenChangedListener {
+export class AssociatedRoomsComponent implements OnInit {
 
   displayedColumns = ['name', 'status', 'time', 'score', 'actions']
   dataSource: MatTableDataSource<RoomAssociated>
   hasRooms
 
   constructor(private service: RoomService, private router: Router) {
-    Globals.addTokenListener(this)
     service.getAssociated().subscribe((rooms: RoomAssociated[]) => {
       rooms.map(p => p.descriptionStatus = getStatusDescriptionRoom(p))
       this.dataSource = new MatTableDataSource(rooms)
@@ -35,7 +34,5 @@ export class AssociatedRoomsComponent implements OnInit, TokenChangedListener {
 
   ngOnInit() {
   }
-
-  tokenChanged(newToken) { }
 
 }
