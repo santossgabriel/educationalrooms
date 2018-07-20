@@ -23,7 +23,6 @@ export class QuestionModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any, private service: QuestionService) {
     this.question = data.question
     this.callback = data.callback
-    console.log(data.callback)
     service.getCategories().subscribe(res => {
       (<Array<string>>res).push('Outra ...')
       this.categories = <Array<string>>res

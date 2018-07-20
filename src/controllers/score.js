@@ -4,7 +4,9 @@ const {
   Room,
   RoomAnswer,
   RoomUser,
-  User
+  User,
+  RoomQuestion,
+  Question
 } = db
 
 const toRoomScore = (r) => {
@@ -26,6 +28,27 @@ const toRoomScore = (r) => {
     name: r.name,
     users: users
   }
+}
+
+const toMyRooms = (room) => {
+  let result = {
+    id: room.id,
+    questions: room.RoomQuestions.map(p => ({
+      id: p.Question.id,
+      order: p.order,
+      points: p.points,
+      description: p.Question.description,
+      score: null
+    }))
+  }
+
+  room.RoomAnswers.forEach(p => {
+    const q = result.questions.filter(x => x.id == p.questionId).shift()
+    if (q)
+      q.score = p.score
+  })
+
+  return result
 }
 
 export default {
@@ -52,13 +75,40 @@ export default {
       ]
     })
 
-    const myScores = await RoomAnswer.findAll({
-      where: { userId: req.claims.id }
+    const questionsRoomScores = (await Room.findAll({
+      attributes: ['id'],
+      include: [
+        { model: RoomUser, attributes: [], where: { userId: req.claims.id } },
+        {
+          model: RoomQuestion,
+          attributes: ['order', 'points'],
+          include: [{
+            model: Question, attributes: ['description', 'id']
+          }]
+        },
+        {
+          model: RoomAnswer,
+          attributes: ['questionId', 'score'],
+          where: { userId: req.claims.id },
+          required: false
+        }
+      ]
+    })).map(p => toMyRooms(p))
+
+    let roomsScores = []
+    questionsRoomScores.forEach(p => {
+      let q = { roomId: p.id, score: 0, points: 0 }
+      if (p.questions.length > 0) {
+        q.score = p.questions.map(x => x.score).reduce((x, y) => x + y)
+        q.points = p.questions.map(x => x.points).reduce((x, y) => x + y)
+      }
+      roomsScores.push(q)
     })
 
     res.json({
       myRoomsScores: myRoomsScores.map(p => toRoomScore(p)),
-      myScores: myScores
+      roomsScores: roomsScores,
+      questionsRoomScores: questionsRoomScores
     })
   }
 }

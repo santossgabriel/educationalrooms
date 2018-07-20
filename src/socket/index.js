@@ -226,76 +226,93 @@ export default (server) => {
   const io = socketIo(server)
   io.on('connection', (socket) => {
 
-    socket.on(SocketEvents.Server.SUBSCRIBE, token => {
-      jwt.verify(token, config.SECRET, (err, data) => {
-        if (err) {
-          Log.create({ description: 'Não foi possível inscrever socket', date: new Date() })
+    const token = socket.handshake.query.token
+
+    jwt.verify(token, config.SECRET, (err, data) => {
+      if (err) {
+        console.log('Não foi possível inscrever socket')
+        Log.create({ description: 'Não foi possível inscrever socket', date: new Date() })
+        socket.emit('onError', 'Não foi possível inscrever socket')
+        return
+      }
+      socket.userId = data.id
+      sockets.push(socket)
+
+      console.log(`Usuário ${socket.userId} Conectou!`)
+
+      socket.on('disconnect', () => console.log(`Usuário ${socket.userId} Disconectou!`))
+
+      socket.on(SocketEvents.Server.IN_ROOM, async (roomId) => {
+        try {
+          console.log(`Usuário ${socket.userId} Entrou na sala!`)
+          const room = onlineRooms.filter(p => p.id == roomId).shift()
+          if (!room) {
+            socket.emit('onError', `Sala não está online: ${roomId}`)
+            console.log(`Sala não está online: ${roomId}`)
+            return
+          }
+
+          if (!socket.userId) {
+            socket.emit('onError', 'Socket sem UserId')
+            console.log('Socket sem UserId')
+            return
+          }
+
+          if (room.users.filter(p => p.id === socket.userId).length == 0) {
+            socket.emit('onError', 'Usuário não está escrito na sala.')
+            console.log('Usuário não está escrito na sala.')
+            return
+          }
+
+          let currentQuestion = cloneObject(getCurrentQuestion(roomId))
+
+          if (currentQuestion) {
+            const answered = await RoomAnswer.findOne({
+              where: {
+                roomId: roomId,
+                questionId: currentQuestion.id,
+                userId: socket.userId
+              }
+            })
+            currentQuestion.answered = answered != null
+          }
+
+          console.log('Enviando questão para ', socket.userId)
+
+          socket.emit(SocketEvents.Client.QUESTION_RECEIVED, currentQuestion)
+        } catch (ex) {
+          console.log('ERRO AO ENTRAR NA SALA')
+          console.log(ex)
+        }
+      })
+
+      socket.on(SocketEvents.Server.SEND_ANSWER, (answer) => {
+        const question = getCurrentQuestion(answer.roomId)
+        if (question.id != answer.questionId) {
+          socket.emit('onError', 'O tempo acabou.')
           return
         }
-        socket.userId = data.id
-        sockets.push(socket)
+        const diff = Math.floor((new Date()).getTime() - question.changedAt.getTime())
+        const seconds = Math.floor(diff / 1000)
+        let score = 0
+        if (correctAnswers.filter(p => p.id == answer.answerId).length > 0) {
+          if (seconds <= (question.time / 2))
+            score = question.points
+          else
+            score = (question.points - (question.points * (seconds / question.time))) * 2
+          const minScore = question.points * .05
+          if (score < minScore)
+            score = minScore
+        }
+        const roomAnswer = {
+          roomId: answer.roomId,
+          questionId: answer.questionId,
+          answerId: answer.answerId,
+          userId: socket.userId,
+          score: Math.floor(score)
+        }
+        RoomAnswer.create(roomAnswer)
       })
-    })
-
-    socket.on(SocketEvents.Server.IN_ROOM, async (roomId) => {
-      const room = onlineRooms.filter(p => p.id == roomId).shift()
-      if (!room) {
-        socket.emit('onError', `Sala não está online: ${roomId}`)
-        return
-      }
-
-      if (!socket.userId) {
-        socket.emit('onError', 'Socket sem UserId')
-        return
-      }
-
-      if (room.users.filter(p => p.id === socket.userId).length == 0) {
-        socket.emit('onError', 'Usuário não está escrito na sala.')
-        return
-      }
-
-      let currentQuestion = cloneObject(getCurrentQuestion(roomId))
-
-      if (currentQuestion) {
-        const answered = await RoomAnswer.findOne({
-          where: {
-            roomId: roomId,
-            questionId: currentQuestion.id,
-            userId: socket.userId
-          }
-        })
-        currentQuestion.answered = answered != null
-      }
-
-      socket.emit(SocketEvents.Client.QUESTION_RECEIVED, currentQuestion)
-    })
-
-    socket.on(SocketEvents.Server.SEND_ANSWER, (answer) => {
-      const question = getCurrentQuestion(answer.roomId)
-      if (question.id != answer.questionId) {
-        socket.emit('onError', 'O tempo acabou.')
-        return
-      }
-      const diff = Math.floor((new Date()).getTime() - question.changedAt.getTime())
-      const seconds = Math.floor(diff / 1000)
-      let score = 0
-      if (correctAnswers.filter(p => p.id == answer.answerId).length > 0) {
-        if (seconds <= (question.time / 2))
-          score = question.points
-        else
-          score = (question.points - (question.points * (seconds / question.time))) * 2
-        const minScore = question.points * .05
-        if (score < minScore)
-          score = minScore
-      }
-      const roomAnswer = {
-        roomId: answer.roomId,
-        questionId: answer.questionId,
-        answerId: answer.answerId,
-        userId: socket.userId,
-        score: Math.floor(score)
-      }
-      RoomAnswer.create(roomAnswer)
     })
   })
 }

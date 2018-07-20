@@ -25,13 +25,14 @@ const generateToken = (user) => {
 export default {
   getUserData: async (req, res) => {
     const user = await User.findOne({ where: { id: req.claims.id } })
-    res.json({
+    res.json(user ? {
+      id: req.claims.id,
       name: user.name,
       email: user.email,
       type: user.type,
       picture: user.picture,
       google: user.google
-    })
+    } : null)
   },
 
   getToken: async (req, res) => {

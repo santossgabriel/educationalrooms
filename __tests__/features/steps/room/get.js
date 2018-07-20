@@ -118,3 +118,28 @@ When('Quando eu obter uma sala com id {int}', (id) => {
 Then('Então a sala deve ter status {string}', (status) => {
   expect(room.status).to.eql(status)
 })
+
+/**
+ * Obter quiz
+ */
+Given('Dado que eu queira obter um quiz que eu esteja participando', () => {
+  return request
+    .post('/api/token')
+    .send({ email: 'test_room@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+
+When('Quando eu tentar obter o quiz', () => {
+  return request
+    .get('/api/room-quiz/1')
+    .set({ token: token })
+    .then((result) => {
+      room = result.body
+    })
+})
+
+Then('Então eu devo obter o quiz com sucesso', () => {
+  assert.isOk(room, `Deveria retornar uma sala: ${JSON.stringify(room)}`)
+})

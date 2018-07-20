@@ -121,6 +121,9 @@ export default {
         }
       ]
     })
+
+    throwValidationError('Sala não disponível no momento')
+
     let score = 0
     if (room && room.endedAt) {
       const answers = await RoomAnswer.findAll({

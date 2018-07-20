@@ -15,7 +15,7 @@ import { StorageService } from '../services/storage.service';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.css']
 })
-export class ToolbarComponent implements OnInit, UserChangedListener {
+export class ToolbarComponent implements OnInit, UserChangedListener, SocketConnectListener {
 
   logged = false
   path: string
@@ -30,19 +30,14 @@ export class ToolbarComponent implements OnInit, UserChangedListener {
     private storageService: StorageService,
     public dialog: MatDialog) {
     Globals.addUserChangedListener(this)
+    Globals.addSocketListener(this)
     this.refresh()
     router.events.subscribe((val: any) => {
       this.path = val.url
     })
 
-    const socket = Globals.getSocket()
-    socket.on('notificationReceived', (n) => {
-      this.notifications.unshift(n)
-      this.updateTimeNotifications()
-    })
-
     accountService.getAccount().subscribe((user: UserDataModel) => {
-      if (this.user.email !== user.email)
+      if (!this.user || this.user.email !== user.email)
         this.logout()
     }, err => {
       this.logout()
@@ -100,5 +95,15 @@ export class ToolbarComponent implements OnInit, UserChangedListener {
       this.notifications = []
       this.updateTimeNotifications()
     })
+  }
+
+  onConnect(socket: any) {
+    socket.on('notificationReceived', (n) => {
+      this.notifications.unshift(n)
+      this.updateTimeNotifications()
+    })
+  }
+  onDisconnect() {
+
   }
 }

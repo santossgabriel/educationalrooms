@@ -17,7 +17,7 @@ import { SocketEvents } from '../../helpers/utils';
   host: { '[@fadeInTransition]': '' }
 })
 
-export class QuizComponent implements OnInit {
+export class QuizComponent implements OnInit, SocketConnectListener {
 
   TIME_OVER = 'TIME_OVER'
   ANSWER = 'ANSWER'
@@ -27,62 +27,40 @@ export class QuizComponent implements OnInit {
   SENT = 'SENT'
   UNAVAILABLE = 'UNAVAILABLE'
   ENDED = 'ENDED'
+  DISCONNECTED = 'DISCONNECTED'
 
   room = <Room>{}
   question = <Question>{}
   mode = 'LOADING'
   progress = 0
   answered = false
-  socket: any
+  socket
   step = 0
 
   constructor(private roomService: RoomService,
     private router: Router,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute) {
-    this.socket = Globals.getSocket()
+    console.log('quiz constructor')
+    Globals.addSocketListener(this)
     activatedRoute.params.subscribe((res: Params) => {
       roomService.getQuiz(res.id).subscribe((res: Room) => {
         this.room = res
         if (this.room && !this.room.endedAt) {
-          this.socket.emit(SocketEvents.Server.IN_ROOM, res.id)
           this.step = 10 / this.room.time
+          this.socket = Globals.getSocket()
+          if (this.socket)
+            this.initSocket()
         } else if (this.room.endedAt)
           this.mode = this.ENDED
         else
           this.mode = this.UNAVAILABLE
       })
     })
-
-    this.socket.on(SocketEvents.Client.QUESTION_RECEIVED, (q) => {
-      console.log('QUESTION_RECEIVED')
-      console.log(q)
-      if (q.roomId == this.room.id) {
-        this.question = q
-        this.mode = q.answered ? this.SENT : this.ANSWER
-        this.runTimer()
-        this.progress = 0
-      }
-    })
-
-    this.socket.on(SocketEvents.Client.FEEDBACK_ANSWER, (q) => {
-      console.log('FEEDBACK')
-      console.log(q)
-      if (q.roomId == this.room.id) {
-        this.question = q
-        this.mode = q.feedback
-      }
-    })
-
-    this.socket.on(SocketEvents.Client.FINISH_ROOM, res => {
-      if (res.roomId == this.room.id) {
-        this.room.score = res.score || 0
-        this.mode = this.ENDED
-      }
-    })
   }
 
   ngOnInit() {
+
   }
 
   runTimer() {
@@ -106,4 +84,40 @@ export class QuizComponent implements OnInit {
       answerId: a.id
     })
   }
+
+  initSocket() {
+
+    if (this.room && this.room.id > 0) {
+      this.socket.emit(SocketEvents.Server.IN_ROOM, this.room.id)
+
+      this.socket.on(SocketEvents.Client.QUESTION_RECEIVED, (q) => {
+        if (q.roomId == this.room.id) {
+          this.question = q
+          this.mode = q.answered ? this.SENT : this.ANSWER
+          this.runTimer()
+          this.progress = 0
+        }
+      })
+
+      this.socket.on(SocketEvents.Client.FEEDBACK_ANSWER, (q) => {
+        if (q.roomId == this.room.id) {
+          this.question = q
+          this.mode = q.feedback
+        }
+      })
+
+      this.socket.on(SocketEvents.Client.FINISH_ROOM, res => {
+        if (res.roomId == this.room.id) {
+          this.room.score = res.score || 0
+          this.mode = this.ENDED
+        }
+      })
+    }
+  }
+
+  onDisconnect() {
+    this.mode = this.DISCONNECTED
+  }
+
+  onConnect() { }
 }

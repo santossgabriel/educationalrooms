@@ -58,7 +58,7 @@ Feature: Sala
       | 'à uma sala que não existe'               | '{"id": 99}'                                    | "A sala não existe."                                   |
       | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 0 }] }'   | "Há questões sem pontuação."                           |
       | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 200 }] }' | "Há questões com pontuação fora do intervalo 10-100."  |
-      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 180 }] }'   | "Há questões com pontuação fora do intervalo 10-100."  |
+      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 180 }] }' | "Há questões com pontuação fora do intervalo 10-100."  |
       | 'à uma sala que não pertencem ao usuário' | '{"id": 3}'                                     | "A sala informada não pertence ao usuário."            |
       | 'para atualização'                        | '{"id": 2}'                                     | "Sala atualizada com sucesso."                         |
       | 'sem id da sala'                          | '{"id": 0}'                                     | "Sala criada com sucesso."                             |
@@ -90,3 +90,8 @@ Feature: Sala
       | 8  | 'STARTED' | 'Sala iniciada com sucesso'                 |
       | 8  | 'ENDEDD'  | 'Status inválido.'                          |
       | 8  | 'ENDED'   | 'Sala finalizada com sucesso'               |
+
+  Scenario: Obter quiz
+    Given Dado que eu queira obter um quiz que eu esteja participando
+    When Quando eu tentar obter o quiz
+    Then Então eu devo obter o quiz com sucesso

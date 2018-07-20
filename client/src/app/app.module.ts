@@ -30,7 +30,6 @@ import { OpenedRoomsComponent } from './room/opened-rooms/opened-rooms.component
 import { EditRoomComponent } from './room/edit-room/edit-room.component';
 import { AssociatedRoomsComponent } from './room/associated-rooms/associated-rooms.component'
 import { RoomQuestionModalComponent } from './modals/room-question-modal.component';
-import { AllNotificationsComponent } from './notifications/all-notifications/all-notifications.component';
 import { NotificationModalComponent } from './modals/notification-modal.component';
 import { QuizComponent } from './room/quiz/quiz.component';
 
@@ -53,7 +52,6 @@ const components = [
   RoomQuestionModalComponent,
   EditRoomComponent,
   AssociatedRoomsComponent,
-  AllNotificationsComponent,
   NotificationModalComponent,
   QuizComponent
 ]
@@ -70,7 +68,6 @@ const routes = [
   { path: 'opened-rooms', component: OpenedRoomsComponent },
   { path: 'edit-room/:id', component: EditRoomComponent },
   { path: 'associated-rooms', component: AssociatedRoomsComponent },
-  { path: 'all-notifications', component: AllNotificationsComponent },
   { path: 'quiz/:id', component: QuizComponent }
 ]
 
