@@ -9,8 +9,9 @@ import { MatTableDataSource } from '@angular/material'
 import { RoomService } from '../../services/room.service'
 import { RoomAssociated } from '../../models/room-associated.models';
 import { getStatusDescriptionRoom } from '../../helpers/utils';
-import { Scores } from '../../models/scores.models';
+import { Scores, AllUserScores } from '../../models/scores.models';
 import { StorageService } from '../../services/storage.service';
+import { UserDataModel } from '../../models/user-data.models';
 
 @Component({
   selector: 'app-rooms',
@@ -25,25 +26,40 @@ export class AssociatedRoomsComponent implements OnInit {
   displayedColumns = ['name', 'status', 'time', 'score', 'actions']
   dataSource: MatTableDataSource<RoomAssociated>
   hasRooms
+  loading = false
+  userScores: AllUserScores[]
+  user: UserDataModel
 
   constructor(private roomService: RoomService,
     private storageService: StorageService,
     private router: Router) {
-
+    this.loading = true
+    this.user = storageService.getUser()
     roomService.getAssociated().subscribe((rooms: RoomAssociated[]) => {
+      this.loading = false
       rooms.map(p => p.descriptionStatus = getStatusDescriptionRoom(p))
       this.dataSource = new MatTableDataSource(rooms)
       this.hasRooms = (rooms).length > 0
       if (this.hasRooms)
         this.updateScores()
-    })
+    }, err => this.loading = false)
   }
 
   ngOnInit() {
   }
 
   openScores(room: RoomAssociated) {
-
+    const scores = this.storageService.getScores()
+    if (scores || scores.allUserScores) {
+      this.userScores = scores.allUserScores.filter(p => p.roomId === room.id) || []
+      if (this.userScores.length > 0)
+        return
+    }
+    this.roomService.getScores().subscribe((res: Scores) => {
+      this.storageService.setScores(res)
+      this.updateRoomsScores(res)
+      this.userScores = res.allUserScores.filter(p => p.roomId === room.id) || []
+    })
   }
 
   updateScores() {
@@ -51,7 +67,7 @@ export class AssociatedRoomsComponent implements OnInit {
     let scores = this.storageService.getScores()
     if (scores) {
       const roomIds = scores.roomsScores.map(p => p.roomId)
-      if (this.dataSource.data.filter(p => roomIds.indexOf(p.id) == -1).length === 0) {
+      if (this.dataSource.data.filter(p => p.endedAt && roomIds.indexOf(p.id) == -1).length === 0) {
         this.updateRoomsScores(scores)
         return
       }
@@ -59,7 +75,6 @@ export class AssociatedRoomsComponent implements OnInit {
     this.roomService.getScores().subscribe((res: Scores) => {
       this.storageService.setScores(res)
       this.updateRoomsScores(res)
-      console.log(res)
     })
   }
 

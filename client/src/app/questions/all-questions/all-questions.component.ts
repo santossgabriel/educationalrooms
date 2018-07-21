@@ -15,6 +15,8 @@ export class AllQuestionsComponent implements OnInit {
 
   displayedColumns = ['id', 'category', 'description']
   dataSource: MatTableDataSource<Question>
+  loading = false
+  hasQuestions
 
   constructor(private service: QuestionService) {
     this.refresh()
@@ -24,9 +26,11 @@ export class AllQuestionsComponent implements OnInit {
   }
 
   refresh() {
-    this.service.getOthers().subscribe(questions => {
-      this.dataSource = new MatTableDataSource(<Question[]>questions)
-    })
+    this.loading = true
+    this.service.getOthers().subscribe((questions: Question[]) => {
+      this.loading = false
+      this.dataSource = new MatTableDataSource(questions)
+      this.hasQuestions = questions.length > 0
+    }, err => this.loading = false)
   }
-
 }

@@ -5,6 +5,8 @@ import { Question } from '../models/question.model'
 import { Answer } from '../models/answer.model'
 import { QuestionService } from '../services/question.service'
 import { ErrorModalComponent } from './confirm-modal.component'
+import swal from 'sweetalert2'
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-question-modal',
@@ -19,16 +21,30 @@ export class QuestionModalComponent {
   customCategory: boolean
   callback: Function
 
-  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<QuestionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private service: QuestionService) {
+  constructor(public dialog: MatDialog,
+    public dialogRef: MatDialogRef<QuestionModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private questionService: QuestionService,
+    private storageService: StorageService) {
     this.question = data.question
     this.callback = data.callback
-    service.getCategories().subscribe(res => {
-      (<Array<string>>res).push('Outra ...')
-      this.categories = <Array<string>>res
-      this.selectedCategory = this.categories[0]
-      this.categoryChanged()
-    })
+
+    let cats = storageService.getCategories()
+    if (cats && cats.length > 0) {
+      this.categories = cats
+      this.fillCategories()
+    } else
+      questionService.getCategories().subscribe((res: string[]) => {
+        storageService.updateCategories(res)
+        this.categories = res
+        this.fillCategories()
+      })
+  }
+
+  private fillCategories() {
+    this.categories.push('Outra ...')
+    this.selectedCategory = this.categories[0]
+    this.categoryChanged()
   }
 
   onNoClick(): void {
@@ -54,18 +70,13 @@ export class QuestionModalComponent {
     answer.correct = true
   }
 
-  saveQuestion() {    
+  saveQuestion() {
     if (!this.customCategory)
       this.question.category = this.selectedCategory
-    this.service.save(this.question).subscribe(res => {
+    this.questionService.save(this.question).subscribe(res => {
       this.dialogRef.close()
     }, err => {
-      console.error(err.error.message)
-      this.dialog.open(ErrorModalComponent, {
-        data: {
-          error: err.error.message
-        }
-      })
+      swal('', err.error.message, 'error')
     })
   }
 

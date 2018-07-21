@@ -30,20 +30,22 @@ export class EditRoomComponent implements OnInit {
     { description: 'PONTOS', value: 'points' },
     { description: 'CATEGORIA', value: 'category' }
   ]
+  loading = false
 
   constructor(private roomService: RoomService,
     private router: Router,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute) {
-
     this.activatedRoute.params.subscribe((params: Params) => {
       let roomId = params['id']
-      if (roomId > 0)
+      if (roomId > 0) {
+        this.loading = true
         this.roomService.get(roomId).subscribe(room => {
+          this.loading = false
           this.room = <Room>room
           this.refresh()
-        })
-      else
+        }, err => this.loading = false)
+      } else
         this.room = new Room()
     })
   }

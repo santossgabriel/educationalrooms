@@ -26,14 +26,17 @@ export class MyRoomsComponent implements OnInit {
   dataSource: MatTableDataSource<Room>
   hasRooms: boolean = false
   rooms: Room[] = []
+  loading = true
 
   constructor(private service: RoomService,
     private router: Router,
     private dialog: MatDialog) {
+    this.loading = true
     this.service.getMy().subscribe((rooms: Room[]) => {
+      this.loading = false
       this.rooms = rooms
       this.refresh()
-    })
+    }, err => this.loading = false)
   }
 
   refresh() {

@@ -15,10 +15,11 @@ export class RoomQuestionModalComponent {
 
   room: Room
   questions: RoomQuestion[]
-  displayedColumns = ['category', 'description', 'points', 'selected']
+  displayedColumns = ['category', 'description', 'selected']
   dataSource: MatTableDataSource<RoomQuestion>
   hasQuestions: boolean = false
   callback: Function
+  allSelected: boolean = false
 
   constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<RoomQuestionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private roomService: RoomService, private questionService: QuestionService) {
@@ -27,11 +28,12 @@ export class RoomQuestionModalComponent {
     this.questions = []
     const removedIds = this.room.questions.map(p => p.id)
 
-    questionService.getMy().subscribe(questions => {
-      this.questions = (<RoomQuestion[]>questions).filter(p => removedIds.indexOf(p.id) === -1)
+    questionService.getMy().subscribe((questions: RoomQuestion[]) => {
+      this.questions = questions.filter(p => removedIds.indexOf(p.id) === -1)
       this.dataSource = new MatTableDataSource(this.questions)
       this.dataSource.paginator = this.paginator
-      this.hasQuestions = (<RoomQuestion[]>questions).length > 0
+      this.hasQuestions = questions.length > 0
+      this.allSelected = this.hasQuestions && removedIds.length === questions.length
     })
   }
 

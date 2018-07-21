@@ -230,7 +230,6 @@ export default (server) => {
 
     jwt.verify(token, config.SECRET, (err, data) => {
       if (err) {
-        console.log('Não foi possível inscrever socket')
         Log.create({ description: 'Não foi possível inscrever socket', date: new Date() })
         socket.emit('onError', 'Não foi possível inscrever socket')
         return
@@ -238,29 +237,21 @@ export default (server) => {
       socket.userId = data.id
       sockets.push(socket)
 
-      console.log(`Usuário ${socket.userId} Conectou!`)
-
-      socket.on('disconnect', () => console.log(`Usuário ${socket.userId} Disconectou!`))
-
       socket.on(SocketEvents.Server.IN_ROOM, async (roomId) => {
         try {
-          console.log(`Usuário ${socket.userId} Entrou na sala!`)
           const room = onlineRooms.filter(p => p.id == roomId).shift()
           if (!room) {
             socket.emit('onError', `Sala não está online: ${roomId}`)
-            console.log(`Sala não está online: ${roomId}`)
             return
           }
 
           if (!socket.userId) {
             socket.emit('onError', 'Socket sem UserId')
-            console.log('Socket sem UserId')
             return
           }
 
           if (room.users.filter(p => p.id === socket.userId).length == 0) {
             socket.emit('onError', 'Usuário não está escrito na sala.')
-            console.log('Usuário não está escrito na sala.')
             return
           }
 
@@ -277,12 +268,9 @@ export default (server) => {
             currentQuestion.answered = answered != null
           }
 
-          console.log('Enviando questão para ', socket.userId)
-
           socket.emit(SocketEvents.Client.QUESTION_RECEIVED, currentQuestion)
         } catch (ex) {
-          console.log('ERRO AO ENTRAR NA SALA')
-          console.log(ex)
+          socket.emit('onError', 'ERRO AO ENTRAR NA SALA')
         }
       })
 

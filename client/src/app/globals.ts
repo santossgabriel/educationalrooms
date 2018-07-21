@@ -29,10 +29,8 @@ export class Globals {
   }
 
   public static addSocketListener(listener: SocketConnectListener) {
-    if (this.socketListeners.indexOf(listener) === -1) {
+    if (this.socketListeners.indexOf(listener) === -1)
       this.socketListeners.push(listener)
-      console.log('Socket listeners: ', this.socketListeners.length)
-    }
     this.connectSocket()
   }
 

@@ -107,10 +107,17 @@ export default {
       roomsScores.push(q)
     })
 
+    const allUserScores = await RoomAnswer.findAll({
+      attributes: ['roomId', 'userId', [sequelize.fn('sum', sequelize.col('score')), 'score']],
+      group: ['roomId', 'userId'],
+      order: sequelize.literal('score desc')
+    })
+
     res.json({
       myRoomsScores: myRoomsScores.map(p => toRoomScore(p)),
       roomsScores: roomsScores,
-      questionsRoomScores: questionsRoomScores
+      questionsRoomScores: questionsRoomScores,
+      allUserScores: allUserScores
     })
   }
 }

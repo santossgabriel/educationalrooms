@@ -39,7 +39,7 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
     })
 
     accountService.getAccount().subscribe((user: UserDataModel) => {
-      if (!this.user || this.user.email !== user.email)
+      if (!this.user || !user || this.user.email !== user.email)
         this.logout()
     }, err => {
       this.logout()
@@ -105,8 +105,7 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
       this.updateTimeNotifications()
       if (n.type === 'ROOM_START' && this.path.indexOf('quiz') === -1) {
         const id = n.origin.split(' ')[0]
-        console.log(n.origin)
-        swal('', `Sala ${n.origin.substring(id.length)} foi iniciada e você será redirecionado!`)
+        swal('', `Sala ${n.origin.substring(id.length)} foi iniciada e você será redirecionado!`, 'info')
           .then(() => this.router.navigate([`quiz/${id}`]))
       }
     })

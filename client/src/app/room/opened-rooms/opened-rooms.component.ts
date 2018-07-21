@@ -20,12 +20,15 @@ export class OpenedRoomsComponent implements OnInit {
   displayedColumns = ['owner', 'name', 'users', 'questions', 'time', 'actions']
   dataSource: MatTableDataSource<RoomOpened>
   hasRooms: boolean = false
+  loading
 
   constructor(private service: RoomService, private router: Router) {
+    this.loading = true
     service.getOpened().subscribe((rooms: RoomOpened[]) => {
+      this.loading = false
       this.dataSource = new MatTableDataSource(rooms)
       this.hasRooms = (rooms).length > 0
-    })
+    }, err => this.loading = false)
   }
 
   ngOnInit() {
