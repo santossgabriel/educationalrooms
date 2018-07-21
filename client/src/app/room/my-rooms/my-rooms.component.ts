@@ -72,6 +72,19 @@ export class MyRoomsComponent implements OnInit {
     this.service.changeStatus(room.id, status).subscribe(res => {
       let r = this.rooms.find(p => p.id === room.id)
       r.status = status
+
+      switch (r.status) {
+        case 'CLOSED':
+          r.openedAt = r.startedAt = r.endedAt = null
+          break
+        case 'STARTED':
+          r.startedAt = new Date()
+          break
+        case 'OPENED':
+          r.openedAt = new Date()
+          break
+      }
+
       this.refresh()
     }, err => Swal('Oops...', err.error.message, 'error'))
   }

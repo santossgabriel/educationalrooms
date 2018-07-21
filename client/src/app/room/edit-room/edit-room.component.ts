@@ -10,8 +10,6 @@ import { RoomService } from '../../services/room.service'
 import { RoomQuestionModalComponent } from '../../modals/room-question-modal.component'
 import { RoomQuestion } from '../../models/room-question.model'
 
-
-
 @Component({
   selector: 'app-rooms',
   templateUrl: './edit-room.component.html',
@@ -26,6 +24,12 @@ export class EditRoomComponent implements OnInit {
   dataSource: MatTableDataSource<RoomQuestion>
   displayedColumns = ['order', 'category', 'description', 'points', 'actions']
   hasQuestions: boolean
+  orderOption = 'id'
+  orderOptions = [
+    { description: 'PADRÃO', value: 'id' },
+    { description: 'PONTOS', value: 'points' },
+    { description: 'CATEGORIA', value: 'category' }
+  ]
 
   constructor(private roomService: RoomService,
     private router: Router,
@@ -48,13 +52,14 @@ export class EditRoomComponent implements OnInit {
   }
 
   refresh() {
-    this.room.questions.sort((n1, n2) => n1.order > n2.order ? 1 : n1.order < n2.order ? -1 : 0)
     this.dataSource = new MatTableDataSource(this.room.questions)
     this.hasQuestions = this.room.questions.length > 0
+    this.room.questions.forEach((p, i) => p.order = i + 1)
   }
 
-  remove(id: number) {
-    this.room.questions = this.room.questions.filter(p => p.id !== id)
+  remove(question: RoomQuestion) {
+    question.points = 0
+    this.room.questions = this.room.questions.filter(p => p.id !== question.id)
     this.refresh()
   }
 
@@ -62,7 +67,7 @@ export class EditRoomComponent implements OnInit {
     const self = this
     const callback = (questions) => {
       questions.map(p => {
-        p.points = 50
+        p.points = p.points || 50
         self.room.questions.push(p)
       })
       self.refresh()
@@ -112,8 +117,8 @@ export class EditRoomComponent implements OnInit {
     this.refresh()
   }
 
-  sortQuestions() {
-    this.room.questions.sort((n1, n2) => n1.id > n2.id ? 1 : n1.id < n2.id ? -1 : 0)
+  sortQuestions(property) {
+    this.room.questions.sort((n1, n2) => n1[property] > n2[property] ? 1 : n1[property] < n2[property] ? -1 : 0)
       .forEach((q, i) => {
         q.order = i + 1
       })
@@ -128,5 +133,9 @@ export class EditRoomComponent implements OnInit {
       q.points = 100
     else if (q.points < 10)
       q.points = 10
+  }
+
+  orderOptionChanged() {
+    this.sortQuestions(this.orderOption)
   }
 }

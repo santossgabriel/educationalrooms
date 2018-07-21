@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
+import swal from 'sweetalert2'
 import { Globals } from '../globals'
-import { Router, NavigationEnd } from '@angular/router'
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router'
 import { UserDataModel } from '../models/user-data.models'
 import { AccountService } from '../services/account.service'
 import { MatDialog } from '@angular/material'
@@ -28,7 +29,8 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
     private accountService: AccountService,
     private notificationService: NotifService,
     private storageService: StorageService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private activatedRouter: ActivatedRoute) {
     Globals.addUserChangedListener(this)
     Globals.addSocketListener(this)
     this.refresh()
@@ -98,9 +100,15 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
   }
 
   onConnect(socket: any) {
-    socket.on('notificationReceived', (n) => {
+    socket.on('notificationReceived', (n: Notif) => {
       this.notifications.unshift(n)
       this.updateTimeNotifications()
+      if (n.type === 'ROOM_START' && this.path.indexOf('quiz') === -1) {
+        const id = n.origin.split(' ')[0]
+        console.log(n.origin)
+        swal('', `Sala ${n.origin.substring(id.length)} foi iniciada e você será redirecionado!`)
+          .then(() => this.router.navigate([`quiz/${id}`]))
+      }
     })
   }
   onDisconnect() {

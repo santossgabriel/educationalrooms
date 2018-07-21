@@ -185,7 +185,7 @@ module.exports = {
         correct: false,
         classification: 'D'
       },
-      
+
       // Questão 17
       {
         questionId: 17,
@@ -206,6 +206,29 @@ module.exports = {
         questionId: 17,
         description: 'teste4',
         correct: false,
+        classification: 'D'
+      },
+
+      // Question 19
+      { // 37
+        questionId: 19,
+        description: 'teste4',
+        correct: false,
+        classification: 'A'
+      }, {
+        questionId: 19,
+        description: 'teste4',
+        correct: false,
+        classification: 'B'
+      }, {
+        questionId: 19,
+        description: 'teste4',
+        correct: false,
+        classification: 'C'
+      }, {
+        questionId: 19,
+        description: 'teste4',
+        correct: true,
         classification: 'D'
       }
     ])

@@ -18,6 +18,24 @@ module.exports = {
       accepted: true,
       score: 8,
       enteredIn: new Date()
+    }, {
+      userId: 6,
+      roomId: 11,
+      accepted: true,
+      score: 8,
+      enteredIn: new Date()
+    }, {
+      userId: 6,
+      roomId: 9,
+      accepted: true,
+      score: 8,
+      enteredIn: new Date()
+    }, {
+      userId: 6,
+      roomId: 2,
+      accepted: true,
+      score: 8,
+      enteredIn: new Date()
     }])
   }
 }

@@ -10,6 +10,7 @@ import { RoomService } from '../../services/room.service'
 import { RoomAssociated } from '../../models/room-associated.models';
 import { getStatusDescriptionRoom } from '../../helpers/utils';
 import { Scores } from '../../models/scores.models';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-rooms',
@@ -25,25 +26,48 @@ export class AssociatedRoomsComponent implements OnInit {
   dataSource: MatTableDataSource<RoomAssociated>
   hasRooms
 
-  constructor(private service: RoomService, private router: Router) {
-    service.getAssociated().subscribe((rooms: RoomAssociated[]) => {
+  constructor(private roomService: RoomService,
+    private storageService: StorageService,
+    private router: Router) {
+
+    roomService.getAssociated().subscribe((rooms: RoomAssociated[]) => {
       rooms.map(p => p.descriptionStatus = getStatusDescriptionRoom(p))
       this.dataSource = new MatTableDataSource(rooms)
       this.hasRooms = (rooms).length > 0
-
-      service.getScores().subscribe((scores: Scores) => {
-        console.log(scores.roomsScores)
-        this.dataSource.data.forEach(p => {
-          const roomScore = scores.roomsScores.filter(x => x.roomId == p.id).shift()
-          if (roomScore)
-            p.score = roomScore.score
-          // console.log(p, roomScore)
-        })
-      })
+      if (this.hasRooms)
+        this.updateScores()
     })
   }
 
   ngOnInit() {
   }
 
+  openScores(room: RoomAssociated) {
+
+  }
+
+  updateScores() {
+
+    let scores = this.storageService.getScores()
+    if (scores) {
+      const roomIds = scores.roomsScores.map(p => p.roomId)
+      if (this.dataSource.data.filter(p => roomIds.indexOf(p.id) == -1).length === 0) {
+        this.updateRoomsScores(scores)
+        return
+      }
+    }
+    this.roomService.getScores().subscribe((res: Scores) => {
+      this.storageService.setScores(res)
+      this.updateRoomsScores(res)
+      console.log(res)
+    })
+  }
+
+  updateRoomsScores(scores: Scores) {
+    this.dataSource.data.forEach(p => {
+      const roomScore = scores.roomsScores.filter(x => x.roomId == p.id).shift()
+      if (roomScore)
+        p.score = roomScore.score
+    })
+  }
 }

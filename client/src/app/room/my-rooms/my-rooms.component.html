@@ -22,6 +22,18 @@
           <span class="room-status">
             {{element.descriptionStatus}}
           </span>
+          <div class="room-changes-status">
+            Criada em: {{element.createdAt | date: 'dd/MM/yy HH:mm'}}
+          </div>
+          <div *ngIf="element.openedAt" class="room-changes-status">
+            Aberta em: {{element.openedAt | date: 'dd/MM/yy HH:mm'}}
+          </div>
+          <div *ngIf="element.startedAt" class="room-changes-status">
+            Iniciada em: {{element.startedAt | date: 'dd/MM/yy HH:mm'}}
+          </div>
+          <div *ngIf="element.endedAt" class="room-changes-status">
+            Finalizada em: {{element.endedAt | date: 'dd/MM/yy HH:mm'}}
+          </div>
           <mat-progress-bar *ngIf="element.status === 'STARTED'" mode="indeterminate"></mat-progress-bar>
         </td>
       </ng-container>
@@ -63,6 +75,9 @@
           <button *ngIf="element.status !== 'STARTED' && element.status !== 'ENDED'" matTooltip="REMOVER" mat-icon-button mat-raised-button
             (click)="remove(element)">
             <mat-icon color="warn">delete</mat-icon>
+          </button>
+          <button *ngIf="element.status === 'ENDED'" mat-raised-button color="primary" (click)="remove(element)">
+            PONTUAÇÕES
           </button>
         </td>
       </ng-container>

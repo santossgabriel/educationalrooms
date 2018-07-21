@@ -1,5 +1,5 @@
 export class Scores {
-  myRoomScores: MyRoomScore[]
+  myRoomsScores: MyRoomScore[]
   roomsScores: RoomScore[]
   questionsRoomScores: QuestionRoomScore[]
 }

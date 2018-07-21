@@ -3,6 +3,7 @@ import { AccountService } from './account.service';
 import { QuestionService } from './question.service';
 import { UserDataModel } from '../models/user-data.models';
 import { Globals } from '../globals';
+import { Scores } from '../models/scores.models';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,16 @@ export class StorageService {
     } else {
       localStorage.removeItem('USER')
       localStorage.removeItem('TOKEN')
+      localStorage.removeItem('SCORES')
       Globals.notifyUserChanged(null)
     }
+  }
+
+  setScores(scores: Scores): void {
+    localStorage.setItem('SCORES', JSON.stringify(scores))
+  }
+
+  getScores(): Scores {
+    return JSON.parse(localStorage.getItem('SCORES'))
   }
 }

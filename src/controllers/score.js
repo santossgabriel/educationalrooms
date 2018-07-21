@@ -6,7 +6,8 @@ const {
   RoomUser,
   User,
   RoomQuestion,
-  Question
+  Question,
+  sequelize
 } = db
 
 const toRoomScore = (r) => {
@@ -57,7 +58,7 @@ export default {
 
     const myRoomsScores = await Room.findAll({
       attributes: ['id', 'name'],
-      where: { userId: req.claims.id },
+      where: { userId: req.claims.id, endedAt: { [sequelize.Op.ne]: null } },
       include: [
         {
           model: RoomUser, attributes: ['userId'],
@@ -76,6 +77,7 @@ export default {
     })
 
     const questionsRoomScores = (await Room.findAll({
+      where: { endedAt: { [sequelize.Op.ne]: null } },
       attributes: ['id'],
       include: [
         { model: RoomUser, attributes: [], where: { userId: req.claims.id } },

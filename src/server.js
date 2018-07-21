@@ -29,6 +29,6 @@ router(app)
 const server = http.createServer(app)
 socket(server)
 
-runJob()
+// runJob()
 
 module.exports = server

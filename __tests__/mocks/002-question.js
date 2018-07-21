@@ -74,6 +74,10 @@ module.exports = {
     { userId: 6, description: 'teste', shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date(), createdAt: new Date() },
     // id = 18
     { userId: 6, description: 'teste', shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date(), createdAt: new Date() },
+    // id = 19
+    { userId: 6, description: 'teste', shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date(), createdAt: new Date() },
+    // id = 20
+    { userId: 6, description: 'teste', shared: false, category: 'categoria 1', sync: 'U', updatedAt: new Date(), createdAt: new Date() }
     ])
   }
 }

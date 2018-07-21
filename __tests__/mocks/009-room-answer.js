@@ -12,6 +12,12 @@ module.exports = {
       userId: 6,
       score: 30,
       roomId: 1
+    }, {
+      questionId: 19,
+      answerId: 40,
+      userId: 6,
+      score: 30,
+      roomId: 11
     }])
   }
 }

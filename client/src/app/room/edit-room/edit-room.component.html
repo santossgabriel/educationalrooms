@@ -23,7 +23,7 @@
       <th mat-header-cell *matHeaderCellDef> Ordem </th>
       <td mat-cell *matCellDef="let element;let rIndex = index">
         <div>
-          <i class="up"(click)="changeIndex(rIndex, -1)" *ngIf="rIndex > 0"></i>
+          <i class="up" (click)="changeIndex(rIndex, -1)" *ngIf="rIndex > 0"></i>
         </div>
         {{element.order || '?'}}
         <div>
@@ -58,7 +58,7 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Ações</th>
       <td mat-cell *matCellDef="let element;let rIndex = index">
-        <button mat-button color="warn" (click)="remove(element.id)">REMOVER</button>
+        <button mat-button color="warn" (click)="remove(element)">REMOVER</button>
       </td>
     </ng-container>
 
@@ -67,7 +67,13 @@
   </table>
   <br />
   <div class="action-button">
-    <button mat-raised-button (click)="sortQuestions()">ORDENAR</button>
+    <mat-form-field>
+      <mat-select [(ngModel)]="orderOption" (selectionChange)="orderOptionChanged()" placeholder="Ordenação">
+        <mat-option *ngFor="let c of orderOptions" [value]="c.value">
+          {{ c.description }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <button mat-raised-button color="primary" (click)="openQuestionModal()">ADICIONAR QUESTÕES</button>
   </div>
   <br />

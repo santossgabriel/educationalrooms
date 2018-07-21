@@ -122,7 +122,8 @@ export default {
       ]
     })
 
-    throwValidationError('Sala não disponível no momento')
+    if (!room)
+      throwValidationError('Sala não disponível no momento')
 
     let score = 0
     if (room && room.endedAt) {
@@ -151,6 +152,12 @@ export default {
       include: [
         { model: RoomUser, include: [{ model: User }] },
         { model: RoomQuestion, include: [{ model: Question }] }
+      ],
+      order: [
+        ['endedAt', 'desc'],
+        ['startedAt', 'desc'],
+        ['openedAt', 'desc'],
+        ['createdAt', 'desc']
       ]
     })
     res.json(rooms.map(p => toMy(p)))
@@ -161,7 +168,13 @@ export default {
       include: [{
         model: RoomUser,
         where: { userId: req.claims.id }
-      }]
+      }],
+      order: [
+        ['endedAt', 'desc'],
+        ['startedAt', 'desc'],
+        ['openedAt', 'desc'],
+        ['createdAt', 'desc']
+      ]
     })
     res.json(toMyAssoc(rooms))
   },
@@ -173,6 +186,7 @@ export default {
         { model: User },
         { model: RoomQuestion }
       ],
+      order: [['openedAt', 'desc']],
       where: {
         openedAt: { [sequelize.Op.ne]: null },
         startedAt: null
@@ -309,7 +323,8 @@ export default {
       room = {
         name: name,
         time: time,
-        userId: req.claims.id
+        userId: req.claims.id,
+        createdAt: new Date()
       }
       room = await Room.create(room)
       msgResult = 'Sala criada com sucesso.'
@@ -322,7 +337,8 @@ export default {
       await RoomQuestion.create({
         roomId: id || room.id,
         questionId: q.id,
-        order: q.order || 0
+        order: q.order,
+        points: q.points
       })
     }
 
@@ -392,7 +408,7 @@ export default {
       const notif = {
         description: started ? 'foi iniciada.' : 'foi fechada',
         type: started ? NotificationTypes.ROOM_STARTED : NotificationTypes.ROOM_CLOSED,
-        origin: roomDb.name
+        origin: `${id} ${roomDb.name}`
       }
       const users = roomDb.RoomUsers.map(p => p.userId)
       sendNotifications(users, notif)

@@ -6,6 +6,8 @@ export class Room {
   name: string
   time: number
   createdAt: Date
+  openedAt: Date
+  startedAt: Date
   endedAt: Date
   userId: number
   questions: RoomQuestion[]

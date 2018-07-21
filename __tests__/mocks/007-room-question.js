@@ -10,6 +10,16 @@ module.exports = {
       questionId: 17,
       order: 1,
       points: 60,
+    }, {
+      roomId: 11,
+      questionId: 19,
+      order: 1,
+      points: 60,
+    }, {
+      roomId: 11,
+      questionId: 20,
+      order: 1,
+      points: 60,
     }])
   }
 }

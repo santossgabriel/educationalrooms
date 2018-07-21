@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
+import Swal from 'sweetalert2'
 import { fadeInTransition } from '../../router.transition'
 import { Room } from '../../models/room.model'
 import { RoomService } from '../../services/room.service'
@@ -55,7 +56,7 @@ export class QuizComponent implements OnInit, SocketConnectListener {
           this.mode = this.ENDED
         else
           this.mode = this.UNAVAILABLE
-      })
+      }, err => Swal('Oops...', err.error.message, 'error').then(() => console.log('CALLBACK')))
     })
   }
 
