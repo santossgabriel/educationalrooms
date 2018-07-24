@@ -2,37 +2,28 @@
   <app-toolbar></app-toolbar>
   <div fxLayout="row">
     <div fxFlex="200px" class="sidenav" [hidden]="!logged">
-
-      <mat-divider></mat-divider>
-      <div class="menu-sidenav">
-        <span>SALAS</span>
-      </div>
       <mat-nav-list>
-        <mat-list-item>
-          <button [disabled]="path === '/my-rooms'" mat-raised-button color="primary" routerLink="/my-rooms">CRIADAS</button>
+        <mat-list-item id="menu-my-questions">
+          <button [disabled]="path === '/my-questions'" mat-raised-button color="primary" routerLink="/my-questions">QUESTÕES QUE CRIEI</button>
         </mat-list-item>
-        <mat-list-item>
-          <button [disabled]="path === '/associated-rooms'" mat-raised-button color="primary" routerLink="/associated-rooms">PARTICIPAÇÕES</button>
+        <mat-divider></mat-divider>
+        <mat-list-item id="menu-my-room">
+          <button [disabled]="path === '/my-rooms'" mat-raised-button color="primary" routerLink="/my-rooms">SALAS QUE CRIEI</button>
         </mat-list-item>
-        <mat-list-item>
-          <button [disabled]="path === '/opened-rooms'" mat-raised-button color="primary" routerLink="/opened-rooms">ABERTAS</button>
+        <mat-divider></mat-divider>
+        <mat-list-item id="menu-opened-rooms">
+          <button [disabled]="path === '/opened-rooms'" mat-raised-button color="primary" routerLink="/opened-rooms">SALAS ABERTAS</button>
         </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item id="menu-associated-rooms">
+          <button [disabled]="path === '/associated-rooms'" mat-raised-button color="primary" routerLink="/associated-rooms">SALAS QUE PARTICIPEI</button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <button id="menu-all-questions" [disabled]="path === '/all-questions'" mat-raised-button color="primary" routerLink="/all-questions">QUESTÕES PÚBLICAS</button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
       </mat-nav-list>
-
-      <mat-divider></mat-divider>
-      
-      <div class="menu-sidenav">
-        <span>QUESTÕES</span>
-      </div>
-      <mat-nav-list>
-        <mat-list-item>
-          <button [disabled]="path === '/my-questions'" mat-raised-button color="primary" routerLink="/my-questions">CRIADAS</button>
-        </mat-list-item>
-        <mat-list-item>
-          <button [disabled]="path === '/all-questions'" mat-raised-button color="primary" routerLink="/all-questions">PÚBLICAS</button>
-        </mat-list-item>
-      </mat-nav-list>
-
     </div>
     <div fxFlex="100%" style="padding-right: 10px">
       <router-outlet></router-outlet>

@@ -55,4 +55,12 @@ export class StorageService {
   getCategories(): string[] {
     return JSON.parse(localStorage.getItem('CATEGORIES'))
   }
+
+  setTutorial(step: number) {
+    localStorage.setItem('TUTORIAL', step.toString())
+  }
+
+  getTutorial(): number {
+    return localStorage.getItem('TUTORIAL') ? Number(localStorage.getItem('TUTORIAL')) : 0
+  }
 }

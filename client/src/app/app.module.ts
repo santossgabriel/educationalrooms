@@ -7,7 +7,7 @@ import { AppMaterialModule } from './app-material.module'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { FlexLayoutModule } from '@angular/flex-layout'
-import { ImageUploadModule } from "angular2-image-upload";
+import { ImageUploadModule } from "angular2-image-upload"
 
 import { HeaderInterceptor } from './interceptors/header.interceptor'
 import { ResponseInterceptor } from './interceptors/response.interceptor'

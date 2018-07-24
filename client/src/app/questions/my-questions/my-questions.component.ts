@@ -6,6 +6,7 @@ import { Question } from '../../models/question.model'
 import { QuestionService } from '../../services/question.service'
 import { ConfirmModalComponent, ErrorModalComponent } from '../../modals/confirm-modal.component'
 import { StorageService } from '../../services/storage.service';
+import { Tour } from '../../helpers/tour';
 
 @Component({
   selector: 'app-my-questions',
@@ -27,11 +28,10 @@ export class MyQuestionsComponent implements OnInit {
     this.refresh()
   }
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort
+  @ViewChild(MatPaginator) paginator: MatPaginator
 
   ngOnInit() {
-
   }
 
   refresh() {
@@ -44,6 +44,15 @@ export class MyQuestionsComponent implements OnInit {
       this.hasQuestions = questions.length > 0
       this.storageService.updateCategories(questions.map(p => p.category))
       questions.map(p => p.category)
+
+      if (this.storageService.getTutorial() == 1) {
+        this.storageService.setTutorial(2)
+        setTimeout(() => {
+          Tour.tutorial1(() => {
+            this.openQuestionModal(null)
+          })
+        }, 500)
+      }
     }, err => this.loading = false)
   }
 
@@ -53,8 +62,16 @@ export class MyQuestionsComponent implements OnInit {
         question: question ? { ...question } : new Question(),
         callback: this.refresh
       }
-    }).afterClosed().subscribe(() => {
-      this.refresh()
+    }).afterClosed().subscribe((res) => {
+      if (res) {
+        this.refresh()
+        if (this.storageService.getTutorial() === 5) {
+          this.storageService.setTutorial(6)
+          setTimeout(() => {
+            Tour.tutorial5()
+          }, 500)
+        }
+      }
     })
   }
 

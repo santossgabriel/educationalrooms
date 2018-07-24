@@ -7,6 +7,7 @@ import { QuestionService } from '../services/question.service'
 import { ErrorModalComponent } from './confirm-modal.component'
 import swal from 'sweetalert2'
 import { StorageService } from '../services/storage.service';
+import { Tour } from '../helpers/tour';
 
 @Component({
   selector: 'app-question-modal',
@@ -39,6 +40,13 @@ export class QuestionModalComponent {
         this.categories = res
         this.fillCategories()
       })
+
+    if (this.storageService.getTutorial() === 2) {
+      this.storageService.setTutorial(3)
+      setTimeout(() => {
+        Tour.tutorial2()
+      }, 500)
+    }
   }
 
   private fillCategories() {
@@ -74,13 +82,23 @@ export class QuestionModalComponent {
     if (!this.customCategory)
       this.question.category = this.selectedCategory
     this.questionService.save(this.question).subscribe(res => {
-      this.dialogRef.close()
+      this.dialogRef.close(true)
     }, err => {
       swal('', err.error.message, 'error')
     })
   }
 
-  getLabel(value: number) {
-    return `${value || 0} P`
+  stepChange(step: number) {
+    if (step === 0 && this.storageService.getTutorial() === 3) {
+      this.storageService.setTutorial(4)
+      setTimeout(() => {
+        Tour.tutorial3()
+      }, 500)
+    } else if (step === 1 && this.storageService.getTutorial() === 4) {
+      this.storageService.setTutorial(5)
+      setTimeout(() => {
+        Tour.tutorial4()
+      }, 500)
+    }
   }
 }

@@ -135,12 +135,11 @@ body {
 
 .sidenav {
   background-color: #4B9372;
-  width: 40px;
   padding-top: 20px;
   padding-bottom: 20px;
   border-radius: 0 0 10px 0;
   margin-right: 10px;
-  height: 280px;
+  height: 230px;
   
   button{
     color: white;
@@ -217,4 +216,8 @@ i {
   margin: 0 auto;
   width: 200px;
   padding: 20px;
+}
+
+body > div.introjs-helperLayer.introjs-fixedTooltip{
+  opacity: 0;
 }

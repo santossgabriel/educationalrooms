@@ -23,7 +23,7 @@
         </ng-container>
 
         <ng-container matColumnDef="shared">
-          <th mat-header-cell *matHeaderCellDef> Compartilhada? </th>
+          <th id="shareQuestion" mat-header-cell *matHeaderCellDef> Compartilhada? </th>
           <td mat-cell *matCellDef="let element">
             <mat-checkbox (change)="sharedChanged(element)" color="primary" [(ngModel)]="element.shared">
               {{element.shared ? 'Sim' : 'Não'}}
@@ -32,7 +32,7 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef style="width: 180px">Ações</th>
+          <th id="manageQuestion" mat-header-cell *matHeaderCellDef style="width: 180px">Ações</th>
           <td mat-cell *matCellDef="let element" style="width: 180px">
             <button matTooltip="EDITAR" style="margin-right: 10px" mat-icon-button mat-raised-button (click)="openQuestionModal(element)">
               <mat-icon color="primary">edit</mat-icon>
@@ -47,7 +47,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
       <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
-      <button (click)="openQuestionModal(null)" style="margin-top: 20px" mat-raised-button color="primary">CRIAR QUESTÃO</button>
+      <button id="createQuestion" (click)="openQuestionModal(null)" style="margin-top: 20px" mat-raised-button color="primary">CRIAR QUESTÃO</button>
     </div>
   </div>
   <div *ngIf="loading" class="loading">

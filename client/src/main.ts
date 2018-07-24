@@ -6,6 +6,7 @@ import { environment } from './environments/environment'
 
 import 'hammerjs'
 import 'web-animations-js'
+import 'intro.js'
 
 if (environment.production) {
   enableProdMode()

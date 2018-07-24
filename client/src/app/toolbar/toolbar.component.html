@@ -25,6 +25,9 @@
         <button mat-icon-button (click)="updateTimeNotifications()" [matMenuTriggerFor]="notificationMenu">
           <mat-icon [matBadge]="notifPendings" [matBadgeHidden]="notifPendings == 0" matBadgeColor="warn">notifications</mat-icon>
         </button>
+        <button matTooltip="Tutorial Completo" mat-icon-button (click)="help()">
+          <mat-icon>help</mat-icon>
+        </button>
         <button mat-icon-button [matMenuTriggerFor]="accountMenu">
           <img style="background-color: white;border-radius: 50%;box-shadow: 0 0 15px #999" height="60" width="60" src="{{user?.picture || 'api/image/user-image.png'}}"
           />
