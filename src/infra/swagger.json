@@ -1,65 +1,936 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "QuizRoom API overview",
-    "version": "v1"
+    "version": "v1",
+    "title": "My API"
   },
   "paths": {
-    "/api/token": {
-      "post": {
+    "/api/account": {
+      "get": {
         "tags": [
-          "Token"
+          "Account"
         ],
-        "operationId": "TokenPost",
+        "summary": "Obter os dados do usuário logado.",
+        "operationId": "ApiAccountGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/UserData"
+            }
+          },
+          "500": {
+            "description": "Ocorreu um erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "Atualizar um usuário existente",
+        "operationId": "ApiAccountPut",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "User",
+            "name": "model",
             "in": "body",
-            "required": true,
+            "required": false,
             "schema": {
-              "$ref": "#/definitions/UserToken"
+              "$ref": "#/definitions/UserUpdate"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Retorno de credenciais válidas",
-            "examples": {
-              "application/json": "{\n    \"token\": ######, \n    \"message\": Token gerado com sucesso. \n}"
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TokenResponse"
             }
           },
-          "401": {
-            "description": "Não autorizado."
+          "422": {
+            "description": "Erro nas validações"
           },
-          "403": {
-            "description": "Acesso proibido."
+          "500": {
+            "description": "Ocorreu um erro interno no servidor"
           }
         }
-      }
-    },
-    "/account": {
+      },
       "post": {
         "tags": [
           "Account"
         ],
-        "operationId": "AccountPost",
+        "summary": "Criar um novo usuário",
+        "operationId": "ApiAccountPost",
         "consumes": [
-          "application/json"
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
         ],
-        "produces": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "id",
+            "name": "model",
             "in": "body",
-            "required": true,
+            "required": false,
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/UserCreate"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TokenResponse"
+            }
+          },
+          "422": {
+            "description": "Erro nas validações"
+          },
+          "500": {
+            "description": "Ocorreu um erro interno no servidor"
+          }
+        }
+      }
+    },
+    "/notification": {
+      "get": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Obter todas as notificações do usuário logado.",
+        "operationId": "NotificationGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/NotificationAll"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Deletar todas as notificações do usuário logado.",
+        "operationId": "NotificationDelete",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Todas as notificações foram removidas com sucesso",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/notification/{id}": {
+      "delete": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Deletar uma notificação específica.",
+        "operationId": "NotificationByIdDelete",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notificação removida com sucesso",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/notification-read": {
+      "put": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Marcar como lidas todas as notificações do usuário logado.",
+        "operationId": "Notification-readPut",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notificação marcada como lida",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/question": {
+      "get": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Obter questões do usuário logado.",
+        "operationId": "ApiQuestionGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MyQuestion"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Atualizar uma questão já existente.",
+        "operationId": "ApiQuestionPut",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/MyQuestion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "422": {
+            "description": "Erro de validação"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Criar uma nova questão.",
+        "operationId": "ApiQuestionPost",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/MyQuestion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "422": {
+            "description": "Erro de validação"
+          }
+        }
+      }
+    },
+    "/api/question-others": {
+      "get": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Obter questões publicadas por outros usuários.",
+        "operationId": "ApiQuestion-othersGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MyQuestion"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/question/{id}": {
+      "get": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Obter uma questão específica.",
+        "operationId": "ApiQuestionByIdGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/MyQuestion"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Remover uma questão específica.",
+        "operationId": "ApiQuestionByIdDelete",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Obter categorias de questões já existentes.",
+        "operationId": "ApiCategoriesGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/question-share": {
+      "put": {
+        "tags": [
+          "Question"
+        ],
+        "summary": "Alterar o compartilhamento de uma questão.",
+        "operationId": "ApiQuestion-sharePut",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/QuestionShare"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/room/{id}": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Obter uma sala específica.",
+        "operationId": "RoomByIdGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Room"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Remover uma determinada sala.",
+        "operationId": "RoomByIdDelete",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/room-my": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Obter salas do usuário logado.",
+        "operationId": "Room-myGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Room"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/room-associated": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Obter salas que o usuário logado participa ou já participou.",
+        "operationId": "Room-associatedGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RoomAssoc"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/room-opened": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Obter salas abertas no momento.",
+        "operationId": "Room-openedGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RoomOpened"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/room-quiz/{id}": {
+      "get": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Obter dados iniciais do quiz.",
+        "operationId": "Room-quizByIdGet",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/RoomAssoc"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/room": {
+      "post": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Salvar uma nova sala ou uma sala já existente.",
+        "operationId": "RoomPost",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/MyRoom"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "422": {
+            "description": "Erro de validação"
+          }
+        }
+      }
+    },
+    "/room-associate": {
+      "put": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Associar o usuário logado à uma determinada sala.",
+        "operationId": "Room-associatePut",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RoomAssociate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "422": {
+            "description": "Erro de validação"
+          }
+        }
+      }
+    },
+    "/room-status": {
+      "put": {
+        "tags": [
+          "Room"
+        ],
+        "summary": "Alterar o status de uma determinada sala.",
+        "operationId": "Room-statusPut",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/RoomStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DefaultResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "422": {
+            "description": "Erro de validação"
           }
         }
       }
@@ -69,84 +940,575 @@
         "tags": [
           "Score"
         ],
-        "operationId": "getScore",
-        "summary": "Obter as pontuações referentes à determinado usuário",
+        "summary": "Obter as pontuações pertinentes ao usuário logado.",
+        "operationId": "ApiScoreGet",
+        "consumes": [],
         "produces": [
-          "application/json"
+          "text/plain",
+          "application/json",
+          "text/json"
         ],
+        "parameters": [],
         "responses": {
           "200": {
-            "description": "200",
-            "examples": {
-              "application/json": "{\n  \"myRoomsScores\": [\n    {\n      \"id\": 1,\n      \"name\": \"Sala 1\",\n      \"users\": [\n        {\n          \"score\": 200,\n          \"id\": 1,\n          \"name\": \"usuario1\",\n          \"picture\": \"image/imagem.jpg\"\n        }\n      ]\n    }\n  ],\n  \"roomsScores\": [\n    {\n      \"roomId\": 1,\n      \"score\": 177,\n      \"points\": 260\n    }\n  ],\n  \"questionsRoomScores\": [\n    {\"id\": 1,\n      \"questions\": [\n        {\n          \"id\": 2,\n          \"order\": 3,\n          \"points\": 80,\n          \"description\": \"Qual o resultado de 1 x 1 ?\",\n          \"score\": 37\n        }\n      ]\n    }\n  ],\n  \"allUserScores\": [\n    {\n      \"roomId\": 1,\n      \"userId\": 2,\n      \"score\": \"186\"\n    }, {\n      \"roomId\": 1,\n      \"userId\": 1,\n      \"score\": \"177\"\n    }\n  ]\n}"
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Scores"
             }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
           },
           "401": {
-            "description": "Não autorizado."
-          },
-          "403": {
-            "description": "Acesso proibido."
+            "description": "Não autorizado"
           }
         }
       }
     },
-    "/users": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "operationId": "listVersionsv2",
-        "summary": "List API versions",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 300 response",
-            "examples": {
-              "application/json": "{\n    \"versions\": [\n        {\n            \"status\": \"CURRENT\",\n            \"updated\": \"2011-01-21T11:33:21Z\",\n            \"id\": \"v2.0\",\n            \"links\": [\n                {\n                    \"href\": \"http://127.0.0.1:8774/v2/\",\n                    \"rel\": \"self\"\n                }\n            ]\n        },\n        {\n            \"status\": \"EXPERIMENTAL\",\n            \"updated\": \"2013-07-23T11:33:21Z\",\n            \"id\": \"v3.0\",\n            \"links\": [\n                {\n                    \"href\": \"http://127.0.0.1:8774/v3/\",\n                    \"rel\": \"self\"\n                }\n            ]\n        }\n    ]\n}"
-            }
-          },
-          "300": {
-            "description": "200 300 response",
-            "examples": {
-              "application/json": "{\n    \"versions\": [\n        {\n            \"status\": \"CURRENT\",\n            \"updated\": \"2011-01-21T11:33:21Z\",\n            \"id\": \"v2.0\",\n            \"links\": [\n                {\n                    \"href\": \"http://127.0.0.1:8774/v2/\",\n                    \"rel\": \"self\"\n                }\n            ]\n        },\n        {\n            \"status\": \"EXPERIMENTAL\",\n            \"updated\": \"2013-07-23T11:33:21Z\",\n            \"id\": \"v3.0\",\n            \"links\": [\n                {\n                    \"href\": \"http://127.0.0.1:8774/v3/\",\n                    \"rel\": \"self\"\n                }\n            ]\n        }\n    ]\n}"
-            }
-          }
-        }
-      }
-    },
-    "/user": {
+    "/api/token": {
       "post": {
         "tags": [
-          "User"
+          "Token"
         ],
-        "operationId": "UserPost",
+        "summary": "Obter o token",
+        "operationId": "ApiTokenPost",
         "consumes": [
-          "application/json"
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
         ],
-        "produces": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "id",
+            "name": "model",
             "in": "body",
-            "required": true,
+            "required": false,
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/TokenRequest"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TokenResponse"
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          },
+          "401": {
+            "description": "Não autorizado"
           }
         }
       }
     }
   },
-  "consumes": [
-    "application/json"
-  ],
+  "definitions": {
+    "UserData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "picture": {
+          "type": "string"
+        },
+        "google": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserCreate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "TokenResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "UserUpdate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "NotificationAll": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "read": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        }
+      }
+    },
+    "DefaultResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "MyQuestion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "shared": {
+          "type": "boolean"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "QuestionShare": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "shared": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Room": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "endedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "openedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "startedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "time": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "users": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserRoom"
+          }
+        },
+        "questions": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MyQuestion"
+          }
+        }
+      }
+    },
+    "UserRoom": {
+      "type": "object",
+      "properties": {
+        "accepted": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "RoomAssoc": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "endedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "openedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "score": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "startedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "time": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "RoomOpened": {
+      "type": "object",
+      "properties": {
+        "associate": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "openedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "questions": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "time": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "users": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "MyRoom": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "endedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "openedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "startedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "time": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "questions": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MyQuestion"
+          }
+        }
+      }
+    },
+    "RoomAssociate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "associate": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RoomStatus": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "Scores": {
+      "type": "object",
+      "properties": {
+        "myRoomsScores": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MyRoomScore"
+          }
+        },
+        "roomsScores": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RoomScore"
+          }
+        },
+        "questionsRoomScores": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QuestionRoomScore"
+          }
+        },
+        "allUserScores": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AllUserScores"
+          }
+        }
+      }
+    },
+    "MyRoomScore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "users": {
+          "$ref": "#/definitions/UserScore"
+        }
+      }
+    },
+    "RoomScore": {
+      "type": "object",
+      "properties": {
+        "roomId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "score": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "points": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "QuestionRoomScore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "questions": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QuestionScore"
+          }
+        }
+      }
+    },
+    "AllUserScores": {
+      "type": "object",
+      "properties": {
+        "roomId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "score": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "UserScore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "score": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "picture": {
+          "type": "string"
+        }
+      }
+    },
+    "QuestionScore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "order": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "points": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "score": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "TokenRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  },
   "securityDefinitions": {
     "Token": {
       "name": "token",
@@ -159,19 +1521,5 @@
     {
       "Token": []
     }
-  ],
-  "definitions": {
-    "UserToken": {
-      "properties": {
-        "email": {
-          "type": "string",
-          "description": "Email do usuário."
-        },
-        "password": {
-          "type": "string",
-          "description": "Senha do usuário."
-        }
-      }
-    }
-  }
+  ]
 }
