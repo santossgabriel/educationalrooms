@@ -3,12 +3,16 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import jwt from 'jsonwebtoken'
+import swaggerUi from 'swagger-ui-express'
+const swaggerDocument = require('./infra/swagger.json')
 
 import router from './routes/index'
 import socket, { runJob } from './socket/index'
 import auth from './auth/auth'
 
 const app = express()
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

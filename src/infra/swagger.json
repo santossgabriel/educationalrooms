@@ -1,0 +1,177 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "QuizRoom API overview",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/token": {
+      "post": {
+        "tags": [
+          "Token"
+        ],
+        "operationId": "TokenPost",
+        "parameters": [
+          {
+            "name": "User",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserToken"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorno de credenciais válidas",
+            "examples": {
+              "application/json": "{\n    \"token\": ######, \n    \"message\": Token gerado com sucesso. \n}"
+            }
+          },
+          "401": {
+            "description": "Não autorizado."
+          },
+          "403": {
+            "description": "Acesso proibido."
+          }
+        }
+      }
+    },
+    "/account": {
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "operationId": "AccountPost",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/score": {
+      "get": {
+        "tags": [
+          "Score"
+        ],
+        "operationId": "getScore",
+        "summary": "Obter as pontuações referentes à determinado usuário",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "examples": {
+              "application/json": "{\n  \"myRoomsScores\": [\n    {\n      \"id\": 1,\n      \"name\": \"Sala 1\",\n      \"users\": [\n        {\n          \"score\": 200,\n          \"id\": 1,\n          \"name\": \"usuario1\",\n          \"picture\": \"image/imagem.jpg\"\n        }\n      ]\n    }\n  ],\n  \"roomsScores\": [\n    {\n      \"roomId\": 1,\n      \"score\": 177,\n      \"points\": 260\n    }\n  ],\n  \"questionsRoomScores\": [\n    {\"id\": 1,\n      \"questions\": [\n        {\n          \"id\": 2,\n          \"order\": 3,\n          \"points\": 80,\n          \"description\": \"Qual o resultado de 1 x 1 ?\",\n          \"score\": 37\n        }\n      ]\n    }\n  ],\n  \"allUserScores\": [\n    {\n      \"roomId\": 1,\n      \"userId\": 2,\n      \"score\": \"186\"\n    }, {\n      \"roomId\": 1,\n      \"userId\": 1,\n      \"score\": \"177\"\n    }\n  ]\n}"
+            }
+          },
+          "401": {
+            "description": "Não autorizado."
+          },
+          "403": {
+            "description": "Acesso proibido."
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "listVersionsv2",
+        "summary": "List API versions",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 300 response",
+            "examples": {
+              "application/json": "{\n    \"versions\": [\n        {\n            \"status\": \"CURRENT\",\n            \"updated\": \"2011-01-21T11:33:21Z\",\n            \"id\": \"v2.0\",\n            \"links\": [\n                {\n                    \"href\": \"http://127.0.0.1:8774/v2/\",\n                    \"rel\": \"self\"\n                }\n            ]\n        },\n        {\n            \"status\": \"EXPERIMENTAL\",\n            \"updated\": \"2013-07-23T11:33:21Z\",\n            \"id\": \"v3.0\",\n            \"links\": [\n                {\n                    \"href\": \"http://127.0.0.1:8774/v3/\",\n                    \"rel\": \"self\"\n                }\n            ]\n        }\n    ]\n}"
+            }
+          },
+          "300": {
+            "description": "200 300 response",
+            "examples": {
+              "application/json": "{\n    \"versions\": [\n        {\n            \"status\": \"CURRENT\",\n            \"updated\": \"2011-01-21T11:33:21Z\",\n            \"id\": \"v2.0\",\n            \"links\": [\n                {\n                    \"href\": \"http://127.0.0.1:8774/v2/\",\n                    \"rel\": \"self\"\n                }\n            ]\n        },\n        {\n            \"status\": \"EXPERIMENTAL\",\n            \"updated\": \"2013-07-23T11:33:21Z\",\n            \"id\": \"v3.0\",\n            \"links\": [\n                {\n                    \"href\": \"http://127.0.0.1:8774/v3/\",\n                    \"rel\": \"self\"\n                }\n            ]\n        }\n    ]\n}"
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "UserPost",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Token": {
+      "name": "token",
+      "in": "header",
+      "type": "apiKey",
+      "description": "Adicionar Token para realizar as requisições."
+    }
+  },
+  "security": [
+    {
+      "Token": []
+    }
+  ],
+  "definitions": {
+    "UserToken": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Email do usuário."
+        },
+        "password": {
+          "type": "string",
+          "description": "Senha do usuário."
+        }
+      }
+    }
+  }
+}

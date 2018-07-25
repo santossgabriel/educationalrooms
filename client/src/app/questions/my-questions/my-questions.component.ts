@@ -45,12 +45,17 @@ export class MyQuestionsComponent implements OnInit {
       this.storageService.updateCategories(questions.map(p => p.category))
       questions.map(p => p.category)
 
-      if (this.storageService.getTutorial() == 1) {
+      if (this.storageService.getTutorial() === 1) {
         this.storageService.setTutorial(2)
         setTimeout(() => {
           Tour.tutorial1(() => {
             this.openQuestionModal(null)
           })
+        }, 500)
+      } else if (this.storageService.getTutorial() === 5) {
+        this.storageService.setTutorial(6)
+        setTimeout(() => {
+          Tour.tutorial5()
         }, 500)
       }
     }, err => this.loading = false)
@@ -63,15 +68,8 @@ export class MyQuestionsComponent implements OnInit {
         callback: this.refresh
       }
     }).afterClosed().subscribe((res) => {
-      if (res) {
+      if (res)
         this.refresh()
-        if (this.storageService.getTutorial() === 5) {
-          this.storageService.setTutorial(6)
-          setTimeout(() => {
-            Tour.tutorial5()
-          }, 500)
-        }
-      }
     })
   }
 

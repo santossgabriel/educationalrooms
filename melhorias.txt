@@ -4,24 +4,17 @@ Melhorias do App:
   - Adicionar filtro na lista de questões
 
 Melhorias do Site:
-  - Alterar o nome de 'Minhas Questões' para 'Questões Públicas'
   - Adicionar imagem nas questões, para substituir perguntas
-  - Exibir opções de ordenação na tela de adicionar questões
-  - Resposta correta
   - Alinhamento das colunas de minhas questões
   - Placeholder com exemplo do tempo de questão
   - Alterar a ordem do botões ORDENAR e ADICIONAR QUESTÃO para experiência de usuário
-  - Definir 
   - Alterar ordem dos menus de forma que fique mais intuitivo
     - Crie suas questões
     - Crie sua sala
     - Salas que participo
     - Salas que criei
   - Exibir tempo total da sala
-
-  - Adicionar o IntroJS ou enjoyhint
+  - Adicionar IntroJS para criar a sala
 
 https://www.youtube.com/watch?v=nOivQEBjXII
 https://www.youtube.com/watch?v=yz316cWscqI
-
-
