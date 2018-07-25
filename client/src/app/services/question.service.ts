@@ -17,8 +17,8 @@ export class QuestionService {
     return this.http.get('/api/question-others')
   }
 
-  getCategories() {
-    return this.http.get('/api/categories')
+  getAreas() {
+    return this.http.get('/api/areas')
   }
 
   save(question: Question) {

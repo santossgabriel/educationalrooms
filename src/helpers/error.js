@@ -64,7 +64,7 @@ export const asyncErrorHandler = fn => (req, res, next) => {
 
 export const questionErros = {
   HAS_DESCRIPTION: 'Descrição inválida.',
-  HAS_CATEGORY: 'A questão deve ter uma área.',
+  HAS_AREA: 'A questão deve ter uma área.',
   HAS_FOUR_ANSWERS: 'A questão deve ter 4 respostas.',
   BETWEEN_POINTS: 'Os pontos devem estar entre 1 and 10.',
   SYNC_NO_UPDATED_DATE: 'Questão sem data de atualização'

@@ -11,6 +11,7 @@ import { Notif } from '../models/notification.models';
 import { dateToElapsedTime } from '../helpers/utils';
 import { StorageService } from '../services/storage.service';
 import { Tour } from '../helpers/tour';
+import { TutorialService } from '../services/tutorial.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -30,6 +31,7 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
     private accountService: AccountService,
     private notificationService: NotifService,
     private storageService: StorageService,
+    private tutorialService: TutorialService,
     public dialog: MatDialog,
     private activatedRouter: ActivatedRoute) {
     Globals.addUserChangedListener(this)
@@ -116,16 +118,16 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
 
   }
 
-  help() {
-    if (this.path.indexOf('my-questions') === -1) {
-      this.storageService.setTutorial(1)
-      this.router.navigate(['my-questions'])
-    } else {
-      this.storageService.setTutorial(2)
-      Tour.tutorial1(() => {
-        const btn = <HTMLElement>(document.getElementById('createQuestion'))
-        btn.click()
-      })
-    }
+  help(type) {
+    // if (this.path.indexOf('my-questions') === -1) {
+    //   this.storageService.setTutorial(1)
+    //   this.router.navigate(['my-questions'])
+    // } else {
+    //   this.storageService.setTutorial(2)
+    //   Tour.tutorial1(() => {
+    //     const btn = <HTMLElement>(document.getElementById('createQuestion'))
+    //     btn.click()
+    //   })
+    // }
   }
 }

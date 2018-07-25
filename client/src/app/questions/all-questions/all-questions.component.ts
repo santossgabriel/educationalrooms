@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material'
 })
 export class AllQuestionsComponent implements OnInit {
 
-  displayedColumns = ['id', 'category', 'description']
+  displayedColumns = ['id', 'area', 'description']
   dataSource: MatTableDataSource<Question>
   loading = false
   hasQuestions

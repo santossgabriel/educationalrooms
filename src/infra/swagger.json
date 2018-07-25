@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "v1",
-    "title": "My API"
+    "title": "QuizRoom API"
   },
   "paths": {
     "/api/account": {
@@ -119,13 +119,13 @@
         }
       }
     },
-    "/notification": {
+    "/api/notification": {
       "get": {
         "tags": [
           "Notification"
         ],
         "summary": "Obter todas as notificações do usuário logado.",
-        "operationId": "NotificationGet",
+        "operationId": "ApiNotificationGet",
         "consumes": [],
         "produces": [
           "text/plain",
@@ -154,7 +154,7 @@
           "Notification"
         ],
         "summary": "Deletar todas as notificações do usuário logado.",
-        "operationId": "NotificationDelete",
+        "operationId": "ApiNotificationDelete",
         "consumes": [],
         "produces": [
           "text/plain",
@@ -178,13 +178,13 @@
         }
       }
     },
-    "/notification/{id}": {
+    "/api/notification/{id}": {
       "delete": {
         "tags": [
           "Notification"
         ],
         "summary": "Deletar uma notificação específica.",
-        "operationId": "NotificationByIdDelete",
+        "operationId": "ApiNotificationByIdDelete",
         "consumes": [],
         "produces": [
           "text/plain",
@@ -216,28 +216,20 @@
         }
       }
     },
-    "/notification-read": {
+    "/api/notification-read": {
       "put": {
         "tags": [
           "Notification"
         ],
         "summary": "Marcar como lidas todas as notificações do usuário logado.",
-        "operationId": "Notification-readPut",
+        "operationId": "ApiNotification-readPut",
         "consumes": [],
         "produces": [
           "text/plain",
           "application/json",
           "text/json"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Notificação marcada como lida",
@@ -499,15 +491,7 @@
           "application/json",
           "text/json"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Success",
@@ -572,13 +556,13 @@
         }
       }
     },
-    "/room/{id}": {
+    "/api/room/{id}": {
       "get": {
         "tags": [
           "Room"
         ],
         "summary": "Obter uma sala específica.",
-        "operationId": "RoomByIdGet",
+        "operationId": "ApiRoomByIdGet",
         "consumes": [],
         "produces": [
           "text/plain",
@@ -614,7 +598,7 @@
           "Room"
         ],
         "summary": "Remover uma determinada sala.",
-        "operationId": "RoomByIdDelete",
+        "operationId": "ApiRoomByIdDelete",
         "consumes": [],
         "produces": [
           "text/plain",
@@ -646,28 +630,20 @@
         }
       }
     },
-    "/room-my": {
+    "/api/room-my": {
       "get": {
         "tags": [
           "Room"
         ],
         "summary": "Obter salas do usuário logado.",
-        "operationId": "Room-myGet",
+        "operationId": "ApiRoom-myGet",
         "consumes": [],
         "produces": [
           "text/plain",
           "application/json",
           "text/json"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Success",
@@ -688,13 +664,13 @@
         }
       }
     },
-    "/room-associated": {
+    "/api/room-associated": {
       "get": {
         "tags": [
           "Room"
         ],
         "summary": "Obter salas que o usuário logado participa ou já participou.",
-        "operationId": "Room-associatedGet",
+        "operationId": "ApiRoom-associatedGet",
         "consumes": [],
         "produces": [
           "text/plain",
@@ -722,13 +698,13 @@
         }
       }
     },
-    "/room-opened": {
+    "/api/room-opened": {
       "get": {
         "tags": [
           "Room"
         ],
         "summary": "Obter salas abertas no momento.",
-        "operationId": "Room-openedGet",
+        "operationId": "ApiRoom-openedGet",
         "consumes": [],
         "produces": [
           "text/plain",
@@ -756,13 +732,13 @@
         }
       }
     },
-    "/room-quiz/{id}": {
+    "/api/room-quiz/{id}": {
       "get": {
         "tags": [
           "Room"
         ],
         "summary": "Obter dados iniciais do quiz.",
-        "operationId": "Room-quizByIdGet",
+        "operationId": "ApiRoom-quizByIdGet",
         "consumes": [],
         "produces": [
           "text/plain",
@@ -794,13 +770,13 @@
         }
       }
     },
-    "/room": {
+    "/api/room": {
       "post": {
         "tags": [
           "Room"
         ],
         "summary": "Salvar uma nova sala ou uma sala já existente.",
-        "operationId": "RoomPost",
+        "operationId": "ApiRoomPost",
         "consumes": [
           "application/json-patch+json",
           "application/json",
@@ -841,13 +817,13 @@
         }
       }
     },
-    "/room-associate": {
+    "/api/room-associate": {
       "put": {
         "tags": [
           "Room"
         ],
         "summary": "Associar o usuário logado à uma determinada sala.",
-        "operationId": "Room-associatePut",
+        "operationId": "ApiRoom-associatePut",
         "consumes": [
           "application/json-patch+json",
           "application/json",
@@ -888,13 +864,13 @@
         }
       }
     },
-    "/room-status": {
+    "/api/room-status": {
       "put": {
         "tags": [
           "Room"
         ],
         "summary": "Alterar o status de uma determinada sala.",
-        "operationId": "Room-statusPut",
+        "operationId": "ApiRoom-statusPut",
         "consumes": [
           "application/json-patch+json",
           "application/json",
@@ -1514,7 +1490,7 @@
       "name": "token",
       "in": "header",
       "type": "apiKey",
-      "description": "Adicionar Token para realizar as requisições."
+      "description": "Adicione o token."
     }
   },
   "security": [

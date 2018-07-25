@@ -3,6 +3,7 @@ import { Answer } from './answer.model'
 export class Question {
   id: number
   category: string
+  area: string
   description: string
   shared: boolean
   answers: Answer[]

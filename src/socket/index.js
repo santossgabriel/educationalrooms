@@ -66,7 +66,7 @@ export const updateOnlineRooms = async () => {
         include: [
           {
             model: Question,
-            attributes: ['id', 'description', 'category'],
+            attributes: ['id', 'description', 'area', 'category'],
             include: [
               { model: Answer, attributes: ['id', 'description', 'correct', 'classification'] }
             ]
@@ -89,6 +89,7 @@ export const updateOnlineRooms = async () => {
       order: p.order,
       points: p.points,
       description: p.Question.description,
+      area: p.Question.area,
       category: p.Question.category,
       answers: p.Question.Answers.map(x => x)
     }))
@@ -153,12 +154,6 @@ const startTimer = async () => {
 }
 
 const sendFeedback = async (roomId, questionId, users) => {
-  // const correctAnswer = await Answer.findOne({
-  //   where: {
-  //     questionId: questionId,
-  //     correct: true
-  //   }
-  // })
   const answers = await RoomAnswer.findAll({ where: { roomId: roomId, questionId: questionId } })
   users.forEach(u => {
     const userAnswer = answers.filter(p => p.userId == u).shift()

@@ -23,6 +23,11 @@ export const modelAttributes = {
     allowNull: false,
     defaultValue: false
   },
+  area: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  },
   category: {
     type: Sequelize.STRING,
     allowNull: false,

@@ -8,6 +8,7 @@ import { ErrorModalComponent } from './confirm-modal.component'
 import swal from 'sweetalert2'
 import { StorageService } from '../services/storage.service';
 import { Tour } from '../helpers/tour';
+import { TutorialService } from '../services/tutorial.service';
 
 @Component({
   selector: 'app-question-modal',
@@ -17,42 +18,45 @@ export class QuestionModalComponent {
 
   points: number
   question: Question
-  selectedCategory
-  categories: Array<string>
-  customCategory: boolean
+  selectedArea
+  areas: Array<string> = []
+  customArea: boolean
   callback: Function
+  categories = ['Iniciante', 'Intermediário', 'Avançado']
 
   constructor(public dialog: MatDialog,
     public dialogRef: MatDialogRef<QuestionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private questionService: QuestionService,
-    private storageService: StorageService) {
+    private storageService: StorageService,
+    private tutorialService: TutorialService) {
     this.question = data.question
     this.callback = data.callback
 
-    let cats = storageService.getCategories()
+    let cats = storageService.getAreas()
     if (cats && cats.length > 0) {
-      this.categories = cats
-      this.fillCategories()
+      this.areas = cats
+      this.fillAreas()
     } else
-      questionService.getCategories().subscribe((res: string[]) => {
-        storageService.updateCategories(res)
-        this.categories = res
-        this.fillCategories()
+      questionService.getAreas().subscribe((res: string[]) => {
+        storageService.updateAreas(res)
+        this.areas = res
+        this.fillAreas()
       })
 
-    if (this.storageService.getTutorial() === 2) {
-      this.storageService.setTutorial(3)
+    const tutorial = tutorialService.get()
+    if (tutorial && tutorial.isQuestion() && tutorial.step === 1) {
       setTimeout(() => {
-        Tour.tutorial2()
+        Tour.question.step2()
       }, 500)
     }
+    this.question.category = this.categories[0]
   }
 
-  private fillCategories() {
-    this.categories.push('Outra ...')
-    this.selectedCategory = this.categories[0]
-    this.categoryChanged()
+  private fillAreas() {
+    this.areas.push('Outra ...')
+    this.selectedArea = this.areas[0]
+    this.areaChanged()
   }
 
   onNoClick(): void {
@@ -65,10 +69,10 @@ export class QuestionModalComponent {
     }, 50)
   }
 
-  categoryChanged() {
-    this.customCategory = this.categories.indexOf(this.selectedCategory) === (this.categories.length - 1)
-    if (!this.customCategory)
-      this.question.category = ''
+  areaChanged() {
+    this.customArea = this.areas.indexOf(this.selectedArea) === (this.areas.length - 1)
+    if (!this.customArea)
+      this.question.area = ''
   }
 
   changeCorrect(answer: Answer): void {
@@ -79,8 +83,8 @@ export class QuestionModalComponent {
   }
 
   saveQuestion() {
-    if (!this.customCategory)
-      this.question.category = this.selectedCategory
+    if (!this.customArea)
+      this.question.area = this.selectedArea
     this.questionService.save(this.question).subscribe(res => {
       this.dialogRef.close(true)
     }, err => {
@@ -89,16 +93,22 @@ export class QuestionModalComponent {
   }
 
   stepChange(step: number) {
-    if (step === 0 && this.storageService.getTutorial() === 3) {
-      this.storageService.setTutorial(4)
-      setTimeout(() => {
-        Tour.tutorial3()
-      }, 500)
-    } else if (step === 1 && this.storageService.getTutorial() === 4) {
-      this.storageService.setTutorial(5)
-      setTimeout(() => {
-        Tour.tutorial4()
-      }, 500)
+
+    const tutorial = this.tutorialService.get()
+    if (tutorial && tutorial.isQuestion()) {
+      if (step === 0 && tutorial.step === 2) {
+        setTimeout(() => {
+          Tour.question.step3()
+        }, 500)
+      } else if (step === 1 && tutorial.step === 3) {
+        setTimeout(() => {
+          Tour.question.step4()
+        }, 500)
+      } else if (step === 2 && tutorial.step === 4) {
+        setTimeout(() => {
+          Tour.question.step5()
+        }, 500)
+      }
     }
   }
 }

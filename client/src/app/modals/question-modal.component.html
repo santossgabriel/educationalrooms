@@ -4,20 +4,34 @@
     <mat-step>
       <ng-template matStepLabel>Área</ng-template>
       <mat-form-field id="selectArea">
-        <mat-select [(ngModel)]="selectedCategory" (selectionChange)="categoryChanged()" placeholder="Selecione a área">
-          <mat-option *ngFor="let c of categories" [value]="c">
+        <mat-select [disabled]="areas.length < 2" [(ngModel)]="selectedArea" (selectionChange)="areaChanged()" placeholder="Selecione a área">
+          <mat-option *ngFor="let c of areas" [value]="c">
             {{ c }}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field id="customArea" style="width: 100%">
-        <input matInput [disabled]="!customCategory" [(ngModel)]="question.category" placeholder="Qual a área da questão ?" required
-        />
+        <input matInput [disabled]="!customArea" [(ngModel)]="question.area" placeholder="Qual a área da questão ?" required />
       </mat-form-field>
       <div class="action-button">
         <button mat-button mat-dialog-close>Cancelar</button>
-        <button (click)="stepChange(0)" id="btnNextStep" [disabled]="customCategory && !question.category" mat-raised-button matStepperNext
+        <button (click)="stepChange(0)" id="btnNextStep" [disabled]="customArea && !question.area" mat-raised-button matStepperNext
           color="primary">Próximo</button>
+      </div>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Categoria</ng-template>
+      <mat-form-field id="selectCategory">
+        <mat-select [(ngModel)]="question.category" placeholder="Selecione a categoria">
+          <mat-option *ngFor="let c of categories" [value]="c">
+            {{ c }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="action-button">
+        <button mat-button mat-dialog-close>Cancelar</button>
+        <button (click)="stepChange(1)" mat-raised-button matStepperNext color="primary">Próximo</button>
       </div>
     </mat-step>
 
@@ -29,7 +43,7 @@
       </mat-form-field>
       <div class="action-button">
         <button mat-button matStepperPrevious>Voltar</button>
-        <button (click)="stepChange(1)" [disabled]="!question.description" mat-raised-button matStepperNext color="primary">Próximo</button>
+        <button (click)="stepChange(2)" [disabled]="!question.description" mat-raised-button matStepperNext color="primary">Próximo</button>
       </div>
     </mat-step>
 

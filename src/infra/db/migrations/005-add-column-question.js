@@ -2,7 +2,7 @@ module.exports = {
   up: function(queryInterface, Sequelize) {
     queryInterface.addColumn(
       'Question',
-      'category',{
+      'area',{
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: 'Conhecimentos gerais'
@@ -13,7 +13,7 @@ module.exports = {
   down: function(queryInterface, Sequelize) {
     queryInterface.removeColumn(
       'Question',
-      'category'
+      'area'
     );
   }
 }

@@ -8,7 +8,7 @@ const request = supertest(app)
 let questions = []
 let question = null
 let token = ''
-let categories = []
+let areas = []
 
 /**
  * Obter questões do usuário logado
@@ -94,9 +94,9 @@ Then('Então eu devo obter uma questão', () => {
 })
 
 /**
- * Obter questão pelo id
+ * Obter áreas
  */
-Given('Dado que eu queira obter minhas categorias', () => {
+Given('Dado que eu queira obter áreas já cadastradas', () => {
   return request
     .post('/api/token')
     .send({ email: 'questionmock3@mail.com', password: '123qwe' })
@@ -105,15 +105,15 @@ Given('Dado que eu queira obter minhas categorias', () => {
     })
 })
 
-When('Quando eu buscar as categorias', () => {
+When('Quando eu buscar as áreas', () => {
   return request
-    .get('/api/categories')
+    .get('/api/areas')
     .set({ token: token })
     .then((result) => {
-      categories = result.body
+      areas = result.body
     })
 })
 
-Then('Então eu quero obter uma lista das categorias', () => {
-  assert.isTrue(categories.length > 0, 'Deve retornar mais de uma categoria')
+Then('Então eu quero obter uma lista das áreas', () => {
+  assert.isTrue(areas.length > 0, 'Deve retornar mais de uma áreas')
 })

@@ -46,7 +46,7 @@ const toMy = (p) => {
       description: x.Question.description,
       points: x.points,
       shared: x.Question.shared,
-      category: x.Question.category,
+      area: x.Question.area,
       sync: x.Question.sync,
       createdAt: x.Question.createdAt,
       updatedAt: x.Question.updatedAt,
@@ -262,7 +262,7 @@ export default {
       await RoomUser.destroy({ where: { roomId: id, userId: req.claims.id } })
       res.json({ message: 'Saiu da sala.' })
 
-      notification.description = 'saiu na sala.'
+      notification.description = 'saiu da sala.'
       notification.type = NotificationTypes.OUT_ROOM
       sendNotifications([room.userId], notification)
     }

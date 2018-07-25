@@ -22,12 +22,13 @@ export class EditRoomComponent implements OnInit {
   error = ''
   room = <Room>{}
   dataSource: MatTableDataSource<RoomQuestion>
-  displayedColumns = ['order', 'category', 'description', 'points', 'actions']
+  displayedColumns = ['order', 'area', 'description', 'points', 'actions']
   hasQuestions: boolean
   orderOption = 'id'
   orderOptions = [
     { description: 'PADRÃO', value: 'id' },
     { description: 'PONTOS', value: 'points' },
+    { description: 'ÁREA', value: 'area' },
     { description: 'CATEGORIA', value: 'category' }
   ]
   loading = false

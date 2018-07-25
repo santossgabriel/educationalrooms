@@ -30,7 +30,7 @@ export class StorageService {
       localStorage.removeItem('USER')
       localStorage.removeItem('TOKEN')
       localStorage.removeItem('SCORES')
-      localStorage.removeItem('CATEGORIES')
+      localStorage.removeItem('AREAS')
       Globals.notifyUserChanged(null)
     }
   }
@@ -43,24 +43,16 @@ export class StorageService {
     return JSON.parse(localStorage.getItem('SCORES'))
   }
 
-  updateCategories(categories: string[]): void {
-    let cats = this.getCategories()
+  updateAreas(areas: string[]): void {
+    let cats = this.getAreas()
     if (cats) {
-      categories.concat(cats)
-      categories.filter((p, i) => categories.indexOf(p) === i)
+      areas.concat(cats)
+      areas.filter((p, i) => areas.indexOf(p) === i)
     }
-    localStorage.setItem('CATEGORIES', JSON.stringify(categories))
+    localStorage.setItem('AREAS', JSON.stringify(areas))
   }
 
-  getCategories(): string[] {
-    return JSON.parse(localStorage.getItem('CATEGORIES'))
-  }
-
-  setTutorial(step: number) {
-    localStorage.setItem('TUTORIAL', step.toString())
-  }
-
-  getTutorial(): number {
-    return localStorage.getItem('TUTORIAL') ? Number(localStorage.getItem('TUTORIAL')) : 0
+  getAreas(): string[] {
+    return JSON.parse(localStorage.getItem('AREAS'))
   }
 }

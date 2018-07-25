@@ -13,15 +13,7 @@ export const questionStatus = {
   REMOVED: 'R'
 }
 
-const questionToDb = (q) => {
-  return {
-    category: q.category,
-    description: q.description,
-    shared: q.shared,
-    sync: q.sync,
-    updatedAt: q.updatedAt
-  }
-}
+const categories = ['Iniciante', 'Intermediário', 'Avançado']
 
 const { sequelize, Question, Answer } = db
 
@@ -59,10 +51,13 @@ const validateQuestion = (question) => {
   if (!question || !question.description)
     throwValidationError(questionErros.HAS_DESCRIPTION)
 
-  const { answers, category } = question
+  const { answers, category, area } = question
 
-  if (!category)
-    throwValidationError(questionErros.HAS_CATEGORY)
+  if (!area)
+    throwValidationError(questionErros.HAS_AREA)
+
+  if (!category || categories.indexOf(category) === -1)
+    throwValidationError(`A categoria deve ter os seguintes valores: '${categories.join(',')}'.`)
 
   if (!Array.isArray(question.answers) || question.answers.length != 4)
     throwValidationError(questionErros.HAS_FOUR_ANSWERS)
@@ -78,6 +73,7 @@ const toResult = (questions) => {
       id: questions.id,
       description: questions.description,
       category: questions.category,
+      area: questions.area,
       answers: questions.Answers,
       shared: questions.shared,
       userId: questions.userId
@@ -116,13 +112,13 @@ export default {
     res.json(toResult(questions))
   },
 
-  getMyCategories: async (req, res) => {
-    const categories = await Question.findAll({
-      attributes: ['category'],
-      group: ['category'],
+  getAreas: async (req, res) => {
+    const areas = await Question.findAll({
+      attributes: ['area'],
+      group: ['area'],
       order: sequelize.literal('count(1) desc')
     })
-    res.json(categories.map(p => p.category))
+    res.json(areas.map(p => p.area))
   },
 
   create: async (req, res) => {
@@ -132,6 +128,7 @@ export default {
 
       question.id = req.body.id
       question.category = req.body.category
+      question.area = req.body.area
       question.description = req.body.description
       question.shared = req.body.shared
       question.answers = req.body.answers
@@ -162,6 +159,7 @@ export default {
 
       question.id = req.body.id
       question.category = req.body.category
+      question.area = req.body.area
       question.description = req.body.description
       question.shared = req.body.shared
       question.answers = req.body.answers
@@ -242,113 +240,5 @@ export default {
       where: { id: question.id }
     })
     res.json({ message: 'Compartilhada com sucesso.' })
-  },
-
-  sync: async (req, res) => {
-
-    if (!req.body || !req.body.questions || !Array.isArray(req.body.questions))
-      throwValidationError('Informe as questões para sincronização.')
-
-    const appQuestions = req.body.questions.map(p => {
-      p.sync = p.sync ? p.sync : ''
-      return p
-    })
-    let errors = []
-    let i
-
-    const appChangesIds = appQuestions.filter(t => t.id > 0).map(p => p.id)
-    const news = appQuestions.filter(t => !t.id)
-
-    const dbChanges = await Question.findAll({
-      include: Answer,
-      where: sequelize.and(
-        { userId: req.claims.id },
-        sequelize.or(
-          { sync: { [sequelize.Op.ne]: '' } },
-          { id: appChangesIds }))
-    })
-
-    const dbUpdates = dbChanges.filter(p => appChangesIds.indexOf(p.id) !== -1)
-
-    for (i = 0; i < dbUpdates.length; i++) {
-      const q = dbUpdates[i]
-      const mq = appQuestions.filter(p => p.id == q.id).shift()
-
-      const transaction = await sequelize.transaction()
-
-      try {
-        if (!mq.updatedAt)
-          throwValidationError(questionErros.SYNC_NO_UPDATED_DATE)
-        mq.updatedAt = new Date(mq.updatedAt)
-        if (!q.updatedAt || (mq.updatedAt > new Date(q.updatedAt.toString()))) {
-          if (mq.sync === 'R') {
-            await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
-            await Question.destroy({ where: { id: q.id }, transaction: transaction })
-          } else {
-            validateQuestion(mq)
-            await Question.update(questionToDb(mq), {
-              where: { id: mq.id },
-              transaction: transaction
-            })
-            const { answers } = mq
-            for (let i = 0; i < answers.length; i++) {
-              let answer = answers[i]
-              answer.questionId = mq.id
-              await Answer.update(answer, {
-                where: { id: answer.id },
-                transaction: transaction
-              })
-            }
-          }
-        } else {
-          if (q.sync === 'R') {
-            await Answer.destroy({ where: { questionId: q.id }, transaction: transaction })
-            await Question.destroy({ where: { id: q.id }, transaction: transaction })
-          }
-        }
-
-        transaction.commit()
-      } catch (ex) {
-        transaction.rollback()
-        errors.push({
-          exception: typeof (ex) === 'string' ? ex : ex.message,
-          question: mq,
-          message: 'Erro ao atualizar questão'
-        })
-      }
-    }
-
-    for (i = 0; i < news.length; i++) {
-      let q = news[i]
-      const transaction = await sequelize.transaction()
-      try {
-        q.userId = req.claims.id
-        validateQuestion(q)
-        q.sync = ''
-        const questionDB = await Question.create(q, { transaction: transaction })
-        const { answers } = q
-        for (let i = 0; i < answers.length; i++) {
-          answers[i].questionId = questionDB.id
-          await Answer.create(answers[i], { transaction: transaction })
-        }
-        transaction.commit()
-      } catch (ex) {
-        transaction.rollback()
-        errors.push({
-          exception: typeof (ex) === 'string' ? ex : ex.message,
-          question: q,
-          message: 'Erro ao criar questão'
-        })
-      }
-    }
-
-    Question.update({ sync: '' }, { where: { userId: req.claims.id } })
-
-    const questionsResult = await Question.findAll({
-      include: Answer,
-      where: { userId: req.claims.id }
-    })
-
-    res.json({ errors: errors, questions: questionsResult })
   }
 }

@@ -32,7 +32,9 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef style="width: 180px">Ações</th>
           <td mat-cell *matCellDef="let element" style="width: 180px">
-            <button (click)="openScores(element)" *ngIf="element.status === 'ENDED'" mat-button color="primary" [matMenuTriggerFor]="scoresMenu">PONTUAÇÕES</button>
+            <button mat-icon-button (click)="openScores(element)" *ngIf="element.status === 'ENDED'" matTooltip="PONTUAÇÕES" mat-raised-button [matMenuTriggerFor]="scoresMenu">
+              <mat-icon color="primary">poll</mat-icon>
+            </button>
             <button routerLink="/quiz/{{element.id}}" *ngIf="element.status === 'STARTED'" matTooltip="ACESSAR" mat-icon-button mat-raised-button>
               <mat-icon color="primary">trending_flat</mat-icon>
             </button>

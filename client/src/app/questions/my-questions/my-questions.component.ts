@@ -7,6 +7,7 @@ import { QuestionService } from '../../services/question.service'
 import { ConfirmModalComponent, ErrorModalComponent } from '../../modals/confirm-modal.component'
 import { StorageService } from '../../services/storage.service';
 import { Tour } from '../../helpers/tour';
+import { TutorialService } from '../../services/tutorial.service';
 
 @Component({
   selector: 'app-my-questions',
@@ -17,14 +18,15 @@ import { Tour } from '../../helpers/tour';
 })
 export class MyQuestionsComponent implements OnInit {
 
-  displayedColumns = ['id', 'category', 'description', 'shared', 'actions']
+  displayedColumns = ['id', 'area', 'description', 'shared', 'actions']
   dataSource: MatTableDataSource<Question>
   hasQuestions: boolean = false
   loading = true
 
   constructor(public dialog: MatDialog,
     private questionService: QuestionService,
-    private storageService: StorageService) {
+    private storageService: StorageService,
+    private tutorialService: TutorialService) {
     this.refresh()
   }
 
@@ -42,21 +44,22 @@ export class MyQuestionsComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.hasQuestions = questions.length > 0
-      this.storageService.updateCategories(questions.map(p => p.category))
-      questions.map(p => p.category)
+      this.storageService.updateAreas(questions.map(p => p.area))
+      questions.map(p => p.area)
 
-      if (this.storageService.getTutorial() === 1) {
-        this.storageService.setTutorial(2)
-        setTimeout(() => {
-          Tour.tutorial1(() => {
-            this.openQuestionModal(null)
-          })
-        }, 500)
-      } else if (this.storageService.getTutorial() === 5) {
-        this.storageService.setTutorial(6)
-        setTimeout(() => {
-          Tour.tutorial5()
-        }, 500)
+      const tutorial = this.tutorialService.get()
+      if (tutorial && tutorial.isQuestion()) {
+        if (tutorial.step === 0) {
+          setTimeout(() => {
+            Tour.question.step1(() => {
+              this.openQuestionModal(null)
+            })
+          }, 500)
+        } else if (tutorial.step === 5) {
+          setTimeout(() => {
+            Tour.question.step6()
+          }, 500)
+        }
       }
     }, err => this.loading = false)
   }

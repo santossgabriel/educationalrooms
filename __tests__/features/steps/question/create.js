@@ -11,7 +11,8 @@ let token = ''
 Given('Dado que eu tenha criado uma questão', () => {
   question = {
     description: 'teste',
-    category: 'Matemárica',
+    category: 'Avançado',
+    area: 'area 1',
     answers: [
       { description: 'teste1', classification: 'A' },
       { description: 'teste2', classification: 'B' },

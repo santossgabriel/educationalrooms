@@ -15,7 +15,7 @@ export class RoomQuestionModalComponent {
 
   room: Room
   questions: RoomQuestion[]
-  displayedColumns = ['category', 'description', 'selected']
+  displayedColumns = ['area', 'description', 'selected']
   dataSource: MatTableDataSource<RoomQuestion>
   hasQuestions: boolean = false
   callback: Function
