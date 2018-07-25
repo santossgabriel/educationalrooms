@@ -39,10 +39,10 @@ const validateAnswers = (answers) => {
   if (corrects != 1)
     throwValidationError(answerErros.HAS_CORRECT_ANSWER)
 
-  if (classifications.filter((v, i, arr) => arr.indexOf(v) === i).length != 4)
+  if (classifications.filter((v, i, arr) => arr.indexOf(v) === i).length !== answers.length)
     throwValidationError(answerErros.HAS_CLASSIFICATION_NEEDED)
 
-  if (descriptions.filter((v, i, arr) => arr.indexOf(v) === i).length != 4)
+  if (descriptions.filter((v, i, arr) => arr.indexOf(v) === i).length !== answers.length)
     throwValidationError(answerErros.NO_ANSWER_REPEATED)
 }
 
@@ -59,8 +59,8 @@ const validateQuestion = (question) => {
   if (!category || categories.indexOf(category) === -1)
     throwValidationError(`A categoria deve ter os seguintes valores: '${categories.join(',')}'.`)
 
-  if (!Array.isArray(question.answers) || question.answers.length != 4)
-    throwValidationError(questionErros.HAS_FOUR_ANSWERS)
+  if (!Array.isArray(question.answers) || question.answers.length < 2 || question.answers.length > 6)
+    throwValidationError(questionErros.HAS_BETWEEN_ANSWERS)
 
   validateAnswers(answers)
 }

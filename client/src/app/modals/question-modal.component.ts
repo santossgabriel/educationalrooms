@@ -45,7 +45,7 @@ export class QuestionModalComponent {
       })
 
     const tutorial = tutorialService.get()
-    if (tutorial && tutorial.isQuestion() && tutorial.step === 1) {
+    if (tutorial && tutorial.type === 'question' && tutorial.step === 1) {
       setTimeout(() => {
         Tour.question.step2()
       }, 500)
@@ -95,7 +95,7 @@ export class QuestionModalComponent {
   stepChange(step: number) {
 
     const tutorial = this.tutorialService.get()
-    if (tutorial && tutorial.isQuestion()) {
+    if (tutorial && tutorial.type === 'question') {
       if (step === 0 && tutorial.step === 2) {
         setTimeout(() => {
           Tour.question.step3()
@@ -110,5 +110,35 @@ export class QuestionModalComponent {
         }, 500)
       }
     }
+  }
+
+  changeAnswer(n: number) {
+    if (n < 0 && this.question.answers.length > 2)
+      this.question.answers.pop()
+    else if (n > 0 && this.question.answers.length < 6) {
+      let answer: Answer = <Answer>{ classification: 'C' }
+      if (this.question.answers.length === 3)
+        answer.classification = 'D'
+      else if (this.question.answers.length === 4)
+        answer.classification = 'E'
+      else if (this.question.answers.length === 5)
+        answer.classification = 'F'
+      this.question.answers.push(<Answer>answer)
+    }
+  }
+
+  validQuestion(): boolean {
+    let valid = true
+    if (!this.question.description)
+      return false
+    if (!this.selectedArea)
+      return false
+    if (!this.question.category)
+      return false
+    this.question.answers.forEach(p => {
+      if (!p.description)
+        valid = false
+    })
+    return valid
   }
 }

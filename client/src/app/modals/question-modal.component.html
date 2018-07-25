@@ -50,7 +50,20 @@
     <mat-step>
       <ng-template matStepLabel>Alternativas</ng-template>
       <mat-list>
-        <h3 mat-subheader>Alternativas</h3>
+        <div style="text-align: center">
+          <span style="color:#666;font-size: 16px">{{question.description}}</span>
+        </div>
+        <div fxLayout="row" style="margin-left: 30px;">
+          <div>
+            <div style="height:13px">
+              <i class="up" (click)="changeAnswer(1)"></i>
+            </div>
+            <div style="height:13px">
+              <i class="down" (click)="changeAnswer(-1)"></i>
+            </div>
+          </div>
+          <span style="margin:5px; color: #666">{{question.answers.length}} Alternativas</span>
+        </div>
         <div style="width:100%;text-align: right; color:#666;font-size: 12px">Correta?</div>
         <mat-list-item *ngFor="let a of question.answers">
           <button mat-mini-fab disabled>{{a.classification}}</button>
@@ -67,7 +80,7 @@
 
       <div class="action-button">
         <button mat-button matStepperPrevious>VOLTAR</button>
-        <button [disabled]="!question.description || !question.description || !question.answers[0].description || !question.answers[1].description || !question.answers[2].description || !question.answers[3].description"
+        <button [disabled]="!validQuestion()"
           mat-raised-button color="primary" (click)="saveQuestion()">PRONTO</button>
       </div>
     </mat-step>

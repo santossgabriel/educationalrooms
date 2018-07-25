@@ -10,7 +10,7 @@ import { NotifService } from '../services/notification.service';
 import { Notif } from '../models/notification.models';
 import { dateToElapsedTime } from '../helpers/utils';
 import { StorageService } from '../services/storage.service';
-import { Tour } from '../helpers/tour';
+import { Tour, TourStep } from '../helpers/tour';
 import { TutorialService } from '../services/tutorial.service';
 
 @Component({
@@ -119,15 +119,20 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
   }
 
   help(type) {
-    // if (this.path.indexOf('my-questions') === -1) {
-    //   this.storageService.setTutorial(1)
-    //   this.router.navigate(['my-questions'])
-    // } else {
-    //   this.storageService.setTutorial(2)
-    //   Tour.tutorial1(() => {
-    //     const btn = <HTMLElement>(document.getElementById('createQuestion'))
-    //     btn.click()
-    //   })
-    // }
+    if (type === 'main') {
+      Tour.menu()
+    } else if (type === 'question') {
+      if (this.path.indexOf('my-questions') === -1) {
+        this.tutorialService.set(new TourStep('question', 0))
+        this.router.navigate(['my-questions'])
+      } else {
+        Tour.question.step1(() => {
+          const btn = <HTMLElement>(document.getElementById('createQuestion'))
+          btn.click()
+        })
+      }
+    } else if (type === 'room') {
+
+    }
   }
 }

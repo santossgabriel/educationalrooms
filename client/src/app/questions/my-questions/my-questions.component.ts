@@ -48,7 +48,7 @@ export class MyQuestionsComponent implements OnInit {
       questions.map(p => p.area)
 
       const tutorial = this.tutorialService.get()
-      if (tutorial && tutorial.isQuestion()) {
+      if (tutorial && tutorial.type === 'question') {
         if (tutorial.step === 0) {
           setTimeout(() => {
             Tour.question.step1(() => {

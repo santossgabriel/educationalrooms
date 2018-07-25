@@ -23,8 +23,8 @@
         </ng-container>
 
         <ng-container matColumnDef="shared">
-          <th id="shareQuestion" mat-header-cell *matHeaderCellDef> Compartilhada? </th>
-          <td mat-cell *matCellDef="let element">
+          <th id="shareQuestion" mat-header-cell *matHeaderCellDef style="width: 130px"> Compartilhada? </th>
+          <td mat-cell *matCellDef="let element" style="width: 130px">
             <mat-checkbox (change)="sharedChanged(element)" color="primary" [(ngModel)]="element.shared">
               {{element.shared ? 'Sim' : 'Não'}}
             </mat-checkbox>

@@ -25,18 +25,6 @@ export class TourStep {
     this.type = type
     this.step = step
   }
-
-  public isQuestion(): boolean {
-    return this.type === 'question'
-  }
-
-  public isMain(): boolean {
-    return this.type === 'main'
-  }
-
-  public isRoom(): boolean {
-    return this.type === 'room'
-  }
 }
 
 export const Tour = {
@@ -56,11 +44,23 @@ export const Tour = {
         position: 'right'
       }, {
         element: '#menu-associated-rooms',
-        intro: "Veja as salas que você participa ou já participu",
+        intro: "Veja as salas que você participa ou já participou",
         position: 'right'
       }, {
         element: '#menu-all-questions',
-        intro: 'Veja uma lista de questões compartilhadas por você e por outros usuários',
+        intro: 'Veja uma lista de questões compartilhadas por você e por outros usuários.',
+        position: 'right'
+      }, {
+        element: '#btnMenuNotification',
+        intro: 'Veja e exclua suas notificações.',
+        position: 'right'
+      }, {
+        element: '#btnMenuTutorial',
+        intro: 'Obtenha ajuda com os tutoriais do site.',
+        position: 'right'
+      }, {
+        element: '#btnMenuAccount',
+        intro: 'Veja e altere seus dados.',
         position: 'right'
       }
     ])
@@ -159,7 +159,8 @@ export const Tour = {
           element: '#shareQuestion',
           intro: 'Compartilhe as questões criadas com outros usuários.',
           position: 'top'
-        }, {
+        },
+         {
           element: '#manageQuestion',
           intro: 'Edite ou exclua suas questões.',
           position: 'top'
