@@ -27,7 +27,7 @@ When('Quando eu buscar as pontuações', () => {
 })
 
 Then('Então eu devo obter minhas pontuações e de minhas salas', () => {
-  assert.isArray(scores.myRoomsScores, `myRoomScores: ${JSON.stringify(scores.myRoomsScores)}`)
-  assert.isArray(scores.roomsScores, `myScores: ${JSON.stringify(scores.roomsScores)}`)
-  assert.isArray(scores.questionsRoomScores, `myScores: ${JSON.stringify(scores.questionsRoomScores)}`)
+  assert.isArray(scores.myRoomsScores, `myRoomsScores: ${JSON.stringify(scores.myRoomsScores)}`)
+  assert.isArray(scores.roomsScores, `roomsScores: ${JSON.stringify(scores.roomsScores)}`)
+  assert.isArray(scores.allUserScores, `allUserScores: ${JSON.stringify(scores.questionsRoomScores)}`)
 })
