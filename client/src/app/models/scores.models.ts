@@ -1,21 +1,7 @@
 export class Scores {
-  myRoomsScores: MyRoomScore[]
   roomsScores: RoomScore[]
-  questionsRoomScores: QuestionRoomScore[]
   allUserScores: AllUserScores[]
-}
-
-export class MyRoomScore {
-  id: number
-  name: string
-  users: UserScore[]
-}
-
-export class UserScore {
-  id: number
-  score: number
-  name: string
-  picture: string
+  myRoomsScores: MyRoomScore[]
 }
 
 export class RoomScore {
@@ -24,8 +10,24 @@ export class RoomScore {
   points: number
 }
 
-export class QuestionRoomScore {
+export class AllUserScores {
+  roomId: number
+  userId: number
+  score: number
+}
+
+export class MyRoomScore {
   id: number
+  name: string
+  questions: QuestionScore[]
+  users: UserScore[]
+}
+
+export class UserScore {
+  id: number
+  score: number
+  name: string
+  picture: string
   questions: QuestionScore[]
 }
 
@@ -34,11 +36,5 @@ export class QuestionScore {
   order: number
   points: number
   description: string
-  score: number
-}
-
-export class AllUserScores {
-  roomId: number
-  userId: number
   score: number
 }

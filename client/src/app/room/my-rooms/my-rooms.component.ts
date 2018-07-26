@@ -10,6 +10,7 @@ import { RoomService } from '../../services/room.service';
 import { ErrorModalComponent } from '../../modals/confirm-modal.component';
 import { getStatusDescriptionRoom } from '../../helpers/utils';
 import Swal from 'sweetalert2'
+import { ScoresModalComponent } from '../../modals/scores-modal.component';
 
 @Component({
   selector: 'app-my-rooms',
@@ -90,5 +91,11 @@ export class MyRoomsComponent implements OnInit {
 
       this.refresh()
     }, err => Swal('Oops...', err.error.message, 'error'))
+  }
+
+  openScores(r: Room): void {
+    this.dialog.open(ScoresModalComponent, {
+      data: { room: r }
+    })
   }
 }

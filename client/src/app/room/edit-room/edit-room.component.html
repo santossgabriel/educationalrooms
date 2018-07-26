@@ -68,6 +68,7 @@
     </table>
     <br />
     <div class="action-button">
+      <button style="margin: 10px" mat-raised-button color="primary" (click)="openQuestionModal()">ADICIONAR QUESTÕES</button>
       <mat-form-field>
         <mat-select [(ngModel)]="orderOption" (selectionChange)="orderOptionChanged()" placeholder="Ordenação">
           <mat-option *ngFor="let c of orderOptions" [value]="c.value">
@@ -75,9 +76,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="openQuestionModal()">ADICIONAR QUESTÕES</button>
     </div>
-    <br />
     <div class="action-button">
       <button [disabled]="!room.name || !room.time" mat-raised-button color="primary" (click)="saveRoom()">SALVAR</button>
     </div>

@@ -32,6 +32,7 @@ import { AssociatedRoomsComponent } from './room/associated-rooms/associated-roo
 import { RoomQuestionModalComponent } from './modals/room-question-modal.component';
 import { NotificationModalComponent } from './modals/notification-modal.component';
 import { QuizComponent } from './room/quiz/quiz.component';
+import { ScoresModalComponent } from './modals/scores-modal.component';
 
 const components = [
   AppComponent,
@@ -53,7 +54,8 @@ const components = [
   EditRoomComponent,
   AssociatedRoomsComponent,
   NotificationModalComponent,
-  QuizComponent
+  QuizComponent,
+  ScoresModalComponent
 ]
 
 const routes = [
@@ -94,7 +96,8 @@ const routes = [
     ConfirmModalComponent,
     NotificationModalComponent,
     ErrorModalComponent,
-    RoomQuestionModalComponent
+    RoomQuestionModalComponent,
+    ScoresModalComponent
   ],
   bootstrap: [AppComponent]
 })

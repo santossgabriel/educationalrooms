@@ -7,14 +7,10 @@ Melhorias do Site:
   - Adicionar imagem nas questões, para substituir perguntas
   - Alinhamento das colunas de minhas questões
   - Placeholder com exemplo do tempo de questão
-  - Alterar a ordem do botões ORDENAR e ADICIONAR QUESTÃO para experiência de usuário
-  - Alterar ordem dos menus de forma que fique mais intuitivo
-    - Crie suas questões
-    - Crie sua sala
-    - Salas que participo
-    - Salas que criei
   - Exibir tempo total da sala
   - Adicionar IntroJS para criar a sala
+  - Questões de salas finalizadas não podem ser excluídas
+  - Ao reduzir o número de respostas deve refletir em questões já respondidas
 
 https://www.youtube.com/watch?v=nOivQEBjXII
 https://www.youtube.com/watch?v=yz316cWscqI

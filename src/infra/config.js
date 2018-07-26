@@ -16,7 +16,7 @@ module.exports = {
     dialectOptions: { ssl: true },
     dialect: 'postgres',
     operatorsAliases: false,
-    logging: true
+    logging: false
   },
   test: {
     dialect: 'sqlite',

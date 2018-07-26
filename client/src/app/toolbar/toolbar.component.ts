@@ -49,9 +49,7 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
     })
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   refresh() {
     this.user = this.storageService.getUser()

@@ -10,30 +10,10 @@ const {
   sequelize
 } = db
 
-const toRoomScore = (r) => {
-  const users = r.RoomUsers.map(p => {
-    let user = {
-      score: 0,
-      id: p.User.id,
-      name: p.User.name,
-      picture: p.User.picture
-    }
-    const userAnswers = r.RoomAnswers.filter(x => x.userId == user.id).map(x => x.score)
-    if (userAnswers.length > 0)
-      user.score = userAnswers.reduce((x, y) => x + y)
-    return user
-  })
-
-  return {
-    id: r.id,
-    name: r.name,
-    users: users
-  }
-}
-
 const toMyRooms = (room) => {
   let result = {
     id: room.id,
+    name: room.name,
     questions: room.RoomQuestions.map(p => ({
       id: p.Question.id,
       order: p.order,
@@ -49,6 +29,35 @@ const toMyRooms = (room) => {
       q.score = p.score
   })
 
+  result.users = room.RoomUsers.map(p => {
+    let user = {
+      score: 0,
+      id: p.User.id,
+      name: p.User.name,
+      picture: p.User.picture
+    }
+
+    const userAnswers = room.RoomAnswers.filter(x => x.userId == user.id).map(x => x.score)
+    if (userAnswers.length > 0)
+      user.score = userAnswers.reduce((x, y) => x + y)
+
+    user.questions = room.RoomAnswers.filter(x => x.userId == user.id).map(x => {
+      let question = {}
+      const q = result.questions.filter(y => y.id == x.questionId).shift()
+      if(q)
+      question = {
+        id: q.id,
+        order: q.order,
+        points: q.points,
+        description: q.description,
+        score: x.score
+      }
+      return question
+    })
+    
+    return user
+  })
+
   return result
 }
 
@@ -56,12 +65,13 @@ export default {
 
   getScores: async (req, res) => {
 
-    const myRoomsScores = await Room.findAll({
+    const myRoomsScores = (await Room.findAll({
+      where: { endedAt: { [sequelize.Op.ne]: null } },
       attributes: ['id', 'name'],
-      where: { userId: req.claims.id, endedAt: { [sequelize.Op.ne]: null } },
       include: [
         {
-          model: RoomUser, attributes: ['userId'],
+          model: RoomUser,
+          attributes: ['userId'],
           include: [
             {
               model: User,
@@ -69,18 +79,6 @@ export default {
             }
           ]
         },
-        {
-          attributes: ['score', 'userId'],
-          model: RoomAnswer
-        }
-      ]
-    })
-
-    const questionsRoomScores = (await Room.findAll({
-      where: { endedAt: { [sequelize.Op.ne]: null } },
-      attributes: ['id'],
-      include: [
-        { model: RoomUser, attributes: [], where: { userId: req.claims.id } },
         {
           model: RoomQuestion,
           attributes: ['order', 'points'],
@@ -90,15 +88,14 @@ export default {
         },
         {
           model: RoomAnswer,
-          attributes: ['questionId', 'score'],
-          where: { userId: req.claims.id },
+          attributes: ['questionId', 'score', 'userId'],
           required: false
         }
       ]
     })).map(p => toMyRooms(p))
 
     let roomsScores = []
-    questionsRoomScores.forEach(p => {
+    myRoomsScores.forEach(p => {
       let q = { roomId: p.id, score: 0, points: 0 }
       if (p.questions.length > 0) {
         q.score = p.questions.map(x => x.score).reduce((x, y) => x + y)
@@ -114,9 +111,8 @@ export default {
     })
 
     res.json({
-      myRoomsScores: myRoomsScores.map(p => toRoomScore(p)),
       roomsScores: roomsScores,
-      questionsRoomScores: questionsRoomScores,
+      myRoomsScores: myRoomsScores,
       allUserScores: allUserScores
     })
   }
