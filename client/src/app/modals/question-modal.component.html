@@ -3,15 +3,17 @@
 
     <mat-step>
       <ng-template matStepLabel>Área</ng-template>
-      <mat-form-field id="selectArea">
+      <mat-form-field id="selectArea" style="width: 300px">
         <mat-select [disabled]="areas.length < 2" [(ngModel)]="selectedArea" (selectionChange)="areaChanged()" placeholder="Selecione a área">
           <mat-option *ngFor="let c of areas" [value]="c">
             {{ c }}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field id="customArea" style="width: 100%">
-        <input matInput maxlength="30" [disabled]="!customArea" [(ngModel)]="question.area" placeholder="Qual a área da questão ?" required />
+      <br />
+      <mat-form-field id="customArea" style="width: 300px">
+        <input matInput maxlength="30" [disabled]="!customArea" [(ngModel)]="question.area" placeholder="Qual a área da questão ?"
+          required />
       </mat-form-field>
       <div class="action-button">
         <button mat-button mat-dialog-close>Cancelar</button>
@@ -30,16 +32,16 @@
         </mat-select>
       </mat-form-field>
       <div class="action-button">
-        <button mat-button mat-dialog-close>Cancelar</button>
+        <button mat-button matStepperPrevious>Voltar</button>
         <button (click)="stepChange(1)" mat-raised-button matStepperNext color="primary">Próximo</button>
       </div>
     </mat-step>
 
     <mat-step>
       <ng-template matStepLabel>Pergunta</ng-template>
-      <mat-form-field id="questionDescription" style="width: 100%">
-        <input id="inputQuestionDescription" matInput [(ngModel)]="question.description" placeholder="Qual a pergunta da questão ?"
-          required />
+      <mat-form-field id="questionDescription" style="width: 500px">
+        <textarea maxlength="200" id="inputQuestionDescription" style="overflow: hidden" cols="100" spellcheck="false" rows="3" matInput [(ngModel)]="question.description"
+          placeholder="Qual a pergunta da questão ?" required></textarea>
       </mat-form-field>
       <div class="action-button">
         <button mat-button matStepperPrevious>Voltar</button>
@@ -50,10 +52,10 @@
     <mat-step>
       <ng-template matStepLabel>Alternativas</ng-template>
       <mat-list>
-        <div style="text-align: center">
+        <div style="text-align: center; max-width: 500px">
           <span style="color:#666;font-size: 16px">{{question.description}}</span>
         </div>
-        <div fxLayout="row" style="margin-left: 30px;">
+        <div fxLayout="row" style="margin-left: 30px;margin-top: 20px">
           <div>
             <div style="height:13px">
               <i class="up" (click)="changeAnswer(1)"></i>
@@ -80,8 +82,7 @@
 
       <div class="action-button">
         <button mat-button matStepperPrevious>VOLTAR</button>
-        <button [disabled]="!validQuestion()"
-          mat-raised-button color="primary" (click)="saveQuestion()">PRONTO</button>
+        <button [disabled]="!validQuestion()" mat-raised-button color="primary" (click)="saveQuestion()">PRONTO</button>
       </div>
     </mat-step>
 

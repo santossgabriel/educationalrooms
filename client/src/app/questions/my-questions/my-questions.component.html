@@ -6,7 +6,7 @@
     </div>
     <div class="question-component">
 
-      <mat-form-field style="width: 50%">
+      <mat-form-field style="width: 50%" [hidden]="!hasQuestions">
         <mat-icon style="color:gray;margin-top: 5px" matSuffix>search</mat-icon>
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Pesquisar">
       </mat-form-field>
@@ -57,7 +57,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons [hidden]="!hasQuestions"></mat-paginator>
       <button id="createQuestion" (click)="openQuestionModal(null)" style="margin-top: 20px" mat-raised-button color="primary">CRIAR QUESTÃO</button>
     </div>
   </div>
