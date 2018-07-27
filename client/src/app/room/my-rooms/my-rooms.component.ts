@@ -11,6 +11,8 @@ import { ErrorModalComponent } from '../../modals/confirm-modal.component';
 import { getStatusDescriptionRoom } from '../../helpers/utils';
 import Swal from 'sweetalert2'
 import { ScoresModalComponent } from '../../modals/scores-modal.component';
+import { Notif } from '../../models/notification.models';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-my-rooms',
@@ -20,7 +22,7 @@ import { ScoresModalComponent } from '../../modals/scores-modal.component';
   host: { '[@fadeInTransition]': '' }
 })
 
-export class MyRoomsComponent implements OnInit {
+export class MyRoomsComponent implements OnInit, SocketConnectListener {
 
   error = ''
   displayedColumns = ['id', 'name', 'status', 'users', 'questions', 'seconds', 'actions']
@@ -32,6 +34,7 @@ export class MyRoomsComponent implements OnInit {
   constructor(private service: RoomService,
     private router: Router,
     private dialog: MatDialog) {
+    Globals.addSocketListener(this)
     this.loading = true
     this.service.getMy().subscribe((rooms: Room[]) => {
       this.loading = false
@@ -97,5 +100,25 @@ export class MyRoomsComponent implements OnInit {
     this.dialog.open(ScoresModalComponent, {
       data: { room: r }
     })
+  }
+
+  onConnect(socket: any) {
+    socket.on('notificationReceived', (n: Notif) => {
+      const id = Number(n.origin.split('-')[0])
+      if (!isNaN(id)) {
+        const room = this.rooms.find(p => p.id == id)
+        if (room) {
+          if (n.type === 'IN_ROOM') {
+            room.users.push(new User())
+          } else if (n.type === 'OUT_ROOM') {
+            room.users.pop()
+          }
+        }
+      }
+    })
+  }
+
+  onDisconnect() {
+
   }
 }

@@ -9,6 +9,8 @@ import { Room } from '../../models/room.model'
 import { RoomService } from '../../services/room.service'
 import { RoomQuestionModalComponent } from '../../modals/room-question-modal.component'
 import { RoomQuestion } from '../../models/room-question.model'
+import { TutorialService } from '../../services/tutorial.service';
+import { Tour } from '../../helpers/tour';
 
 @Component({
   selector: 'app-rooms',
@@ -22,7 +24,7 @@ export class EditRoomComponent implements OnInit {
   error = ''
   room = <Room>{}
   dataSource: MatTableDataSource<RoomQuestion>
-  displayedColumns = ['order', 'area', 'description', 'points', 'actions']
+  displayedColumns = ['order', 'area', 'category', 'description', 'points', 'actions']
   hasQuestions: boolean
   orderOption = 'id'
   orderOptions = [
@@ -36,7 +38,8 @@ export class EditRoomComponent implements OnInit {
   constructor(private roomService: RoomService,
     private router: Router,
     private dialog: MatDialog,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private tutorialService: TutorialService) {
     this.activatedRoute.params.subscribe((params: Params) => {
       let roomId = params['id']
       if (roomId > 0) {
@@ -46,8 +49,17 @@ export class EditRoomComponent implements OnInit {
           this.room = <Room>room
           this.refresh()
         }, err => this.loading = false)
-      } else
+      } else {
         this.room = new Room()
+        this.room.time = 30
+
+        const tutorial = this.tutorialService.get()
+        if (tutorial && tutorial.type === 'room' && tutorial.step === 0) {
+          setTimeout(() => {
+            Tour.room.step1()
+          }, 500)
+        }
+      }
     })
   }
 

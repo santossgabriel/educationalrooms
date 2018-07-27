@@ -15,7 +15,7 @@ export class RoomQuestionModalComponent {
 
   room: Room
   questions: RoomQuestion[]
-  displayedColumns = ['area', 'description', 'selected']
+  displayedColumns = ['area', 'category', 'description', 'selected']
   dataSource: MatTableDataSource<RoomQuestion>
   hasQuestions: boolean = false
   callback: Function
@@ -46,5 +46,9 @@ export class RoomQuestionModalComponent {
   finishSelection() {
     this.callback(this.questions.filter(p => p.selected))
     this.dialogRef.close()
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

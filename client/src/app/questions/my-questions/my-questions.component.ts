@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { MatTableDataSource, MatDialog, MatSort, MatPaginator } from '@angular/material'
+import Swal from 'sweetalert2'
 import { fadeInTransition } from '../../router.transition'
 import { QuestionModalComponent } from '../../modals/question-modal.component'
 import { Question } from '../../models/question.model'
@@ -18,7 +19,7 @@ import { TutorialService } from '../../services/tutorial.service';
 })
 export class MyQuestionsComponent implements OnInit {
 
-  displayedColumns = ['id', 'area', 'description', 'shared', 'actions']
+  displayedColumns = ['id', 'area', 'category', 'description', 'shared', 'actions']
   dataSource: MatTableDataSource<Question>
   hasQuestions: boolean = false
   loading = true
@@ -82,17 +83,17 @@ export class MyQuestionsComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed)
-        this.questionService.remove(id).subscribe(res => this.refresh(), err => {
-          this.dialog.open(ErrorModalComponent, {
-            data: {
-              error: err.message
-            }
-          })
-        })
+        this.questionService.remove(id).subscribe(res => this.refresh(),
+          err => Swal('Oops...', err.error.message, 'error'))
     })
   }
 
   sharedChanged(q: Question) {
-    this.questionService.save(q).subscribe(res => console.log(res), err => console.log(err))
+    this.questionService.share(q).subscribe(res => { },
+      err => Swal('Oops...', err.error.message, 'error'))
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

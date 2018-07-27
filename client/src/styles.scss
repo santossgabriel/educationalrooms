@@ -173,6 +173,10 @@ th.mat-header-cell {
   text-align: center !important;
 }
 
+.mat-cell{
+  text-align: center;
+}
+
 .or-elem{
   margin: 20px;
   color: #aaa;
@@ -225,3 +229,5 @@ body > div.introjs-helperLayer.introjs-fixedTooltip{
 body > div.introjs-helperLayer{
   opacity: 0;
 }
+
+// #mat-dialog-0 > app-room-question-modal > div > div:nth-child(2) > table > tbody > tr:nth-child(1) > td.mat-cell.cdk-column-area.mat-column-area.ng-star-inserted

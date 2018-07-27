@@ -47,6 +47,7 @@ const toMy = (p) => {
       points: x.points,
       shared: x.Question.shared,
       area: x.Question.area,
+      category: x.Question.category,
       sync: x.Question.sync,
       createdAt: x.Question.createdAt,
       updatedAt: x.Question.updatedAt,
@@ -236,7 +237,7 @@ export default {
 
     const associated = room.RoomUsers.filter(p => p.userId === req.claims.id).length > 0
 
-    let notification = { origin: req.claims.name }
+    let notification = { origin: `${id}-${req.claims.name}` }
 
     if (associate) {
 

@@ -48,7 +48,7 @@ export const Tour = {
         position: 'right'
       }, {
         element: '#menu-all-questions',
-        intro: 'Veja uma lista de questões compartilhadas por você e por outros usuários.',
+        intro: 'Veja uma lista de questões compartilhadas por outros usuários que você não possui.',
         position: 'right'
       }, {
         element: '#btnMenuNotification',
@@ -160,7 +160,7 @@ export const Tour = {
           intro: 'Compartilhe as questões criadas com outros usuários.',
           position: 'top'
         },
-         {
+        {
           element: '#manageQuestion',
           intro: 'Edite ou exclua suas questões.',
           position: 'top'
@@ -169,5 +169,30 @@ export const Tour = {
       intro.start()
       tutorialService.set(new TourStep('question', 6))
     }
+  },
+  room: {
+    step1: () => {
+      let intro = createIntro([
+        {
+          element: '#roomName',
+          intro: 'Escolha um nome para a sala',
+          position: 'right'
+        }, {
+          element: '#roomTime',
+          intro: 'Defina o tempo da sala que deve ser em segundos',
+          position: 'right'
+        }, {
+          element: '#addQuestionRoom',
+          intro: 'Abra a lista de questões disponível para serem adicionadas à sala',
+          position: 'right'
+        }, {
+          element: '#selOrderQuestions',
+          intro: 'Selecione a ordem em que as questões serão passadas na sala',
+          position: 'right'
+        }
+      ])
+      intro.start()
+      tutorialService.set(new TourStep('room', 1))
+    },
   }
 }

@@ -11,7 +11,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field id="customArea" style="width: 100%">
-        <input matInput [disabled]="!customArea" [(ngModel)]="question.area" placeholder="Qual a área da questão ?" required />
+        <input matInput maxlength="30" [disabled]="!customArea" [(ngModel)]="question.area" placeholder="Qual a área da questão ?" required />
       </mat-form-field>
       <div class="action-button">
         <button mat-button mat-dialog-close>Cancelar</button>

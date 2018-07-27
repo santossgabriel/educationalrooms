@@ -9,17 +9,11 @@ export class QuestionService {
 
   constructor(private http: HttpClient) { }
 
-  getMy() {
-    return this.http.get('/api/question')
-  }
+  getMy() { return this.http.get('/api/question') }
 
-  getOthers() {
-    return this.http.get('/api/question-others')
-  }
+  getOthers() { return this.http.get('/api/question-others') }
 
-  getAreas() {
-    return this.http.get('/api/areas')
-  }
+  getAreas() { return this.http.get('/api/areas') }
 
   save(question: Question) {
     if (question.id > 0)
@@ -28,7 +22,9 @@ export class QuestionService {
       return this.http.post('/api/question', question)
   }
 
-  remove(id: number) {
-    return this.http.delete('/api/question/' + id)
-  }
+  share(question: Question) { return this.http.put('/api/question-share', question) }
+
+  getSharedQuestion(id: number) { return this.http.get(`/api/question-get-shared/${id}`) }
+
+  remove(id: number) { return this.http.delete('/api/question/' + id) }
 }

@@ -5,12 +5,12 @@ Melhorias do App:
 
 Melhorias do Site:
   - Adicionar imagem nas questões, para substituir perguntas
-  - Alinhamento das colunas de minhas questões
-  - Placeholder com exemplo do tempo de questão
-  - Exibir tempo total da sala
   - Adicionar IntroJS para criar a sala
-  - Questões de salas finalizadas não podem ser excluídas
-  - Ao reduzir o número de respostas deve refletir em questões já respondidas
 
 https://www.youtube.com/watch?v=nOivQEBjXII
 https://www.youtube.com/watch?v=yz316cWscqI
+
+
+
+Roteiro de apresentação:
+  - Mostrar fluxo do sistema

@@ -47,6 +47,10 @@ export const modelAttributes = {
     type: Sequelize.DATE,
     allowNull: false,
     defaultValue: new Date('01/01/1970')
+  },
+  sharedQuestionId: {
+    type: Sequelize.INTEGER,
+    allowNull: true
   }
 }
 

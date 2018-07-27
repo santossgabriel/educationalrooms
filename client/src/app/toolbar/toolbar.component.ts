@@ -130,7 +130,12 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
         })
       }
     } else if (type === 'room') {
-
+      if (this.path.indexOf('edit-room') === -1) {
+        this.tutorialService.set(new TourStep('room', 0))
+        this.router.navigate(['/edit-room/0'])
+      } else {
+        Tour.room.step1()
+      }
     }
   }
 }
