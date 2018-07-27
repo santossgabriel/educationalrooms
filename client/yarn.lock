@@ -193,10 +193,6 @@
   dependencies:
     tslib "^1.9.0"
 
-"@ng-bootstrap/ng-bootstrap@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-2.2.0.tgz#acd514e878a1412f39d50eff691095ecc0882bf3"
-
 "@ngtools/webpack@6.0.3":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-6.0.3.tgz#baa9caaa8b21be16c30b2b15f92eb2afb8eb04c0"
@@ -2784,6 +2780,16 @@ he@1.1.x:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/he/-/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
 
+highcharts-angular@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/highcharts-angular/-/highcharts-angular-2.0.2.tgz#a1acf82285845fbb7efec4155a6c3631762ed9c9"
+  dependencies:
+    tslib "^1.9.0"
+
+highcharts@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-6.1.1.tgz#49dc34f5e963744ecd7eb87603b6cdaf8304c13a"
+
 hmac-drbg@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/hmac-drbg/-/hmac-drbg-1.0.1.tgz#d2745701025a6c775a6c545793ed502fc0c649a1"
@@ -4041,19 +4047,6 @@ neo-async@^2.5.0:
 next-tick@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
-
-ngx-tour-core@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-tour-core/-/ngx-tour-core-3.0.0.tgz#d9275d11ae40c989d898d8de640f9cb12706ddef"
-  dependencies:
-    tslib "^1.9.0"
-
-ngx-tour-ng-bootstrap@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-tour-ng-bootstrap/-/ngx-tour-ng-bootstrap-3.0.0.tgz#c2abfe35f43d0314218fdb7a84dbc61c7895c7e0"
-  dependencies:
-    tslib "^1.9.0"
-    withinviewport "^2.0.0"
 
 no-case@^2.2.0:
   version "2.3.2"
@@ -6437,10 +6430,6 @@ wide-align@^1.1.0:
 window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
-
-withinviewport@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/withinviewport/-/withinviewport-2.0.0.tgz#5df1468b087832812dfba0a793c2be4e96b2da85"
 
 wordwrap@0.0.2:
   version "0.0.2"

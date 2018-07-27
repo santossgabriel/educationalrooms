@@ -30,6 +30,10 @@ export class RoomService {
     return this.http.get('/api/score')
   }
 
+  getScoresGraph() {
+    return this.http.get('/api/score-graph')
+  }
+
   associate(room: RoomOpened) {
     return this.http.put('/api/room-associate', {
       associate: !room.associate,

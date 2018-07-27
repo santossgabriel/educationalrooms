@@ -44,17 +44,17 @@ const toMyRooms = (room) => {
     user.questions = room.RoomAnswers.filter(x => x.userId == user.id).map(x => {
       let question = {}
       const q = result.questions.filter(y => y.id == x.questionId).shift()
-      if(q)
-      question = {
-        id: q.id,
-        order: q.order,
-        points: q.points,
-        description: q.description,
-        score: x.score
-      }
+      if (q)
+        question = {
+          id: q.id,
+          order: q.order,
+          points: q.points,
+          description: q.description,
+          score: x.score
+        }
       return question
     })
-    
+
     return user
   })
 
@@ -115,5 +115,38 @@ export default {
       myRoomsScores: myRoomsScores,
       allUserScores: allUserScores
     })
+  },
+
+  getScoresGraph: async (req, res) => {
+
+    const userScores = await RoomAnswer.findAll({
+      attributes: ['roomId', [sequelize.fn('sum', sequelize.col('score')), 'score']],
+      where: { userId: req.claims.id },
+      group: ['roomId']
+    })
+
+    const rooms = await Room.findAll({
+      attributes: ['id', 'endedAt'],
+      where: { endedAt: { [sequelize.Op.ne]: null } },
+      include: [{
+        model: RoomAnswer,
+        attributes: [],
+        where: { userId: req.claims.id },
+        order: sequelize.literal('endedAt desc')
+      }]
+    })
+
+    const scores = []
+    rooms.forEach(p => {
+      const us = userScores.find(x => x.roomId == p.id)
+      if (us)
+        scores.push({
+          roomId: p.id,
+          score: Number(us.score),
+          endedAt: p.endedAt
+        })
+    })
+
+    res.json(scores)
   }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { routerTransition } from '../router.transition'
+import { Globals } from '../globals';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +17,14 @@ export class HomeComponent implements OnInit {
   allTitle = 'Quiz Room'
   index = 1
 
-  constructor() {
-    setTimeout(() => {
-      this.animateText()
-    }, 1000)
+  constructor(private router: Router) {
+    if (Globals.userLogged()) {
+      router.navigate(['resume'])
+    } else {
+      setTimeout(() => {
+        this.animateText()
+      }, 1000)
+    }
   }
 
   animateText() {

@@ -8,6 +8,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { ImageUploadModule } from "angular2-image-upload"
+import { HighchartsChartModule } from 'highcharts-angular'
 
 import { HeaderInterceptor } from './interceptors/header.interceptor'
 import { ResponseInterceptor } from './interceptors/response.interceptor'
@@ -33,6 +34,7 @@ import { RoomQuestionModalComponent } from './modals/room-question-modal.compone
 import { NotificationModalComponent } from './modals/notification-modal.component';
 import { QuizComponent } from './room/quiz/quiz.component';
 import { ScoresModalComponent } from './modals/scores-modal.component';
+import { ResumeComponent } from './resume/resume.component';
 
 const components = [
   AppComponent,
@@ -55,7 +57,8 @@ const components = [
   AssociatedRoomsComponent,
   NotificationModalComponent,
   QuizComponent,
-  ScoresModalComponent
+  ScoresModalComponent,
+  ResumeComponent
 ]
 
 const routes = [
@@ -70,6 +73,7 @@ const routes = [
   { path: 'opened-rooms', component: OpenedRoomsComponent },
   { path: 'edit-room/:id', component: EditRoomComponent },
   { path: 'associated-rooms', component: AssociatedRoomsComponent },
+  { path: 'resume', component: ResumeComponent },
   { path: 'quiz/:id', component: QuizComponent }
 ]
 
@@ -85,7 +89,8 @@ const routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(routes, { useHash: true }),
     FlexLayoutModule,
-    ImageUploadModule.forRoot()
+    ImageUploadModule.forRoot(),
+    HighchartsChartModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
