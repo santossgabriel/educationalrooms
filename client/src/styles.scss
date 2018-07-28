@@ -171,6 +171,7 @@ mat-nav-list mat-list-item {
 
 th.mat-header-cell {
   text-align: center !important;
+  text-transform: uppercase;
 }
 
 .mat-cell{
@@ -231,3 +232,16 @@ body > div.introjs-helperLayer{
 }
 
 // #mat-dialog-0 > app-room-question-modal > div > div:nth-child(2) > table > tbody > tr:nth-child(1) > td.mat-cell.cdk-column-area.mat-column-area.ng-star-inserted
+
+.beginner{
+  font-size: 12px; color:#66c;font-weight: bold;
+  
+}
+
+.intermediate{
+  font-size: 12px; color:#393; font-weight: bold;
+}
+
+.advanced{
+  font-size: 12px; color:#ff8f1a;font-weight: bold
+}

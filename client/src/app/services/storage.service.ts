@@ -31,6 +31,7 @@ export class StorageService {
       localStorage.removeItem('TOKEN')
       localStorage.removeItem('SCORES')
       localStorage.removeItem('AREAS')
+      localStorage.removeItem('TUTORIAL')
       Globals.notifyUserChanged(null)
     }
   }
@@ -47,7 +48,7 @@ export class StorageService {
     let cats = this.getAreas()
     if (cats) {
       areas.concat(cats)
-      areas.filter((p, i) => areas.indexOf(p) === i)
+      areas = areas.filter((p, i) => areas.indexOf(p) === i)
     }
     localStorage.setItem('AREAS', JSON.stringify(areas))
   }

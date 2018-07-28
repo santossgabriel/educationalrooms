@@ -28,6 +28,7 @@ export class SignupComponent implements OnInit, UserChangedListener {
     private storageService: StorageService) { }
 
   ngOnInit() {
+    Globals.addUserChangedListener(this)
     if (this.router.isActive('/sign-edit', true)) {
       this.editMode = true
       this.userAccount = this.storageService.getUser()

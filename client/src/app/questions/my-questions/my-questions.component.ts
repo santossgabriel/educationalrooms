@@ -19,7 +19,7 @@ import { TutorialService } from '../../services/tutorial.service';
 })
 export class MyQuestionsComponent implements OnInit {
 
-  displayedColumns = ['id', 'area', 'category', 'description', 'shared', 'actions']
+  displayedColumns = ['area', 'category', 'description', 'shared', 'actions']
   dataSource: MatTableDataSource<Question>
   hasQuestions: boolean = false
   loading = true

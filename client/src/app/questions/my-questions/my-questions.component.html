@@ -13,19 +13,18 @@
 
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" [hidden]="!hasQuestions">
 
-        <ng-container matColumnDef="id">
-          <th style="width: 100px" mat-header-cell *matHeaderCellDef> Número </th>
-          <td style="width: 100px" mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
-
         <ng-container matColumnDef="area">
           <th mat-header-cell *matHeaderCellDef> Área </th>
           <td mat-cell *matCellDef="let element"> {{element.area}} </td>
         </ng-container>
 
         <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef> Categoria </th>
-          <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+          <th style="width: 120px" mat-header-cell *matHeaderCellDef> Categoria </th>
+          <td style="width: 120px" mat-cell *matCellDef="let element">
+            <span *ngIf="element.category == 'Iniciante'" class="beginner">{{element.category.toUpperCase()}} </span>
+            <span *ngIf="element.category == 'Intermediário'" class="intermediate">{{element.category.toUpperCase()}} </span>
+            <span *ngIf="element.category == 'Avançado'" class="advanced">{{element.category.toUpperCase()}} </span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="description">
@@ -36,7 +35,8 @@
         <ng-container matColumnDef="shared">
           <th id="shareQuestion" mat-header-cell *matHeaderCellDef style="width: 130px"> Compartilhada? </th>
           <td mat-cell *matCellDef="let element" style="width: 130px">
-            <mat-checkbox (change)="sharedChanged(element)" color="primary" [(ngModel)]="element.shared">
+            <span style="color: #666" *ngIf="element.sharedQuestionId > 0">ADQUIRIDA</span>
+            <mat-checkbox [hidden]="element.sharedQuestionId > 0" (change)="sharedChanged(element)" color="primary" [(ngModel)]="element.shared">
               {{element.shared ? 'Sim' : 'Não'}}
             </mat-checkbox>
           </td>

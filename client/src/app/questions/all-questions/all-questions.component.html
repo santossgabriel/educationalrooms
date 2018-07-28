@@ -13,19 +13,18 @@
 
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-        <ng-container matColumnDef="id">
-          <th style="width: 100px" mat-header-cell *matHeaderCellDef> Número </th>
-          <td style="width: 100px" mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
-
         <ng-container matColumnDef="area">
-          <th style="width: 100px" mat-header-cell *matHeaderCellDef> Área </th>
-          <td style="width: 100px" mat-cell *matCellDef="let element"> {{element.area}} </td>
+          <th mat-header-cell *matHeaderCellDef> Área </th>
+          <td mat-cell *matCellDef="let element"> {{element.area}} </td>
         </ng-container>
 
         <ng-container matColumnDef="category">
-          <th style="width: 100px" mat-header-cell *matHeaderCellDef> Categoria </th>
-          <td style="width: 100px" mat-cell *matCellDef="let element"> {{element.category}} </td>
+          <th style="width: 120px" mat-header-cell *matHeaderCellDef> Categoria </th>
+          <td style="width: 120px" mat-cell *matCellDef="let element">
+            <span *ngIf="element.category == 'Iniciante'" class="beginner">{{element.category.toUpperCase()}} </span>
+            <span *ngIf="element.category == 'Intermediário'" class="intermediate">{{element.category.toUpperCase()}} </span>
+            <span *ngIf="element.category == 'Avançado'" class="advanced">{{element.category.toUpperCase()}} </span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="description">
@@ -34,15 +33,15 @@
         </ng-container>
 
         <ng-container matColumnDef="answers">
-          <th mat-header-cell *matHeaderCellDef> Alternativas </th>
-          <td mat-cell *matCellDef="let element"> {{element.answers.length}} </td>
+          <th style="width: 100px" mat-header-cell *matHeaderCellDef> Alternativas </th>
+          <td style="width: 100px" mat-cell *matCellDef="let element"> {{element.answers.length}} </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Ações </th>
-          <td mat-cell *matCellDef="let element">
-            <button matTooltip="Obter questão" mat-icon-button mat-raised-button (click)="getSharedQuestion(element.id)">
-              <mat-icon color="primary">get_app</mat-icon>
+          <th mat-header-cell *matHeaderCellDef style="width: 150px"> Ações </th>
+          <td mat-cell *matCellDef="let element" style="width: 150px">
+            <button color="primary" matTooltip="Obter questão" mat-icon-button mat-raised-button (click)="getSharedQuestion(element.id)">
+              <mat-icon>get_app</mat-icon>
             </button>
           </td>
         </ng-container>

@@ -75,7 +75,8 @@ const toResult = (questions) => {
       area: questions.area,
       answers: questions.Answers,
       shared: questions.shared,
-      userId: questions.userId
+      userId: questions.userId,
+      sharedQuestionId: questions.sharedQuestionId
     }
 }
 

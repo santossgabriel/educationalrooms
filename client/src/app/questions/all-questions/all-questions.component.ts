@@ -15,7 +15,7 @@ import { Question } from '../../models/question.model'
 })
 export class AllQuestionsComponent implements OnInit {
 
-  displayedColumns = ['id', 'area', 'category', 'description', 'answers', 'actions']
+  displayedColumns = ['area', 'category', 'description', 'answers', 'actions']
   dataSource: MatTableDataSource<Question>
   loading = false
   hasQuestions
