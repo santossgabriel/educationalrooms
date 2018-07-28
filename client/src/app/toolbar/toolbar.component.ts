@@ -41,12 +41,14 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
       this.path = val.url
     })
 
-    accountService.getAccount().subscribe((user: UserDataModel) => {
-      if (!this.user || !user || this.user.email !== user.email)
+    if (Globals.userLogged()) {
+      accountService.getAccount().subscribe((user: UserDataModel) => {
+        if (!this.user || !user || this.user.email !== user.email)
+          this.logout()
+      }, err => {
         this.logout()
-    }, err => {
-      this.logout()
-    })
+      })
+    }
   }
 
   ngOnInit() { }
@@ -64,7 +66,7 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
 
   logout() {
     this.storageService.setToken(null)
-    this.router.navigate(['/signin'])
+    this.router.navigate(['/'])
   }
 
   userChanged(newToken) { this.refresh() }
@@ -102,6 +104,9 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
 
   onConnect(socket: any) {
     socket.on('notificationReceived', (n: Notif) => {
+      const arr = n.origin.split('-')
+      if (arr.length > 0 && !isNaN(Number(arr[0])))
+        n.origin = arr[1]
       this.notifications.unshift(n)
       this.updateTimeNotifications()
       if (n.type === 'ROOM_START' && this.path.indexOf('quiz') === -1) {

@@ -8,15 +8,4 @@ Melhorias do Site:
   - Adicionar IntroJS para criar a sala
   - Quando usuário entra na sala está recebendo notificações repetidas
   - Quiz quando perde conexão fica com a tela branca
-  - Exibindo áreas repetidas ao criar questões
-
-https://www.youtube.com/watch?v=nOivQEBjXII
-https://www.youtube.com/watch?v=yz316cWscqI
-
-
-
-Roteiro de apresentação:
-  - Mostrar fluxo do sistema
-
-
-29/04/2018 10 horas estudas
+  - Exibir tamanho máximo para upload de imagem

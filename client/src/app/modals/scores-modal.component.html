@@ -2,7 +2,7 @@
   <h3>{{room.name}}</h3>
   <h6 [hidden]="roomScores">A sala não teve pontuações.</h6>
   <div *ngIf="roomScores" fxLayout="row">
-    <div>
+    <div fxFlex="400px">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%">
 
         <ng-container matColumnDef="picture">
@@ -35,12 +35,17 @@
         />
         <span>{{user.name}}</span>
       </div>
-      <mat-list style="overflow-y: scroll; max-height: 300px">
-        <mat-list-item *ngFor="let q of user.questions">
+      <mat-list style="overflow-y: auto">
+        <mat-list-item *ngFor="let q of user.questions" style="margin-top: 20px">
           <button style="margin-right: 10px" mat-mini-fab disabled>{{q.order}}</button>
-          <span style="font-size: 14px">{{q.description}}</span>
-          <span class="horizontal-space"></span>
-          <span style="font-size: 14px" class="success-message"> {{q.score}}/{{q.points}} </span>
+          <div fxLayout="row">
+              <div fxFlex="400px">
+              <span style="font-size: 14px">{{q.description}}</span>
+            </div>
+            <div>
+              <span style="font-size: 14px;margin-bottom: 10px" class="success-message"> {{q.score}}/{{q.points}} </span>
+            </div>
+          </div>
           <mat-divider></mat-divider>
         </mat-list-item>
       </mat-list>

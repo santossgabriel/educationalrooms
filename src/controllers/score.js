@@ -136,13 +136,20 @@ export default {
       }]
     })
 
+    const roomPoints = await RoomQuestion.findAll({
+      attributes: ['roomId', [sequelize.fn('sum', sequelize.col('points')), 'points']],
+      group: ['roomId']
+    })
+
     const scores = []
     rooms.forEach(p => {
       const us = userScores.find(x => x.roomId == p.id)
+      const points = roomPoints.find(x => x.roomId == p.id)
       if (us)
         scores.push({
           roomId: p.id,
           score: Number(us.score),
+          points: Number(points.points),
           endedAt: p.endedAt
         })
     })

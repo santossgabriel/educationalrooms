@@ -1,6 +1,13 @@
-<mat-card class="root-card" style="text-align: center; max-width: 90%">
-  <h4 [hidden]="hasScores">Você não possui pontuações</h4>
-  <div *ngIf="hasScores" style="margin-top: 40px; text-align: center">
-    <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions" style="display: block; width: 80%; height: 400px"></highcharts-chart>
+<mat-card class="root-card" style="text-align: center">
+  <div [hidden]="loading">
+    <div class="question-component" [hidden]="hasScores">
+      <span>Você ainda não gerou pontos.</span>
+    </div>
+    <div *ngIf="hasScores" style="margin-top: 40px; text-align: center">
+      <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions" style="display: block; width: 80%; height: 400px"></highcharts-chart>
+    </div>
+  </div>
+  <div *ngIf="loading" class="loading">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
   </div>
 </mat-card>

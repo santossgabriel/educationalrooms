@@ -37,7 +37,7 @@ export class SigninComponent implements OnInit {
       this.error = ''
       const result: AccountResponse = <AccountResponse>response
       this.storageService.setToken(result.token)
-      this.router.navigate(['/my-questions'])
+      this.router.navigate(['/resume'])
     }, error => {
       this.error = error.error.message
     })
@@ -71,7 +71,7 @@ export class SigninComponent implements OnInit {
     }
     this.service.sendGoogleToken(user.googleToken).subscribe((user: AccountResponse) => {
       this.storageService.setToken(user.token)
-      location.hash = '#/my-questions'
+      location.hash = '#/resume'
     })
   }
 

@@ -52,6 +52,7 @@ export class AssociatedRoomsComponent implements OnInit {
     const scores = this.storageService.getScores()
     if (scores || scores.allUserScores) {
       this.userScores = scores.allUserScores.filter(p => p.roomId === room.id) || []
+      console.log(this.userScores)
       if (this.userScores.length > 0)
         return
     }
@@ -80,7 +81,7 @@ export class AssociatedRoomsComponent implements OnInit {
 
   updateRoomsScores(scores: Scores) {
     this.dataSource.data.forEach(p => {
-      const roomScore = scores.roomsScores.filter(x => x.roomId == p.id).shift()
+      const roomScore = scores.allUserScores.find(x => x.roomId == p.id && x.userId == this.user.id)
       if (roomScore)
         p.score = roomScore.score
     })

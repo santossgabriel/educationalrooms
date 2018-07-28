@@ -29,18 +29,23 @@ export class TourStep {
 
 export const Tour = {
   menu: () => {
-    let intro = createIntro([
+    let intro = createIntro([      
+      {
+        element: '#menu-scores',
+        intro: 'Veja de forma amigável suas pontuações geradas',
+        position: 'right'
+      }, 
       {
         element: '#menu-my-questions',
-        intro: 'Veja a lista de questões que você já criou',
+        intro: 'Veja a lista de questões que você já criou e às gerencie',
         position: 'right'
       }, {
         element: '#menu-my-room',
-        intro: 'Veja a lista de salas que você já criou',
+        intro: 'Veja a lista de suas salas, crie novas e às gerencie abrindo e iniciando ',
         position: 'right'
       }, {
         element: '#menu-opened-rooms',
-        intro: "Veja as salas que estão abertas que você pode participar",
+        intro: "Veja as salas abertas que você possa participar",
         position: 'right'
       }, {
         element: '#menu-associated-rooms',

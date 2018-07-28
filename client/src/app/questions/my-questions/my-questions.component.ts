@@ -31,7 +31,6 @@ export class MyQuestionsComponent implements OnInit {
     this.refresh()
   }
 
-  @ViewChild(MatSort) sort: MatSort
   @ViewChild(MatPaginator) paginator: MatPaginator
 
   ngOnInit() {
@@ -42,7 +41,6 @@ export class MyQuestionsComponent implements OnInit {
     this.questionService.getMy().subscribe((questions: Question[]) => {
       this.loading = false
       this.dataSource = new MatTableDataSource(questions)
-      this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.hasQuestions = questions.length > 0
       this.storageService.updateAreas(questions.map(p => p.area))

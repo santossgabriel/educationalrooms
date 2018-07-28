@@ -2,7 +2,7 @@
   <mat-card-title>QUESTÕES PÚBLICAS</mat-card-title>
   <div [hidden]="loading">
     <div class="question-component" [hidden]="hasQuestions">
-      <span>Nenhuma questão foi encontrada.</span>
+      <span>Não há mais questões para serem adquiridas.</span>
     </div>
     <div class="question-component" [hidden]="!hasQuestions">
 
@@ -49,6 +49,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons [hidden]="!hasQuestions"></mat-paginator>
     </div>
   </div>
   <div *ngIf="loading" class="loading">

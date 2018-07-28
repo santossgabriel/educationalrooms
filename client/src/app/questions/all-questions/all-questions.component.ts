@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core'
-import { MatTableDataSource } from '@angular/material'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { MatTableDataSource, MatPaginator } from '@angular/material'
 import Swal from 'sweetalert2'
 import { fadeInTransition } from '../../router.transition'
 import { QuestionService } from '../../services/question.service'
@@ -22,6 +22,8 @@ export class AllQuestionsComponent implements OnInit {
 
   constructor(private service: QuestionService) { this.refresh() }
 
+  @ViewChild(MatPaginator) paginator: MatPaginator
+
   ngOnInit() { }
 
   refresh() {
@@ -29,6 +31,7 @@ export class AllQuestionsComponent implements OnInit {
     this.service.getOthers().subscribe((questions: Question[]) => {
       this.loading = false
       this.dataSource = new MatTableDataSource(questions)
+      this.dataSource.paginator = this.paginator;
       this.hasQuestions = questions.length > 0
     }, err => this.loading = false)
   }

@@ -3,6 +3,10 @@
   <div fxLayout="row">
     <div fxFlex="200px" class="sidenav" [hidden]="!logged">
       <mat-nav-list>
+        <mat-list-item id="menu-scores">
+          <button [disabled]="path === '/resume'" mat-raised-button color="primary" routerLink="/resume">PONTUAÇÕES</button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
         <mat-list-item id="menu-my-questions">
           <button [disabled]="path === '/my-questions'" mat-raised-button color="primary" routerLink="/my-questions">MINHAS QUESTÕES</button>
         </mat-list-item>
@@ -16,7 +20,7 @@
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item id="menu-associated-rooms">
-          <button [disabled]="path === '/associated-rooms'" mat-raised-button color="primary" routerLink="/associated-rooms">SALAS QUE PARTICIPEI</button>
+          <button [disabled]="path === '/associated-rooms'" mat-raised-button color="primary" routerLink="/associated-rooms">PARTICIPAÇÕES</button>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>

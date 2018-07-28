@@ -6,13 +6,15 @@ import { Router } from '@angular/router'
 import { AccountModel } from '../../models/account.models'
 import { UserDataModel } from '../../models/user-data.models'
 import { StorageService } from '../../services/storage.service'
+import { TutorialService } from '../../services/tutorial.service';
+import { TourStep, Tour } from '../../helpers/tour';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
-  animations: [routerTransition],
-  host: { '[@routerTransition]': '' }
+  // animations: [routerTransition],
+  // host: { '[@routerTransition]': '' }
 })
 export class SignupComponent implements OnInit, UserChangedListener {
 
@@ -25,7 +27,8 @@ export class SignupComponent implements OnInit, UserChangedListener {
 
   constructor(private accountService: AccountService,
     private router: Router,
-    private storageService: StorageService) { }
+    private storageService: StorageService,
+    private tutorialService: TutorialService) { }
 
   ngOnInit() {
     Globals.addUserChangedListener(this)
@@ -42,9 +45,12 @@ export class SignupComponent implements OnInit, UserChangedListener {
       this.error = ''
       this.message = res.message
       this.storageService.setToken(res.token)
+      this.router.navigate(['resume'])
       setTimeout(() => {
-        this.router.navigate(['/my-questions'])
-      }, 1500)
+        Tour.menu()
+        //   this.tutorialService.set(new TourStep('question', 0))
+
+      }, 1000)
     }, err => {
       this.error = err.error.message
     })
