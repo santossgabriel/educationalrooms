@@ -9,3 +9,9 @@ Melhorias do Site:
   - Quando usuário entra na sala está recebendo notificações repetidas
   - Quiz quando perde conexão fica com a tela branca
   - Exibir tamanho máximo para upload de imagem
+  - Exibir usuários por questão acertada
+
+Bugs na apresentação:
+  - Não recebimento do feedback de acerto em alguns casos.
+  - Seta para baixo de alterar ordem das questões na sala não funciona.
+  - Compartilhar questões com grupo específico de usuários.
