@@ -22,6 +22,8 @@
     "@material-ui/icons": "^3.0.1",
     "babel-loader": "7",
     "react": "^16.5.0",
-    "react-dom": "^16.5.0"
+    "react-dom": "^16.5.0",
+    "react-sidebar": "^3.0.2",
+    "reactstrap": "^6.4.0"
   }
 }

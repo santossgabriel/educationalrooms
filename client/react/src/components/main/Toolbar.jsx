@@ -1,4 +1,3 @@
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
@@ -15,6 +14,7 @@ const styles = {
   },
   grow: {
     flexGrow: 1,
+    textTransform: 'uppercase'
   },
   menuButton: {
     marginLeft: -12,
@@ -23,26 +23,29 @@ const styles = {
 };
 
 const ButtonAppBar = (props) => {
-  const { classes } = props;
+  const { classes } = props
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position='static' color='primary'>
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+          <IconButton className={classes.menuButton}
+            color="inherit"
+            aria-label="Menu"
+            onClick={() => props.openSideBar()}>
             <MenuIcon />
           </IconButton>
           <Typography variant="title" color="inherit" className={classes.grow}>
-            News
+            Salas EducaCionais
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
     </div>
-  );
+  )
 }
 
 ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ButtonAppBar);
+export default withStyles(styles)(ButtonAppBar)
