@@ -1,11 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Button, MuiThemeProvider } from '@material-ui/core'
-import Toobar from './components/main/Toolbar'
-import Sidebar from './components/main/Sidebar'
-import { AppTheme } from './helpers/themes';
+import { MuiThemeProvider } from '@material-ui/core'
+import MainComponent from './components/main/MainComponent'
+import { AppTheme } from './helpers/themes'
 
-const title = 'My Minimal React Webpack Babel Seeetup'
+import './App.css'
 
 class App extends React.Component {
 
@@ -17,14 +16,9 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider theme={AppTheme}>
-        <div>
-          <Sidebar
-            isOpen={this.state.sidebarIsOpen}
-            onSetSidebarOpen={() => this.setState({ sidebarIsOpen: false })} />
-          <Toobar openSideBar={() => this.setState({ sidebarIsOpen: true })} />
-          <h2>{title}</h2>
-          <Button onClick={() => this.setState({ sidebarIsOpen: true })}>Abrir</Button>
-        </div>
+        <MainComponent>
+          <div style={{ fontFamily: 'PTC55F' }}>Main Sidebar</div>
+        </MainComponent>
       </MuiThemeProvider>
     )
   }

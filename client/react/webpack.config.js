@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+const webpack = require('webpack')
 
 module.exports = {
   entry: './src/App.jsx',
@@ -8,11 +8,17 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
+      }, {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }, {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        use: 'file-loader?name=public/fonts/[name].[ext]'
       }
     ]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx', '.ttf']
   },
   output: {
     path: __dirname + '/dist',
@@ -26,4 +32,4 @@ module.exports = {
     contentBase: './dist',
     hot: true
   }
-};
+}

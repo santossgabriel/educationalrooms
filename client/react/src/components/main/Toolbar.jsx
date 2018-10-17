@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
+import { More, Menu } from '@material-ui/icons'
+import { AppTexts, AppDefaultLanguage } from '../../helpers/appTexts';
 
 const styles = {
   root: {
@@ -20,7 +20,11 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
-};
+}
+
+const appLanguage = AppDefaultLanguage
+
+document.title = AppTexts.AppTitle[appLanguage]
 
 const ButtonAppBar = (props) => {
   const { classes } = props
@@ -28,16 +32,24 @@ const ButtonAppBar = (props) => {
     <div className={classes.root}>
       <AppBar position='static' color='primary'>
         <Toolbar>
+          {
+            props.dockedMenu ? null :
+              <IconButton className={classes.menuButton}
+                color="inherit"
+                aria-label="Menu"
+                onClick={() => props.openSideBar()}>
+                <Menu />
+              </IconButton>
+          }
+          <Typography variant="title" color="inherit" className={classes.grow}>
+            {AppTexts.AppTitle[appLanguage]}
+          </Typography>
           <IconButton className={classes.menuButton}
             color="inherit"
-            aria-label="Menu"
+            aria-label="More"
             onClick={() => props.openSideBar()}>
-            <MenuIcon />
+            <More />
           </IconButton>
-          <Typography variant="title" color="inherit" className={classes.grow}>
-            Salas EducaCionais
-          </Typography>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
     </div>
