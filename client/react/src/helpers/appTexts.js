@@ -3,22 +3,42 @@ export const AppTexts = {
     ptbr: 'Salas Educacionais',
     enus: 'Educational Rooms'
   },
+  AppSymbol: {
+    ptbr: 'SE',
+    enus: 'ER'
+  },
   MainComponent: {
-    Question: {
-      ptbr: 'Questões',
-      enus: 'Questions'
+    QuestionTexts: {
+      Questions: {
+        ptbr: 'Questões',
+        enus: 'Questions'
+      },
+      My: {
+        ptbr: 'Minhas Questões',
+        enus: 'My Questions'
+      },
+      Shared: {
+        ptbr: 'Questões Compartilhadas',
+        enus: 'Shared Questions'
+      }
     },
-    Rooms: {
-      ptbr: 'Salas',
-      enus: 'Rooms'
+    RoomTexts: {
+      Rooms: {
+        ptbr: 'Salas',
+        enus: 'Rooms'
+      }
     },
-    Scores: {
-      ptbr: 'Pontuações',
-      enus: 'Scores'
+    ScoreTexts: {
+      Scores: {
+        ptbr: 'Pontuações',
+        enus: 'Scores'
+      }
     },
-    Notification: {
-      ptbr: 'Notificações',
-      enus: 'Notifications'
+    NotificationTexts: {
+      Notifications: {
+        ptbr: 'Notificações',
+        enus: 'Notifications'
+      }
     }
   }
 }
@@ -28,4 +48,4 @@ const languages = {
   EN_US: 'enus'
 }
 
-export const AppDefaultLanguage = languages.EN_US
+export const AppDefaultLanguage = languages.PT_BR
