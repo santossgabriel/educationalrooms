@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 import { MuiThemeProvider } from '@material-ui/core'
 import { HashRouter } from 'react-router-dom'
 import MainComponent from './components/main/MainComponent'
 import AppRouter from './components/main/AppRouter'
 import { AppTheme } from './helpers/themes'
+import { Store } from './store';
 
 import './App.css'
 
@@ -17,13 +19,15 @@ class App extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider theme={AppTheme}>
-        <HashRouter>
-          <MainComponent>
-            <AppRouter />
-          </MainComponent>
-        </HashRouter>
-      </MuiThemeProvider>
+      <Provider store={Store}>
+        <MuiThemeProvider theme={AppTheme}>
+          <HashRouter>
+            <MainComponent>
+              <AppRouter />
+            </MainComponent>
+          </HashRouter>
+        </MuiThemeProvider>
+      </Provider>
     )
   }
 }

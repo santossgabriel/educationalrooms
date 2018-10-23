@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -8,14 +9,15 @@ import Divider from '@material-ui/core/Divider';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import RoomIcon from '@material-ui/icons/RoomService';
 import { Link, withRouter } from 'react-router-dom'
-import { AppTexts, AppDefaultLanguage } from '../../helpers/appTexts';
+import { AppTexts } from '../../helpers/appTexts';
 
 const styles = {
   mainIcon: {
     color: 'white'
   },
   symbolDiv: {
-    textAlign: 'center'
+    textAlign: 'center',
+    width: '260px'
   },
   symbolSpan: {
     color: '#FFF',
@@ -33,8 +35,6 @@ const styles = {
     fontSize: '14px'
   }
 }
-
-const appLanguage = AppDefaultLanguage
 
 const MainText = (props) => (
   <ListItemText primary={<span style={styles.mainText}>{props.text}</span>} />
@@ -68,7 +68,7 @@ const {
   NotificationTexts
 } = AppTexts.MainComponent
 
-export default class SidebarContent extends React.Component {
+class SidebarContent extends React.Component {
 
   constructor(props) {
     super(props)
@@ -85,7 +85,7 @@ export default class SidebarContent extends React.Component {
     return (
       <div>
         <div style={styles.symbolDiv}>
-          <span style={styles.symbolSpan}>{AppTexts.AppSymbol[appLanguage]}</span>
+          <span style={styles.symbolSpan}>{AppTexts.AppSymbol[this.props.language]}</span>
         </div>
         <List>
           <Divider />
@@ -93,12 +93,12 @@ export default class SidebarContent extends React.Component {
             <ListItemIcon>
               <QuestionAnswerIcon style={styles.mainIcon} />
             </ListItemIcon>
-            <MainText text={QuestionTexts.Questions[appLanguage]} />
+            <MainText text={QuestionTexts.Questions[this.props.language]} />
           </ListItem>
           <Collapse in={this.state.opened === 'question'} timeout={400} unmountOnExit>
             <List component="div" disablePadding>
-              <LinkListItem to="/my-questions" text={QuestionTexts.My[appLanguage]} />
-              <LinkListItem to="/shared-questions" text={QuestionTexts.Shared[appLanguage]} />
+              <LinkListItem to="/my-questions" text={QuestionTexts.My[this.props.language]} />
+              <LinkListItem to="/shared-questions" text={QuestionTexts.Shared[this.props.language]} />
             </List>
           </Collapse>
 
@@ -108,7 +108,7 @@ export default class SidebarContent extends React.Component {
               <ListItemIcon>
                 <RoomIcon style={styles.mainIcon} />
               </ListItemIcon>
-              <MainText text={RoomTexts.Rooms[appLanguage]} />
+              <MainText text={RoomTexts.Rooms[this.props.language]} />
             </ListItem>
           </Link>
 
@@ -118,7 +118,7 @@ export default class SidebarContent extends React.Component {
               <ListItemIcon>
                 <RoomIcon style={styles.mainIcon} />
               </ListItemIcon>
-              <MainText text={ScoreTexts.Scores[appLanguage]} />
+              <MainText text={ScoreTexts.Scores[this.props.language]} />
             </ListItem>
           </Link>
 
@@ -127,12 +127,12 @@ export default class SidebarContent extends React.Component {
             <ListItemIcon>
               <RoomIcon style={styles.mainIcon} />
             </ListItemIcon>
-            <MainText text={NotificationTexts.Notifications[appLanguage]} />
+            <MainText text={NotificationTexts.Notifications[this.props.language]} />
           </ListItem>
           <Collapse in={this.state.opened === 'notification'} timeout={400} unmountOnExit>
             <List component="div" disablePadding>
               <ListItem button >
-                <SubMainText text={NotificationTexts.Notifications[appLanguage]} />
+                <SubMainText text={NotificationTexts.Notifications[this.props.language]} />
               </ListItem>
             </List>
           </Collapse>
@@ -142,3 +142,7 @@ export default class SidebarContent extends React.Component {
     )
   }
 }
+
+const mapStateToProps = state => ({ language: state.appState.language })
+
+export default connect(mapStateToProps)(SidebarContent)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { HashRouter, Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch, Link } from 'react-router-dom'
 import createHistory from 'history/createHashHistory'
 
 const history = createHistory()

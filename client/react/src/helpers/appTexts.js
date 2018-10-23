@@ -43,9 +43,7 @@ export const AppTexts = {
   }
 }
 
-const languages = {
+export const Languages = {
   PT_BR: 'ptbr',
   EN_US: 'enus'
 }
-
-export const AppDefaultLanguage = languages.PT_BR
