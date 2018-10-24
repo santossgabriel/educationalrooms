@@ -4,13 +4,12 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import * as Icons from '@material-ui/icons'
 import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import { AppTexts, Languages } from '../../helpers/appTexts'
 import { BrazilFlag, UnitedStatesFlag } from './Flags'
-import { languageChanged } from '../../actions';
+import { languageChanged } from '../../actions'
 
 const styles = {
   root: {
@@ -23,6 +22,20 @@ const styles = {
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
+  },
+  userName: {
+    fontFamily: 'Roboto Helvetica Arial sans-serif',
+    color: '#777',
+    fontSize: '24px'
+  },
+  userEmail: {
+    fontFamily: 'Roboto Helvetica Arial sans-serif',
+    color: '#777'
+  },
+  userMenuFooter: {
+    padding: '10px',
+    textAlign: 'end',
+    backgroundColor: '#afafaf'
   }
 }
 
@@ -67,27 +80,32 @@ class AppToolbar extends React.Component {
             <Typography variant="title" color="inherit" style={styles.grow}>
               {AppTexts.AppTitle[this.props.language]}
             </Typography>
-            <IconButton
-              color="inherit"
-              aria-label="Person"
-              onClick={this.handleClick}>
-              <Icons.Person />
-            </IconButton>
+            <Button variant="fab" color="secondary" onClick={this.handleClick}>
+              <img height="70" width="70" style={{ borderRadius: '50%' }}
+                src={this.props.user && this.props.user.image ? this.props.user.image : '/api/image/user-image.png'} />
+            </Button>
 
             <Menu
+              style={{ margin: '0', padding: '0' }}
               id="simple-menu"
               anchorEl={this.state.anchorEl}
               open={Boolean(this.state.anchorEl)}
               onClose={this.handleClose}>
-              <span>menu principal do site da aplicação</span>
-              <UnitedStatesFlag onClick={() => this.changeLanguage(Languages.EN_US)} />
-              <BrazilFlag onClick={() => this.changeLanguage(Languages.PT_BR)} />
-              <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-              <MenuItem onClick={this.handleClose}>My account</MenuItem>
-              <MenuItem onClick={this.handleClose}>Logout</MenuItem>
-              <div style={{ padding: '10px' }}>
-                <Button variant="contained" color="primary">Editar Conta</Button>
-                <Button style={{ marginLeft: '10px' }} variant="contained">Sair</Button>
+              <div style={{ display: 'inline-block' }}>
+                <img height="60" width="60" style={{ marginLeft: '8px', borderRadius: '50%' }}
+                  src={this.props.user && this.props.user.image ? this.props.user.image : '/api/image/user-image.png'} />
+                <div style={{ marginLeft: '12px' }}>
+                  <UnitedStatesFlag onClick={() => this.changeLanguage(Languages.EN_US)} />
+                  <BrazilFlag onClick={() => this.changeLanguage(Languages.PT_BR)} />
+                </div>
+              </div>
+              <div style={{ display: 'inline-block', marginLeft: '8px', marginRight: '8px' }}>
+                <div style={styles.userName}>Usuário Sistema</div>
+                <div style={styles.userEmail}>usuariodosistemaatual@mail.com</div>
+              </div>
+              <div style={styles.userMenuFooter}>
+                <Button variant="contained" color="primary">{AppTexts.Toolbar.EditAccount[this.props.language]}</Button>
+                <Button style={{ marginLeft: '10px' }} variant="contained">{AppTexts.Toolbar.Logout[this.props.language]}</Button>
               </div>
             </Menu>
           </Toolbar>

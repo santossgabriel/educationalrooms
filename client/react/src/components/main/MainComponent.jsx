@@ -1,12 +1,16 @@
 import React from 'react'
 import Sidebar from 'react-sidebar'
+import { connect } from 'react-redux'
+
 import { Colors } from '../../helpers/themes'
 import Toobar from './Toolbar'
 import SidebarContent from './SidebarContent'
+import AppRouter from './AppRouter'
+import Auth from './Auth'
 
 const mql = window.matchMedia(`(min-width: 800px)`)
 
-class SidebarComponent extends React.Component {
+class MainComponent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -30,20 +34,25 @@ class SidebarComponent extends React.Component {
 
   render() {
     return (
-      <Sidebar
-        sidebar={<SidebarContent />}
-        open={this.state.sidebarIsOpen}
-        onSetOpen={open => this.setState({ sidebarIsOpen: open })}
-        docked={this.state.sidebarDocked}
-        styles={{ sidebar: { background: Colors.AppGreen } }}>
-        <Toobar
-          dockedMenu={this.state.sidebarDocked}
-          openSideBar={() => this.setState({ sidebarIsOpen: true })}
-        />
-        {this.props.children}
-      </Sidebar>
+      this.props.user ?
+        <Sidebar
+          sidebar={<SidebarContent />}
+          open={this.state.sidebarIsOpen}
+          onSetOpen={open => this.setState({ sidebarIsOpen: open })}
+          docked={this.state.sidebarDocked}
+          styles={{ sidebar: { background: Colors.AppGreen } }}>
+          <Toobar
+            dockedMenu={this.state.sidebarDocked}
+            openSideBar={() => this.setState({ sidebarIsOpen: true })}
+          />
+          <AppRouter />
+        </Sidebar>
+        :
+        <Auth />
     )
   }
 }
 
-export default SidebarComponent
+const mapStateToProps = state => ({ user: state.appState.user })
+
+export default connect(mapStateToProps)(MainComponent)

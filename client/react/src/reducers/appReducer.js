@@ -2,7 +2,8 @@ import { Languages } from '../helpers/appTexts'
 import { LANGUAGE_CHANGED } from '../actions/actionTypes'
 
 const initialState = {
-  language: localStorage.getItem('LANGUAGE') || Languages.EN_US
+  language: localStorage.getItem('LANGUAGE') || Languages.EN_US,
+  user: JSON.parse(localStorage.getItem('USER'))
 }
 
 export const appReducer = (state = initialState, action) => {

@@ -3,6 +3,16 @@ export const AppTexts = {
     ptbr: 'Salas Educacionais',
     enus: 'Educational Rooms'
   },
+  Toolbar: {
+    EditAccount: {
+      ptbr: 'Editar Conta',
+      enus: 'Edit Account'
+    },
+    Logout: {
+      ptbr: 'Sair',
+      enus: 'Logout'
+    }
+  },
   AppSymbol: {
     ptbr: 'SE',
     enus: 'ER'

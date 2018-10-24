@@ -1,15 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
-import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
-import RoomIcon from '@material-ui/icons/RoomService';
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Collapse from '@material-ui/core/Collapse'
+import Divider from '@material-ui/core/Divider'
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
+import RoomIcon from '@material-ui/icons/RoomService'
 import { Link, withRouter } from 'react-router-dom'
-import { AppTexts } from '../../helpers/appTexts';
+import { AppTexts } from '../../helpers/appTexts'
 
 const styles = {
   mainIcon: {
