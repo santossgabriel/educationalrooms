@@ -50,6 +50,9 @@ export const AppTexts = {
         enus: 'Notifications'
       }
     }
+  },
+  Auth: {
+
   }
 }
 

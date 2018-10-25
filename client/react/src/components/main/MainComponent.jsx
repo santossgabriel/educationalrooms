@@ -6,7 +6,7 @@ import { Colors } from '../../helpers/themes'
 import Toobar from './Toolbar'
 import SidebarContent from './SidebarContent'
 import AppRouter from './AppRouter'
-import Auth from './Auth'
+import Auth from '../../scenes/auth/Auth'
 
 const mql = window.matchMedia(`(min-width: 800px)`)
 
