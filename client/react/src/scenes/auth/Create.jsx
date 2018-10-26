@@ -26,12 +26,26 @@ export default class Login extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { showPassword: false }
+    this.state = {
+      name: '',
+      email: '',
+      password: '',
+      confirm: '',
+      validName: false,
+      validEmail: false,
+      validPassword: false,
+      validConfirm: false,
+      showPassword: false
+    }
   }
+
+  onNameChange(t) { this.setState({ name: t }) }
 
   onEmailChange(t) { this.setState({ email: t }) }
 
   onPasswordChange(t) { this.setState({ password: t }) }
+
+  onConfirmChange(t) { this.setState({ confirm: t }) }
 
   login() {
     axios.post('/api/token', this.state)
@@ -49,31 +63,47 @@ export default class Login extends React.Component {
           <CardContent>
             <IconTextInput
               label="Name"
-              onChange={(t) => this.onEmailChange(t)}
+              required
+              minlength={5}
+              onChange={(t) => this.onNameChange(t)}
+              validChanged={valid => this.setState({ validName: valid })}
               Icon={<Person />}
             />
             <IconTextInput
               label="Email"
+              email
+              required
               onChange={(t) => this.onEmailChange(t)}
+              validChanged={valid => this.setState({ validEmail: valid })}
               Icon={<Email />}
             />
             <IconTextInput
               type={this.state.showPassword ? 'text' : 'password'}
+              required
               label="Password"
               onChange={(t) => this.onPasswordChange(t)}
+              minlength={4}
+              validChanged={valid => this.setState({ validPassword: valid })}
               Icon={this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-              iconClick={() => this.setState({ showPassword: !this.state.showPassword })} />
+              iconClick={() => this.setState({ showPassword: !this.state.showPassword })}
+            />
             <IconTextInput
+              required
               type={this.state.showConfirm ? 'text' : 'password'}
               label="Confirm"
-              onChange={(t) => this.onPasswordChange(t)}
+              onChange={(t) => this.onConfirmChange(t)}
+              validChanged={valid => this.setState({ validConfirm: valid })}
+              pattern={`^${this.state.password}$`}
+              patternMessage="The passwords do not match."
               Icon={this.state.showConfirm ? <VisibilityOff /> : <Visibility />}
-              iconClick={() => this.setState({ showConfirm: !this.state.showConfirm })} />
+              iconClick={() => this.setState({ showConfirm: !this.state.showConfirm })}
+            />
           </CardContent>
           <br />
           <Button style={{ width: '250px' }}
             variant="contained"
             onClick={() => this.login()}
+            disabled={!this.state.validName || !this.state.validEmail || !this.state.validPassword || !this.state.validConfirm}
             color="primary">Send</Button>
           <br /><br />
           <Button variant="outlined"
