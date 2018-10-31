@@ -11,9 +11,6 @@ import {
 
 const emailRegex = /^[a-zA-Z0-9!#$.%&*()]{3,20}@[a-zA-Z0-9]{1,20}[.][a-zA-Z0-9]{1,20}([.][a-zA-Z0-9]{1,20})?$/
 
-/**
-* @augments {Component<{  required:boolean,  minlength:number,  email:boolean,  pattern:string,  patternMessage:string>}
-*/
 class IconTextInput extends React.Component {
 
   constructor(props) {
@@ -29,7 +26,7 @@ class IconTextInput extends React.Component {
     let hasError = false
     let errorMessage = ''
 
-    if (this.props.required && !t) {
+    if (this.props.required && !t.trim()) {
       hasError = true
       errorMessage = 'This field is required.'
     } else if (this.props.minlength && t.length < this.props.minlength) {
@@ -49,25 +46,28 @@ class IconTextInput extends React.Component {
       errorMessage: errorMessage
     })
     if (this.props.onChange)
-      this.props.onChange(t)
-    if (this.props.validChanged)
-      this.props.validChanged(!hasError)
+      this.props.onChange({ valid: !hasError, value: t, name: this.props.name })
   }
 
   render() {
     return (
       <FormControl>
         <TextField error={this.state.hasError && this.state.lostFocus}
+        disabled={this.props.disabled}
           style={{ marginTop: '10px' }}
           variant="outlined"
+          className="teste"
           label={this.props.label}
           type={this.props.type || 'text'}
-          onChange={(e) => this.onChange(e.target.value)}
+          onChange={e => this.onChange(e.target.value)}
           onBlur={() => this.setState({ lostFocus: true })}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton tabIndex={99} onClick={this.props.iconClick}>
+                <IconButton
+                  disabled={this.props.disabled}
+                  tabIndex={99}
+                  onClick={this.props.iconClick}>
                   {this.props.Icon}
                 </IconButton>
               </InputAdornment>
@@ -90,7 +90,8 @@ IconTextInput.propTypes = {
   patternMessage: PropTypes.string,
   validChanged: PropTypes.func,
   onChange: PropTypes.func,
-  patternMessage: PropTypes.string
+  patternMessage: PropTypes.string,
+  name: PropTypes.string
 }
 
 export default IconTextInput

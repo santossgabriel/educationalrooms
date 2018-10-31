@@ -1,19 +1,22 @@
 import React from 'react'
-import axios from 'axios'
 import PropTypes from 'prop-types'
-
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { Email, Visibility, VisibilityOff } from '@material-ui/icons'
 import {
   CardContent,
   Card,
   Button,
-  Zoom
+  Zoom,
+  FormHelperText,
+  CircularProgress
 } from '@material-ui/core'
 
-import { Email, Visibility, VisibilityOff } from '@material-ui/icons'
 
 import GoogleButton from '../../components/main/GoogleButton'
 import IconTextInput from '../../components/main/IconTextInput'
-
+import { userChanged } from '../../actions'
+import { login } from '../../actions/user.actions'
 
 const styles = {
   Card: {
@@ -33,74 +36,92 @@ const styles = {
   }
 }
 
-/**
-* @augments {Component<{  changeScene:Function>}
-*/
 class Login extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      showPassword: false,
-      email: '',
-      password: '',
-      emailValid: false,
-      passwordValid: false
-    }
+    this.state = {}
+    this.onInputChange = this.onInputChange.bind(this)
   }
 
-  onEmailChange(t) { this.setState({ email: t }) }
+  onInputChange(e) {
+    this.setState({
+      [e.name]: e.value,
+      [`${e.name}Valid`]: e.valid,
+      errorMessage: ''
+    })
+  }
 
-  onPasswordChange(t) { this.setState({ password: t }) }
-
-  login() {
-    axios.post('/api/token', this.state)
-      .then(res => console.log(res))
-      .catch(err => {
-        console.log('erro tratado')
-        console.log(err.message)
-      })
+  login(e) {
+    this.setState({ loading: true })
+    if (e)
+      e.preventDefault()
+    this.props.login({
+      email: this.state.email,
+      password: this.state.password
+    }).then(user => {
+      setTimeout(() => {
+        this.setState({ loading: false })
+        this.props.userChanged(user)
+      }, 500)
+    }).catch(err => {
+      setTimeout(() => this.setState({ errorMessage: err, loading: false }), 500)
+    })
   }
 
   render() {
     return (
       <Zoom in={true}>
         <Card style={styles.Card}>
-          <GoogleButton label="Login with google" />
-          <div style={styles.Or}>OR</div>
-          <CardContent>
-            <IconTextInput
-              label="Email"
-              required
-              email
-              onChange={(t) => this.onEmailChange(t)}
-              validChanged={valid => this.setState({ emailValid: valid })}
-              Icon={<Email />}
-            />
-
-            <IconTextInput
-              type={this.state.showPassword ? 'text' : 'password'}
-              label="Password"
-              required
-              minlength={4}
-              onChange={(t) => this.onPasswordChange(t)}
-              validChanged={valid => this.setState({ passwordValid: valid })}
-              Icon={this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-              iconClick={() => this.setState({ showPassword: !this.state.showPassword })} />
-          </CardContent>
-          <br />
-          <Button style={{ width: '250px' }}
-            variant="contained"
-            disabled={!this.state.emailValid || !this.state.passwordValid}
-            onClick={() => this.login()}
-            color="primary">Login</Button>
-          <br /><br />
-          <Button style={{ width: '250px' }}
-            variant="outlined"
-            onClick={this.props.changeScene}
-            color="primary">Create Account</Button>
+          <form onSubmit={e => this.login(e)}>
+            <GoogleButton label="Login with google" disabled={this.state.loading} />
+            <div style={styles.Or}>OR</div>
+            <CardContent>
+              <IconTextInput
+                label="Email"
+                required
+                email
+                disabled={this.state.loading}
+                name="email"
+                onChange={this.onInputChange}
+                validChanged={valid => this.setState({ emailValid: valid })}
+                Icon={<Email />}
+              />
+              <IconTextInput
+                type={this.state.showPassword ? 'text' : 'password'}
+                label="Password"
+                required
+                minlength={4}
+                onChange={this.onInputChange}
+                name="password"
+                disabled={this.state.loading}
+                Icon={this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                iconClick={() => this.setState({ showPassword: !this.state.showPassword })} />
+            </CardContent>
+            <br />
+            <div style={{ marginBottom: '10px' }} hidden={!this.state.loading}>
+              <CircularProgress />
+            </div>
+            <div hidden={this.state.loading}>
+              <Button style={{ width: '250px' }}
+                variant="contained"
+                disabled={!this.state.emailValid || !this.state.passwordValid}
+                type="submit"
+                onClick={() => this.login()}
+                color="primary">Login</Button>
+              <br /><br />
+              <Button style={{ width: '250px' }}
+                variant="outlined"
+                onClick={this.props.changeScene}
+                color="primary">Create Account</Button>
+              <FormHelperText style={{ textTransform: 'uppercase', textAlign: 'center', marginTop: '8px' }}
+                hidden={!this.state.errorMessage} error={true}>
+                {this.state.errorMessage}
+              </FormHelperText>
+            </div>
+          </form>
         </Card>
-      </Zoom>
+      </Zoom >
     )
   }
 }
@@ -109,4 +130,6 @@ Login.propTypes = {
   changeScene: PropTypes.func
 }
 
-export default Login
+const mapDispatchToProps = dispatch => bindActionCreators({ login, userChanged }, dispatch)
+
+export default connect(null, mapDispatchToProps)(Login)

@@ -4,7 +4,8 @@ import {
   CardContent,
   Card,
   Button,
-  Zoom
+  Zoom,
+  FormHelperText
 } from '@material-ui/core'
 
 import { Email, Visibility, VisibilityOff, Person } from '@material-ui/icons'
@@ -22,30 +23,15 @@ const styles = {
   }
 }
 
-export default class Login extends React.Component {
+export default class Create extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      name: '',
-      email: '',
-      password: '',
-      confirm: '',
-      validName: false,
-      validEmail: false,
-      validPassword: false,
-      validConfirm: false,
-      showPassword: false
-    }
+    this.state = {}
+    this.onInputChange = this.onInputChange.bind(this)
   }
 
-  onNameChange(t) { this.setState({ name: t }) }
-
-  onEmailChange(t) { this.setState({ email: t }) }
-
-  onPasswordChange(t) { this.setState({ password: t }) }
-
-  onConfirmChange(t) { this.setState({ confirm: t }) }
+  onInputChange(e) { this.setState({ [e.name]: e.value, errorMessage: '' }) }
 
   login() {
     axios.post('/api/token', this.state)
@@ -65,25 +51,25 @@ export default class Login extends React.Component {
               label="Name"
               required
               minlength={5}
-              onChange={(t) => this.onNameChange(t)}
-              validChanged={valid => this.setState({ validName: valid })}
+              name="name"
+              onChange={this.onInputChange}
               Icon={<Person />}
             />
             <IconTextInput
               label="Email"
               email
               required
-              onChange={(t) => this.onEmailChange(t)}
-              validChanged={valid => this.setState({ validEmail: valid })}
+              name="email"
+              onChange={this.onInputChange}
               Icon={<Email />}
             />
             <IconTextInput
               type={this.state.showPassword ? 'text' : 'password'}
               required
               label="Password"
-              onChange={(t) => this.onPasswordChange(t)}
+              name="password"
+              onChange={this.onInputChange}
               minlength={4}
-              validChanged={valid => this.setState({ validPassword: valid })}
               Icon={this.state.showPassword ? <VisibilityOff /> : <Visibility />}
               iconClick={() => this.setState({ showPassword: !this.state.showPassword })}
             />
@@ -91,8 +77,8 @@ export default class Login extends React.Component {
               required
               type={this.state.showConfirm ? 'text' : 'password'}
               label="Confirm"
-              onChange={(t) => this.onConfirmChange(t)}
-              validChanged={valid => this.setState({ validConfirm: valid })}
+              name="confirm"
+              onChange={this.onInputChange}
               pattern={`^${this.state.password}$`}
               patternMessage="The passwords do not match."
               Icon={this.state.showConfirm ? <VisibilityOff /> : <Visibility />}
@@ -109,6 +95,10 @@ export default class Login extends React.Component {
           <Button variant="outlined"
             onClick={this.props.changeScene}
             style={{ width: '250px' }} color="primary">back to Login</Button>
+          <FormHelperText style={{ textTransform: 'uppercase', textAlign: 'center', marginTop: '8px' }}
+            hidden={!this.state.errorMessage} error={true}>
+            {this.state.errorMessage}
+          </FormHelperText>
         </Card>
       </Zoom>
     )

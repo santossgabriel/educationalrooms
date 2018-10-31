@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux'
 import { AppTexts, Languages } from '../../helpers/appTexts'
 import { BrazilFlag, UnitedStatesFlag } from './Flags'
 import { languageChanged } from '../../actions'
+import { logout } from '../../actions/user.actions'
 
 const styles = {
   root: {
@@ -82,7 +83,7 @@ class AppToolbar extends React.Component {
             </Typography>
             <Button variant="fab" color="secondary" onClick={this.handleClick}>
               <img height="70" width="70" style={{ borderRadius: '50%' }}
-                src={this.props.user && this.props.user.image ? this.props.user.image : '/api/image/user-image.png'} />
+                src={this.props.user && this.props.user.picture ? this.props.user.picture : '/api/image/user-image.png'} />
             </Button>
 
             <Menu
@@ -93,19 +94,22 @@ class AppToolbar extends React.Component {
               onClose={this.handleClose}>
               <div style={{ display: 'inline-block' }}>
                 <img height="60" width="60" style={{ marginLeft: '8px', borderRadius: '50%' }}
-                  src={this.props.user && this.props.user.image ? this.props.user.image : '/api/image/user-image.png'} />
+                  src={this.props.user && this.props.user.picture ? this.props.user.picture : '/api/image/user-image.png'} />
                 <div style={{ marginLeft: '12px' }}>
                   <UnitedStatesFlag onClick={() => this.changeLanguage(Languages.EN_US)} />
                   <BrazilFlag onClick={() => this.changeLanguage(Languages.PT_BR)} />
                 </div>
               </div>
               <div style={{ display: 'inline-block', marginLeft: '8px', marginRight: '8px' }}>
-                <div style={styles.userName}>Usuário Sistema</div>
-                <div style={styles.userEmail}>usuariodosistemaatual@mail.com</div>
+                <div style={styles.userName}>{this.props.user && this.props.user.name ? this.props.user.name : ''}</div>
+                <div style={styles.userEmail}>{this.props.user && this.props.user.email ? this.props.user.email : ''}</div>
               </div>
               <div style={styles.userMenuFooter}>
-                <Button variant="contained" color="primary">{AppTexts.Toolbar.EditAccount[this.props.language]}</Button>
-                <Button style={{ marginLeft: '10px' }} variant="contained">{AppTexts.Toolbar.Logout[this.props.language]}</Button>
+                <Button autoFocus={true} variant="contained" color="primary">{AppTexts.Toolbar.EditAccount[this.props.language]}</Button>
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  onClick={() => this.props.logout()}
+                  variant="contained">{AppTexts.Toolbar.Logout[this.props.language]}</Button>
               </div>
             </Menu>
           </Toolbar>
@@ -115,8 +119,11 @@ class AppToolbar extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ language: state.appState.language })
+const mapStateToProps = state => ({
+  language: state.appState.language,
+  user: state.appState.user
+})
 
-const mapDispatchToProps = dispatch => bindActionCreators({ languageChanged }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ languageChanged, logout }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppToolbar)

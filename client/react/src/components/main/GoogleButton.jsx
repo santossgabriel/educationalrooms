@@ -25,7 +25,7 @@ const GoogleLogo = props => (
 )
 
 export default props => (
-  <Button style={styles.button}
+  <Button style={styles.button} disabled={props.disabled}
     variant="contained">
     <GoogleLogo />
     <label style={styles.label}>{props.label}</label>

@@ -11,12 +11,6 @@ import { Store } from './store'
 import './App.css'
 
 class App extends React.Component {
-
-  constructor() {
-    super()
-    this.state = { sidebarIsOpen: false }
-  }
-
   render() {
     return (
       <Provider store={Store}>
