@@ -1,6 +1,8 @@
 import React from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import createHistory from 'history/createHashHistory'
+import MyQuestion from '../../scenes/question/MyQuestion'
+import SharedQuestion from '../../scenes/question/SharedQuestion'
 
 const history = createHistory()
 const isAuthenticated = true
@@ -21,20 +23,6 @@ const About = () => (
   </div>
 )
 
-const MyQuestions = () => (
-  <div>
-    <span>My Questions</span><br />
-    <Link to="/">Home</Link>
-  </div>
-)
-
-const SharedQuestions = () => (
-  <div>
-    <span>Shared Questions</span><br />
-    <Link to="/">Home</Link>
-  </div>
-)
-
 history.listen((location, action) => {
   if (freeRoutes.indexOf(location.pathname) === -1 && !isAuthenticated) {
     window.location.hash = '#/'
@@ -47,9 +35,8 @@ export default class AppRouter extends React.Component {
       <Switch>
         <Route path="/" exact={true} component={App} />
         <Route path="/about" component={About} />
-        <Route path="/my-questions" component={MyQuestions} />
-        <Route path="/shared-questions" component={SharedQuestions} />
-
+        <Route path="/my-questions" component={MyQuestion} />
+        <Route path="/shared-questions" component={SharedQuestion} />
       </Switch>
     )
   }
