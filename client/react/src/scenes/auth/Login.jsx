@@ -16,7 +16,6 @@ import {
 import GoogleButton from '../../components/main/GoogleButton'
 import IconTextInput from '../../components/main/IconTextInput'
 import { userChanged } from '../../actions'
-import { login } from '../../actions/user.actions'
 import { authService } from '../../services/authService'
 
 const styles = {
@@ -133,6 +132,6 @@ Login.propTypes = {
   changeScene: PropTypes.func
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ login, userChanged }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ userChanged }, dispatch)
 
 export default connect(null, mapDispatchToProps)(Login)

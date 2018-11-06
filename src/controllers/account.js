@@ -50,11 +50,19 @@ export default {
     let account = req.body
     validateAccount(account)
     const userDB = await User.findOne({
-      where: { email: account.email }
+      where: {
+        [sequelize.sequelize.Op.or]: [
+          { email: account.email },
+          { name: account.name }
+        ]
+      }
     })
 
-    if (userDB)
-      throwValidationError('Este email já está em uso.')
+    if (userDB) {
+      if (userDB.email === account.email)
+        throwValidationError('Este email já está em uso.')
+      throwValidationError('Este nome já está em uso.')
+    }
 
     account.password = sha1(account.password)
     account.createdAt = new Date()

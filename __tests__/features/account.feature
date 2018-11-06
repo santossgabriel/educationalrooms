@@ -30,6 +30,7 @@ Feature: Gerenciamento de conta
       | 'sem email'       | '{"email": ""}'                       | "Email inválido."                               |
       | 'sem senha'       | '{"password": null}'                  | "A senha deve possuir pelo menos 6 caracteres." |
       | 'email existente' | '{"email": "questionmock1@mail.com"}' | "Este email já está em uso."                    |
+      | 'nome existente'  | '{"name": "question_mock_1"}'         | "Este nome já está em uso."                    |
       | 'nome inválido'   | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres."  |
       | 'email existente' | '{}'                                  | "Criado com sucesso."                           |
 
@@ -40,11 +41,11 @@ Feature: Gerenciamento de conta
     Then Então eu devo obter a mensagem <mensagem> ao tentar atualizar
 
     Examples:
-      | caso                 | propriedade                           | mensagem                                        |
-      | 'sem email'          | '{"email": ""}'                       | "Email inválido."                               |
-      | 'email existente'    | '{"email": "questionmock2@mail.com"}' | "Este email já está em uso."                    |
-      | 'nome inválido'      | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres."  |
-      | 'dados ok'           | '{"name": "nome atualizado"}'         | "Atualizado com sucesso."                       |
+      | caso              | propriedade                           | mensagem                                       |
+      | 'sem email'       | '{"email": ""}'                       | "Email inválido."                              |
+      | 'email existente' | '{"email": "questionmock2@mail.com"}' | "Este email já está em uso."                   |
+      | 'nome inválido'   | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres." |
+      | 'dados ok'        | '{"name": "nome atualizado"}'         | "Atualizado com sucesso."                      |
 
   Scenario: Não enviar o token
     Given Dado que eu queira acessar um endpoint permissionado

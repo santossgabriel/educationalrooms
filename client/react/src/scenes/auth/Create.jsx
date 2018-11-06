@@ -1,5 +1,7 @@
 import React from 'react'
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 import {
   CardContent,
   Card,
@@ -11,6 +13,8 @@ import {
 import { Email, Visibility, VisibilityOff, Person } from '@material-ui/icons'
 
 import IconTextInput from '../../components/main/IconTextInput'
+import { authService } from '../../services/authService'
+import { userChanged } from '../../actions'
 
 const styles = {
   Card: {
@@ -23,7 +27,7 @@ const styles = {
   }
 }
 
-export default class Create extends React.Component {
+class Create extends React.Component {
 
   constructor(props) {
     super(props)
@@ -31,15 +35,24 @@ export default class Create extends React.Component {
     this.onInputChange = this.onInputChange.bind(this)
   }
 
-  onInputChange(e) { this.setState({ [e.name]: e.value, errorMessage: '' }) }
+  onInputChange(e) {
+    this.setState({
+      [e.name]: e.value,
+      [`${e.name}Valid`]: e.valid,
+      errorMessage: ''
+    })
+  }
 
-  login() {
-    axios.post('/api/token', this.state)
-      .then(res => console.log(res))
-      .catch(err => {
-        console.log('erro tratado')
-        console.log(err.message)
-      })
+  send() {
+    authService.createAccount({
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password
+    }).then(res => {
+      setTimeout(() => {
+        this.props.userChanged(res)
+      }, 500)
+    }).catch(err => this.setState({ errorMessage: err.message }))
   }
 
   render() {
@@ -88,8 +101,8 @@ export default class Create extends React.Component {
           <br />
           <Button style={{ width: '250px' }}
             variant="contained"
-            onClick={() => this.login()}
-            disabled={!this.state.validName || !this.state.validEmail || !this.state.validPassword || !this.state.validConfirm}
+            onClick={() => this.send()}
+            disabled={!this.state.nameValid || !this.state.emailValid || !this.state.passwordValid || !this.state.confirmValid}
             color="primary">Send</Button>
           <br /><br />
           <Button variant="outlined"
@@ -104,3 +117,7 @@ export default class Create extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = dispatch => bindActionCreators({ userChanged }, dispatch)
+
+export default connect(null, mapDispatchToProps)(Create)
