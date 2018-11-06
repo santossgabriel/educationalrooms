@@ -23,10 +23,16 @@ const About = () => (
   </div>
 )
 
+let currentPath = location.hash.replace('#', '')
+
+export const getCurrentPath = () => currentPath
+
 history.listen((location, action) => {
   if (freeRoutes.indexOf(location.pathname) === -1 && !isAuthenticated) {
     window.location.hash = '#/'
-  }
+    currentPath = '/'
+  } else
+    currentPath = location.pathname
 })
 
 export default class AppRouter extends React.Component {

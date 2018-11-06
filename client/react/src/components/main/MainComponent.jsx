@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from 'react-sidebar'
 import { connect } from 'react-redux'
-import axios from 'axios'
+import { HashRouter } from 'react-router-dom'
 
 import { Colors } from '../../helpers/themes'
 import Toobar from './Toolbar'
@@ -48,18 +48,20 @@ class MainComponent extends React.Component {
     return (
       <div>
         {this.props.user ?
-          <Sidebar
-            sidebar={<SidebarContent />}
-            open={this.state.sidebarIsOpen}
-            onSetOpen={open => this.setState({ sidebarIsOpen: open })}
-            docked={this.state.sidebarDocked}
-            styles={{ sidebar: { background: Colors.AppGreen } }}>
-            <Toobar
-              dockedMenu={this.state.sidebarDocked}
-              openSideBar={() => this.setState({ sidebarIsOpen: true })}
-            />
-            <AppRouter />
-          </Sidebar>
+          <HashRouter>
+            <Sidebar
+              sidebar={<SidebarContent />}
+              open={this.state.sidebarIsOpen}
+              onSetOpen={open => this.setState({ sidebarIsOpen: open })}
+              docked={this.state.sidebarDocked}
+              styles={{ sidebar: { background: Colors.AppGreen } }}>
+              <Toobar
+                dockedMenu={this.state.sidebarDocked}
+                openSideBar={() => this.setState({ sidebarIsOpen: true })}
+              />
+              <AppRouter />
+            </Sidebar>
+          </HashRouter>
           :
           <Auth />
         }

@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { MuiThemeProvider } from '@material-ui/core'
-import { HashRouter } from 'react-router-dom'
 import MainComponent from './components/main/MainComponent'
 
 import { AppTheme } from './helpers/themes'
@@ -15,9 +14,7 @@ class App extends React.Component {
     return (
       <Provider store={Store}>
         <MuiThemeProvider theme={AppTheme}>
-          <HashRouter>
-            <MainComponent />
-          </HashRouter>
+          <MainComponent />
         </MuiThemeProvider>
       </Provider>
     )

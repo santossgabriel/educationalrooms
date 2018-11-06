@@ -9,8 +9,9 @@ import { bindActionCreators } from 'redux'
 
 import { AppTexts, Languages } from '../../helpers/appTexts'
 import { BrazilFlag, UnitedStatesFlag } from './Flags'
-import { languageChanged } from '../../actions'
+import { languageChanged, userChanged } from '../../actions'
 import { logout } from '../../actions/user.actions'
+import { authService } from '../../services/authService'
 
 const styles = {
   root: {
@@ -64,6 +65,11 @@ class AppToolbar extends React.Component {
     this.handleClose()
   }
 
+  logout() {
+    authService.logout()
+    this.props.userChanged(null)
+  }
+
   render() {
     return (
       <div style={styles.root} >
@@ -108,7 +114,7 @@ class AppToolbar extends React.Component {
                 <Button autoFocus={true} variant="contained" color="primary">{AppTexts.Toolbar.EditAccount[this.props.language]}</Button>
                 <Button
                   style={{ marginLeft: '10px' }}
-                  onClick={() => this.props.logout()}
+                  onClick={() => this.logout()}
                   variant="contained">{AppTexts.Toolbar.Logout[this.props.language]}</Button>
               </div>
             </Menu>
@@ -124,6 +130,6 @@ const mapStateToProps = state => ({
   user: state.appState.user
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ languageChanged, logout }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ languageChanged, logout, userChanged }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppToolbar)

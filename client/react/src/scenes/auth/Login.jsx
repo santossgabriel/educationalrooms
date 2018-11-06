@@ -17,6 +17,7 @@ import GoogleButton from '../../components/main/GoogleButton'
 import IconTextInput from '../../components/main/IconTextInput'
 import { userChanged } from '../../actions'
 import { login } from '../../actions/user.actions'
+import { authService } from '../../services/authService'
 
 const styles = {
   Card: {
@@ -56,7 +57,7 @@ class Login extends React.Component {
     this.setState({ loading: true })
     if (e)
       e.preventDefault()
-    this.props.login({
+    authService.login({
       email: this.state.email,
       password: this.state.password
     }).then(user => {
@@ -64,9 +65,11 @@ class Login extends React.Component {
         this.setState({ loading: false })
         this.props.userChanged(user)
       }, 500)
-    }).catch(err => {
-      setTimeout(() => this.setState({ errorMessage: err, loading: false }), 500)
-    })
+    }).catch(err =>
+      setTimeout(() => this.setState({
+        errorMessage: err.message,
+        loading: false
+      }), 500))
   }
 
   render() {

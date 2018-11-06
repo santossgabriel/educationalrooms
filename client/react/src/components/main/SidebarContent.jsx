@@ -9,7 +9,9 @@ import Divider from '@material-ui/core/Divider'
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
 import RoomIcon from '@material-ui/icons/RoomService'
 import { Link, withRouter } from 'react-router-dom'
+
 import { AppTexts } from '../../helpers/appTexts'
+import { getCurrentPath } from './AppRouter'
 
 const styles = {
   mainIcon: {
@@ -45,20 +47,20 @@ const SubMainText = (props) => (
 )
 
 const LinkListItem = (props) => {
-  const clickHandle = (location, e) => {
-    if (location.pathname === props.to)
+  const clickHandle = (e) => {
+
+    if (getCurrentPath() === props.to)
       e.preventDefault()
   }
-  const LinkRouter = withRouter((routerProps) => (
+  return (
     <Link to={props.to}
-      onClick={e => clickHandle(routerProps.location, e)}
+      onClick={e => clickHandle(e)}
       style={{ textDecoration: 'none' }}>
       <ListItem button >
         <ListItemText primary={<span style={styles.subMainText}>{props.text}</span>} />
       </ListItem>
     </Link>
-  ))
-  return <LinkRouter />
+  )
 }
 
 const {
