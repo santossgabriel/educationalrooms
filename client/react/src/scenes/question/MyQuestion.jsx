@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core'
 
 import Stars from '../../components/question/Stars'
+import EditQuestionModal from '../../components/modais/EditQuestionModal'
 
 export default class MyQuestion extends React.Component {
 
@@ -22,7 +23,9 @@ export default class MyQuestion extends React.Component {
       questions: [],
       emptyRows: 0,
       rowsPerPage: 5,
-      page: 5
+      page: 5,
+      editModalOpen: false,
+      question: {}
     }
   }
 
@@ -30,11 +33,22 @@ export default class MyQuestion extends React.Component {
     questionService.getMy().then(res => this.setState({ questions: res }))
   }
 
+  openEditQuestion(question) {
+    this.setState({
+      question: question ? Object.assign({}, question) : {},
+      editModalOpen: true
+    })
+  }
+
+  saveQuestion(question) {
+    console.log(question)
+  }
+
   render() {
     const { questions } = this.state
     return (
       <div>
-        <h2>Shared Questions</h2>
+        <h2>Minhas Questões</h2>
         <br />
         <Paper style={{ marginLeft: '20px', marginRight: '20px' }}>
           <div>
@@ -44,7 +58,7 @@ export default class MyQuestion extends React.Component {
                   .map(n => (
                     <TableRow
                       hover
-                      onClick={(e) => console.log(e, n.id)}
+                      onClick={(e) => this.openEditQuestion(n)}
                       role="checkbox"
                       aria-checked={true}
                       tabIndex={-1}
@@ -86,9 +100,16 @@ export default class MyQuestion extends React.Component {
             onChangeRowsPerPage={e => this.setState({ rowsPerPage: e.target.value })}
           />
           <div style={{ textAlign: 'center', padding: '20px' }}>
-            <Button color="primary" variant="raised">Criar questão</Button>
+            <Button
+              onClick={() => this.openEditQuestion()}
+              color="primary" variant="raised">Criar questão</Button>
           </div>
         </Paper>
+        <EditQuestionModal
+          cancel={() => this.setState({ editModalOpen: false })}
+          ok={(question) => this.saveQuestion(question)}
+          question={this.state.question}
+          open={this.state.editModalOpen} />
       </div>
     )
   }
