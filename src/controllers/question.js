@@ -12,8 +12,6 @@ export const questionStatus = {
   REMOVED: 'R'
 }
 
-const categories = ['Iniciante', 'Intermediário', 'Avançado']
-
 const { sequelize, Question, Answer, RoomQuestion, Room } = db
 
 const validateAnswers = (answers) => {
@@ -50,13 +48,13 @@ const validateQuestion = (question) => {
   if (!question || !question.description)
     throwValidationError(questionErros.HAS_DESCRIPTION)
 
-  const { answers, category, area } = question
+  const { answers, difficulty, area } = question
 
   if (!area)
     throwValidationError(questionErros.HAS_AREA)
 
-  if (!category || categories.indexOf(category) === -1)
-    throwValidationError(`A categoria deve ter os seguintes valores: '${categories.join(',')}'.`)
+  if (!difficulty || difficulty < 1 || difficulty > 5)
+    throwValidationError('A dificuldade deve estar entre 1 e 5.')
 
   if (!Array.isArray(question.answers) || question.answers.length < 2 || question.answers.length > 6)
     throwValidationError(questionErros.HAS_BETWEEN_ANSWERS)
@@ -71,7 +69,7 @@ const toResult = (questions) => {
     return {
       id: questions.id,
       description: questions.description,
-      category: questions.category,
+      difficulty: questions.difficulty,
       area: questions.area,
       answers: questions.Answers,
       shared: questions.shared,
@@ -134,7 +132,7 @@ export default {
     try {
 
       question.id = req.body.id
-      question.category = req.body.category
+      question.difficulty = req.body.difficulty
       question.area = req.body.area
       question.description = req.body.description
       question.shared = req.body.shared
@@ -165,7 +163,7 @@ export default {
     try {
 
       question.id = req.body.id
-      question.category = req.body.category
+      question.difficulty = req.body.difficulty
       question.area = req.body.area
       question.description = req.body.description
       question.shared = req.body.shared
@@ -285,7 +283,7 @@ export default {
       userId: req.claims.id,
       shared: false,
       area: questionDb.area,
-      category: questionDb.category,
+      difficulty: questionDb.difficulty,
       createdAt: questionDb.createdAt,
       updatedAt: questionDb.updatedAt,
       sharedQuestionId: questionDb.id

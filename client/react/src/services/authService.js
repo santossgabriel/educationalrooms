@@ -1,4 +1,4 @@
-import { httpService } from './httpService'
+import httpService from './httpService'
 
 const updateToken = (token) => localStorage.setItem('TOKEN', token)
 
@@ -18,7 +18,7 @@ const createAccount = (account) =>
 
 const logout = () => updateToken(null)
 
-export const authService = {
+export default {
   logout,
   login,
   createAccount

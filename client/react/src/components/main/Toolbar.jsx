@@ -10,8 +10,7 @@ import { bindActionCreators } from 'redux'
 import { AppTexts, Languages } from '../../helpers/appTexts'
 import { BrazilFlag, UnitedStatesFlag } from './Flags'
 import { languageChanged, userChanged } from '../../actions'
-import { logout } from '../../actions/user.actions'
-import { authService } from '../../services/authService'
+import { authService } from '../../services'
 
 const styles = {
   root: {
@@ -130,6 +129,6 @@ const mapStateToProps = state => ({
   user: state.appState.user
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ languageChanged, logout, userChanged }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ languageChanged, userChanged }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppToolbar)

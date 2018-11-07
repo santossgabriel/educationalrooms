@@ -25,13 +25,11 @@ export const modelAttributes = {
   },
   area: {
     type: Sequelize.STRING,
-    allowNull: false,
-    defaultValue: ''
+    allowNull: false
   },
-  category: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    defaultValue: ''
+  difficulty: {
+    type: Sequelize.INTEGER,
+    allowNull: false
   },
   sync: {
     type: Sequelize.CHAR(1),

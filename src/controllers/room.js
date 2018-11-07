@@ -47,7 +47,7 @@ const toMy = (p) => {
       points: x.points,
       shared: x.Question.shared,
       area: x.Question.area,
-      category: x.Question.category,
+      difficulty: x.Question.difficulty,
       sync: x.Question.sync,
       createdAt: x.Question.createdAt,
       updatedAt: x.Question.updatedAt,

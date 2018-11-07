@@ -50,7 +50,7 @@ class MainComponent extends React.Component {
         {this.props.user ?
           <HashRouter>
             <Sidebar
-              sidebar={<SidebarContent />}
+              sidebar={<SidebarContent closeSidebar={() => this.setState({ sidebarIsOpen: false })} />}
               open={this.state.sidebarIsOpen}
               onSetOpen={open => this.setState({ sidebarIsOpen: open })}
               docked={this.state.sidebarDocked}

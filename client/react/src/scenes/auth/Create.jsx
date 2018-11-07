@@ -13,7 +13,7 @@ import {
 import { Email, Visibility, VisibilityOff, Person } from '@material-ui/icons'
 
 import IconTextInput from '../../components/main/IconTextInput'
-import { authService } from '../../services/authService'
+import { authService } from '../../services'
 import { userChanged } from '../../actions'
 
 const styles = {

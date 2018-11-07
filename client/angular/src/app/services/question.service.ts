@@ -16,6 +16,7 @@ export class QuestionService {
   getAreas() { return this.http.get('/api/areas') }
 
   save(question: Question) {
+    question.difficulty = 3
     if (question.id > 0)
       return this.http.put('/api/question', question)
     else

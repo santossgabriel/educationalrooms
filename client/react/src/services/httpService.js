@@ -14,7 +14,7 @@ const sendRequest = (method, url, headers, data) => {
 
 const getHeaders = () => ({ token: getToken() })
 
-export const httpService = {
+export default {
   getNotAuthenticated: (url) => sendRequest('get', `/api${url}`),
   postNotAuthenticated: (url, body) => sendRequest('post', `/api${url}`, null, body),
   get: (url) => sendRequest('get', `/api${url}`, getHeaders()),

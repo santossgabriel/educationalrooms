@@ -14,7 +14,7 @@ Given('Dado que eu tenha atualizado uma questão', () => {
     id: 4,
     description: 'teste',
     userId: 3,
-    category: 'Avançado',
+    difficulty: 1,
     area: 'area 1',
     answers: [
       { description: 'teste1', classification: 'A' },

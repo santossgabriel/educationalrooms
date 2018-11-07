@@ -1094,8 +1094,9 @@
         "description": {
           "type": "string"
         },
-        "category": {
-          "type": "string"
+        "difficulty": {
+          "format": "int32",
+          "type": "integer"
         },
         "shared": {
           "type": "boolean"

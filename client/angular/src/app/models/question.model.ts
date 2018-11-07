@@ -9,6 +9,7 @@ export class Question {
   answers: Answer[]
   order: number
   sharedQuestionId: number
+  difficulty: number
 
   constructor() {
     this.answers = [

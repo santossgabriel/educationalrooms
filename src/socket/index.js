@@ -66,7 +66,7 @@ export const updateOnlineRooms = async () => {
         include: [
           {
             model: Question,
-            attributes: ['id', 'description', 'area', 'category'],
+            attributes: ['id', 'description', 'area', 'difficulty'],
             include: [
               { model: Answer, attributes: ['id', 'description', 'correct', 'classification'] }
             ]
@@ -90,7 +90,7 @@ export const updateOnlineRooms = async () => {
       points: p.points,
       description: p.Question.description,
       area: p.Question.area,
-      category: p.Question.category,
+      difficulty: p.Question.difficulty,
       answers: p.Question.Answers.map(x => x)
     }))
   }))

@@ -48,9 +48,9 @@ const SubMainText = (props) => (
 
 const LinkListItem = (props) => {
   const clickHandle = (e) => {
-
     if (getCurrentPath() === props.to)
       e.preventDefault()
+    props.onClick()
   }
   return (
     <Link to={props.to}
@@ -99,8 +99,8 @@ class SidebarContent extends React.Component {
           </ListItem>
           <Collapse in={this.state.opened === 'question'} timeout={400} unmountOnExit>
             <List component="div" disablePadding>
-              <LinkListItem to="/my-questions" text={QuestionTexts.My[this.props.language]} />
-              <LinkListItem to="/shared-questions" text={QuestionTexts.Shared[this.props.language]} />
+              <LinkListItem onClick={() => this.props.closeSidebar()} to="/my-questions" text={QuestionTexts.My[this.props.language]} />
+              <LinkListItem onClick={() => this.props.closeSidebar()} to="/shared-questions" text={QuestionTexts.Shared[this.props.language]} />
             </List>
           </Collapse>
 
