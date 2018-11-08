@@ -17,7 +17,7 @@ class IconTextInput extends React.Component {
     super(props)
     this.state = {
       hasError: this.props.required,
-      errorMessage: 'This field is required.',
+      errorMessage: 'Este campo é obrigatório.',
       lostFocus: false
     }
   }
@@ -28,16 +28,16 @@ class IconTextInput extends React.Component {
 
     if (this.props.required && !t.trim()) {
       hasError = true
-      errorMessage = 'This field is required.'
+      errorMessage = 'Este campo é obrigatório.'
     } else if (this.props.minlength && t.length < this.props.minlength) {
       hasError = true
-      errorMessage = `Enter at least ${this.props.minlength} characters.`
+      errorMessage = `É preciso informar pelo menos ${this.props.minlength} caracteres.`
     } else if (this.props.email && !emailRegex.test(t)) {
       hasError = true
-      errorMessage = 'Enter a valid email address'
+      errorMessage = 'Entre com um email válido.'
     } else if (this.props.pattern && !RegExp(this.props.pattern).test(t)) {
       hasError = true
-      errorMessage = this.props.patternMessage ? this.props.patternMessage : 'Check the value of this field.'
+      errorMessage = this.props.patternMessage ? this.props.patternMessage : 'Verifique o valor deste campo.'
     }
 
     this.setState({
@@ -51,10 +51,11 @@ class IconTextInput extends React.Component {
 
   render() {
     return (
-      <FormControl>
+      <FormControl style={this.props.style}>
         <TextField error={this.state.hasError && this.state.lostFocus}
-        disabled={this.props.disabled}
+          disabled={this.props.disabled}
           style={{ marginTop: '10px' }}
+          value={this.props.value || this.state.text}
           variant="outlined"
           className="teste"
           label={this.props.label}
@@ -91,7 +92,8 @@ IconTextInput.propTypes = {
   validChanged: PropTypes.func,
   onChange: PropTypes.func,
   patternMessage: PropTypes.string,
-  name: PropTypes.string
+  name: PropTypes.string,
+  label: PropTypes.string.isRequired
 }
 
 export default IconTextInput

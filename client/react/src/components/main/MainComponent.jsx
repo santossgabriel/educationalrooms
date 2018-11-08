@@ -10,7 +10,7 @@ import AppRouter from './AppRouter'
 import Auth from '../../scenes/auth/Auth'
 import { AlertModal } from '../main/Modal'
 
-const mql = window.matchMedia(`(min-width: 800px)`)
+const mql = window.matchMedia(`(min-width: 1024px)`)
 
 class MainComponent extends React.Component {
   constructor(props) {
