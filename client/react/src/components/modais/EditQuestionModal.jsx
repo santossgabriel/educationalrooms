@@ -6,13 +6,18 @@ import {
   DialogContent,
   DialogActions,
   Zoom,
-  MobileStepper
-
+  MobileStepper,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@material-ui/core'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
-import ComboTextInput from '../main/ComboTextInput'
+
 import IconTextInput from '../main/IconTextInput'
 import Stars from '../question/Stars'
+import EditQuestionAlternatives from '../question/EditQuestionAlternatives'
+import { questionService } from '../../services'
 
 const styles = {
   legend: {
@@ -29,17 +34,27 @@ const tutorialSteps = [
   { title: 'Alternativas', description: 'passo 2' }
 ]
 
-const areas = ['Matemática', 'Física', 'Informática']
-
 export default class EditQuestionModal extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
       activeStep: 0,
-      area: areas[0],
-      difficulty: 1
+      difficulty: 1,
+      areas: ['OUTRA...'],
+      areaSelected: 'OUTRA...',
+      areaCustom: false,
+      areaCustomName: ''
     }
+  }
+
+  componentDidMount() {
+    questionService.getAreas().then(res => {
+      this.setState({
+        areas: res.map(p => p.toUpperCase()).concat(this.state.areas),
+        areaSelected: res.length > 0 ? res[0] : this.state.areaSelected
+      })
+    })
   }
 
   render() {
@@ -61,13 +76,24 @@ export default class EditQuestionModal extends React.Component {
             </legend>
             {activeStep === 0 ?
               <div>
-                <ComboTextInput
-                  onChange={t => this.setState({ area: t, areaValid: t.length > 1 })}
-                  minlength={2}
-                  selected={this.state.area}
-                  width="250px"
-                  label="Área"
-                  options={areas} />
+                <FormControl>
+                  <InputLabel>Área</InputLabel>
+                  <Select
+                    style={{ width: '250px' }}
+                    value={this.state.areaSelected}
+                    onChange={(e) => this.setState({ areaSelected: e.target.value, areaCustom: e.target.value === 'OUTRA...' })}
+                    displayEmpty>
+                    {this.state.areas.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
+                  </Select>
+                  <div hidden={this.state.areaSelected !== 'OUTRA...'}>
+                    <IconTextInput
+                      value={this.state.areaCustomName}
+                      minlength={2}
+                      required
+                      onChange={(e) => this.setState({ areaSelected: e.target.value, areaCustom: true })}
+                      label="Área" />
+                  </div>
+                </FormControl>
                 <Stars style={{ marginTop: '20px' }}
                   filled={difficulty}
                   label="Dificuldade"
@@ -78,9 +104,7 @@ export default class EditQuestionModal extends React.Component {
                   onChange={t => this.setState({ description: t.value, descriptionValid: t.valid })}
                   label="Descrição" />
               </div>
-              : <div>
-                PASSO 1
-                </div>
+              : <EditQuestionAlternatives />
             }
           </fieldset>
           <MobileStepper

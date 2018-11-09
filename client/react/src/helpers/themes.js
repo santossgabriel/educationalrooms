@@ -8,6 +8,6 @@ export const Colors = {
 export const AppTheme = createMuiTheme({
   palette: {
     primary: { main: Colors.AppGreen },
-    secondary: { main: '#11cb5f' }
+    secondary: { main: '#bb2222' }
   }
 })
