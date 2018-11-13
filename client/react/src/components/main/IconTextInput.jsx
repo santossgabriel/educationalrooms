@@ -16,10 +16,15 @@ class IconTextInput extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      hasError: this.props.required,
+      hasError: props.required && !props.defaultValue,
       errorMessage: 'Este campo é obrigatório.',
-      lostFocus: false
+      lostFocus: false,
+      text: props.defaultValue || ''
     }
+  }
+
+  componentDidMount() {
+    this.onChange(this.props.value || this.state.text)
   }
 
   onChange(t) {
@@ -32,6 +37,9 @@ class IconTextInput extends React.Component {
     } else if (this.props.minlength && t.length < this.props.minlength) {
       hasError = true
       errorMessage = `É preciso informar pelo menos ${this.props.minlength} caracteres.`
+    } else if (this.props.maxlength && t.length > this.props.maxlength) {
+      hasError = true
+      errorMessage = `Este campo excedeu o limite de ${this.props.maxlength} caracteres.`
     } else if (this.props.email && !emailRegex.test(t)) {
       hasError = true
       errorMessage = 'Entre com um email válido.'
@@ -49,13 +57,21 @@ class IconTextInput extends React.Component {
       this.props.onChange({ valid: !hasError, value: t, name: this.props.name })
   }
 
+  componentDidUpdate() {
+    if ((this.props.value || this.props.value === '') && this.state.text !== this.props.value)
+      this.onChange(this.props.value)
+  }
+
   render() {
     return (
       <FormControl style={this.props.style}>
         <TextField error={this.state.hasError && this.state.lostFocus}
           disabled={this.props.disabled}
           style={{ marginTop: '10px' }}
-          value={this.props.value || this.state.text}
+          value={this.state.text}
+          multiline={this.props.multiline}
+          rowsMax={this.props.rowsMax}
+          rows={this.props.rows}
           variant="outlined"
           className="teste"
           label={this.props.label}
@@ -86,6 +102,7 @@ class IconTextInput extends React.Component {
 IconTextInput.propTypes = {
   required: PropTypes.bool,
   minlength: PropTypes.number,
+  maxlength: PropTypes.number,
   email: PropTypes.bool,
   pattern: PropTypes.string,
   patternMessage: PropTypes.string,
@@ -93,7 +110,10 @@ IconTextInput.propTypes = {
   onChange: PropTypes.func,
   patternMessage: PropTypes.string,
   name: PropTypes.string,
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  rowsMax: PropTypes.string,
+  multiline: PropTypes.bool
 }
 
 export default IconTextInput

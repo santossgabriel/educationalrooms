@@ -38,7 +38,7 @@ export default class MyQuestion extends React.Component {
 
   openEditQuestion(question) {
     this.setState({
-      question: question ? Object.assign({}, question) : {},
+      question: question || {},
       editModalOpen: true
     })
   }
@@ -75,7 +75,7 @@ export default class MyQuestion extends React.Component {
                       {n.area}
                     </TableCell>
                     <TableCell style={{ textAlign: 'center' }}>
-                      <Stars filled={4} />
+                      <Stars filled={n.difficulty || 0} />
                     </TableCell>
                     <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
                     <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>

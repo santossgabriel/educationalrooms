@@ -21,23 +21,33 @@ export default class EditQuestionAlternatives extends React.Component {
     }
   }
 
+  componentDidMount(){
+    this.props.onAlternativeChange(this.state.alternatives)
+  }
+
   removeAlternative(alt) {
     const alts = this.state.alternatives.filter(p => p.classification !== alt.classification)
-    alts.forEach((v, i) => {
-      v.classification = classifications[i]
-    })
+    alts.forEach((v, i) => v.classification = classifications[i])
     this.setState({
       alternatives: alts,
       correct: classifications[0]
     })
+    this.props.onAlternativeChange(alts)
   }
 
   addAlternative() {
     const alt = {}
     alt.classification = classifications[this.state.alternatives.length]
+    const alts = this.state.alternatives.concat([alt])
     this.setState({
-      alternatives: this.state.alternatives.concat([alt])
+      alternatives: alts
     })
+    this.props.onAlternativeChange(alts)
+  }
+
+  descriptionChanged(alternative, value) {
+    alternative.description = value
+    this.props.onAlternativeChange(this.state.alternatives)
   }
 
   render() {
@@ -49,8 +59,8 @@ export default class EditQuestionAlternatives extends React.Component {
         </div>
         {this.state.alternatives.map((p, i) => (
           <div key={i}>
-            <IconTextInput required label={p.classification}
-              onChange={(e) => p.description = e.value} />
+            <IconTextInput required label={p.classification} defaultValue={p.description}
+              onChange={e => this.descriptionChanged(p, e.value)} />
             <Radio color="primary" style={{ marginTop: '15px' }} checked={p.classification === this.state.correct}
               onChange={() => this.setState({ correct: p.classification })} />
             <IconButton color="secondary" style={{ marginTop: '15px' }} size="small" aria-label="Delete"
