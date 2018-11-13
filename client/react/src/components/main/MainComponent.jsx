@@ -1,6 +1,7 @@
 import React from 'react'
 import Sidebar from 'react-sidebar'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { HashRouter } from 'react-router-dom'
 
 import { Colors } from '../../helpers/themes'
@@ -9,6 +10,7 @@ import SidebarContent from './SidebarContent'
 import AppRouter from './AppRouter'
 import Auth from '../../scenes/auth/Auth'
 import { AlertModal } from '../main/Modal'
+import { hideAlert } from '../../actions'
 
 const mql = window.matchMedia(`(min-width: 1024px)`)
 
@@ -65,15 +67,16 @@ class MainComponent extends React.Component {
           :
           <Auth />
         }
-        <AlertModal title="Sessão expirou!"
-          text="Você será redirecionado para a tela de login."
-          show={this.state.showModal}
-          onClose={() => this.setState({ showModal: false })} />
+        <AlertModal type={this.props.modal.type}
+          text={this.props.modal.message}
+          show={this.props.modal.show}
+          onClose={() => this.props.hideAlert()} />
       </div>
     )
   }
 }
 
-const mapStateToProps = state => ({ user: state.appState.user })
+const mapStateToProps = state => ({ user: state.appState.user, modal: state.modalState })
+const mapDispatchToProps = dispatch => bindActionCreators({ hideAlert }, dispatch)
 
-export default connect(mapStateToProps)(MainComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(MainComponent)

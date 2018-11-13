@@ -1,6 +1,8 @@
 import { appReducer } from './appReducer'
+import { modalReducer } from './modalReducer'
 import { combineReducers } from 'redux'
 
 export const Reducers = combineReducers({
-  appState: appReducer
+  appState: appReducer,
+  modalState: modalReducer
 })
