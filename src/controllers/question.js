@@ -171,6 +171,9 @@ export default {
 
       const questionDb = await Question.findOne({ include: Answer, where: { id: question.id } })
 
+      if (!questionDb)
+        throwForbiddenError('A questão não foi localizada.')
+
       if (questionDb.userId != req.claims.id)
         throwForbiddenError('Usuário sem permissão para alterar o item.')
 

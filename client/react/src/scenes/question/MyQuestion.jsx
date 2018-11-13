@@ -43,10 +43,6 @@ export default class MyQuestion extends React.Component {
     })
   }
 
-  saveQuestion(question) {
-    console.log(question)
-  }
-
   render() {
     const { questions } = this.state
     return (
@@ -112,8 +108,7 @@ export default class MyQuestion extends React.Component {
             color="primary" variant="raised">Criar questão</Button>
         </div>
         <EditQuestionModal
-          cancel={() => this.setState({ editModalOpen: false })}
-          ok={(question) => this.saveQuestion(question)}
+          close={() => this.setState({ editModalOpen: false })}
           question={this.state.question}
           open={this.state.editModalOpen} />
       </CardMain>

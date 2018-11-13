@@ -17,45 +17,20 @@ export const AlertModal = props => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       transitionDuration={300}
-      TransitionComponent={Zoom}
-    >
-      <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+      TransitionComponent={Zoom}>
+      <DialogTitle id="alert-dialog-title" style={{ textAlign: 'center' }}>
+        <span style={{ color: '#d62e2e', fontWeight: 'bold', fontSize: '30px' }} >
+          {props.mode === 'success' ? 'Sucesso' : 'Oops!'}
+        </span>
+      </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {props.text}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={() => props.onClose()} color="primary" variant="raised" autoFocus>ok</Button>
-      </DialogActions>
+      <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+        <Button onClick={() => props.onClose()} variant="raised" autoFocus>ok</Button>
+      </div>
     </Dialog>
   )
 }
-
-// export const ConfirmModal = props => {
-//   return (
-//     <Dialog
-//       open={this.state.showSwAl}
-//       onClose={() => this.setState({ showSwAl: false })}
-//       aria-labelledby="alert-dialog-title"
-//       aria-describedby="alert-dialog-description"
-//       transitionDuration={200}
-//       TransitionComponent={Zoom}
-//     >
-//       <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-//       <DialogContent>
-//         <DialogContentText id="alert-dialog-description">
-//           {props.text}
-//         </DialogContentText>
-//       </DialogContent>
-//       <DialogActions>
-//         <Button onClick={() => this.setState({ showSwAl: false })}
-//           variant="outlined"
-//           color="primary">Disagree</Button>
-//         <Button onClick={() => this.setState({ showSwAl: false })}
-//           color="primary"
-//           variant="raised" autoFocus>ok</Button>
-//       </DialogActions>
-//     </Dialog>
-//   )
-// }

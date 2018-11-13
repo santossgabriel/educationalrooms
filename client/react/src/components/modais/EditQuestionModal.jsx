@@ -18,6 +18,7 @@ import IconTextInput from '../main/IconTextInput'
 import Stars from '../question/Stars'
 import EditQuestionAlternatives from '../question/EditQuestionAlternatives'
 import { questionService } from '../../services'
+import { AlertModal } from '../main/Modal'
 
 const styles = {
   legend: {
@@ -47,7 +48,8 @@ export default class EditQuestionModal extends React.Component {
       areaSelected: OUTRAS,
       areaCustomName: '',
       question: {},
-      description: ''
+      description: '',
+      showAlertModal: false
     }
     this.onEnter = this.onEnter.bind(this)
   }
@@ -97,91 +99,119 @@ export default class EditQuestionModal extends React.Component {
     })
   }
 
+  save() {
+    const { description, difficulty, areaCustomName, areaSelected, alternatives } = this.state
+    const question = {
+      description,
+      difficulty,
+      area: areaSelected === OUTRAS ? areaCustomName.toUpperCase() : areaSelected,
+      answers: alternatives,
+      id: this.props.question.id
+    }
+    if (question.id) {
+      questionService.update(question)
+        .then(res => this.setState({ showAlertModal: true, responseError: res.message }))
+        .catch(err => this.setState({ showAlertModal: true, responseError: err.message }))
+    }
+    else {
+      questionService.create(question)
+        .then(res => this.setState({ showAlertModal: true, responseError: res.message }))
+        .catch(err => this.setState({ showAlertModal: true, responseError: err.message }))
+    }
+    // this.props.close()
+  }
+
   render() {
     const { activeStep, difficulty } = this.state
     return (
-      <Dialog
-        open={this.props.open}
-        onClose={() => this.props.cancel()}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        transitionDuration={300}
-        onEnter={this.onEnter}
-        TransitionComponent={Zoom}>
-        <DialogTitle id="alert-dialog-title">
-          {this.props.question.id > 0 ? 'Edição' : 'Nova'}</DialogTitle>
-        <DialogContent>
-          <fieldset style={styles.legend}>
-            <legend>
-              {tutorialSteps[activeStep].title}
-            </legend>
-            {activeStep === 0 ?
-              <div>
-                <FormControl>
-                  <InputLabel>Área</InputLabel>
-                  <Select
-                    style={{ width: '250px' }}
-                    value={this.state.areaSelected}
-                    onChange={(e) => this.setState({ areaSelected: e.target.value })}
-                    displayEmpty>
-                    {this.state.areas.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
-                  </Select>
-                  <div hidden={this.state.areaSelected !== OUTRAS}>
-                    <IconTextInput
-                      value={this.state.areaCustomName}
-                      defaultValue={this.state.areaCustomName}
-                      minlength={2}
-                      required
-                      onChange={(e) => this.setState({ areaCustomName: e.value })}
-                      label="Área" />
-                  </div>
-                </FormControl>
-                <Stars style={{ marginTop: '20px' }}
-                  filled={difficulty}
-                  label="Dificuldade"
-                  onClick={(i) => this.setState({ difficulty: i })} />
-                <IconTextInput
-                  style={{ marginTop: '20px' }}
-                  required
-                  multiline={true}
-                  rowsMax="3"
-                  name="teste"
-                  rows="3"
-                  maxlength={100}
-                  value={this.state.description}
-                  onChange={t => this.setState({ description: t.value, descriptionValid: t.valid })}
-                  label="Descrição" />
-              </div>
-              : <EditQuestionAlternatives
-                alternatives={this.state.alternatives}
-                onAlternativeChange={(e) => this.alternativeChanged(e)} />
-            }
-          </fieldset>
-          <MobileStepper
-            steps={2}
-            position="static"
-            activeStep={activeStep}
-            backButton={
-              <Button size="small" color="primary"
-                onClick={() => this.setState({ activeStep: 0 })}
-                disabled={activeStep === 0}>
-                {<KeyboardArrowLeft />}anterior</Button>
-            }
-            nextButton={
-              <Button size="small" color="primary"
-                onClick={() => this.setState({ activeStep: 1 })}
-                disabled={activeStep === 1 || !this.state.description || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}>
-                próximo{<KeyboardArrowRight />}
-              </Button>
-            }
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => this.props.cancel()} variant="raised" autoFocus>cancelar</Button>
-          <Button disabled={!this.state.description || !this.state.alternativesValid || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}
-            onClick={() => this.props.cancel()} color="primary" variant="raised" autoFocus>Salvar</Button>
-        </DialogActions>
-      </Dialog >
+      <div>
+        <Dialog
+          open={this.props.open}
+          onClose={() => this.props.close()}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          transitionDuration={300}
+          onEnter={this.onEnter}
+          TransitionComponent={Zoom}>
+          <DialogTitle id="alert-dialog-title">
+            {this.props.question.id > 0 ? 'Edição' : 'Nova'}</DialogTitle>
+          <DialogContent>
+            <fieldset style={styles.legend}>
+              <legend>
+                {tutorialSteps[activeStep].title}
+              </legend>
+              {activeStep === 0 ?
+                <div>
+                  <FormControl>
+                    <InputLabel>Área</InputLabel>
+                    <Select
+                      style={{ width: '250px' }}
+                      value={this.state.areaSelected}
+                      onChange={(e) => this.setState({ areaSelected: e.target.value })}
+                      displayEmpty>
+                      {this.state.areas.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
+                    </Select>
+                    <div hidden={this.state.areaSelected !== OUTRAS}>
+                      <IconTextInput
+                        value={this.state.areaCustomName}
+                        defaultValue={this.state.areaCustomName}
+                        minlength={2}
+                        required
+                        onChange={(e) => this.setState({ areaCustomName: e.value })}
+                        label="Área" />
+                    </div>
+                  </FormControl>
+                  <Stars style={{ marginTop: '20px' }}
+                    filled={difficulty}
+                    label="Dificuldade"
+                    onClick={(i) => this.setState({ difficulty: i })} />
+                  <IconTextInput
+                    style={{ marginTop: '20px' }}
+                    required
+                    multiline={true}
+                    rowsMax="3"
+                    name="teste"
+                    rows="3"
+                    maxlength={100}
+                    value={this.state.description}
+                    onChange={t => this.setState({ description: t.value, descriptionValid: t.valid })}
+                    label="Descrição" />
+                </div>
+                : <EditQuestionAlternatives
+                  alternatives={this.state.alternatives}
+                  onAlternativeChange={(e) => this.alternativeChanged(e)} />
+              }
+            </fieldset>
+            <MobileStepper
+              steps={2}
+              position="static"
+              activeStep={activeStep}
+              backButton={
+                <Button size="small" color="primary"
+                  onClick={() => this.setState({ activeStep: 0 })}
+                  disabled={activeStep === 0}>
+                  {<KeyboardArrowLeft />}anterior</Button>
+              }
+              nextButton={
+                <Button size="small" color="primary"
+                  onClick={() => this.setState({ activeStep: 1 })}
+                  disabled={activeStep === 1 || !this.state.description || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}>
+                  próximo{<KeyboardArrowRight />}
+                </Button>
+              }
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => this.props.close()} variant="raised" autoFocus>cancelar</Button>
+            <Button disabled={!this.state.description || !this.state.alternativesValid || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}
+              onClick={() => this.save()} color="primary" variant="raised" autoFocus>Salvar</Button>
+          </DialogActions>
+        </Dialog>
+        <AlertModal title="ERRO!"
+          text={this.state.responseError}
+          show={this.state.showAlertModal}
+          onClose={() => this.setState({ showAlertModal: false })} />
+      </div>
     )
   }
 }
