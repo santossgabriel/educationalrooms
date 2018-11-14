@@ -14,9 +14,14 @@ export const userChanged = user => ({
   payload: user
 })
 
-export const showAlert = (message, type) => ({
+export const showError = (message) => ({
   type: CHANGE_VISIBLE_ALERT,
-  payload: { message, type, show: true }
+  payload: { message, type: 'error', show: true }
+})
+
+export const showSuccess = (message) => ({
+  type: CHANGE_VISIBLE_ALERT,
+  payload: { message, type: 'success', show: true }
 })
 
 export const hideAlert = () => ({

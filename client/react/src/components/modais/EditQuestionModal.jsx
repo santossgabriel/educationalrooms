@@ -20,7 +20,7 @@ import IconTextInput from '../main/IconTextInput'
 import Stars from '../question/Stars'
 import EditQuestionAlternatives from '../question/EditQuestionAlternatives'
 import { questionService } from '../../services'
-import { showAlert } from '../../actions'
+import { showError, showSuccess } from '../../actions'
 
 const styles = {
   legend: {
@@ -54,7 +54,6 @@ class EditQuestionModal extends React.Component {
       showAlertModal: false
     }
     this.onEnter = this.onEnter.bind(this)
-    this.props.showAlert('Olá', 'error')
   }
 
   onEnter() {
@@ -111,17 +110,15 @@ class EditQuestionModal extends React.Component {
       answers: alternatives,
       id: this.props.question.id
     }
-    if (question.id) {
-      questionService.update(question)
-        .then(res => this.setState({ showAlertModal: true, responseError: res.message }))
-        .catch(err => this.setState({ showAlertModal: true, responseError: err.message }))
+
+    const caller = (promise) => {
+      promise.then(res => {
+        this.props.showSuccess(res.message)
+        this.props.close(true)
+      }).catch(err => this.props.showError(err.message))
     }
-    else {
-      questionService.create(question)
-        .then(res => this.setState({ showAlertModal: true, responseError: res.message }))
-        .catch(err => this.setState({ showAlertModal: true, responseError: err.message }))
-    }
-    // this.props.close()
+
+    caller(question.id ? questionService.update(question) : questionService.create(question))
   }
 
   render() {
@@ -213,6 +210,6 @@ class EditQuestionModal extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ showAlert }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ showError, showSuccess }, dispatch)
 
 export default connect(null, mapDispatchToProps)(EditQuestionModal)

@@ -43,6 +43,12 @@ export default class MyQuestion extends React.Component {
     })
   }
 
+  modalQuestionCallback(hasChanges) {
+    this.setState({ editModalOpen: false })
+    if (hasChanges)
+      questionService.getMy().then(res => this.setState({ questions: res }))
+  }
+
   render() {
     const { questions } = this.state
     return (
@@ -108,7 +114,7 @@ export default class MyQuestion extends React.Component {
             color="primary" variant="raised">Criar questão</Button>
         </div>
         <EditQuestionModal
-          close={() => this.setState({ editModalOpen: false })}
+          close={(hasChanges) => this.modalQuestionCallback(hasChanges)}
           question={this.state.question}
           open={this.state.editModalOpen} />
       </CardMain>
