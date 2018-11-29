@@ -6,10 +6,12 @@ import {
   TableRow,
   Table,
   TableCell,
-  Checkbox,
+  TableHead,
   TablePagination,
-  Paper
+  Paper,
+  Button
 } from '@material-ui/core'
+import IconDownload from '@material-ui/icons/Archive'
 
 import Stars from '../../components/question/Stars'
 
@@ -29,6 +31,12 @@ export default class SharedQuestion extends React.Component {
     questionService.getOthers().then(res => this.setState({ questions: res }))
   }
 
+  getShared(id) {
+    questionService.getShared(id).then(() => {
+      this.setState({ questions: this.state.questions.filter(p => p.id !== id) })
+    })
+  }
+
   render() {
     const { questions } = this.state
     return (
@@ -38,28 +46,34 @@ export default class SharedQuestion extends React.Component {
         <Paper style={{ marginLeft: '20px', marginRight: '20px' }}>
           <div>
             <Table aria-labelledby="tableTitle">
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>Área</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>Dificuldade</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>Descrição</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>Respostas</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>Adquirir</TableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
                 {questions
                   .map(n => (
                     <TableRow
-                      hover
-                      onClick={(e) => console.log(e, n.id)}
-                      role="checkbox"
-                      aria-checked={true}
                       tabIndex={-1}
-                      key={n.id}
-                      selected={true}>
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={true} />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
+                      key={n.id}>
+                      <TableCell style={{ textAlign: 'center' }} component="th" scope="row" padding="none">
                         {n.area}
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{ textAlign: 'center' }}>
                         <Stars filled={4} />
                       </TableCell>
                       <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
-                      <TableCell numeric>{n.answers.length}</TableCell>
+                      <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>
+                      <TableCell style={{ textAlign: 'center' }}>
+                        <Button onClick={() => this.getShared(n.id)} variant="fab">
+                          <IconDownload color="primary" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 {this.state.emptyRows > 0 && (
