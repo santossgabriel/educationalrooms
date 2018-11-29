@@ -11,7 +11,8 @@ import {
   TablePagination,
   Button,
   TableHead,
-  Paper
+  Paper,
+  Checkbox
 } from '@material-ui/core'
 
 import Stars from '../../components/question/Stars'
@@ -33,6 +34,10 @@ export default class MyQuestion extends React.Component {
   }
 
   componentDidMount() {
+    this.refresh()
+  }
+
+  refresh() {
     questionService.getMy().then(res => this.setState({ questions: res }))
   }
 
@@ -49,6 +54,14 @@ export default class MyQuestion extends React.Component {
       questionService.getMy().then(res => this.setState({ questions: res }))
   }
 
+  changeShared(checked, id) {
+    questionService.share(id, checked).then(() => {
+      const questions = this.state.questions
+      questions.forEach(p => { if (p.id === id) p.shared = checked })
+      this.setState({ questions: questions })
+    })
+  }
+
   render() {
     const { questions } = this.state
     return (
@@ -61,6 +74,7 @@ export default class MyQuestion extends React.Component {
                 <TableCell style={{ textAlign: 'center' }}>Dificuldade</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>Descrição</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>Respostas</TableCell>
+                <TableCell style={{ textAlign: 'center' }}>Compartilhada?</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -81,6 +95,15 @@ export default class MyQuestion extends React.Component {
                     </TableCell>
                     <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
                     <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }} numeric>
+                      <div onClick={(event) => { event.stopPropagation() }}>
+                        <Checkbox
+                          color="primary"
+                          checked={n.shared}
+                          onChange={(e, c) => this.changeShared(c, n.id)}
+                        />
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               {this.state.emptyRows > 0 && (

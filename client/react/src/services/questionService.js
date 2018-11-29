@@ -6,7 +6,7 @@ const getOthers = () => httpService.get('/question-others')
 const getAreas = () => httpService.get('/areas')
 const create = (q) => httpService.post('/question', q)
 const update = (q) => httpService.put('/question', q)
-const share = (id, shared) => httpService.put('/question', { id, shared })
+const share = (id, shared) => httpService.put('/question-share', { id, shared })
 const remove = (id) => httpService.delete(`/question/${id}`)
 
 export default {
