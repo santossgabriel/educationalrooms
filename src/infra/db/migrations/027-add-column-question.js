@@ -6,5 +6,5 @@ module.exports = {
       allowNull: true
     }
   ),
-  down: (queryInterface, Sequelize) => null
+  down: (queryInterface, Sequelize) => queryInterface.removeColumn('Question', 'sharedQuestionId'),
 }

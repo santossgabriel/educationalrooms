@@ -4,5 +4,5 @@ module.exports = {
       type: 'unique',
       name: 'pk_room_question'
     }),
-  down: (queryInterface, Sequelize) => null
+  down: (queryInterface, Sequelize) => queryInterface.removeConstraint('RoomQuestion', 'pk_room_question')
 }

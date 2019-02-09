@@ -4,5 +4,5 @@ module.exports = {
     allowNull: false,
     defaultValue: 50
   }),
-  down: (queryInterface, Sequelize) => null
+  down: (queryInterface, Sequelize) => queryInterface.removeColumn('RoomQuestion', 'points')
 }

@@ -7,5 +7,5 @@ module.exports = {
       defaultValue: 'Iniciante'
     }
   ),
-  down: (queryInterface, Sequelize) => null
+  down: (queryInterface, Sequelize) => queryInterface.removeColumn('Question', 'category'),
 }

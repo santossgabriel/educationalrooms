@@ -4,5 +4,5 @@ module.exports = {
     allowNull: false,
     defaultValue: false
   }),
-  down: (queryInterface, Sequelize) => null
+  down: (queryInterface, Sequelize) => queryInterface.removeColumn('User', 'google')
 }
