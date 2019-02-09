@@ -7,7 +7,7 @@ echo "Branch: $GIT_BRANCH"
 echo "Commit: $GIT_COMMIT"
 
 git archive --format=tar.gz -o deploy.tgz $GIT_COMMIT
-
+dasdas
 HEROKU_VERSION=$GIT_COMMIT
 HEROKU_APP_NAME=quiz-room
 
