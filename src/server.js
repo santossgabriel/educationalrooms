@@ -2,7 +2,6 @@ import http from 'http'
 import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
-import jwt from 'jsonwebtoken'
 import swaggerUi from 'swagger-ui-express'
 const swaggerDocument = require('./infra/swagger.json')
 

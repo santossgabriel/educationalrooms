@@ -1,7 +1,4 @@
 module.exports = {
-  up: function (queryInterface, Sequelize) {
-    queryInterface.removeColumn('Question', 'category')
-  },
-
-  down: function (queryInterface, Sequelize) { }
+  up: (queryInterface, Sequelize) => queryInterface.removeColumn('Question', 'category'),
+  down: (queryInterface, Sequelize) => null
 }

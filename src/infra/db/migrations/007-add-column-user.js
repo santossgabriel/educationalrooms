@@ -1,17 +1,10 @@
 module.exports = {
-  up: function (queryInterface, Sequelize) {
-    queryInterface.addColumn(
-      'User',
-      'updateAt', {
-        type: Sequelize.DATE
-      }
-    )
-  },
+  up: (queryInterface, Sequelize) => queryInterface.addColumn(
+    'User',
+    'updateAt', {
+      type: Sequelize.DATE
+    }
+  ),
 
-  down: function (queryInterface, Sequelize) {
-    queryInterface.removeColumn(
-      'User',
-      'updateAt'
-    )
-  }
+  down: (queryInterface, Sequelize) => queryInterface.removeColumn('User', 'updateAt')
 }

@@ -1,16 +1,13 @@
 module.exports = {
-  up: function (queryInterface, Sequelize) {
-    queryInterface.addColumn(
-      'User',
-      'mobile',
-      Sequelize.BOOLEAN
-    );
-  },
+  up: (queryInterface, Sequelize) => queryInterface.addColumn(
+    'User',
+    'mobile',
+    Sequelize.BOOLEAN
+  ),
 
-  down: function (queryInterface, Sequelize) {
+  down: (queryInterface, Sequelize) =>
     queryInterface.removeColumn(
       'User',
       'mobile'
-    );
-  }
+    )
 }
