@@ -3,8 +3,6 @@
     <mat-toolbar-row>
       <span class="qr-logo">QR</span>
       <span class="app-spacer"></span>
-      <!-- <button [disabled]="path === '/' || path === 'resume'" routerLink="/" mat-button>Home</button> -->
-      <!-- <button [disabled]="path === '/about'" routerLink="/about" mat-button>Sobre</button> -->
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
       <span class="app-spacer"></span>
@@ -22,9 +20,10 @@
         <button [disabled]="path === '/signup'" mat-button routerLink="/signup">Cadastre-se</button>
       </div>
       <div [hidden]="!logged" style="margin-right: 20px; margin-top: -10px">
-
-        <button id="btnMenuNotification" mat-icon-button (click)="updateTimeNotifications()" [matMenuTriggerFor]="notificationMenu">
-          <mat-icon [matBadge]="notifPendings" [matBadgeHidden]="notifPendings == 0" matBadgeColor="warn">notifications</mat-icon>
+        <button id="btnMenuNotification" mat-icon-button (click)="updateTimeNotifications()"
+          [matMenuTriggerFor]="notificationMenu">
+          <mat-icon [matBadge]="notifPendings" [matBadgeHidden]="notifPendings == 0" matBadgeColor="warn">notifications
+          </mat-icon>
         </button>
 
         <button id="btnMenuTutorial" matTooltip="Tutoriais" mat-icon-button [matMenuTriggerFor]="helpMenu">
@@ -32,8 +31,8 @@
         </button>
 
         <button id="btnMenuAccount" mat-icon-button [matMenuTriggerFor]="accountMenu">
-          <img style="background-color: white;border-radius: 50%;box-shadow: 0 0 15px #999" height="60" width="60" src="{{user?.picture || 'api/image/user-image.png'}}"
-          />
+          <img style="background-color: white;border-radius: 50%;box-shadow: 0 0 15px #999" height="60" width="60"
+            src="{{user?.picture || 'api/image/user-image.png'}}" />
         </button>
 
         <mat-menu #notificationMenu="matMenu" style="overflow: hidden;">
@@ -45,7 +44,8 @@
                 <div>
                   <div class="icon-actions">
                     <mat-icon style="color:aqua;" *ngIf="!n.read">lens</mat-icon>
-                    <mat-icon matTooltip="Remover" (click)="removeNotification(n)" style="color:#B44;cursor: pointer; width: 3px">close</mat-icon>
+                    <mat-icon matTooltip="Remover" (click)="removeNotification(n)"
+                      style="color:#B44;cursor: pointer; width: 3px">close</mat-icon>
                   </div>
                 </div>
                 <span style="font-weight: bold">{{n.origin}} </span>
@@ -80,7 +80,8 @@
           <div class="account-data" style="padding: 10px">
             <div fxLayout="row">
               <div fxFlex="60px">
-                <img style="border-radius: 50%" height="50" width="50" src="{{user?.picture || 'api/image/user-image.png'}}" />
+                <img style="border-radius: 50%" height="50" width="50"
+                  src="{{user?.picture || 'api/image/user-image.png'}}" />
               </div>
               <div>
                 <span class="account-name">{{user?.name}}</span>

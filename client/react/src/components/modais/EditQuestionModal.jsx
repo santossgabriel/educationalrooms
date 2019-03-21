@@ -21,6 +21,7 @@ import Stars from '../question/Stars'
 import EditQuestionAlternatives from '../question/EditQuestionAlternatives'
 import { questionService } from '../../services'
 import { showError, showSuccess } from '../../actions'
+import { AppTexts } from '../../helpers/appTexts'
 
 const styles = {
   legend: {
@@ -33,8 +34,17 @@ const styles = {
 }
 
 const tutorialSteps = [
-  { title: 'Questão' },
-  { title: 'Alternativas' }
+  {
+    title: {
+      ptbr: 'Questão',
+      enus: 'Question'
+    }
+  }, {
+    title: {
+      ptbr: 'Alternativas',
+      enus: 'Alternatives'
+    }
+  }
 ]
 
 const OUTRAS = 'OUTRA...'
@@ -133,16 +143,16 @@ class EditQuestionModal extends React.Component {
         onEnter={this.onEnter}
         TransitionComponent={Zoom}>
         <DialogTitle id="alert-dialog-title">
-          {this.props.question.id > 0 ? 'Edição' : 'Nova'}</DialogTitle>
+          {this.props.question.id > 0 ? AppTexts.Root.Edition[this.props.language] : AppTexts.Root.New[this.props.language]}</DialogTitle>
         <DialogContent>
           <fieldset style={styles.legend}>
             <legend>
-              {tutorialSteps[activeStep].title}
+              {tutorialSteps[activeStep].title[this.props.language]}
             </legend>
             {activeStep === 0 ?
               <div>
                 <FormControl>
-                  <InputLabel>Área</InputLabel>
+                  <InputLabel>{AppTexts.MyQuestionsTable.Area[this.props.language]}</InputLabel>
                   <Select
                     style={{ width: '250px' }}
                     value={this.state.areaSelected}
@@ -157,12 +167,12 @@ class EditQuestionModal extends React.Component {
                       minlength={2}
                       required
                       onChange={(e) => this.setState({ areaCustomName: e.value })}
-                      label="Área" />
+                      label={AppTexts.MyQuestionsTable.Area[this.props.language]} />
                   </div>
                 </FormControl>
                 <Stars style={{ marginTop: '20px' }}
                   filled={difficulty}
-                  label="Dificuldade"
+                  label={AppTexts.MyQuestionsTable.Difficulty[this.props.language]}
                   onClick={(i) => this.setState({ difficulty: i })} />
                 <IconTextInput
                   style={{ marginTop: '20px' }}
@@ -174,7 +184,7 @@ class EditQuestionModal extends React.Component {
                   maxlength={100}
                   value={this.state.description}
                   onChange={t => this.setState({ description: t.value, descriptionValid: t.valid })}
-                  label="Descrição" />
+                  label={AppTexts.MyQuestionsTable.Description[this.props.language]} />
               </div>
               : <EditQuestionAlternatives
                 alternatives={this.state.alternatives}
@@ -189,27 +199,29 @@ class EditQuestionModal extends React.Component {
               <Button size="small" color="primary"
                 onClick={() => this.setState({ activeStep: 0 })}
                 disabled={activeStep === 0}>
-                {<KeyboardArrowLeft />}anterior</Button>
+                {<KeyboardArrowLeft />}{AppTexts.Root.Prev[this.props.language]}</Button>
             }
             nextButton={
               <Button size="small" color="primary"
                 onClick={() => this.setState({ activeStep: 1 })}
                 disabled={activeStep === 1 || !this.state.description || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}>
-                próximo{<KeyboardArrowRight />}
+                {AppTexts.Root.Next[this.props.language]}{<KeyboardArrowRight />}
               </Button>
             }
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => this.props.close()} variant="raised" autoFocus>cancelar</Button>
+          <Button onClick={() => this.props.close()} variant="raised" autoFocus>{AppTexts.Root.Cancel[this.props.language]}</Button>
           <Button disabled={!this.state.description || !this.state.alternativesValid || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}
-            onClick={() => this.save()} color="primary" variant="raised" autoFocus>Salvar</Button>
+            onClick={() => this.save()} color="primary" variant="raised" autoFocus>{AppTexts.Root.Save[this.props.language]}</Button>
         </DialogActions>
       </Dialog>
     )
   }
 }
 
+const mapStateToProps = state => ({ language: state.appState.language })
+
 const mapDispatchToProps = dispatch => bindActionCreators({ showError, showSuccess }, dispatch)
 
-export default connect(null, mapDispatchToProps)(EditQuestionModal)
+export default connect(mapStateToProps, mapDispatchToProps)(EditQuestionModal)

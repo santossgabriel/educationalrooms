@@ -12,7 +12,7 @@ import Auth from '../../scenes/auth/Auth'
 import { AlertModal } from '../main/Modal'
 import { hideAlert } from '../../actions'
 
-const mql = window.matchMedia(`(min-width: 1024px)`)
+const mql = window.matchMedia(`(min-width: 1280px)`)
 
 class MainComponent extends React.Component {
   constructor(props) {

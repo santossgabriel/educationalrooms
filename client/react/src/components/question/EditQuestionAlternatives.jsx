@@ -1,12 +1,14 @@
 import React from 'react'
-import { Radio, IconButton, Button } from '@material-ui/core'
-import { Remove, Delete, Add } from '@material-ui/icons'
+import { connect } from 'react-redux'
+import { Radio, IconButton } from '@material-ui/core'
+import { Delete, Add } from '@material-ui/icons'
 
 import IconTextInput from '../main/IconTextInput'
+import { AppTexts } from '../../helpers/appTexts'
 
 const classifications = ['A', 'B', 'C', 'D', 'E', 'F']
 
-export default class EditQuestionAlternatives extends React.Component {
+class EditQuestionAlternatives extends React.Component {
 
   constructor(props) {
     super(props)
@@ -21,7 +23,7 @@ export default class EditQuestionAlternatives extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.onAlternativeChange(this.state.alternatives)
   }
 
@@ -54,8 +56,8 @@ export default class EditQuestionAlternatives extends React.Component {
     return (
       <div>
         <div style={{ textAlign: 'right', fontSize: '8px', fontWeight: 'bold' }}>
-          <span>CORRETA?</span>
-          <span style={{ marginLeft: '5px' }}>EXCLUIR</span>
+          <span>{AppTexts.Root.Correct[this.props.language]}</span>
+          <span style={{ marginLeft: '5px' }}>{AppTexts.Root.Remove[this.props.language]}</span>
         </div>
         {this.state.alternatives.map((p, i) => (
           <div key={i}>
@@ -80,3 +82,7 @@ export default class EditQuestionAlternatives extends React.Component {
     )
   }
 }
+
+const mapStateToProps = state => ({ language: state.appState.language })
+
+export default connect(mapStateToProps)(EditQuestionAlternatives)

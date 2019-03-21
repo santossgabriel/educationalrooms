@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { LoginModel, AccountModel } from '../models/account.models'
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ import { LoginModel, AccountModel } from '../models/account.models'
 export class AccountService {
 
   constructor(private http: HttpClient) { }
+
+  private user = new Subject<AccountModel>();
 
   login(login: LoginModel) {
     return this.http.post('/api/token', {

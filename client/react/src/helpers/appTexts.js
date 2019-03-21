@@ -17,6 +17,44 @@ export const AppTexts = {
     ptbr: 'SE',
     enus: 'ER'
   },
+  Root: {
+    Prev: {
+      ptbr: 'Anterior',
+      enus: 'Previous'
+    },
+    Next: {
+      ptbr: 'Próximo',
+      enus: 'Next'
+    },
+    Cancel: {
+      ptbr: 'Cancelar',
+      enus: 'Cancel'
+    },
+    Save: {
+      ptbr: 'Salvar',
+      enus: 'Save'
+    },
+    Correct: {
+      ptbr: 'Correta?',
+      enus: 'Correct?'
+    },
+    Remove: {
+      ptbr: 'Remover',
+      enus: 'Remove'
+    },
+    New: {
+      ptbr: 'Novo',
+      enus: 'New'
+    },
+    Edition: {
+      ptbr: 'Edição',
+      enus: 'Edition'
+    },
+    Acquired: {
+      ptbr: 'Adquirida',
+      enus: 'Acquired'
+    },
+  },
   MainComponent: {
     QuestionTexts: {
       Questions: {
@@ -50,6 +88,32 @@ export const AppTexts = {
         enus: 'Notifications'
       }
     }
+  },
+  MyQuestionsTable: {
+    Area: {
+      ptbr: 'Área',
+      enus: 'Area'
+    },
+    Difficulty: {
+      ptbr: 'Dificuldade',
+      enus: 'Difficulty'
+    },
+    Description: {
+      ptbr: 'Descrição',
+      enus: 'Description'
+    },
+    Answers: {
+      ptbr: 'Respostas',
+      enus: 'Answers'
+    },
+    Shared: {
+      ptbr: 'Compartilhada?',
+      enus: 'Shared?'
+    },
+    CreateQuestion: {
+      ptbr: 'Criar Questão',
+      enus: 'Create Question'
+    },
   },
   Auth: {
 
