@@ -1,5 +1,3 @@
-import { authService } from '../services/authService'
-
 import {
   LANGUAGE_CHANGED,
   USER_CHANGED

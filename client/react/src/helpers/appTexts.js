@@ -18,6 +18,14 @@ export const AppTexts = {
     enus: 'ER'
   },
   Root: {
+    Yes: {
+      ptbr: 'Sim',
+      enus: 'Yes'
+    },
+    No: {
+      ptbr: 'Não',
+      enus: 'No'
+    },
     Prev: {
       ptbr: 'Anterior',
       enus: 'Previous'
@@ -110,10 +118,20 @@ export const AppTexts = {
       ptbr: 'Compartilhada?',
       enus: 'Shared?'
     },
+    Actions: {
+      ptbr: 'Ações',
+      enus: 'Actions'
+    },
     CreateQuestion: {
       ptbr: 'Criar Questão',
       enus: 'Create Question'
     },
+  },
+  Question: {
+    ConfirmExclusionTitle: {
+      ptbr: 'Tem certeza que deseja excluir a questão ?',
+      enus: 'Are you sure you want to remove the question?'
+    }
   },
   Auth: {
 
