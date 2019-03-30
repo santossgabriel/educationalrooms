@@ -17,6 +17,52 @@ export const AppTexts = {
     ptbr: 'SE',
     enus: 'ER'
   },
+  Root: {
+    Yes: {
+      ptbr: 'Sim',
+      enus: 'Yes'
+    },
+    No: {
+      ptbr: 'Não',
+      enus: 'No'
+    },
+    Prev: {
+      ptbr: 'Anterior',
+      enus: 'Previous'
+    },
+    Next: {
+      ptbr: 'Próximo',
+      enus: 'Next'
+    },
+    Cancel: {
+      ptbr: 'Cancelar',
+      enus: 'Cancel'
+    },
+    Save: {
+      ptbr: 'Salvar',
+      enus: 'Save'
+    },
+    Correct: {
+      ptbr: 'Correta?',
+      enus: 'Correct?'
+    },
+    Remove: {
+      ptbr: 'Remover',
+      enus: 'Remove'
+    },
+    New: {
+      ptbr: 'Novo',
+      enus: 'New'
+    },
+    Edition: {
+      ptbr: 'Edição',
+      enus: 'Edition'
+    },
+    Acquired: {
+      ptbr: 'Adquirida',
+      enus: 'Acquired'
+    },
+  },
   MainComponent: {
     QuestionTexts: {
       Questions: {
@@ -49,6 +95,42 @@ export const AppTexts = {
         ptbr: 'Notificações',
         enus: 'Notifications'
       }
+    }
+  },
+  MyQuestionsTable: {
+    Area: {
+      ptbr: 'Área',
+      enus: 'Area'
+    },
+    Difficulty: {
+      ptbr: 'Dificuldade',
+      enus: 'Difficulty'
+    },
+    Description: {
+      ptbr: 'Descrição',
+      enus: 'Description'
+    },
+    Answers: {
+      ptbr: 'Respostas',
+      enus: 'Answers'
+    },
+    Shared: {
+      ptbr: 'Compartilhada?',
+      enus: 'Shared?'
+    },
+    Actions: {
+      ptbr: 'Ações',
+      enus: 'Actions'
+    },
+    CreateQuestion: {
+      ptbr: 'Criar Questão',
+      enus: 'Create Question'
+    },
+  },
+  Question: {
+    ConfirmExclusionTitle: {
+      ptbr: 'Tem certeza que deseja excluir a questão ?',
+      enus: 'Are you sure you want to remove the question?'
     }
   },
   Auth: {

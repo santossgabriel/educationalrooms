@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core'
 import swal from 'sweetalert2'
 import { Globals } from '../globals'
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router'
+import { Router } from '@angular/router'
 import { UserDataModel } from '../models/user-data.models'
 import { AccountService } from '../services/account.service'
 import { MatDialog } from '@angular/material'
 import { NotificationModalComponent } from '../modals/notification-modal.component'
-import { NotifService } from '../services/notification.service';
-import { Notif } from '../models/notification.models';
+import { NotificationService } from '../services/notification.service';
+import { Notification } from '../models/notification.models';
 import { dateToElapsedTime } from '../helpers/utils';
 import { StorageService } from '../services/storage.service';
 import { Tour, TourStep } from '../helpers/tour';
 import { TutorialService } from '../services/tutorial.service';
+import { AccountModel } from '../models/account.models';
 
 @Component({
   selector: 'app-toolbar',
@@ -23,17 +24,16 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
   logged = false
   path: string
   user = <UserDataModel>{}
-  notifications: Notif[] = []
+  notifications: Notification[] = []
   notifPendings: number = 0
   hasNoRead = false
 
   constructor(private router: Router,
     private accountService: AccountService,
-    private notificationService: NotifService,
+    private notificationService: NotificationService,
     private storageService: StorageService,
     private tutorialService: TutorialService,
-    public dialog: MatDialog,
-    private activatedRouter: ActivatedRoute) {
+    public dialog: MatDialog) {
     Globals.addUserChangedListener(this)
     Globals.addSocketListener(this)
     this.refresh()
@@ -51,13 +51,14 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   refresh() {
     this.user = this.storageService.getUser()
     this.logged = this.user ? true : false
     if (this.logged) {
-      this.notificationService.get().subscribe((res: Notif[]) => {
+      this.notificationService.get().subscribe((res: Notification[]) => {
         this.notifications = res
         this.updateTimeNotifications()
       })
@@ -88,22 +89,22 @@ export class ToolbarComponent implements OnInit, UserChangedListener, SocketConn
     })
   }
 
-  removeNotification(n: Notif) {
-    this.notificationService.remove(n.id).subscribe(res => {
+  removeNotification(n: Notification) {
+    this.notificationService.remove(n.id).subscribe(() => {
       this.notifications = this.notifications.filter(p => p.id !== n.id)
       this.updateTimeNotifications()
     })
   }
 
   removeAllnotifications() {
-    this.notificationService.removeAll().subscribe(res => {
+    this.notificationService.removeAll().subscribe(() => {
       this.notifications = []
       this.updateTimeNotifications()
     })
   }
 
   onConnect(socket: any) {
-    socket.on('notificationReceived', (n: Notif) => {
+    socket.on('notificationReceived', (n: Notification) => {
       const arr = n.origin.split('-')
       if (arr.length > 0 && !isNaN(Number(arr[0])))
         n.origin = arr[1]

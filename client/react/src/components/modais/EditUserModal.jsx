@@ -22,6 +22,7 @@ import EditQuestionAlternatives from '../question/EditQuestionAlternatives'
 import { questionService } from '../../services'
 import { showError, showSuccess } from '../../actions'
 import { AppTexts } from '../../helpers/appTexts'
+import { } from ''
 
 const styles = {
   legend: {
@@ -49,7 +50,7 @@ const tutorialSteps = [
 
 const OUTRAS = 'OUTRA...'
 
-class EditQuestionModal extends React.Component {
+class EditUserModal extends React.Component {
 
   constructor(props) {
     super(props)

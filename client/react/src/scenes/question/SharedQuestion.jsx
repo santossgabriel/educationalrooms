@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import { questionService } from '../../services'
 import {
@@ -11,11 +12,14 @@ import {
   Paper,
   Button
 } from '@material-ui/core'
+
 import IconDownload from '@material-ui/icons/Archive'
 
 import Stars from '../../components/question/Stars'
+import CardMain from '../../components/main/CardMain'
+import { AppTexts } from '../../helpers/appTexts'
 
-export default class SharedQuestion extends React.Component {
+class SharedQuestion extends React.Component {
 
   constructor(props) {
     super(props)
@@ -40,9 +44,7 @@ export default class SharedQuestion extends React.Component {
   render() {
     const { questions } = this.state
     return (
-      <div>
-        <h2>Shared Questions</h2>
-        <br />
+      <CardMain title={AppTexts.MainComponent.QuestionTexts.Shared[this.props.language]}>
         <Paper style={{ marginLeft: '20px', marginRight: '20px' }}>
           <div>
             <Table aria-labelledby="tableTitle">
@@ -99,7 +101,11 @@ export default class SharedQuestion extends React.Component {
             onChangeRowsPerPage={e => this.setState({ rowsPerPage: e.target.value })}
           />
         </Paper>
-      </div>
+      </CardMain>
     )
   }
 }
+
+const mapStateToProps = state => ({ language: state.appState.language })
+
+export default connect(mapStateToProps)(SharedQuestion)

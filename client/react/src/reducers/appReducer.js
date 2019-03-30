@@ -1,9 +1,10 @@
 import { Languages } from '../helpers/appTexts'
 import { LANGUAGE_CHANGED, USER_CHANGED } from '../actions/actionTypes'
+import storageService from '../services/storageService'
 
 const initialState = {
-  language: localStorage.getItem('LANGUAGE') || Languages.EN_US,
-  user: JSON.parse(localStorage.getItem('USER'))
+  language: storageService.getLanguage(),
+  user: storageService.getUser()
 }
 
 export const appReducer = (state = initialState, action) => {

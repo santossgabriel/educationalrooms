@@ -23,10 +23,10 @@
     </mat-step>
 
     <mat-step>
-      <ng-template matStepLabel>Categoria</ng-template>
+      <ng-template matStepLabel>Dificuldade</ng-template>
       <mat-form-field id="selectCategory">
-        <mat-select [(ngModel)]="question.category" placeholder="Selecione a categoria">
-          <mat-option *ngFor="let c of categories" [value]="c">
+        <mat-select [(ngModel)]="question.difficulty" placeholder="Selecione a dificuldade">
+          <mat-option *ngFor="let c of [1, 2, 3, 4, 5]" [value]="c">
             {{ c }}
           </mat-option>
         </mat-select>

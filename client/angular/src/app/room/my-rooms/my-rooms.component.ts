@@ -2,16 +2,13 @@ import { Component, OnInit } from '@angular/core'
 import { Globals } from '../../globals'
 import { Router } from '@angular/router'
 import { fadeInTransition } from '../../router.transition'
-import { FormGroup, FormControl, Validators } from '@angular/forms'
-import { LoginModel } from '../../models/account.models'
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Room } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
-import { ErrorModalComponent } from '../../modals/confirm-modal.component';
 import { getStatusDescriptionRoom } from '../../helpers/utils';
 import Swal from 'sweetalert2'
 import { ScoresModalComponent } from '../../modals/scores-modal.component';
-import { Notif } from '../../models/notification.models';
+import { Notification } from '../../models/notification.models';
 import { User } from '../../models/user.model';
 
 @Component({
@@ -103,7 +100,7 @@ export class MyRoomsComponent implements OnInit, SocketConnectListener {
   }
 
   onConnect(socket: any) {
-    socket.on('notificationReceived', (n: Notif) => {
+    socket.on('notificationReceived', (n: Notification) => {
       const id = Number(n.origin.split('-')[0])
       if (!isNaN(id)) {
         const room = this.rooms.find(p => p.id == id)

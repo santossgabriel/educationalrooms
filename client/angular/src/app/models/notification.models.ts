@@ -1,4 +1,4 @@
-export class Notif {
+export class Notification {
   id: number
   description: string
   createdAt: Date

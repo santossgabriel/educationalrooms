@@ -1,8 +1,7 @@
 import React from 'react'
-
-React.rea
-
-import { questionService } from '../../services'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as Icons from '@material-ui/icons'
 import {
   TableBody,
   TableRow,
@@ -12,14 +11,19 @@ import {
   Button,
   TableHead,
   Paper,
-  Checkbox
+  Checkbox,
+  IconButton
 } from '@material-ui/core'
 
+import { questionService } from '../../services'
 import Stars from '../../components/question/Stars'
 import CardMain from '../../components/main/CardMain'
 import EditQuestionModal from '../../components/modais/EditQuestionModal'
+import { AppTexts } from '../../helpers/appTexts'
+import { ConfirmModal } from '../../components/main/Modal'
+import { showError, showSuccess } from '../../actions'
 
-export default class MyQuestion extends React.Component {
+class MyQuestion extends React.Component {
 
   constructor(props) {
     super(props)
@@ -29,7 +33,8 @@ export default class MyQuestion extends React.Component {
       rowsPerPage: 5,
       page: 5,
       editModalOpen: false,
-      question: {}
+      question: {},
+      removeQuestion: null
     }
   }
 
@@ -62,19 +67,32 @@ export default class MyQuestion extends React.Component {
     })
   }
 
+  onResultRemoveQuestion(confirm) {
+    const { id } = this.state.removeQuestion
+    this.setState({ removeQuestion: null })
+    if (confirm) {
+      questionService.remove(id)
+        .then(res => {
+          this.props.showSuccess(res.message)
+          this.refresh()
+        }).catch(err => this.props.showError(err.message))
+    }
+  }
+
   render() {
     const { questions } = this.state
     return (
-      <CardMain title="Minhas Questões">
+      <CardMain title={AppTexts.MainComponent.QuestionTexts.My[this.props.language]}>
         <Paper>
           <Table aria-labelledby="tableTitle">
             <TableHead>
               <TableRow>
-                <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>Área</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Dificuldade</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Descrição</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Respostas</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Compartilhada?</TableCell>
+                <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Area[this.props.language]}</TableCell>
+                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</TableCell>
+                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</TableCell>
+                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Answers[this.props.language]}</TableCell>
+                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Shared[this.props.language]}</TableCell>
+                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Actions[this.props.language]}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -96,13 +114,30 @@ export default class MyQuestion extends React.Component {
                     <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
                     <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>
                     <TableCell style={{ textAlign: 'center' }} numeric>
-                      <div onClick={(event) => { event.stopPropagation() }}>
-                        <Checkbox
-                          color="primary"
-                          checked={n.shared}
-                          onChange={(e, c) => this.changeShared(c, n.id)}
-                        />
-                      </div>
+                      {
+                        n.sharedQuestionId ?
+                          <span>{AppTexts.Root.Acquired[this.props.language]}</span> :
+                          <div onClick={(event) => { event.stopPropagation() }}>
+                            <Checkbox
+                              color="primary"
+                              checked={n.shared}
+                              onChange={(e, c) => this.changeShared(c, n.id)}
+                            />
+                          </div>
+                      }
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
+                      {
+                        n.sharedQuestionId ? null :
+                          <IconButton color="secondary"
+                            aria-label="Menu"
+                            onClick={event => {
+                              event.stopPropagation();
+                              this.setState({ removeQuestion: n })
+                            }}>
+                            <Icons.Delete />
+                          </IconButton>
+                      }
                     </TableCell>
                   </TableRow>
                 ))}
@@ -134,13 +169,23 @@ export default class MyQuestion extends React.Component {
         <div style={{ textAlign: 'center', padding: '5px' }}>
           <Button
             onClick={() => this.openEditQuestion()}
-            color="primary" variant="raised">Criar questão</Button>
+            color="primary" variant="raised">{AppTexts.MyQuestionsTable.CreateQuestion[this.props.language]}</Button>
         </div>
         <EditQuestionModal
           close={(hasChanges) => this.modalQuestionCallback(hasChanges)}
           question={this.state.question}
           open={this.state.editModalOpen} />
+        <ConfirmModal open={!!this.state.removeQuestion}
+          title={AppTexts.Question.ConfirmExclusionTitle[this.props.language]}
+          text={this.state.removeQuestion ? this.state.removeQuestion.description : ''}
+          onResult={confirm => this.onResultRemoveQuestion(confirm)}>
+        </ConfirmModal>
       </CardMain>
     )
   }
 }
+
+const mapStateToProps = state => ({ language: state.appState.language })
+const mapDispatchToProps = dispatch => bindActionCreators({ showError, showSuccess }, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyQuestion)
