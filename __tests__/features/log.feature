@@ -9,6 +9,6 @@ Feature: Logs
     Then Então eu devo obter dos logs a mansagem <mensagem>
 
     Examples:
-      | usuario                  | senha    | mensagem                              |
-      | 'questionmock3@mail.com' | '123qwe' | "Sem permissão para visualizar logs." |
-      | 'questionmock4@mail.com' | '123qwe' | "Logs retornados com sucesso."        |
+      | usuario                  | senha    | mensagem                                                                          |
+      | 'questionmock3@mail.com' | '123qwe' | '{"en": "Now allowed to view logs", "br": "Sem permissão para visualizar logs."}' |
+      | 'questionmock4@mail.com' | '123qwe' | "Logs retornados com sucesso."                                                    |

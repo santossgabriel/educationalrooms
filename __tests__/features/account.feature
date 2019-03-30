@@ -9,11 +9,11 @@ Feature: Gerenciamento de conta
     Then Para obter o token eu devo obter a mensagem <mensagem>
 
     Examples:
-      | credenciais                                                  | mensagem                    |
-      | '{"email": "questionmock1@mail.com", "password": "123qwe" }' | 'Token gerado com sucesso.' |
-      | '{"email": "questionmock1@mail.com"}'                        | 'Credenciais inválidas.'    |
-      | '{"password": "123qwe"}'                                     | 'Credenciais inválidas.'    |
-      | '{"email": "teste@mail.com", "password": "123qwee"}'         | 'Credenciais inválidas.'    |
+      | credenciais                                                  | mensagem                                                                       |
+      | '{"email": "questionmock1@mail.com", "password": "123qwe" }' | ' { "en": "Token successfully generated", "br": "Token gerado com sucesso." }' |
+      | '{"email": "questionmock1@mail.com"}'                        | ' { "en": "Invalid credentials.", "br": "Credenciais inválidas." }'            |
+      | '{"password": "123qwe"}'                                     | ' { "en": "Invalid credentials.", "br": "Credenciais inválidas." }'            |
+      | '{"email": "teste@mail.com", "password": "123qwee"}'         | ' { "en": "Invalid credentials.", "br": "Credenciais inválidas." }'            |
 
   Scenario: Obter dados da conta
     Given Dado que eu queira obter os dados da minha conta
@@ -26,13 +26,13 @@ Feature: Gerenciamento de conta
     Then Então eu devo obter a mensagem <mensagem> ao tentar me cadastrar
 
     Examples:
-      | caso              | propriedade                           | mensagem                                        |
-      | 'sem email'       | '{"email": ""}'                       | "Email inválido."                               |
-      | 'sem senha'       | '{"password": null}'                  | "A senha deve possuir pelo menos 6 caracteres." |
-      | 'email existente' | '{"email": "questionmock1@mail.com"}' | "Este email já está em uso."                    |
-      | 'nome existente'  | '{"name": "question_mock_1"}'         | "Este nome já está em uso."                    |
-      | 'nome inválido'   | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres."  |
-      | 'email existente' | '{}'                                  | "Criado com sucesso."                           |
+      | caso              | propriedade                           | mensagem                                                                                                             |
+      | 'sem email'       | '{"email": ""}'                       | '{"br": "Email inválido.", "en": "Invalid email."}'                                                                  |
+      | 'sem senha'       | '{"password": null}'                  | '{"br": "A senha deve possuir pelo menos 6 caracteres.", "en": "The password must be at least 6 characters long." }' |
+      | 'email existente' | '{"email": "questionmock1@mail.com"}' | '{"br": "Este email já está em uso.", "en": "This email is already in use." }'                                       |
+      | 'nome existente'  | '{"name": "question_mock_1"}'         | '{"br": "Este nome já está em uso.", "en": "This name is already in use." }'                                         |
+      | 'nome inválido'   | '{"name": "qw"}'                      | '{"br": "O nome deve possuir pelo menos 3 caracteres.", "en": "The name must be at least 3 characters long." }'      |
+      | 'email existente' | '{}'                                  | '{"br": "Criado com sucesso.", "en": "Created successfully" }'                                                       |
 
 
   Scenario Outline: Atualizar usuário
@@ -41,13 +41,14 @@ Feature: Gerenciamento de conta
     Then Então eu devo obter a mensagem <mensagem> ao tentar atualizar
 
     Examples:
-      | caso              | propriedade                           | mensagem                                       |
-      | 'sem email'       | '{"email": ""}'                       | "Email inválido."                              |
-      | 'email existente' | '{"email": "questionmock2@mail.com"}' | "Este email já está em uso."                   |
-      | 'nome inválido'   | '{"name": "qw"}'                      | "O nome deve possuir pelo menos 3 caracteres." |
-      | 'dados ok'        | '{"name": "nome atualizado"}'         | "Atualizado com sucesso."                      |
+      | caso              | propriedade                           | mensagem                                                                                                        |
+      | 'sem email'       | '{"email": ""}'                       | '{"br": "Email inválido.", "en": "Invalid email."}'                                                             |
+      | 'email existente' | '{"email": "questionmock2@mail.com"}' | '{"br": "Este email já está em uso.", "en": "This email is already in use." }'                                  |
+      | 'nome existente'  | '{"name": "question_mock_2"}'         | '{"br": "Este nome já está em uso.", "en": "This name is already in use." }'                                    |
+      | 'nome inválido'   | '{"name": "qw"}'                      | '{"br": "O nome deve possuir pelo menos 3 caracteres.", "en": "The name must be at least 3 characters long." }' |
+      | 'dados ok'        | '{"name": "nome atualizado"}'         | '{"br": "Atualizado com sucesso.", "en": "Updated successfully." }'                                              |
 
   Scenario: Não enviar o token
     Given Dado que eu queira acessar um endpoint permissionado
     When Quando eu não enviar o token
-    Then Então eu devo obter a mensagem "Forneça o token."
+    Then Então eu devo obter o retorno '{ "en": "Provide the token.", "br": "Forneça o token." }'

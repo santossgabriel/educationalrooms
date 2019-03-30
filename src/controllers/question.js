@@ -5,6 +5,7 @@ import {
   questionErros
 } from '../helpers/error'
 import db from '../infra/db/models/index'
+import { Languages } from '../helpers/utils'
 
 export const questionStatus = {
   NEW: 'N',
@@ -13,6 +14,7 @@ export const questionStatus = {
 }
 
 const { sequelize, Question, Answer, RoomQuestion, Room } = db
+const { EN, BR } = Languages
 
 const validateAnswers = (answers) => {
   let corrects = 0
@@ -54,7 +56,7 @@ const validateQuestion = (question) => {
     throwValidationError(questionErros.HAS_AREA)
 
   if (!difficulty || difficulty < 1 || difficulty > 5)
-    throwValidationError('A dificuldade deve estar entre 1 e 5.')
+    throwValidationError(questionErros.INVALID_DIFFICULTY)
 
   if (!Array.isArray(question.answers) || question.answers.length < 2 || question.answers.length > 6)
     throwValidationError(questionErros.HAS_BETWEEN_ANSWERS)
@@ -150,7 +152,7 @@ export default {
         await Answer.create(answers[i], { transaction: transaction })
       }
       transaction.commit()
-      res.json({ message: 'Criado com sucesso.' })
+      res.json({ message: { [BR]: 'Criado com sucesso.', [EN]: 'Created successfully.' } })
     } catch (ex) {
       transaction.rollback()
       throw ex
@@ -172,10 +174,10 @@ export default {
       const questionDb = await Question.findOne({ include: Answer, where: { id: question.id } })
 
       if (!questionDb)
-        throwForbiddenError('A questão não foi localizada.')
+        throwForbiddenError(questionErros.NOT_FOUND)
 
       if (questionDb.userId != req.claims.id)
-        throwForbiddenError('Usuário sem permissão para alterar o item.')
+        throwForbiddenError(questionErros.NOT_ALLOWED_CHANGE)
 
       validateQuestion(question)
 
@@ -192,7 +194,7 @@ export default {
       })
 
       if (roomQuestion)
-        throwForbiddenError('A questão pertence à uma sala que já foi iniciada ou finalizada e não pode ser editada.')
+        throwForbiddenError(questionErros.IN_ROOM_EDIT)
 
       await Question.update(question, {
         where: { id: question.id },
@@ -213,7 +215,7 @@ export default {
         }, { transaction: transaction })
       }
       transaction.commit()
-      res.json({ message: 'Atualizado com sucesso.' })
+      res.json({ message: { [BR]: 'Atualizada com sucesso.', [EN]: 'Updated successfully.' } })
     } catch (ex) {
       if (transaction)
         transaction.rollback()
@@ -227,20 +229,25 @@ export default {
     try {
       const question = await Question.findOne({ where: { id: id } })
       if (!question)
-        throwValidationError('A questão não existe.')
+        throwValidationError(questionErros.NOT_FOUND)
       if (question.userId != req.claims.id)
-        throwForbiddenError('Usuário sem permissão para remover o item.')
+        throwForbiddenError(questionErros.NOT_ALLOWED_REMOVE)
 
       const roomQuestion = await RoomQuestion.findOne({ where: { questionId: id } })
 
       if (roomQuestion)
-        throwValidationError('A questão faz parte de uma sala e não pode ser removida.')
+        throwValidationError(questionErros.IN_ROOM_REMOVE)
 
       await Answer.destroy({ where: { questionId: id }, transaction: transaction })
       await Question.destroy({ where: { id: id }, transaction: transaction })
 
       transaction.commit()
-      res.json({ message: 'Questão removida com sucesso.' })
+      res.json({
+        message: {
+          [EN]: 'Question removed successfully.',
+          [BR]: 'Questão removida com sucesso.'
+        }
+      })
     } catch (ex) {
       transaction.rollback()
       throw ex
@@ -252,16 +259,21 @@ export default {
     const questionDb = await Question.findOne({ where: { id: question.id } })
 
     if (!questionDb)
-      throwValidationError('A questão não existe.')
+      throwValidationError(questionErros.NOT_FOUND)
 
     if (questionDb.userId != req.claims.id)
-      throwForbiddenError('Usuário sem permissão para alterar o item.')
+      throwForbiddenError(questionErros.NOT_ALLOWED_CHANGE)
 
     await Question.update({ shared: question.shared }, {
       where: { id: question.id }
     })
 
-    res.json({ message: 'Compartilhada com sucesso.' })
+    res.json({
+      message: {
+        [EN]: 'Shared successfully.',
+        [BR]: 'Compartilhada com sucesso.'
+      }
+    })
   },
 
   getShared: async (req, res) => {
@@ -272,14 +284,14 @@ export default {
     })
 
     if (!questionDb)
-      throwValidationError('A questão não existe ou não está compartilhada.')
+      throwValidationError(questionErros.NOT_EXIST_OR_NOT_SHARED)
 
     const already = await Question.findOne({
       where: { sharedQuestionId: id }
     })
 
     if (already)
-      throwValidationError('Essa questão já foi adicionada.')
+      throwValidationError(questionErros.QUESTION_ALREADY_ADDED)
 
     const q = {
       description: questionDb.description,
@@ -305,7 +317,12 @@ export default {
         await Answer.create(a, { transaction: transaction })
       }
       transaction.commit()
-      res.json({ message: 'Questão adquirida com sucesso.' })
+      res.json({
+        message: {
+          [EN]: 'Question acquired successfully.',
+          [BR]: 'Questão adquirida com sucesso.'
+        }
+      })
     } catch (ex) {
       transaction.rollback()
       throw ex

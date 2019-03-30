@@ -10,7 +10,6 @@ const isFree = (req) => {
     || path === '/api/token'
     || path.indexOf('/api/image') !== -1 && method === 'GET'
     || (path === '/api/account' && method === 'POST')
-
 }
 
 export default (req, res, next) => {
@@ -18,7 +17,7 @@ export default (req, res, next) => {
     return next()
   const { token } = req.headers
   if (!token)
-    return authError('Forneça o token.', res, req)
+    return authError({ en: 'Provide the token.', br: 'Forneça o token.' }, res, req)
   jwt.verify(token, config.SECRET, (err, data) => {
     if (err)
       return authError(err, res, req)

@@ -8,3 +8,8 @@ export const cloneObject = (obj) => {
   }
   return cloned
 }
+
+export const Languages = {
+  EN: 'en',
+  BR: 'br'
+}

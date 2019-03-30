@@ -2,6 +2,7 @@ import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
 import { expect } from 'chai'
 
+import { validProps } from '../stepsHelper'
 import app from '../../../../src/server'
 
 const request = supertest(app)
@@ -26,6 +27,9 @@ When('Quando eu buscar os logs', () => {
     })
 })
 
-Then('Então eu devo obter dos logs a mansagem {string}', (message) => {
-  expect(body.message || 'Logs retornados com sucesso.').to.eql(message)
+Then('Então eu devo obter dos logs a mansagem {string}', (json) => {
+  if (Array.isArray(body))
+    expect('Logs retornados com sucesso.').to.eql(json)
+  else
+    validProps(json, body.message)
 })
