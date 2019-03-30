@@ -1,6 +1,7 @@
 import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
 import { expect } from 'chai'
+import { validProps } from '../stepsHelper'
 
 import app from '../../../../src/server'
 
@@ -32,14 +33,12 @@ When('Quando eu entrar ou sair de uma sala {string} atribuindo {string}', (caso,
     room = null
 })
 
-Then('Então eu devo obter a mensagem {string} depois de entrar ou sair da sala', (message) => {
+Then('Então eu devo obter a mensagem {string} depois de entrar ou sair da sala', (json) => {
   return request
     .put('/api/room-associate')
     .set({ token: token })
     .send(room)
-    .then((result) => {
-      expect(result.body.message).to.eql(message)
-    })
+    .then((result) => validProps(json, result.body.message))
 })
 
 Given('Dado eu que queira salvar uma sala', () => {
@@ -71,14 +70,12 @@ When('Quando enviar {string} atribuindo {string}', (caso, p) => {
     room = null
 })
 
-Then('Então eu devo obter a mensagem {string} depois de salvar a sala', (message) => {
+Then('Então eu devo obter a mensagem {string} depois de salvar a sala', (json) => {
   return request
     .post('/api/room')
     .set({ token: token })
     .send(room)
-    .then((result) => {
-      expect(result.body.message).to.eql(message)
-    })
+    .then((result) => validProps(json, result.body.message))
 })
 
 Given('Dado que eu queira alterar o status de uma sala', () => {
@@ -100,6 +97,6 @@ When('Quando eu enviar o status {string} para a sala de id {int}', (status, id) 
     })
 })
 
-Then('Então eu devo obter a mensagem {string} depois de alterar o status', (message) => {
-  expect(msg).to.eql(message)
+Then('Então eu devo obter a mensagem {string} depois de alterar o status', (json) => {
+  validProps(json, msg)
 })

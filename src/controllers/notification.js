@@ -1,7 +1,9 @@
 import db from '../infra/db/models/index'
 import { throwValidationError } from '../helpers/error'
+import { Languages } from '../helpers/utils'
 
 const { sequelize, Notification } = db
+const { EN, BR } = Languages
 
 export const NotificationTypes = {
   IN_ROOM: 'IN_ROOM',
@@ -28,22 +30,33 @@ export default {
     const notification = await Notification.findOne({ where: { id: id } })
 
     if (!notification)
-      throwValidationError('A notificação não existe.')
+      throwValidationError({
+        [BR]: 'A notificação não existe.',
+        [EN]: 'Notification does not exist.'
+      })
 
     if (notification.userId !== req.claims.id)
-      throwValidationError('Sem permissão para remover o item.')
+      throwValidationError({
+        [BR]: 'Sem permissão para remover esta notificação.',
+        [EN]: 'Not allowed to remove this notification.'
+      })
 
     await Notification.destroy({ where: { id: id } })
-    res.json({ message: 'Removido com sucesso.' })
+    res.json({ message: { [BR]: 'Removido com sucesso.', [EN]: 'Removed successfully.' } })
   },
 
   removeAll: async (req, res) => {
     await Notification.destroy({ where: { userId: req.claims.id } })
-    res.json({ message: 'Removidas com sucesso.' })
+    res.json({ message: { [BR]: 'Removidas com sucesso.', [EN]: 'Removed successfully.' } })
   },
 
   maskAsRead: async (req, res) => {
     await Notification.update({ read: true }, { where: { userId: req.claims.id } })
-    res.json({ message: 'Todas questões marcadas como lidas' })
+    res.json({
+      message: {
+        [BR]: 'Todas as notificações foram marcadas como lidas.',
+        [EN]: 'All notifications were marked as read.'
+      }
+    })
   }
 }

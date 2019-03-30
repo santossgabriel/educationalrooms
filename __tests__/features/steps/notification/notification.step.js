@@ -1,7 +1,8 @@
 import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
-import { expect, assert } from 'chai'
+import { assert } from 'chai'
 
+import { validProps } from '../stepsHelper'
 import app from '../../../../src/server'
 
 const request = supertest(app)
@@ -56,8 +57,8 @@ When('Quando eu remover uma notificação de id {int}', (id) => {
     })
 })
 
-Then('Então eu devo receber a mensagem {string} depois de remover a notificação', (message) => {
-  expect(resultRequest.message, message)
+Then('Então eu devo receber a mensagem {string} depois de remover a notificação', (json) => {
+  validProps(json, resultRequest.message)
 })
 
 /**
@@ -81,8 +82,8 @@ When('Quando eu marcar minhas notificações como lidas', () => {
     })
 })
 
-Then('Então eu devo obter um retorno de sucesso de notificações lidas', () => {
-  expect(resultRequest.message, 'Todas questões marcadas como lidas')
+Then('Então eu devo obter um retorno de sucesso de notificações lidas {string}', (json) => {
+  validProps(json, resultRequest.message)
 })
 
 /**
@@ -106,6 +107,6 @@ When('Quando eu remover todas minhas notificações', () => {
     })
 })
 
-Then('Então eu devo obter um retorno de sucesso de notificações removidas', () => {
-  expect(resultRequest.message, 'Todas questões marcadas como lidas')
+Then('Então eu devo obter um retorno de sucesso de notificações removidas {string}', (json) => {
+  validProps(json, resultRequest.message)
 })

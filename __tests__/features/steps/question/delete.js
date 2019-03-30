@@ -1,6 +1,6 @@
 import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
-import { expect } from 'chai'
+import { validProps } from '../stepsHelper'
 
 import app from '../../../../src/server'
 
@@ -24,6 +24,6 @@ When('Quando eu enviar o id de uma questão {string} {int}', (caso, id) => {
     .then((result) => { msg = result.body.message })
 })
 
-Then('Então eu devo obter a mensagem {string} depois de tentar remover a questão', (message) => {
-  expect(msg).to.eql(message)
+Then('Então eu devo obter a mensagem {string} depois de tentar remover a questão', (json) => {
+  validProps(json, msg)
 })

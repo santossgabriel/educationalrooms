@@ -1,7 +1,7 @@
 import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
-import { expect } from 'chai'
 
+import { validProps } from '../stepsHelper'
 import app from '../../../../src/server'
 
 const request = supertest(app)
@@ -34,12 +34,10 @@ When('Quando eu atualizar meus dados {string} atribuindo {string}', (caso, p) =>
   }
 })
 
-Then('Então eu devo obter a mensagem {string} ao tentar atualizar', (message) => {
+Then('Então eu devo obter a mensagem {string} ao tentar atualizar', (json) => {
   return request
     .put('/api/account')
     .set({ token: token })
     .send(account)
-    .then((result) => {
-      expect(result.body.message).to.eql(message)
-    })
+    .then((result) => validProps(json, result.body.message))
 })

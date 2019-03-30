@@ -5,8 +5,10 @@ import { throwValidationError, throwAuthError } from '../helpers/error'
 import config from '../infra/config'
 import sequelize from '../infra/db/models/index'
 import { validateAccount } from '../helpers/validation'
+import { Languages } from '../helpers/utils'
 
 const { User } = sequelize
+const { EN, BR } = Languages
 
 export const isMobile = async (userId) => {
   return await User.findOne({ attributes: ['mobile'], where: { id: userId } })
@@ -39,11 +41,17 @@ export default {
     const { email, password, mobile } = req.body
     const user = await User.findOne({ where: { email: email } })
     if (!user || !password || user.password !== sha1(password))
-      throwAuthError('Credenciais inválidas.')
+      throwAuthError({ [EN]: 'Invalid credentials.', [BR]: 'Credenciais inválidas.' })
     const token = generateToken(user)
     if (mobile)
       User.update({ mobile: true }, { where: { email: email } })
-    res.json({ token: token, message: 'Token gerado com sucesso.' })
+    res.json({
+      token: token,
+      message: {
+        [EN]: 'Token successfully generated',
+        [BR]: 'Token gerado com sucesso.'
+      }
+    })
   },
 
   create: async (req, res) => {
@@ -60,8 +68,8 @@ export default {
 
     if (userDB) {
       if (userDB.email === account.email)
-        throwValidationError('Este email já está em uso.')
-      throwValidationError('Este nome já está em uso.')
+        throwValidationError({ [BR]: 'Este email já está em uso.', [EN]: 'This email is already in use.' })
+      throwValidationError({ [BR]: 'Este nome já está em uso.', [EN]: 'This name is already in use.' })
     }
 
     account.password = sha1(account.password)
@@ -69,21 +77,26 @@ export default {
     account.updatedAt = new Date()
     const user = await User.create(account)
     const token = generateToken(user)
-    res.json({ token: token, message: 'Criado com sucesso.' })
+    res.json({
+      token: token, message: {
+        [BR]: 'Criado com sucesso.', [EN]: 'Created successfully'
+      }
+    })
   },
 
   update: async (req, res) => {
     let account = req.body
 
-    if (!account || !account.email || !/.{3,}@.{3,}/.test(account.email))
-      throwValidationError('Email inválido.')
-
-    if (!account.name || account.name.length < 3)
-      throwValidationError('O nome deve possuir pelo menos 3 caracteres.')
+    validateAccount(account)
 
     const userDB = await User.findOne({
       where: sequelize.sequelize.and(
-        { email: account.email },
+        {
+          [sequelize.sequelize.Op.or]: [
+            { email: account.email },
+            { name: account.name }
+          ]
+        },
         {
           id: {
             [sequelize.sequelize.Op.ne]: req.claims.id
@@ -91,8 +104,12 @@ export default {
         })
     })
 
-    if (userDB)
-      throwValidationError('Este email já está em uso.')
+    if (userDB) {
+      if (userDB.email === account.email)
+        throwValidationError({ [BR]: 'Este email já está em uso.', [EN]: 'This email is already in use.' })
+      throwValidationError({ [BR]: 'Este nome já está em uso.', [EN]: 'This name is already in use.' })
+    }
+
     await User.update({
       email: account.email,
       name: account.name,
@@ -100,6 +117,11 @@ export default {
     }, { where: { id: req.claims.id } })
     account.id = req.claims.id
     const token = generateToken(account)
-    res.json({ token: token, message: 'Atualizado com sucesso.' })
+    res.json({
+      token: token, message: {
+        [BR]: 'Atualizado com sucesso.',
+        [EN]: 'Updated successfully.'
+      }
+    })
   }
 }

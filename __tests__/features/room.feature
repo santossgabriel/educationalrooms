@@ -36,14 +36,14 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de entrar ou sair da sala
 
     Examples:
-      | caso                  | propriedades                      | mensagem                       |
-      | 'que não exista'      | '{ "id": 99 }'                    | "A sala não existe."           |
-      | 'que eu esteja'       | '{ "id": 6, "associate": true }'  | "Usuário já incluso na sala."  |
-      | 'sala não aberta'     | '{ "id": 8, "associate": true }'  | "A sala ainda não foi aberta." |
-      | 'sala já iniciada'    | '{ "id": 4, "associate": true }'  | "A sala já foi iniciada."      |
-      | 'que eu possa entrar' | '{ "id": 6, "associate": false }' | "Saiu da sala."                |
-      | 'que eu não esteja'   | '{ "id": 2, "associate": false }' | "Usuário não incluso na sala." |
-      | 'que eu possa entrar' | '{ "id": 6, "associate": true }'  | "Entrou na sala."              |
+      | caso                  | propriedades                      | mensagem                                                                        |
+      | 'que não exista'      | '{ "id": 99 }'                    | '{"en": "The room does not exist.", "br": "A sala não existe."}'                |
+      | 'que eu esteja'       | '{ "id": 6, "associate": true }'  | '{"en": "User already included in room.", "br": "Usuário já incluso na sala."}' |
+      | 'sala não aberta'     | '{ "id": 8, "associate": true }'  | '{"en": "The room is not open yet.", "br": "A sala não está aberta ainda." }'   |
+      | 'sala já iniciada'    | '{ "id": 4, "associate": true }'  | '{"en": "The room has already been started.", "br": "A sala já foi iniciada."}' |
+      | 'que eu possa entrar' | '{ "id": 6, "associate": false }' | '{"en": "Leave the room.", "br": "Saiu da sala." }'                             |
+      | 'que eu não esteja'   | '{ "id": 2, "associate": false }' | '{"en": "Not included in the room.", "br": "Usuário não incluso na sala." }'    |
+      | 'que eu possa entrar' | '{ "id": 6, "associate": true }'  | '{"en": "Came into the room.", "br": "Entrou na sala." }'                       |
 
   Scenario Outline: Salvar Sala
     Given Dado eu que queira salvar uma sala
@@ -51,17 +51,17 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de salvar a sala
 
     Examples:
-      | caso                                      | propriedades                                    | mensagem                                               |
-      | 'sem nome da sala'                        | '{"name": ""}'                                  | "Informe o nome da sala."                              |
-      | 'que não existem'                         | '{"questions": [{ "id": 99, "points": 20 }] }'  | "Há questões informadas que não existem."              |
-      | 'que não pertencem ao usuário'            | '{"questions": [{ "id": 1, "points": 20 }] }'   | "Há questões informadas que não pertencem ao usuário." |
-      | 'à uma sala que não existe'               | '{"id": 99}'                                    | "A sala não existe."                                   |
-      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 0 }] }'   | "Há questões sem pontuação."                           |
-      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 200 }] }' | "Há questões com pontuação fora do intervalo 10-100."  |
-      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 180 }] }' | "Há questões com pontuação fora do intervalo 10-100."  |
-      | 'à uma sala que não pertencem ao usuário' | '{"id": 3}'                                     | "A sala informada não pertence ao usuário."            |
-      | 'para atualização'                        | '{"id": 2}'                                     | "Sala atualizada com sucesso."                         |
-      | 'sem id da sala'                          | '{"id": 0}'                                     | "Sala criada com sucesso."                             |
+      | caso                                      | propriedades                                    | mensagem                                                                                                                                |
+      | 'sem nome da sala'                        | '{"name": ""}'                                  | '{"en": "Provide the room name.", "br": "Informe o nome da sala."}'                                                                     |
+      | 'que não existem'                         | '{"questions": [{ "id": 99, "points": 20 }] }'  | '{"en": "There are informed questions that do not exist.", "br": "Há questões informadas que não existem." }'                           |
+      | 'que não pertencem ao usuário'            | '{"questions": [{ "id": 1, "points": 20 }] }'   | '{"en": "There are informed questions that do not belong to the user.", "br": "Há questões informadas que não pertencem ao usuário." }' |
+      | 'à uma sala que não existe'               | '{"id": 99}'                                    | '{"en": "The room does not exist.", "br": "A sala não existe." }'                                                                       |
+      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 0 }] }'   | '{"en": "There are questions without score.", "br": "Há questões sem pontuação." }'                                                     |
+      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 200 }] }' | '{"en": "There are questions with scores out of range 10-100.", "br": "Há questões com pontuação fora do intervalo 10-100." }'          |
+      | 'pontuação fora do intervalo'             | '{"questions": [{ "id": 18, "points": 180 }] }' | '{"en": "There are questions with scores out of range 10-100.", "br": "Há questões com pontuação fora do intervalo 10-100." }'          |
+      | 'à uma sala que não pertencem ao usuário' | '{"id": 3}'                                     | '{"en": "The informed room does not belong to the user.", "br": "A sala informada não pertence ao usuário." }'                          |
+      | 'para atualização'                        | '{"id": 2}'                                     | '{"en": "Room updated successfully.", "br": "Sala atualizada com sucesso." }'                                                           |
+      | 'sem id da sala'                          | '{"id": 0}'                                     | '{"en": "Room created successfully.", "br": "Sala criada com sucesso." }'                                                               |
 
   Scenario Outline: Remover sala
     Given Dado que eu queira remover uma sala
@@ -69,11 +69,11 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de tentar remover a sala
 
     Examples:
-      | id | caso                  | mensagem                                     |
-      | 3  | 'que não me pertence' | "Usuário sem permissão para remover o item." |
-      | 99 | 'que não existe'      | "A sala não existe."                         |
-      | 4  | 'iniciada'            | "Uma sala iniciada não pode ser removida."   |
-      | 10 | 'que me pertence'     | "Sala removida com sucesso."                 |
+      | id | caso                  | mensagem                                                                                                       |
+      | 3  | 'que não me pertence' | '{ "en": "Without permission to remove this room.", "br": "Sem permissão para remover esta sala." }' |
+      | 99 | 'que não existe'      | '{ "en": "The room does not exist.", "br": "A sala não existe." }'                                              |
+      | 4  | 'iniciada'            | '{ "en": "A room started can not be removed.", "br": "Uma sala iniciada não pode ser removida." }'             |
+      | 10 | 'que me pertence'     | '{ "en": "Room removed successfully.", "br": "Sala removida com sucesso." }'                                    |
 
   Scenario Outline: Alterar status da sala
     Given Dado que eu queira alterar o status de uma sala
@@ -81,15 +81,15 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de alterar o status
 
     Examples:
-      | id | status    | mensagem                                    |
-      | 99 | 'ENDED'   | 'A sala não existe.'                        |
-      | 3  | 'ENDED'   | 'A sala informada não pertence ao usuário.' |
-      | 9  | 'ENDED'   | 'A sala já foi finalizada.'                 |
-      | 8  | 'CLOSED'  | 'Sala fechada com sucesso'                  |
-      | 8  | 'OPENED'  | 'Sala aberta com sucesso'                   |
-      | 8  | 'STARTED' | 'Sala iniciada com sucesso'                 |
-      | 8  | 'ENDEDD'  | 'Status inválido.'                          |
-      | 8  | 'ENDED'   | 'Sala finalizada com sucesso'               |
+      | id | status    | mensagem                                                                                                     |
+      | 99 | 'ENDED'   | '{"en": "The room does not exist.", "br": "A sala não existe."}'                                              |
+      | 3  | 'ENDED'   | '{"en": "The informed room does not belong to the user.", "br": "A sala informada não pertence ao usuário."}' |
+      | 9  | 'ENDED'   | '{"en": "The room already is finished.", "br": "A sala já foi finalizada."}'                                     |
+      | 8  | 'CLOSED'  | '{"en": "Room was closed successfully.", "br": "Sala foi fechada com sucesso."}'                                      |
+      | 8  | 'OPENED'  | '{"en": "Room was opened successfully.", "br": "Sala foi aberta com sucesso."}'                                       |
+      | 8  | 'STARTED' | '{"en": "Room was started successfully.", "br": "Sala foi iniciada com sucesso."}'                                    |
+      | 8  | 'ENDEDD'  | '{"en": "Invalid status.", "br": "Status inválido."}'                                                         |
+      | 8  | 'ENDED'   | '{"en": "Room was finished successfully.", "br": "Sala foi finalizada com sucesso."}'                                 |
 
   Scenario: Obter quiz
     Given Dado que eu queira obter um quiz que eu esteja participando

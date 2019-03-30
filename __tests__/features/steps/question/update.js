@@ -1,7 +1,7 @@
 import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
-import { expect } from 'chai'
 
+import { validProps } from '../stepsHelper'
 import app from '../../../../src/server'
 
 const request = supertest(app)
@@ -43,14 +43,12 @@ When('Quando eu atualizar {string} atribuindo {string}', (caso, p) => {
     question = null
 })
 
-Then('Então eu devo obter a mensagem {string} depois de tentar atualizar', (message) => {
+Then('Então eu devo obter a mensagem {string} depois de tentar atualizar', (json) => {
   return request
     .put('/api/question')
     .set({ token: token })
     .send(question)
-    .then((result) => {
-      expect(result.body.message).to.eql(message)
-    })
+    .then((result) => validProps(json, result.body.message))
 })
 
 Given('Dado que eu queira alterar o compartilhamento de uma questão', () => {
@@ -67,9 +65,9 @@ When('Quando eu enviar o id de uma {string} {int} a ser ou não compartilhada', 
     .put('/api/question-share')
     .set({ token: token })
     .send({ id: id, shared: true })
-    .then((result) => { msgShare = result.body.message })
+    .then(result => msgShare = result.body.message)
 })
 
-Then('Então eu devo obter a mensagem {string} depois de alterar o compartilhamento', (message) => {
-  expect(msgShare).to.eql(message)
+Then('Então eu devo obter a mensagem {string} depois de alterar o compartilhamento', (json) => {
+  validProps(json, msgShare)
 })

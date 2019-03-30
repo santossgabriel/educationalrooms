@@ -4,6 +4,9 @@ import { questionStatus } from './question'
 import { sendNotifications, updateOnlineRooms } from '../socket'
 
 import { NotificationTypes } from './notification'
+import { Languages } from '../helpers/utils'
+
+const { BR, EN } = Languages
 
 const {
   Room,
@@ -124,7 +127,10 @@ export default {
     })
 
     if (!room)
-      throwValidationError('Sala não disponível no momento')
+      throwValidationError({
+        [EN]: 'The room is not available yet.',
+        [BR]: 'A sala não está disponível no momento.'
+      })
 
     let score = 0
     if (room && room.endedAt) {
@@ -204,22 +210,36 @@ export default {
     })
 
     if (!room)
-      throwValidationError('A sala não existe.')
+      throwValidationError({
+        [EN]: 'The room does not exist.',
+        [BR]: 'A sala não existe.'
+      })
 
     if (room.userId != req.claims.id)
-      throwForbiddenError('Usuário sem permissão para remover o item.')
+      throwForbiddenError({
+        [EN]: 'Without permission to remove this room.',
+        [BR]: 'Sem permissão para remover esta sala.'
+      })
 
     if (room.startedAt)
-      throwValidationError('Uma sala iniciada não pode ser removida.')
+      throwValidationError({
+        [EN]: 'A room started can not be removed.',
+        [BR]: 'Uma sala iniciada não pode ser removida.'
+      })
 
     await RoomUser.destroy({ where: { roomId: id } })
     await RoomQuestion.destroy({ where: { roomId: id } })
     await Room.destroy({ where: { id: id } })
-    res.json({ message: 'Sala removida com sucesso.' })
+    res.json({
+      message: {
+        [EN]: 'Room removed successfully.',
+        [BR]: 'Sala removida com sucesso.'
+      }
+    })
 
     const users = room.RoomUsers.map(p => p.userId)
     const notification = {
-      description: 'sala foi removida.',
+      description: { [EN]: 'Room was removed.', [BR]: 'Sala foi removida.' },
       type: NotificationTypes.ROOM_REMOVED,
       origin: room.name
     }
@@ -232,8 +252,12 @@ export default {
       include: [{ model: RoomUser }],
       where: { id: id }
     })
+
     if (!room)
-      throwValidationError('A sala não existe.')
+      throwValidationError({
+        [EN]: 'The room does not exist.',
+        [BR]: 'A sala não existe.'
+      })
 
     const associated = room.RoomUsers.filter(p => p.userId === req.claims.id).length > 0
 
@@ -242,28 +266,49 @@ export default {
     if (associate) {
 
       if (associated)
-        throwValidationError('Usuário já incluso na sala.')
+        throwValidationError({
+          [EN]: 'User already included in room.',
+          [BR]: 'Usuário já incluso na sala.'
+        })
 
       if (!room.openedAt)
-        throwValidationError('A sala ainda não foi aberta.')
+        throwValidationError({
+          [EN]: 'The room is not open yet.',
+          [BR]: 'A sala não está aberta ainda.'
+        })
 
       if (room.startedAt)
-        throwValidationError('A sala já foi iniciada.')
+        throwValidationError({
+          [EN]: 'The room has already been started.',
+          [BR]: 'A sala já foi iniciada.'
+        })
 
       await RoomUser.create({ roomId: id, userId: req.claims.id })
-      res.json({ message: 'Entrou na sala.' })
+      res.json({
+        message: {
+          [EN]: 'Came into the room.',
+          [BR]: 'Entrou na sala.'
+        }
+      })
 
-      notification.description = 'entrou na sala.'
+      notification.description = {
+        [EN]: 'Came into the room.',
+        [BR]: 'Entrou na sala.'
+      }
+
       notification.type = NotificationTypes.IN_ROOM
       sendNotifications([room.userId], notification)
 
     } else {
       if (!associated)
-        throwValidationError('Usuário não incluso na sala.')
+        throwValidationError({
+          [EN]: 'Not included in the room.',
+          [BR]: 'Usuário não incluso na sala.'
+        })
       await RoomUser.destroy({ where: { roomId: id, userId: req.claims.id } })
-      res.json({ message: 'Saiu da sala.' })
+      res.json({ message: { [EN]: 'Leave the room.', [BR]: 'Saiu da sala.' } })
 
-      notification.description = 'saiu da sala.'
+      notification.description = { [EN]: 'Leave the room.', [BR]: 'Saiu da sala.' }
       notification.type = NotificationTypes.OUT_ROOM
       sendNotifications([room.userId], notification)
     }
@@ -273,10 +318,13 @@ export default {
     const { questions, id, name, time } = req.body
 
     if (!name)
-      throwValidationError('Informe o nome da sala.')
+      throwValidationError({
+        [EN]: 'Provide the room name.',
+        [BR]: 'Informe o nome da sala.'
+      })
 
     if (!Array.isArray(questions) || questions.length == 0)
-      throwValidationError('Informe as questões.')
+      throwValidationError({ [EN]: 'Provide the questions', [BR]: 'Informe as questões.' })
 
     const questionIds = questions.map(p => {
       p.points = Math.floor(p.points / 10) * 10
@@ -284,18 +332,30 @@ export default {
     })
 
     if (questions.filter(p => !p.points).length > 0)
-      throwValidationError('Há questões sem pontuação.')
+      throwValidationError({
+        [EN]: 'There are questions without score.',
+        [BR]: 'Há questões sem pontuação.'
+      })
 
     if (questions.filter(p => p.points < 10 || p.points > 100).length > 0)
-      throwValidationError('Há questões com pontuação fora do intervalo 10-100.')
+      throwValidationError({
+        [EN]: 'There are questions with scores out of range 10-100.',
+        [BR]: 'Há questões com pontuação fora do intervalo 10-100.'
+      })
 
     const questionsDb = await Question.findAll({ where: { id: questionIds } })
     const questionsIdsDb = questionsDb.map(p => p.id)
     if (questionIds.filter(p => questionsIdsDb.indexOf(p) === -1).length > 0)
-      throwValidationError('Há questões informadas que não existem.')
+      throwValidationError({
+        [EN]: 'There are informed questions that do not exist.',
+        [BR]: 'Há questões informadas que não existem.'
+      })
 
     if (questionsDb.filter(p => p.userId !== req.claims.id).length > 0)
-      throwValidationError('Há questões informadas que não pertencem ao usuário.')
+      throwValidationError({
+        [EN]: 'There are informed questions that do not belong to the user.',
+        [BR]: 'Há questões informadas que não pertencem ao usuário.'
+      })
 
     let room = null
     let msgResult = ''
@@ -308,17 +368,23 @@ export default {
       })
 
       if (!room)
-        throwValidationError('A sala não existe.')
+        throwValidationError({
+          [EN]: 'The room does not exist.',
+          [BR]: 'A sala não existe.'
+        })
 
       if (room.userId !== req.claims.id)
-        throwValidationError('A sala informada não pertence ao usuário.')
+        throwValidationError({
+          [EN]: 'The informed room does not belong to the user.',
+          [BR]: 'A sala informada não pertence ao usuário.'
+        })
 
       await Room.update(
         { name: name, time: time },
         { where: { id: id } }
       )
 
-      msgResult = 'Sala atualizada com sucesso.'
+      msgResult = { [EN]: 'Room updated successfully.', [BR]: 'Sala atualizada com sucesso.' }
 
     } else {
       room = {
@@ -328,7 +394,7 @@ export default {
         createdAt: new Date()
       }
       room = await Room.create(room)
-      msgResult = 'Sala criada com sucesso.'
+      msgResult = { [EN]: 'Room created successfully.', [BR]: 'Sala criada com sucesso.' }
     }
 
     await RoomQuestion.destroy({ where: { roomId: id } })
@@ -353,24 +419,24 @@ export default {
     switch (status) {
       case roomStatus.CLOSED:
         room.endedAt = room.startedAt = room.openedAt = null
-        msg = 'Sala fechada com sucesso'
+        msg = { [EN]: 'Room was closed successfully.', [BR]: 'Sala foi fechada com sucesso.' }
         break
       case roomStatus.OPENED:
         room.openedAt = new Date()
         room.endedAt = room.startedAt = null
-        msg = 'Sala aberta com sucesso'
+        msg = { [EN]: 'Room was opened successfully.', [BR]: 'Sala foi aberta com sucesso.' }
         break
       case roomStatus.STARTED:
         room.startedAt = new Date()
         room.endedAt = null
-        msg = 'Sala iniciada com sucesso'
+        msg = { [EN]: 'Room was started successfully.', [BR]: 'Sala foi iniciada com sucesso.' }
         break
       case roomStatus.ENDED:
         room.endedAt = new Date()
-        msg = 'Sala finalizada com sucesso'
+        msg = { [EN]: 'Room was finished successfully.', [BR]: 'Sala foi finalizada com sucesso.' }
         break
       default:
-        throwValidationError('Status inválido.')
+        throwValidationError({ [EN]: 'Invalid status.', [BR]: 'Status inválido.' })
     }
 
     const roomDb = await Room.findOne({
@@ -379,13 +445,22 @@ export default {
     })
 
     if (!roomDb)
-      throwValidationError('A sala não existe.')
+      throwValidationError({
+        [EN]: 'The room does not exist.',
+        [BR]: 'A sala não existe.'
+      })
 
     if (roomDb.userId !== req.claims.id)
-      throwValidationError('A sala informada não pertence ao usuário.')
+      throwValidationError({
+        [EN]: 'The informed room does not belong to the user.',
+        [BR]: 'A sala informada não pertence ao usuário.'
+      })
 
     if (roomDb.endedAt)
-      throwValidationError('A sala já foi finalizada.')
+      throwValidationError({
+        [EN]: 'The room already is finished.',
+        [BR]: 'A sala já foi finalizada.'
+      })
 
     await Room.update(room, { where: { id: id } })
     res.json({ message: msg })
@@ -407,10 +482,15 @@ export default {
       updateOnlineRooms()
 
       const notif = {
-        description: started ? 'foi iniciada.' : 'foi fechada',
+        description: started ? {
+          [EN]: 'was started.', [BR]: 'foi iniciada.'
+        } : {
+            [EN]: 'was closed.', [BR]: 'foi fechada.'
+          },
         type: started ? NotificationTypes.ROOM_STARTED : NotificationTypes.ROOM_CLOSED,
         origin: `${id} ${roomDb.name}`
       }
+
       const users = roomDb.RoomUsers.map(p => p.userId)
       sendNotifications(users, notif)
     }
