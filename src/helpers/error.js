@@ -101,6 +101,14 @@ export const questionErros = {
   IN_ROOM_REMOVE: {
     [BR]: 'A questão pertence à uma sala que já foi iniciada ou finalizada e não pode ser removida.',
     [EN]: 'The question belongs to a room that has already been started or finished and can not be removed.'
+  },
+  NOT_EXIST_OR_NOT_SHARED: {
+    [EN]: 'The question does not exist or is not shared.',
+    [BR]: 'A questão não existe ou não está compartilhada.'
+  },
+  QUESTION_ALREADY_ADDED: {
+    [EN]: 'This question has already been added ',
+    [BR]: 'Essa questão já foi adicionada.'
   }
 }
 

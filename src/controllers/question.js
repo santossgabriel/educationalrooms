@@ -284,20 +284,14 @@ export default {
     })
 
     if (!questionDb)
-      throwValidationError({
-        [EN]: 'The question does not exist or is not shared.',
-        [BR]: 'A questão não existe ou não está compartilhada.'
-      })
+      throwValidationError(questionErros.NOT_EXIST_OR_NOT_SHARED)
 
     const already = await Question.findOne({
       where: { sharedQuestionId: id }
     })
 
     if (already)
-      throwValidationError({
-        [EN]: 'This question has already been added ',
-        [BR]: 'Essa questão já foi adicionada.'
-      })
+      throwValidationError(questionErros.QUESTION_ALREADY_ADDED)
 
     const q = {
       description: questionDb.description,
