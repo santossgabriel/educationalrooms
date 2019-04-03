@@ -1,164 +1,172 @@
+const PT_BR = 'br'
+const EN_US = 'en'
+
+export const Languages = {
+  PT_BR: PT_BR,
+  EN_US: EN_US
+}
+
 export const AppTexts = {
   AppTitle: {
-    ptbr: 'Salas Educacionais',
-    enus: 'Educational Rooms'
+    [PT_BR]: 'Salas Educacionais',
+    [EN_US]: 'Educational Rooms'
   },
   Toolbar: {
     EditAccount: {
-      ptbr: 'Editar Conta',
-      enus: 'Edit Account'
+      [PT_BR]: 'Editar Conta',
+      [EN_US]: 'Edit Account'
     },
     Logout: {
-      ptbr: 'Sair',
-      enus: 'Logout'
+      [PT_BR]: 'Sair',
+      [EN_US]: 'Logout'
     }
   },
   AppSymbol: {
-    ptbr: 'SE',
-    enus: 'ER'
+    [PT_BR]: 'SE',
+    [EN_US]: 'ER'
   },
   Root: {
     Yes: {
-      ptbr: 'Sim',
-      enus: 'Yes'
+      [PT_BR]: 'Sim',
+      [EN_US]: 'Yes'
     },
     No: {
-      ptbr: 'Não',
-      enus: 'No'
+      [PT_BR]: 'Não',
+      [EN_US]: 'No'
     },
     Prev: {
-      ptbr: 'Anterior',
-      enus: 'Previous'
+      [PT_BR]: 'Anterior',
+      [EN_US]: 'Previous'
     },
     Next: {
-      ptbr: 'Próximo',
-      enus: 'Next'
+      [PT_BR]: 'Próximo',
+      [EN_US]: 'Next'
     },
     Cancel: {
-      ptbr: 'Cancelar',
-      enus: 'Cancel'
+      [PT_BR]: 'Cancelar',
+      [EN_US]: 'Cancel'
     },
     Save: {
-      ptbr: 'Salvar',
-      enus: 'Save'
+      [PT_BR]: 'Salvar',
+      [EN_US]: 'Save'
     },
     Correct: {
-      ptbr: 'Correta?',
-      enus: 'Correct?'
+      [PT_BR]: 'Correta?',
+      [EN_US]: 'Correct?'
     },
     Remove: {
-      ptbr: 'Remover',
-      enus: 'Remove'
+      [PT_BR]: 'Remover',
+      [EN_US]: 'Remove'
     },
     New: {
-      ptbr: 'Novo',
-      enus: 'New'
+      [PT_BR]: 'Novo',
+      [EN_US]: 'New'
     },
     Edition: {
-      ptbr: 'Edição',
-      enus: 'Edition'
+      [PT_BR]: 'Edição',
+      [EN_US]: 'Edition'
     },
     Acquired: {
-      ptbr: 'Adquirida',
-      enus: 'Acquired'
+      [PT_BR]: 'Adquirida',
+      [EN_US]: 'Acquired'
     },
   },
   MainComponent: {
     QuestionTexts: {
       Questions: {
-        ptbr: 'Questões',
-        enus: 'Questions'
+        [PT_BR]: 'Questões',
+        [EN_US]: 'Questions'
       },
       My: {
-        ptbr: 'Minhas Questões',
-        enus: 'My Questions'
+        [PT_BR]: 'Minhas Questões',
+        [EN_US]: 'My Questions'
       },
       Shared: {
-        ptbr: 'Questões Compartilhadas',
-        enus: 'Shared Questions'
+        [PT_BR]: 'Questões Compartilhadas',
+        [EN_US]: 'Shared Questions'
       }
     },
     RoomTexts: {
       NewEdit: {
         New: {
-          ptbr: 'Nova Sala',
-          enus: 'New Room'
+          [PT_BR]: 'Nova Sala',
+          [EN_US]: 'New Room'
         },
         Edit: {
-          ptbr: 'Editar Sala',
-          enus: 'Edit Room'
+          [PT_BR]: 'Editar Sala',
+          [EN_US]: 'Edit Room'
         },
       },
       Rooms: {
-        ptbr: 'Salas',
-        enus: 'Rooms'
+        [PT_BR]: 'Salas',
+        [EN_US]: 'Rooms'
       },
       My: {
-        ptbr: 'Salas Que Criei',
-        enus: 'Rooms I\'ve Created'
+        [PT_BR]: 'Salas Que Criei',
+        [EN_US]: 'Rooms I\'ve Created'
       },
       Open: {
-        ptbr: 'Salas Abertas',
-        enus: 'Open Rooms'
+        [PT_BR]: 'Salas Abertas',
+        [EN_US]: 'Open Rooms'
       },
       Associate: {
-        ptbr: 'Participações',
-        enus: 'Associate'
+        [PT_BR]: 'Participações',
+        [EN_US]: 'Associate'
       }
     },
     ScoreTexts: {
       Scores: {
-        ptbr: 'Pontuações',
-        enus: 'Scores'
+        [PT_BR]: 'Pontuações',
+        [EN_US]: 'Scores'
       }
     },
     NotificationTexts: {
       Notifications: {
-        ptbr: 'Notificações',
-        enus: 'Notifications'
+        [PT_BR]: 'Notificações',
+        [EN_US]: 'Notifications'
       }
     }
   },
   MyQuestionsTable: {
     Area: {
-      ptbr: 'Área',
-      enus: 'Area'
+      [PT_BR]: 'Área',
+      [EN_US]: 'Area'
     },
     Difficulty: {
-      ptbr: 'Dificuldade',
-      enus: 'Difficulty'
+      [PT_BR]: 'Dificuldade',
+      [EN_US]: 'Difficulty'
     },
     Description: {
-      ptbr: 'Descrição',
-      enus: 'Description'
+      [PT_BR]: 'Descrição',
+      [EN_US]: 'Description'
     },
     Answers: {
-      ptbr: 'Respostas',
-      enus: 'Answers'
+      [PT_BR]: 'Respostas',
+      [EN_US]: 'Answers'
     },
     Shared: {
-      ptbr: 'Compartilhada?',
-      enus: 'Shared?'
+      [PT_BR]: 'Compartilhada?',
+      [EN_US]: 'Shared?'
     },
     Actions: {
-      ptbr: 'Ações',
-      enus: 'Actions'
+      [PT_BR]: 'Ações',
+      [EN_US]: 'Actions'
     },
     CreateQuestion: {
-      ptbr: 'Criar Questão',
-      enus: 'Create Question'
+      [PT_BR]: 'Criar Questão',
+      [EN_US]: 'Create Question'
     },
   },
   MyRoomsTable: {
     CreateRoom: {
-      ptbr: 'Criar Sala',
-      enus: 'Create Room'
+      [PT_BR]: 'Criar Sala',
+      [EN_US]: 'Create Room'
     },
   },
   Question: {
     ConfirmExclusionTitle: {
-      ptbr: 'Tem certeza que deseja excluir a questão ?',
-      enus: 'Are you sure you want to remove the question?'
+      [PT_BR]: 'Tem certeza que deseja excluir a questão ?',
+      [EN_US]: 'Are you sure you want to remove the question?'
     }
   },
   Room: {
@@ -167,9 +175,4 @@ export const AppTexts = {
   Auth: {
 
   }
-}
-
-export const Languages = {
-  PT_BR: 'ptbr',
-  EN_US: 'enus'
 }
