@@ -1,27 +1,18 @@
 import React from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
 import createHistory from 'history/createHashHistory'
-import MyQuestion from '../../scenes/question/MyQuestion'
-import SharedQuestion from '../../scenes/question/SharedQuestion'
+import {
+  MyQuestion,
+  SharedQuestion,
+  MyRooms,
+  OpenRooms,
+  AssociateRooms,
+  EditRoom
+} from '../../scenes'
 
 const history = createHistory()
 const isAuthenticated = true
 const freeRoutes = ['/', '/about']
-
-const App = () => (
-  <div>
-    <span>App</span><br />
-    <Link to="/question">Questions</Link><br />
-    <Link to="/about">About</Link>
-  </div>
-)
-
-const About = () => (
-  <div>
-    <span>About</span><br />
-    <Link to="/">Home</Link>
-  </div>
-)
 
 let currentPath = location.hash.replace('#', '')
 
@@ -39,10 +30,14 @@ export default class AppRouter extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/" exact={true} component={App} />
-        <Route path="/about" component={About} />
+        <Route path="/" exact={true} component={MyQuestion} />
         <Route path="/my-questions" component={MyQuestion} />
         <Route path="/shared-questions" component={SharedQuestion} />
+
+        <Route path="/edit-room/:id" component={EditRoom} />
+        <Route path="/my-rooms" component={MyRooms} />
+        <Route path="/open-rooms" component={OpenRooms} />
+        <Route path="/associate-rooms" component={AssociateRooms} />
       </Switch>
     )
   }

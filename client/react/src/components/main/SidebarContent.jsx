@@ -8,7 +8,7 @@ import Collapse from '@material-ui/core/Collapse'
 import Divider from '@material-ui/core/Divider'
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
 import RoomIcon from '@material-ui/icons/RoomService'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { AppTexts } from '../../helpers/appTexts'
 import { getCurrentPath } from './AppRouter'
@@ -38,6 +38,13 @@ const styles = {
   }
 }
 
+const {
+  QuestionTexts,
+  RoomTexts,
+  ScoreTexts,
+  NotificationTexts
+} = AppTexts.MainComponent
+
 const MainText = (props) => (
   <ListItemText primary={<span style={styles.mainText}>{props.text}</span>} />
 )
@@ -63,13 +70,6 @@ const LinkListItem = (props) => {
   )
 }
 
-const {
-  QuestionTexts,
-  RoomTexts,
-  ScoreTexts,
-  NotificationTexts
-} = AppTexts.MainComponent
-
 class SidebarContent extends React.Component {
 
   constructor(props) {
@@ -91,12 +91,14 @@ class SidebarContent extends React.Component {
         </div>
         <List>
           <Divider />
+
           <ListItem button onClick={() => this.showMenu('question')}>
             <ListItemIcon>
               <QuestionAnswerIcon style={styles.mainIcon} />
             </ListItemIcon>
             <MainText text={QuestionTexts.Questions[this.props.language]} />
           </ListItem>
+
           <Collapse in={this.state.opened === 'question'} timeout={400} unmountOnExit>
             <List component="div" disablePadding>
               <LinkListItem onClick={() => this.props.closeSidebar()} to="/my-questions" text={QuestionTexts.My[this.props.language]} />
@@ -105,14 +107,20 @@ class SidebarContent extends React.Component {
           </Collapse>
 
           <Divider />
-          <Link to="/rooms" style={{ textDecoration: 'none' }}>
-            <ListItem button onClick={() => this.showMenu('room')}>
-              <ListItemIcon>
-                <RoomIcon style={styles.mainIcon} />
-              </ListItemIcon>
-              <MainText text={RoomTexts.Rooms[this.props.language]} />
-            </ListItem>
-          </Link>
+          <ListItem button onClick={() => this.showMenu('room')}>
+            <ListItemIcon>
+              <RoomIcon style={styles.mainIcon} />
+            </ListItemIcon>
+            <MainText text={RoomTexts.Rooms[this.props.language]} />
+          </ListItem>
+
+          <Collapse in={this.state.opened === 'room'} timeout={400} unmountOnExit>
+            <List component="div" disablePadding>
+              <LinkListItem onClick={() => this.props.closeSidebar()} to="/my-rooms" text={RoomTexts.My[this.props.language]} />
+              <LinkListItem onClick={() => this.props.closeSidebar()} to="/open-rooms" text={RoomTexts.Open[this.props.language]} />
+              <LinkListItem onClick={() => this.props.closeSidebar()} to="/associate-rooms" text={RoomTexts.Associate[this.props.language]} />
+            </List>
+          </Collapse>
 
           <Divider />
           <Link to="/score" style={{ textDecoration: 'none' }}>

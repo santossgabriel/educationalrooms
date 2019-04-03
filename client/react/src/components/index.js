@@ -1,0 +1,16 @@
+export { BrazilFlag, UnitedStatesFlag } from './main/Flags'
+export { default as AppRouter } from './main/AppRouter'
+export { default as CardMain } from './main/CardMain'
+export { default as GoogleButton } from './main/GoogleButton'
+export { ErrorAnimatedIcon, SuccessAnimatedIcon } from './main/Icons'
+export { default as IconTextInput } from './main/IconTextInput'
+export { default as MainComponen } from './main/MainComponent'
+export { AlertModal, ConfirmModal } from './main/Modal'
+export { default as SidebarConten } from './main/SidebarContent'
+export { default as Toolbar } from './main/Toolbar'
+
+export { default as EditQuestionModal } from './modais/EditQuestionModal'
+// export { default as EditUserModal } from './modais/EditUserModal'
+
+export { default as EditQuestionAlternatives } from './question/EditQuestionAlternatives'
+export { default as Stars } from './question/Stars'

@@ -21,6 +21,6 @@ export const appReducer = (state = initialState, action) => {
         localStorage.removeItem('USER')
       return { ...state, user: action.payload }
     default:
-      return state;
+      return state
   }
 }

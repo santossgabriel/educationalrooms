@@ -79,9 +79,31 @@ export const AppTexts = {
       }
     },
     RoomTexts: {
+      NewEdit: {
+        New: {
+          ptbr: 'Nova Sala',
+          enus: 'New Room'
+        },
+        Edit: {
+          ptbr: 'Editar Sala',
+          enus: 'Edit Room'
+        },
+      },
       Rooms: {
         ptbr: 'Salas',
         enus: 'Rooms'
+      },
+      My: {
+        ptbr: 'Salas Que Criei',
+        enus: 'Rooms I\'ve Created'
+      },
+      Open: {
+        ptbr: 'Salas Abertas',
+        enus: 'Open Rooms'
+      },
+      Associate: {
+        ptbr: 'Participações',
+        enus: 'Associate'
       }
     },
     ScoreTexts: {
@@ -127,11 +149,20 @@ export const AppTexts = {
       enus: 'Create Question'
     },
   },
+  MyRoomsTable: {
+    CreateRoom: {
+      ptbr: 'Criar Sala',
+      enus: 'Create Room'
+    },
+  },
   Question: {
     ConfirmExclusionTitle: {
       ptbr: 'Tem certeza que deseja excluir a questão ?',
       enus: 'Are you sure you want to remove the question?'
     }
+  },
+  Room: {
+
   },
   Auth: {
 
