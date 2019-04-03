@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxyconfig.json --poll=2000 --port 4200",
-    "build": "ng build --prod --output-path=../public",
+    "build": "ng build --prod --output-path=../../public",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

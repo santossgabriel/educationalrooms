@@ -7,9 +7,8 @@ echo "Branch: $GIT_BRANCH"
 echo "Commit: $GIT_COMMIT"
 
 git archive --format=tar.gz -o deploy.tgz $GIT_COMMIT
-dasdas
 HEROKU_VERSION=$GIT_COMMIT
-HEROKU_APP_NAME=quiz-room
+HEROKU_APP_NAME=salaseducacionais
 
 # Set in environment variables
 # HEROKU_API_KEY=ab338e95-dd01-45f3-b215-762086154d38

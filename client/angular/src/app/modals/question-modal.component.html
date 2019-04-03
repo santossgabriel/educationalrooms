@@ -4,7 +4,8 @@
     <mat-step>
       <ng-template matStepLabel>Área</ng-template>
       <mat-form-field id="selectArea" style="width: 300px">
-        <mat-select [disabled]="areas.length < 2" [(ngModel)]="selectedArea" (selectionChange)="areaChanged()" placeholder="Selecione a área">
+        <mat-select [disabled]="areas.length < 2" [(ngModel)]="selectedArea" (selectionChange)="areaChanged()"
+          placeholder="Selecione a área">
           <mat-option *ngFor="let c of areas" [value]="c">
             {{ c }}
           </mat-option>
@@ -12,13 +13,13 @@
       </mat-form-field>
       <br />
       <mat-form-field id="customArea" style="width: 300px">
-        <input matInput maxlength="30" [disabled]="!customArea" [(ngModel)]="question.area" placeholder="Qual a área da questão ?"
-          required />
+        <input matInput maxlength="30" [disabled]="!customArea" [(ngModel)]="question.area"
+          placeholder="Qual a área da questão ?" required />
       </mat-form-field>
       <div class="action-button">
         <button mat-button mat-dialog-close>Cancelar</button>
-        <button (click)="stepChange(0)" id="btnNextStep" [disabled]="customArea && !question.area" mat-raised-button matStepperNext
-          color="primary">Próximo</button>
+        <button (click)="stepChange(0)" id="btnNextStep" [disabled]="customArea && !question.area" mat-raised-button
+          matStepperNext color="primary">Próximo</button>
       </div>
     </mat-step>
 
@@ -26,7 +27,7 @@
       <ng-template matStepLabel>Dificuldade</ng-template>
       <mat-form-field id="selectCategory">
         <mat-select [(ngModel)]="question.difficulty" placeholder="Selecione a dificuldade">
-          <mat-option *ngFor="let c of [1, 2, 3, 4, 5]" [value]="c">
+          <mat-option *ngFor="let c of [1,2,3,4,5]" [value]="c">
             {{ c }}
           </mat-option>
         </mat-select>
@@ -40,12 +41,14 @@
     <mat-step>
       <ng-template matStepLabel>Pergunta</ng-template>
       <mat-form-field id="questionDescription" style="width: 500px">
-        <textarea maxlength="200" id="inputQuestionDescription" style="overflow: hidden" cols="100" spellcheck="false" rows="3" matInput [(ngModel)]="question.description"
-          placeholder="Qual a pergunta da questão ?" required></textarea>
+        <textarea maxlength="200" id="inputQuestionDescription" style="overflow: hidden" cols="100" spellcheck="false"
+          rows="3" matInput [(ngModel)]="question.description" placeholder="Qual a pergunta da questão ?"
+          required></textarea>
       </mat-form-field>
       <div class="action-button">
         <button mat-button matStepperPrevious>Voltar</button>
-        <button (click)="stepChange(2)" [disabled]="!question.description" mat-raised-button matStepperNext color="primary">Próximo</button>
+        <button (click)="stepChange(2)" [disabled]="!question.description" mat-raised-button matStepperNext
+          color="primary">Próximo</button>
       </div>
     </mat-step>
 
@@ -71,12 +74,12 @@
           <button mat-mini-fab disabled>{{a.classification}}</button>
           <span class="horizontal-space"></span>
           <mat-form-field style="width: 100%">
-            <input matInput class="introDescriptionAnswer" [(ngModel)]="a.description" placeholder="Descrição da alternativa {{a.classification}}"
-              required />
+            <input matInput class="introDescriptionAnswer" [(ngModel)]="a.description"
+              placeholder="Descrição da alternativa {{a.classification}}" required />
           </mat-form-field>
           <span class="horizontal-space"></span>
-          <mat-slide-toggle class="introCorrectAnswer" (click)="correctClick(a)" [matTooltip]="a.correct ? 'Correta' : 'Errada'" color="primary"
-            [(ngModel)]="a.correct"></mat-slide-toggle>
+          <mat-slide-toggle class="introCorrectAnswer" (click)="correctClick(a)"
+            [matTooltip]="a.correct ? 'Correta' : 'Errada'" color="primary" [(ngModel)]="a.correct"></mat-slide-toggle>
         </mat-list-item>
       </mat-list>
 
