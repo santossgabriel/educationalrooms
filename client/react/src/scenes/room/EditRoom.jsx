@@ -66,7 +66,8 @@ class EditRoom extends React.Component {
       order: {},
       points: {},
       roomName: '',
-      time: ''
+      time: '',
+      totalTime: 0
     }
   }
 
@@ -167,6 +168,14 @@ class EditRoom extends React.Component {
       .catch(err => console.log(err))
   }
 
+  roomTime() {
+    const { selectedQuestions, time } = this.state
+    if (selectedQuestions.length && time)
+      return selectedQuestions.length * Number(time)
+    else
+      return 0
+  }
+
   render() {
     return (
       <CardMain title={this.state.title[this.state.id > 0 ? 'Edit' : 'New'][this.props.language]}>
@@ -189,63 +198,68 @@ class EditRoom extends React.Component {
         />
 
         {this.state.selectedQuestions.length ?
-          <Table aria-labelledby="tableTitle">
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Order[this.props.language]}</TableCell>
-                <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Area[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Points[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.selectedQuestions.map((n, idx) => (
-                <TableRow
-                  tabIndex={-1}
-                  key={n.id}>
-                  <TableCell style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
-                      <div>
-                        <i onClick={() => this.changeOrder(-1, idx)} className="up arrow"></i>
-                      </div>
-                      {this.state.order[n.id]}
-                      <div>
-                        <i onClick={() => this.changeOrder(+1, idx)} className="down arrow"></i>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell component="th" scope="row" padding="none" style={{ textAlign: 'center' }}>
-                    {n.area}
-                  </TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>
-                    <Stars filled={n.difficulty || 0} />
-                  </TableCell>
-                  <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
-                  <TableCell style={{ textAlign: 'center' }} numeric>
-                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
-                      <div>
-                        <i onClick={() => this.changePoints(n.id, 10)} className="up arrow"> </i>
-                      </div>
-                      {this.state.points[n.id] || 50}
-                      <div>
-                        <i onClick={() => this.changePoints(n.id, +10)} className="down arrow"> </i>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>
-                    <IconButton
-                      color="secondary"
-                      aria-label="Menu"
-                      onClick={() => this.removeQuestion(n.id)}>
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
+          <div>
+            <Table aria-labelledby="tableTitle">
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Order[this.props.language]}</TableCell>
+                  <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Area[this.props.language]}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Points[this.props.language]}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}></TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {this.state.selectedQuestions.map((n, idx) => (
+                  <TableRow
+                    tabIndex={-1}
+                    key={n.id}>
+                    <TableCell style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                        <div>
+                          <i onClick={() => this.changeOrder(-1, idx)} className="up arrow"></i>
+                        </div>
+                        {this.state.order[n.id]}
+                        <div>
+                          <i onClick={() => this.changeOrder(+1, idx)} className="down arrow"></i>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell component="th" scope="row" padding="none" style={{ textAlign: 'center' }}>
+                      {n.area}
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
+                      <Stars filled={n.difficulty || 0} />
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }} numeric>
+                      <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                        <div>
+                          <i onClick={() => this.changePoints(n.id, 10)} className="up arrow"> </i>
+                        </div>
+                        {this.state.points[n.id] || 50}
+                        <div>
+                          <i onClick={() => this.changePoints(n.id, +10)} className="down arrow"> </i>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
+                      <IconButton
+                        color="secondary"
+                        aria-label="Menu"
+                        onClick={() => this.removeQuestion(n.id)}>
+                        <Delete />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <div style={{ fontSize: '14px', textAlign: 'center', margin: '20px' }}>
+              <span>{AppTexts.Room.TotalTime[this.props.language].replace('{0}', this.roomTime())}</span>
+            </div>
+          </div>
           : <div style={styles.noQuestions}><span>{AppTexts.Room.NoQuestions[this.props.language]}</span></div>}
 
         <div style={{ textAlign: 'center', padding: '5px' }}>
@@ -272,15 +286,7 @@ class EditRoom extends React.Component {
   }
 }
 
-// Funcionalidades:
-// Escolher nome da sala
-// Adicionar e remover questões
-// Escolher a pontuação de cada questão na sala
-// Permitir ordenação das questões
-// Não permitir que usuário salve sala com a ordem das questões incorretas
 // Adicionar botão para que as questões possam ser ordenadas de forma automática
-// Adicionar flechas para que usuário possa alterar a ordem das questões para cima e para baixo
-
 const mapStateToProps = state => ({ language: state.appState.language })
 
 export default connect(mapStateToProps)(EditRoom)

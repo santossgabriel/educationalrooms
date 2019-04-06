@@ -193,6 +193,10 @@ export const AppTexts = {
     NoQuestions: {
       [PT_BR]: 'A sala não possui questões ainda.',
       [EN_US]: 'The room does not have questions yet.'
+    },
+    TotalTime: {
+      [PT_BR]: 'O tempo de duração da sala é de {0} segundos.',
+      [EN_US]: 'The room duration time is {0} seconds.'
     }
   },
   Auth: {
