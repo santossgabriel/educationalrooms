@@ -36,8 +36,8 @@ export default class AppRouter extends React.Component {
 
         <Route path="/edit-room/:id" component={EditRoom} />
         <Route path="/my-rooms" component={MyRooms} />
-        <Route path="/open-rooms" component={OpenRooms} />
-        <Route path="/associate-rooms" component={AssociateRooms} />
+        {/* <Route path="/open-rooms" component={OpenRooms} /> */}
+        {/* <Route path="/associate-rooms" component={AssociateRooms} /> */}
       </Switch>
     )
   }

@@ -136,7 +136,7 @@ class MyRooms extends React.Component {
         />
 
         <div style={{ textAlign: 'center', padding: '5px' }}>
-          <Link to="edit-room/:88"
+          <Link to="edit-room/:0"
             style={{ textDecoration: 'none' }}>
             <Button
               color="primary" variant="raised">{AppTexts.MyRoomsTable.CreateRoom[this.props.language]}</Button>

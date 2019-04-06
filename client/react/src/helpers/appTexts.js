@@ -112,6 +112,10 @@ export const AppTexts = {
       Associate: {
         [PT_BR]: 'Participações',
         [EN_US]: 'Associate'
+      },
+      RoomName: {
+        [PT_BR]: 'Nome da sala',
+        [EN_US]: 'Room name'
       }
     },
     ScoreTexts: {
@@ -167,10 +171,17 @@ export const AppTexts = {
     ConfirmExclusionTitle: {
       [PT_BR]: 'Tem certeza que deseja excluir a questão ?',
       [EN_US]: 'Are you sure you want to remove the question?'
+    },
+    AddQuestions: {
+      [PT_BR]: 'Adicionar Questões',
+      [EN_US]: 'Add Questions'
     }
   },
   Room: {
-
+    NoQuestions: {
+      [PT_BR]: 'A sala não possui questões ainda.',
+      [EN_US]: 'The room does not have questions yet.'
+    }
   },
   Auth: {
 

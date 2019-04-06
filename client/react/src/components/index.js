@@ -11,6 +11,7 @@ export { default as Toolbar } from './main/Toolbar'
 
 export { default as EditQuestionModal } from './modais/EditQuestionModal'
 // export { default as EditUserModal } from './modais/EditUserModal'
+export { default as SelectQuestionModal } from './modais/SelectQuestionModal'
 
 export { default as EditQuestionAlternatives } from './question/EditQuestionAlternatives'
 export { default as Stars } from './question/Stars'
