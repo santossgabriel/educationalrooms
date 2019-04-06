@@ -46,7 +46,7 @@ class SelectQuestionModal extends React.Component {
     const { selectedQuestions } = this.state
     for (let id in selectedQuestions)
       if (selectedQuestions[id])
-        ids.push(id)
+        ids.push(Number(id))
     this.props.onResult(ids)
   }
 

@@ -14,12 +14,15 @@ import {
   Checkbox
 } from '@material-ui/core'
 
+import { ArrowDropUp, ArrowDropDown } from '@material-ui/icons'
+
 import { AppTexts, formValidator } from '../../helpers'
 import {
   ConfirmModal,
   CardMain,
   IconTextInput,
-  SelectQuestionModal
+  SelectQuestionModal,
+  Stars
 } from '../../components'
 import { questionService } from '../../services'
 
@@ -29,6 +32,25 @@ const styles = {
     textAlign: 'center',
     fontSize: 14,
     margin: 20
+  },
+  up: {
+    border: 'solid #666',
+    borderWidth: '0 3px 3px 0',
+    display: 'inlineBlock',
+    padding: '3px',
+    cursor: 'pointer',
+    margin: '3px',
+    transform: 'rotate(-135deg)'
+  },
+  down: {
+    border: 'solid #666',
+    borderWidth: '0 3px 3px 0',
+    display: 'inlineBlock',
+    padding: '3px',
+    cursor: 'pointer',
+    margin: '3px',
+    transform: 'rotate(0deg)',
+    ['font-size']: '6px'
   }
 }
 
@@ -62,7 +84,8 @@ class EditRoom extends React.Component {
   onSelectQuestions(ids) {
     this.setState({
       idsQuestions: ids,
-      modalQuestions: false
+      modalQuestions: false,
+      selectedQuestions: this.state.questions.filter(p => ids.includes(p.id))
     })
   }
 
@@ -82,41 +105,56 @@ class EditRoom extends React.Component {
           <Table aria-labelledby="tableTitle">
             <TableHead>
               <TableRow>
+                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Order[this.props.language]}</TableCell>
                 <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Area[this.props.language]}</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Answers[this.props.language]}</TableCell>
+                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Points[this.props.language]}</TableCell>
                 <TableCell style={{ textAlign: 'center' }}></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.selectedQuestions.length
-                .map(n => (
-                  <TableRow
-                    tabIndex={-1}
-                    key={n.id}>
-                    <TableCell component="th" scope="row" padding="none" style={{ textAlign: 'center' }}>
-                      {n.area}
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      <Stars filled={n.difficulty || 0} />
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      <Checkbox
-                        color="primary"
-                        checked={this.state.idsQuestions[n.id]}
-                        onChange={(_, v) => this.selectQuestion(v, n.id)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              {this.state.emptyRows > 0 && (
-                <TableRow style={{ height: 49 * this.state.emptyRows }}>
-                  <TableCell colSpan={6} />
+              {this.state.selectedQuestions.map(n => (
+                <TableRow
+                  tabIndex={-1}
+                  key={n.id}>
+                  <TableCell style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                      <div>
+                        <i className="up arrow"> </i>
+                      </div>
+                      <div>
+                        <i className="down arrow"> </i>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell component="th" scope="row" padding="none" style={{ textAlign: 'center' }}>
+                    {n.area}
+                  </TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>
+                    <Stars filled={n.difficulty || 0} />
+                  </TableCell>
+                  <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }} numeric>
+                    <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                      <div>
+                        <i className="up arrow"> </i>
+                      </div>
+                      {80}
+                      <div>
+                        <i className="down arrow"> </i>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>
+                    <Checkbox
+                      color="primary"
+                      checked={this.state.idsQuestions[n.id]}
+                      onChange={(_, v) => this.selectQuestion(v, n.id)}
+                    />
+                  </TableCell>
                 </TableRow>
-              )}
+              ))}
             </TableBody>
           </Table>
           : <div style={styles.noQuestions}><span>{AppTexts.Room.NoQuestions[this.props.language]}</span></div>}

@@ -4,3 +4,32 @@
   font-weight: normal;
   font-style: normal;
 }
+
+i.arrow {
+  border: solid #666;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  cursor: pointer;
+  margin: 3px;
+}
+
+i.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+i.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+i.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+i.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}

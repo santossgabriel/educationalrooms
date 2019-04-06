@@ -160,6 +160,14 @@ export const AppTexts = {
       [PT_BR]: 'Criar Questão',
       [EN_US]: 'Create Question'
     },
+    Order: {
+      [PT_BR]: 'Ordem',
+      [EN_US]: 'Order'
+    },
+    Points: {
+      [PT_BR]: 'Pontos',
+      [EN_US]: 'Points'
+    },
   },
   MyRoomsTable: {
     CreateRoom: {
