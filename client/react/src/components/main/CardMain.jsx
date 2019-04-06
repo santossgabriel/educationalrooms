@@ -22,8 +22,8 @@ export default (props) => {
     <Paper style={styles.paper}>
       <fieldset style={styles.legend}>
         <legend>{props.title}</legend>
-        <div style={{textTransform: 'initial'}}>
-        {props.children}
+        <div style={{ textTransform: 'initial', fontSize: '14px' }}>
+          {props.children}
         </div>
       </fieldset>
     </Paper>

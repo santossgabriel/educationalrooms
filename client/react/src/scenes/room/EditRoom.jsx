@@ -67,7 +67,8 @@ class EditRoom extends React.Component {
       points: {},
       roomName: '',
       time: '',
-      totalTime: 0
+      totalTime: 0,
+      sortedBy: ''
     }
   }
 
@@ -118,12 +119,27 @@ class EditRoom extends React.Component {
   }
 
   ordenateQuestions(questions, prop) {
-    if (prop)
-      questions.sort((a, b) => a[prop] > b[prop] ? -1 : a[prop] < b[prop] ? 1 : 0)
+    let { sortedBy } = this.state
     let i = 1
     const order = {}
-    questions.forEach(p => order[p.id] = i++)
+    questions.forEach(p => {
+      order[p.id] = i++
+      p.points = this.state.points[p.id] || 50
+    })
+
+    if (prop) {
+      const desc = this.state.sortedBy === prop
+      if (desc) {
+        questions.sort((a, b) => a[prop] > b[prop] ? -1 : a[prop] < b[prop] ? 1 : 0)
+        sortedBy = ''
+      } else {
+        questions.sort((a, b) => a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0)
+        sortedBy = prop
+      }
+    }
+    
     this.setState({
+      sortedBy,
       selectedQuestions: questions,
       order: order,
       form: formValidator(this.state.form, {
@@ -198,7 +214,14 @@ class EditRoom extends React.Component {
         />
 
         {this.state.selectedQuestions.length ?
-          <div>
+          <div style={{ marginTop: '20px' }}>
+
+            <span>{AppTexts.Room.OrderBy[this.props.language]}</span>
+            <Button color="primary" onClick={() => this.ordenateQuestions(this.state.selectedQuestions, 'area')}>{AppTexts.MyQuestionsTable.Area[this.props.language]}</Button>
+            <Button color="primary" onClick={() => this.ordenateQuestions(this.state.selectedQuestions, 'difficulty')}>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</Button>
+            <Button color="primary" onClick={() => this.ordenateQuestions(this.state.selectedQuestions, 'description')}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</Button>
+            <Button color="primary" onClick={() => this.ordenateQuestions(this.state.selectedQuestions, 'points')}>{AppTexts.MyQuestionsTable.Points[this.props.language]}</Button>
+
             <Table aria-labelledby="tableTitle">
               <TableHead>
                 <TableRow>
@@ -240,7 +263,7 @@ class EditRoom extends React.Component {
                         </div>
                         {this.state.points[n.id] || 50}
                         <div>
-                          <i onClick={() => this.changePoints(n.id, +10)} className="down arrow"> </i>
+                          <i onClick={() => this.changePoints(n.id, -10)} className="down arrow"> </i>
                         </div>
                       </div>
                     </TableCell>

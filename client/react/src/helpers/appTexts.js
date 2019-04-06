@@ -197,6 +197,10 @@ export const AppTexts = {
     TotalTime: {
       [PT_BR]: 'O tempo de duração da sala é de {0} segundos.',
       [EN_US]: 'The room duration time is {0} seconds.'
+    },
+    OrderBy: {
+      [PT_BR]: 'Ordenar questões por:',
+      [EN_US]: 'Sor questions by:'
     }
   },
   Auth: {
