@@ -3,10 +3,10 @@ export const formValidator = (form, prop) => {
     throw 'Field does not contain the name property.'
   if (!form)
     throw 'Enter the form object.'
-  form.valid = prop.valid
+  form.valid = true
+  form[prop.name] = prop.valid
   for (let key in form)
-    if (key !== prop.name && !prop.valid)
+    if (!form[key])
       form.valid = false
-  form[prop.name] = prop.value
   return form
 }

@@ -23,16 +23,20 @@ class SelectQuestionModal extends React.Component {
   constructor(props) {
     super(props)
 
-    const selectedQuestions = {}
-
-    if (this.props.selectedQuestions)
-      this.props.selectedQuestions.forEach(p => selectedQuestions[p.id] = true)
-
     this.state = {
       questions: [],
       selectedQuestions: {},
       qSelected: {}
     }
+  }
+
+  onEnter() {
+    this.setState({ questions: [] })
+    const selectedQuestions = {},
+      questions = this.props.questions || []
+    if (this.props.ids)
+      this.props.ids.forEach(p => selectedQuestions[p] = true)
+    setTimeout(() => this.setState({ selectedQuestions, questions }), 50);
   }
 
   selectQuestion(selected, id) {
@@ -60,6 +64,7 @@ class SelectQuestionModal extends React.Component {
         aria-describedby="alert-dialog-description"
         transitionDuration={300}
         maxWidth={false}
+        onEnter={() => this.onEnter()}
         TransitionComponent={Zoom}>
         <DialogContent>
           <Table aria-labelledby="tableTitle">
@@ -73,7 +78,7 @@ class SelectQuestionModal extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.props.questions
+              {this.state.questions
                 .map(n => (
                   <TableRow
                     tabIndex={-1}

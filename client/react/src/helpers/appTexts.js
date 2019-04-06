@@ -116,6 +116,10 @@ export const AppTexts = {
       RoomName: {
         [PT_BR]: 'Nome da sala',
         [EN_US]: 'Room name'
+      },
+      QuestionTime: {
+        [PT_BR]: 'Tempo de cada questão',
+        [EN_US]: 'Time of each question'
       }
     },
     ScoreTexts: {

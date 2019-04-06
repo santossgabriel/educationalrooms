@@ -20,7 +20,7 @@ import {
   SelectQuestionModal,
   Stars
 } from '../../components'
-import { questionService } from '../../services'
+import { questionService, roomService } from '../../services'
 
 const styles = {
   noQuestions: {
@@ -58,41 +58,36 @@ class EditRoom extends React.Component {
     this.state = {
       title: AppTexts.MainComponent.RoomTexts.NewEdit,
       id: Number(this.props.match.params.id.replace(':', '')),
-      form: {},
+      form: { roomName: false, time: false, questions: false },
       questions: [],
       idsQuestions: [],
       selectedQuestions: [],
       modalQuestions: false,
       order: {},
-      points: {}
+      points: {},
+      roomName: '',
+      time: ''
     }
   }
 
   componentDidMount() {
     questionService.getMy().then(res => this.setState({ questions: res }))
-    setTimeout(() => {
-      this.onSelectQuestions([22, 23, 24, 25, 26, 27])
-    }, 200)
   }
 
   fieldChanged(field) {
     this.setState({
       form: formValidator(this.state.form, field),
-      roomName: field.value
+      [field.name]: field.value
     })
   }
 
   onSelectQuestions(ids) {
     const questions = this.state.questions.filter(p => ids.includes(p.id))
-    const order = {}
-    let idx = 1
-    questions.forEach(p => order[p.id] = idx++)
     this.setState({
       idsQuestions: ids,
-      modalQuestions: false,
-      selectedQuestions: questions,
-      order: order
+      modalQuestions: false
     })
+    this.ordenateQuestions(questions)
   }
 
   changeOrder(dir, idx) {
@@ -129,12 +124,19 @@ class EditRoom extends React.Component {
     questions.forEach(p => order[p.id] = i++)
     this.setState({
       selectedQuestions: questions,
-      order: order
+      order: order,
+      form: formValidator(this.state.form, {
+        name: 'questions',
+        valid: !!questions.length
+      }),
     })
   }
 
   removeQuestion(id) {
     const questions = this.state.selectedQuestions.filter(p => p.id !== id)
+    this.setState({
+      idsQuestions: questions.map(p => p.id),
+    })
     this.ordenateQuestions(questions)
   }
 
@@ -147,6 +149,24 @@ class EditRoom extends React.Component {
     this.setState({ points })
   }
 
+  save() {
+    const { time, roomName, selectedQuestions, id } = this.state
+    const room = {
+      time,
+      name: roomName,
+      id,
+      questions: selectedQuestions.map(p => ({
+        id: p.id,
+        order: this.state.order[p.id],
+        points: this.state.points[p.id] || 50
+      }))
+    }
+
+    roomService.save(room)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
+
   render() {
     return (
       <CardMain title={this.state.title[this.state.id > 0 ? 'Edit' : 'New'][this.props.language]}>
@@ -156,6 +176,15 @@ class EditRoom extends React.Component {
           required
           disabled={this.state.loading}
           name="roomName"
+          onChange={val => this.fieldChanged(val)}
+        />
+
+        <IconTextInput
+          style={{ marginLeft: 20 }}
+          label={AppTexts.MainComponent.RoomTexts.QuestionTime[this.props.language]}
+          required
+          disabled={this.state.loading}
+          name="time"
           onChange={val => this.fieldChanged(val)}
         />
 
@@ -197,11 +226,11 @@ class EditRoom extends React.Component {
                   <TableCell style={{ textAlign: 'center' }} numeric>
                     <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
                       <div>
-                        <i onClick={() => this.changePoints(n.id, -10)} className="up arrow"> </i>
+                        <i onClick={() => this.changePoints(n.id, 10)} className="up arrow"> </i>
                       </div>
                       {this.state.points[n.id] || 50}
                       <div>
-                        <i onClick={() => this.changePoints(n.id, 10)} className="down arrow"> </i>
+                        <i onClick={() => this.changePoints(n.id, +10)} className="down arrow"> </i>
                       </div>
                     </div>
                   </TableCell>
@@ -222,7 +251,7 @@ class EditRoom extends React.Component {
         <div style={{ textAlign: 'center', padding: '5px' }}>
           <Button style={{ marginRight: '30px' }} variant="raised">{AppTexts.Root.Cancel[this.props.language]}</Button>
           <Button onClick={() => this.setState({ modalQuestions: true })} style={{ marginRight: '30px' }} color="primary">{AppTexts.Question.AddQuestions[this.props.language]}</Button>
-          <Button disabled={!this.state.form.valid} color="primary" variant="raised">{AppTexts.Root.Save[this.props.language]}</Button>
+          <Button onClick={() => this.save()} disabled={!this.state.form.valid} color="primary" variant="raised">{AppTexts.Root.Save[this.props.language]}</Button>
         </div>
 
         <SelectQuestionModal
