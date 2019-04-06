@@ -68,7 +68,7 @@ class MainComponent extends React.Component {
           <Auth />
         }
         <AlertModal type={this.props.modal.type}
-          text={this.props.modal.message}
+          text={this.props.modal.message[this.props.language]}
           show={this.props.modal.show}
           onClose={() => this.props.hideAlert()} />
       </div>
@@ -76,7 +76,11 @@ class MainComponent extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ user: state.appState.user, modal: state.modalState })
+const mapStateToProps = state => ({
+  user: state.appState.user,
+  modal: state.modalState,
+  language: state.appState.language
+})
 const mapDispatchToProps = dispatch => bindActionCreators({ hideAlert }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainComponent)

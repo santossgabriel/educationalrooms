@@ -2,19 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import {
   Button,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  Zoom,
   Table,
   TableHead,
   TableCell,
   TableRow,
   TableBody,
-  Checkbox
+  IconButton
 } from '@material-ui/core'
 
-import { ArrowDropUp, ArrowDropDown } from '@material-ui/icons'
+import { Delete } from '@material-ui/icons'
 
 import { AppTexts, formValidator } from '../../helpers'
 import {
@@ -66,12 +62,17 @@ class EditRoom extends React.Component {
       questions: [],
       idsQuestions: [],
       selectedQuestions: [],
-      modalQuestions: false
+      modalQuestions: false,
+      order: {},
+      points: {}
     }
   }
 
   componentDidMount() {
     questionService.getMy().then(res => this.setState({ questions: res }))
+    setTimeout(() => {
+      this.onSelectQuestions([22, 23, 24, 25, 26, 27])
+    }, 200)
   }
 
   fieldChanged(field) {
@@ -82,11 +83,68 @@ class EditRoom extends React.Component {
   }
 
   onSelectQuestions(ids) {
+    const questions = this.state.questions.filter(p => ids.includes(p.id))
+    const order = {}
+    let idx = 1
+    questions.forEach(p => order[p.id] = idx++)
     this.setState({
       idsQuestions: ids,
       modalQuestions: false,
-      selectedQuestions: this.state.questions.filter(p => ids.includes(p.id))
+      selectedQuestions: questions,
+      order: order
     })
+  }
+
+  changeOrder(dir, idx) {
+    const { selectedQuestions } = this.state
+    const left = selectedQuestions.slice(0, idx)
+    const right = selectedQuestions.slice(idx + 1)
+    const elem = selectedQuestions[idx]
+    let result = []
+    if (dir === -1) {
+      if (!left.length)
+        return
+      const temp = left.pop()
+      left.push(elem)
+      if (temp)
+        left.push(temp)
+      result = left.concat(right)
+    } else {
+      if (!right.length)
+        return
+      const temp = right.shift()
+      right.unshift(elem)
+      if (temp)
+        right.unshift(temp)
+      result = left.concat(right)
+    }
+    this.ordenateQuestions(result)
+  }
+
+  ordenateQuestions(questions, prop) {
+    if (prop)
+      questions.sort((a, b) => a[prop] > b[prop] ? -1 : a[prop] < b[prop] ? 1 : 0)
+    let i = 1
+    const order = {}
+    questions.forEach(p => order[p.id] = i++)
+    this.setState({
+      selectedQuestions: questions,
+      order: order
+    })
+  }
+
+  removeQuestion(id) {
+    const questions = this.state.selectedQuestions.filter(p => p.id !== id)
+    this.ordenateQuestions(questions)
+  }
+
+  changePoints(id, pts) {
+    const { points } = this.state
+    if (!points[id])
+      points[id] = 50 + pts
+    else if ((points[id] > 10 && pts < 0) || (points[id] < 100 && pts > 0))
+      points[id] = points[id] + pts
+    this.setState({ points })
   }
 
   render() {
@@ -114,17 +172,18 @@ class EditRoom extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.state.selectedQuestions.map(n => (
+              {this.state.selectedQuestions.map((n, idx) => (
                 <TableRow
                   tabIndex={-1}
                   key={n.id}>
                   <TableCell style={{ textAlign: 'center' }}>
                     <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
                       <div>
-                        <i className="up arrow"> </i>
+                        <i onClick={() => this.changeOrder(-1, idx)} className="up arrow"></i>
                       </div>
+                      {this.state.order[n.id]}
                       <div>
-                        <i className="down arrow"> </i>
+                        <i onClick={() => this.changeOrder(+1, idx)} className="down arrow"></i>
                       </div>
                     </div>
                   </TableCell>
@@ -138,20 +197,21 @@ class EditRoom extends React.Component {
                   <TableCell style={{ textAlign: 'center' }} numeric>
                     <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
                       <div>
-                        <i className="up arrow"> </i>
+                        <i onClick={() => this.changePoints(n.id, -10)} className="up arrow"> </i>
                       </div>
-                      {80}
+                      {this.state.points[n.id] || 50}
                       <div>
-                        <i className="down arrow"> </i>
+                        <i onClick={() => this.changePoints(n.id, 10)} className="down arrow"> </i>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell style={{ textAlign: 'center' }}>
-                    <Checkbox
-                      color="primary"
-                      checked={this.state.idsQuestions[n.id]}
-                      onChange={(_, v) => this.selectQuestion(v, n.id)}
-                    />
+                    <IconButton
+                      color="secondary"
+                      aria-label="Menu"
+                      onClick={() => this.removeQuestion(n.id)}>
+                      <Delete />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
