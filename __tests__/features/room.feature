@@ -53,6 +53,7 @@ Feature: Sala
     Examples:
       | caso                                      | propriedades                                    | mensagem                                                                                                                                |
       | 'sem nome da sala'                        | '{"name": ""}'                                  | '{"en": "Provide the room name.", "br": "Informe o nome da sala."}'                                                                     |
+      | 'tempo zerado'                            | '{"time": 0}'                                   | '{"en": "Provide the time for each question.", "br": "Informe o tempo de cada questão."}'                                               |
       | 'que não existem'                         | '{"questions": [{ "id": 99, "points": 20 }] }'  | '{"en": "There are informed questions that do not exist.", "br": "Há questões informadas que não existem." }'                           |
       | 'que não pertencem ao usuário'            | '{"questions": [{ "id": 1, "points": 20 }] }'   | '{"en": "There are informed questions that do not belong to the user.", "br": "Há questões informadas que não pertencem ao usuário." }' |
       | 'à uma sala que não existe'               | '{"id": 99}'                                    | '{"en": "The room does not exist.", "br": "A sala não existe." }'                                                                       |
@@ -69,11 +70,11 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de tentar remover a sala
 
     Examples:
-      | id | caso                  | mensagem                                                                                                       |
+      | id | caso                  | mensagem                                                                                             |
       | 3  | 'que não me pertence' | '{ "en": "Without permission to remove this room.", "br": "Sem permissão para remover esta sala." }' |
-      | 99 | 'que não existe'      | '{ "en": "The room does not exist.", "br": "A sala não existe." }'                                              |
-      | 4  | 'iniciada'            | '{ "en": "A room started can not be removed.", "br": "Uma sala iniciada não pode ser removida." }'             |
-      | 10 | 'que me pertence'     | '{ "en": "Room removed successfully.", "br": "Sala removida com sucesso." }'                                    |
+      | 99 | 'que não existe'      | '{ "en": "The room does not exist.", "br": "A sala não existe." }'                                   |
+      | 4  | 'iniciada'            | '{ "en": "A room started can not be removed.", "br": "Uma sala iniciada não pode ser removida." }'   |
+      | 10 | 'que me pertence'     | '{ "en": "Room removed successfully.", "br": "Sala removida com sucesso." }'                         |
 
   Scenario Outline: Alterar status da sala
     Given Dado que eu queira alterar o status de uma sala
@@ -81,15 +82,15 @@ Feature: Sala
     Then Então eu devo obter a mensagem <mensagem> depois de alterar o status
 
     Examples:
-      | id | status    | mensagem                                                                                                     |
+      | id | status    | mensagem                                                                                                      |
       | 99 | 'ENDED'   | '{"en": "The room does not exist.", "br": "A sala não existe."}'                                              |
       | 3  | 'ENDED'   | '{"en": "The informed room does not belong to the user.", "br": "A sala informada não pertence ao usuário."}' |
-      | 9  | 'ENDED'   | '{"en": "The room already is finished.", "br": "A sala já foi finalizada."}'                                     |
-      | 8  | 'CLOSED'  | '{"en": "Room was closed successfully.", "br": "Sala foi fechada com sucesso."}'                                      |
-      | 8  | 'OPENED'  | '{"en": "Room was opened successfully.", "br": "Sala foi aberta com sucesso."}'                                       |
-      | 8  | 'STARTED' | '{"en": "Room was started successfully.", "br": "Sala foi iniciada com sucesso."}'                                    |
+      | 9  | 'ENDED'   | '{"en": "The room already is finished.", "br": "A sala já foi finalizada."}'                                  |
+      | 8  | 'CLOSED'  | '{"en": "Room was closed successfully.", "br": "Sala foi fechada com sucesso."}'                              |
+      | 8  | 'OPENED'  | '{"en": "Room was opened successfully.", "br": "Sala foi aberta com sucesso."}'                               |
+      | 8  | 'STARTED' | '{"en": "Room was started successfully.", "br": "Sala foi iniciada com sucesso."}'                            |
       | 8  | 'ENDEDD'  | '{"en": "Invalid status.", "br": "Status inválido."}'                                                         |
-      | 8  | 'ENDED'   | '{"en": "Room was finished successfully.", "br": "Sala foi finalizada com sucesso."}'                                 |
+      | 8  | 'ENDED'   | '{"en": "Room was finished successfully.", "br": "Sala foi finalizada com sucesso."}'                         |
 
   Scenario: Obter quiz
     Given Dado que eu queira obter um quiz que eu esteja participando

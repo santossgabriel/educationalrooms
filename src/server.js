@@ -3,21 +3,21 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
-const swaggerDocument = require('./infra/swagger.json')
 
 import router from './routes/index'
 import socket, { runJob } from './socket/index'
 import auth from './auth/auth'
+import swaggerDocument from './infra/swagger.json'
 
 const app = express()
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next()
-})
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next()
+// })
 
 if (process.env.NODE_ENV !== 'test')
   app.use(morgan('dev'))

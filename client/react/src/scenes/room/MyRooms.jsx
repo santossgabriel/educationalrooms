@@ -12,29 +12,49 @@ import {
   Button,
   TableHead,
   Paper,
-  Checkbox,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@material-ui/core'
 
-import { questionService } from '../../services'
-import Stars from '../../components/question/Stars'
+import { roomService } from '../../services'
 import CardMain from '../../components/main/CardMain'
-import { AppTexts } from '../../helpers/appTexts'
+import { AppTexts, RoomStatus } from '../../helpers'
 import { ConfirmModal } from '../../components/main/Modal'
 import { showError, showSuccess } from '../../actions'
+
+const styles = {
+  tableHeader: {
+    color: '#AAA',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  tableRow: {
+    textAlign: 'center'
+  }
+}
+
+const StatusButton = (props) => (
+  <Tooltip title={AppTexts.Room.OpenRoom[props.language]} placement="bottom">
+    <IconButton color="primary"
+      aria-label="Menu"
+      onClick={() => console.log(props.status)}>
+      <Icons.CallMade />
+    </IconButton>
+  </Tooltip>
+)
 
 class MyRooms extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      questions: [],
       emptyRows: 0,
       rowsPerPage: 5,
       page: 5,
       editModalOpen: false,
       question: {},
-      removeQuestion: null
+      removeQuestion: null,
+      rooms: []
     }
   }
 
@@ -43,69 +63,63 @@ class MyRooms extends React.Component {
   }
 
   refresh() {
-    questionService.getMy().then(res => this.setState({ questions: res }))
+    roomService.getMy().then(res => this.setState({ rooms: res }))
   }
 
 
   render() {
-    const { questions } = this.state
+    const { rooms } = this.state
     return (
       <CardMain title={AppTexts.MainComponent.RoomTexts.My[this.props.language]}>
         <Paper>
           <Table aria-labelledby="tableTitle">
             <TableHead>
               <TableRow>
-                <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Area[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Answers[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Shared[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Actions[this.props.language]}</TableCell>
+                <TableCell style={styles.tableHeader}>N°</TableCell>
+                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Name[this.props.language]}</TableCell>
+                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Status[this.props.language]}</TableCell>
+                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Users[this.props.language]}</TableCell>
+                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Questions[this.props.language]}</TableCell>
+                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Duration[this.props.language]}</TableCell>
+                <TableCell style={styles.tableHeader}>{AppTexts.Root.Actions[this.props.language]}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {questions
+              {rooms
                 .map(n => (
                   <TableRow
-                    hover
-                    onClick={() => this.openEditQuestion(n)}
-                    role="checkbox"
-                    aria-checked={true}
-                    tabIndex={-1}
                     key={n.id}>
-                    <TableCell component="th" scope="row" padding="none" style={{ textAlign: 'center' }}>
-                      {n.area}
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      <Stars filled={n.difficulty || 0} />
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>
-                      {
-                        n.sharedQuestionId ?
-                          <span>{AppTexts.Root.Acquired[this.props.language]}</span> :
-                          <div onClick={event => event.stopPropagation()}>
-                            <Checkbox
-                              color="primary"
-                              checked={n.shared}
-                              onChange={(e, c) => this.changeShared(c, n.id)}
-                            />
-                          </div>
-                      }
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      {
-                        n.sharedQuestionId ? null :
-                          <IconButton color="secondary"
+                    <TableCell style={styles.tableRow}>{n.id}</TableCell>
+                    <TableCell style={styles.tableRow}>{n.name}</TableCell>
+                    <TableCell style={styles.tableRow}>{AppTexts.Room.Status[n.status][this.props.language]}</TableCell>
+                    <TableCell style={styles.tableRow}>{n.users.length}</TableCell>
+                    <TableCell style={styles.tableRow}>{n.questions.length}</TableCell>
+                    <TableCell style={styles.tableRow}>{`${n.time}s`}</TableCell>
+                    <TableCell style={styles.tableRow}>
+                      <StatusButton language={this.props.language} status={n.status} />
+                      <Link to={`edit-room/:${n.id}`}
+                        style={{ textDecoration: 'none' }}>
+                        <Tooltip title={AppTexts.Root.Edit[this.props.language]} placement="bottom">
+                          <IconButton color="primary"
                             aria-label="Menu"
                             onClick={event => {
                               event.stopPropagation();
                               this.setState({ removeQuestion: n })
                             }}>
-                            <Icons.Delete />
+                            <Icons.Edit />
                           </IconButton>
-                      }
+                        </Tooltip>
+                      </Link>
+                      <Tooltip title={AppTexts.Root.Remove[this.props.language]} placement="bottom">
+                        <IconButton color="secondary"
+                          aria-label="Menu"
+                          onClick={event => {
+                            event.stopPropagation();
+                            this.setState({ removeQuestion: n })
+                          }}>
+                          <Icons.Delete />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -119,9 +133,8 @@ class MyRooms extends React.Component {
         </Paper>
         <TablePagination
           component="div"
-          count={this.state.questions.length}
+          count={this.state.rooms.length}
           rowsPerPage={this.state.rowsPerPage}
-          title="teste"
           page={this.state.page}
           labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
           labelRowsPerPage="itens por página"

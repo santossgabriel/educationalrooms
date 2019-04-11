@@ -92,7 +92,7 @@ class MyQuestion extends React.Component {
                 <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Answers[this.props.language]}</TableCell>
                 <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Shared[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Actions[this.props.language]}</TableCell>
+                <TableCell style={{ textAlign: 'center' }}>{AppTexts.Root.Actions[this.props.language]}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

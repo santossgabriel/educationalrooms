@@ -323,6 +323,12 @@ export default {
         [BR]: 'Informe o nome da sala.'
       })
 
+    if (isNaN(time) || Number(time) < 1)
+      throwValidationError({
+        [EN]: 'Provide the time for each question.',
+        [BR]: 'Informe o tempo de cada questão.'
+      })
+
     if (!Array.isArray(questions) || questions.length == 0)
       throwValidationError({ [EN]: 'Provide the questions', [BR]: 'Informe as questões.' })
 

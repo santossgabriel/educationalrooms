@@ -70,6 +70,14 @@ export const AppTexts = {
       [PT_BR]: 'Adquirida',
       [EN_US]: 'Acquired'
     },
+    Actions: {
+      [PT_BR]: 'Ações',
+      [EN_US]: 'Actions'
+    },
+    Edit: {
+      [PT_BR]: 'Editar',
+      [EN_US]: 'Edit'
+    }
   },
   MainComponent: {
     QuestionTexts: {
@@ -156,10 +164,6 @@ export const AppTexts = {
       [PT_BR]: 'Compartilhada?',
       [EN_US]: 'Shared?'
     },
-    Actions: {
-      [PT_BR]: 'Ações',
-      [EN_US]: 'Actions'
-    },
     CreateQuestion: {
       [PT_BR]: 'Criar Questão',
       [EN_US]: 'Create Question'
@@ -177,6 +181,26 @@ export const AppTexts = {
     CreateRoom: {
       [PT_BR]: 'Criar Sala',
       [EN_US]: 'Create Room'
+    },
+    Name: {
+      [PT_BR]: 'Nome',
+      [EN_US]: 'Name'
+    },
+    Status: {
+      [PT_BR]: 'Situação',
+      [EN_US]: 'Status'
+    },
+    Users: {
+      [PT_BR]: 'Usuários',
+      [EN_US]: 'Users'
+    },
+    Questions: {
+      [PT_BR]: 'Questões',
+      [EN_US]: 'Questions'
+    },
+    Duration: {
+      [PT_BR]: 'Duração',
+      [EN_US]: 'Duration'
     },
   },
   Question: {
@@ -201,6 +225,28 @@ export const AppTexts = {
     OrderBy: {
       [PT_BR]: 'Ordenar questões por:',
       [EN_US]: 'Sor questions by:'
+    },
+    Status: {
+      CLOSED: {
+        [PT_BR]: 'FECHADA',
+        [EN_US]: 'CLOSED'
+      },
+      OPENED: {
+        [PT_BR]: 'ABERTA',
+        [EN_US]: 'OPENED'
+      },
+      STARTED: {
+        [PT_BR]: 'INICIADA',
+        [EN_US]: 'STARTED'
+      },
+      ENDED: {
+        [PT_BR]: 'FINALIZADA',
+        [EN_US]: 'ENDED'
+      }
+    },
+    OpenRoom: {
+      [PT_BR]: 'Abrir Sala',
+      [EN_US]: 'Open Room'
     }
   },
   Auth: {
