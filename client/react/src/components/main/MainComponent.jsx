@@ -68,7 +68,7 @@ class MainComponent extends React.Component {
           <Auth />
         }
         <AlertModal type={this.props.modal.type}
-          text={this.props.modal.message[this.props.language]}
+          text={this.props.modal.message}
           show={this.props.modal.show}
           onClose={() => this.props.hideAlert()} />
       </div>
