@@ -1,3 +1,4 @@
+import { RoomStatus } from './'
 const PT_BR = 'br'
 const EN_US = 'en'
 
@@ -227,19 +228,19 @@ export const AppTexts = {
       [EN_US]: 'Sor questions by:'
     },
     Status: {
-      CLOSED: {
+      [RoomStatus.CLOSED]: {
         [PT_BR]: 'FECHADA',
         [EN_US]: 'CLOSED'
       },
-      OPENED: {
+      [RoomStatus.OPENED]: {
         [PT_BR]: 'ABERTA',
         [EN_US]: 'OPENED'
       },
-      STARTED: {
+      [RoomStatus.STARTED]: {
         [PT_BR]: 'INICIADA',
         [EN_US]: 'STARTED'
       },
-      ENDED: {
+      [RoomStatus.ENDED]: {
         [PT_BR]: 'FINALIZADA',
         [EN_US]: 'ENDED'
       }

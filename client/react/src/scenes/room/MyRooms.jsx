@@ -30,6 +30,10 @@ const styles = {
   },
   tableRow: {
     textAlign: 'center'
+  },
+  tableActions: {
+    textAlign: 'center',
+    minWidth: '150px'
   }
 }
 
@@ -37,10 +41,10 @@ const StatusButton = (props) => (
   <Tooltip title={AppTexts.Room.OpenRoom[props.language]} placement="bottom">
     <IconButton color="primary"
       aria-label="Menu"
-      onClick={() => console.log(props.status)}>
+      onClick={props.onClick ? () => props.onClick(props.status) : null}>
       <Icons.CallMade />
     </IconButton>
-  </Tooltip>
+  </Tooltip >
 )
 
 class MyRooms extends React.Component {
@@ -66,6 +70,24 @@ class MyRooms extends React.Component {
     roomService.getMy().then(res => this.setState({ rooms: res }))
   }
 
+  changeRoomStatus(room) {
+    let newStatus = null
+    switch (room.status) {
+      case RoomStatus.CLOSED:
+        newStatus = RoomStatus.OPENED
+        break
+      case RoomStatus.OPENED:
+        newStatus = RoomStatus.STARTED
+        break
+      case RoomStatus.STARTED:
+        newStatus = RoomStatus.ENDED
+        break
+    }
+    roomService.changeStatus(room.id, newStatus).then(res => {
+      this.refresh()
+      this.props.showSuccess(res.message)
+    }).catch(err => this.props.showError(err.message))
+  }
 
   render() {
     const { rooms } = this.state
@@ -81,7 +103,7 @@ class MyRooms extends React.Component {
                 <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Users[this.props.language]}</TableCell>
                 <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Questions[this.props.language]}</TableCell>
                 <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Duration[this.props.language]}</TableCell>
-                <TableCell style={styles.tableHeader}>{AppTexts.Root.Actions[this.props.language]}</TableCell>
+                <TableCell style={styles.tableActions}>{AppTexts.Root.Actions[this.props.language]}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -96,7 +118,10 @@ class MyRooms extends React.Component {
                     <TableCell style={styles.tableRow}>{n.questions.length}</TableCell>
                     <TableCell style={styles.tableRow}>{`${n.time}s`}</TableCell>
                     <TableCell style={styles.tableRow}>
-                      <StatusButton language={this.props.language} status={n.status} />
+                      <StatusButton
+                        language={this.props.language}
+                        status={n.status}
+                        onClick={() => this.changeRoomStatus(n)} />
                       <Link to={`edit-room/:${n.id}`}
                         style={{ textDecoration: 'none' }}>
                         <Tooltip title={AppTexts.Root.Edit[this.props.language]} placement="bottom">
