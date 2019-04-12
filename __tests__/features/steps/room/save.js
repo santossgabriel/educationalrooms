@@ -12,7 +12,7 @@ let msg
 
 Given('Dado eu que queira entrar ou sair de uma sala', () => {
 
-  room = { id: 2, associate: true }
+  room = { id: 2, associate: true, time: 8 }
 
   return request
     .post('/api/token')
@@ -49,7 +49,8 @@ Given('Dado eu que queira salvar uma sala', () => {
       { id: 17, order: 2, points: 90 },
       { id: 18, order: 3, points: 100 }
     ],
-    roomId: 1
+    roomId: 1,
+    time: 8
   }
 
   return request
