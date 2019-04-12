@@ -248,6 +248,14 @@ export const AppTexts = {
     OpenRoom: {
       [PT_BR]: 'Abrir Sala',
       [EN_US]: 'Open Room'
+    },
+    StartRoom: {
+      [PT_BR]: 'Iniciar Sala',
+      [EN_US]: 'Start Room'
+    },
+    EndRoom: {
+      [PT_BR]: 'Finalizar Sala',
+      [EN_US]: 'Finish Room'
     }
   },
   Auth: {

@@ -37,15 +37,40 @@ const styles = {
   }
 }
 
-const StatusButton = (props) => (
-  <Tooltip title={AppTexts.Room.OpenRoom[props.language]} placement="bottom">
-    <IconButton color="primary"
-      aria-label="Menu"
-      onClick={props.onClick ? () => props.onClick(props.status) : null}>
-      <Icons.CallMade />
-    </IconButton>
-  </Tooltip >
-)
+const StatusButton = (props) => {
+  if (props.status === RoomStatus.CLOSED) {
+    return (
+      <Tooltip title={AppTexts.Room.OpenRoom[props.language]} placement="bottom">
+        <IconButton color="primary"
+          aria-label="Menu"
+          onClick={props.onClick ? () => props.onClick(props.status) : null}>
+          <Icons.CallMade />
+        </IconButton>
+      </Tooltip >
+    )
+  } else if (props.status === RoomStatus.OPENED) {
+    return (
+      <Tooltip title={AppTexts.Room.StartRoom[props.language]} placement="bottom">
+        <IconButton color="primary"
+          aria-label="Menu"
+          onClick={props.onClick ? () => props.onClick(props.status) : null}>
+          <Icons.PlayArrow />
+        </IconButton>
+      </Tooltip >
+    )
+  } else if (props.status === RoomStatus.STARTED) {
+    return (
+      <Tooltip title={AppTexts.Room.EndRoom[props.language]} placement="bottom">
+        <IconButton color="primary"
+          aria-label="Menu"
+          onClick={props.onClick ? () => props.onClick(props.status) : null}>
+          <Icons.PowerSettingsNew />
+        </IconButton>
+      </Tooltip >
+    )
+  } else
+    return null
+}
 
 class MyRooms extends React.Component {
 
