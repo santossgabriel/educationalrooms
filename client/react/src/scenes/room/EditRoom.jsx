@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import {
   Button,
   Table,
@@ -9,8 +10,8 @@ import {
   TableBody,
   IconButton
 } from '@material-ui/core'
-
 import { Delete } from '@material-ui/icons'
+import { Route } from 'react-router-dom'
 
 import { AppTexts, formValidator } from '../../helpers'
 import {
@@ -21,6 +22,7 @@ import {
   Stars
 } from '../../components'
 import { questionService, roomService } from '../../services'
+import { showError, showSuccess } from '../../actions'
 
 const styles = {
   noQuestions: {
@@ -137,7 +139,7 @@ class EditRoom extends React.Component {
         sortedBy = prop
       }
     }
-    
+
     this.setState({
       sortedBy,
       selectedQuestions: questions,
@@ -180,8 +182,10 @@ class EditRoom extends React.Component {
     }
 
     roomService.save(room)
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
+      .then(res => {
+        window.location.hash = '#/my-rooms'
+      })
+      .catch(err => this.props.showError(err.message))
   }
 
   roomTime() {
@@ -309,7 +313,8 @@ class EditRoom extends React.Component {
   }
 }
 
-// Adicionar botão para que as questões possam ser ordenadas de forma automática
 const mapStateToProps = state => ({ language: state.appState.language })
 
-export default connect(mapStateToProps)(EditRoom)
+const mapDispatchToProps = dispatch => bindActionCreators({ showError, showSuccess }, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditRoom)

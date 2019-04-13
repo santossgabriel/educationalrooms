@@ -147,29 +147,33 @@ class MyRooms extends React.Component {
                         language={this.props.language}
                         status={n.status}
                         onClick={() => this.changeRoomStatus(n)} />
-                      <Link to={`edit-room/:${n.id}`}
-                        style={{ textDecoration: 'none' }}>
-                        <Tooltip title={AppTexts.Root.Edit[this.props.language]} placement="bottom">
-                          <IconButton color="primary"
-                            aria-label="Menu"
-                            onClick={event => {
-                              event.stopPropagation();
-                              this.setState({ removeQuestion: n })
-                            }}>
-                            <Icons.Edit />
-                          </IconButton>
-                        </Tooltip>
-                      </Link>
-                      <Tooltip title={AppTexts.Root.Remove[this.props.language]} placement="bottom">
-                        <IconButton color="secondary"
-                          aria-label="Menu"
-                          onClick={event => {
-                            event.stopPropagation();
-                            this.setState({ removeQuestion: n })
-                          }}>
-                          <Icons.Delete />
-                        </IconButton>
-                      </Tooltip>
+                      {n.status === RoomStatus.OPENED || n.status === RoomStatus.CLOSED ?
+                        <span>
+                          <Link to={`edit-room/:${n.id}`}
+                            style={{ textDecoration: 'none' }}>
+                            <Tooltip title={AppTexts.Root.Edit[this.props.language]} placement="bottom">
+                              <IconButton color="primary"
+                                aria-label="Menu"
+                                onClick={event => {
+                                  event.stopPropagation();
+                                  this.setState({ removeQuestion: n })
+                                }}>
+                                <Icons.Edit />
+                              </IconButton>
+                            </Tooltip>
+                          </Link>
+                          <Tooltip title={AppTexts.Root.Remove[this.props.language]} placement="bottom">
+                            <IconButton color="secondary"
+                              aria-label="Menu"
+                              onClick={event => {
+                                event.stopPropagation();
+                                this.setState({ removeQuestion: n })
+                              }}>
+                              <Icons.Delete />
+                            </IconButton>
+                          </Tooltip>
+                        </span>
+                        : null}
                     </TableCell>
                   </TableRow>
                 ))}
