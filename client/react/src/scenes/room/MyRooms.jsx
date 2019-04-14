@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as Icons from '@material-ui/icons'
 import { Link } from 'react-router-dom'
+import Moment from 'react-moment'
 import {
   TableBody,
   TableRow,
@@ -13,7 +14,8 @@ import {
   TableHead,
   Paper,
   IconButton,
-  Tooltip
+  Tooltip,
+  LinearProgress
 } from '@material-ui/core'
 
 import { roomService } from '../../services'
@@ -29,11 +31,14 @@ const styles = {
     textAlign: 'center'
   },
   tableRow: {
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#666',
+    marginTop: '50px'
   },
   tableActions: {
     textAlign: 'center',
-    minWidth: '150px'
+    minWidth: '150px',
+    color: '#666'
   }
 }
 
@@ -71,6 +76,22 @@ const StatusButton = (props) => {
   } else
     return null
 }
+
+const StatusDate = (props) => {
+  if (!props.date)
+    return null
+  return (
+    <div style={{ lineHeight: '18px', fontSize: 12, fontFamily: 'Arial, Helvetica, sans-serif', color: '#666' }}>
+      <span>{props.label}</span>
+      <span>
+        <Moment format="DD/MM/YY HH:mm">
+          {props.date}
+        </Moment>
+      </span>
+    </div>
+  )
+}
+
 
 class MyRooms extends React.Component {
 
@@ -123,12 +144,12 @@ class MyRooms extends React.Component {
             <TableHead>
               <TableRow>
                 <TableCell style={styles.tableHeader}>N°</TableCell>
-                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Name[this.props.language]}</TableCell>
-                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Status[this.props.language]}</TableCell>
-                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Users[this.props.language]}</TableCell>
-                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Questions[this.props.language]}</TableCell>
-                <TableCell style={styles.tableHeader}>{AppTexts.MyRoomsTable.Duration[this.props.language]}</TableCell>
-                <TableCell style={styles.tableActions}>{AppTexts.Root.Actions[this.props.language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Name[this.props.language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Status[this.props.language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Users[this.props.language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Questions[this.props.language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Duration[this.props.language]}</TableCell>
+                <TableCell padding="none" style={styles.tableActions}>{AppTexts.Root.Actions[this.props.language]}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -137,12 +158,23 @@ class MyRooms extends React.Component {
                   <TableRow
                     key={n.id}>
                     <TableCell style={styles.tableRow}>{n.id}</TableCell>
-                    <TableCell style={styles.tableRow}>{n.name}</TableCell>
-                    <TableCell style={styles.tableRow}>{AppTexts.Room.Status[n.status][this.props.language]}</TableCell>
-                    <TableCell style={styles.tableRow}>{n.users.length}</TableCell>
-                    <TableCell style={styles.tableRow}>{n.questions.length}</TableCell>
-                    <TableCell style={styles.tableRow}>{`${n.time}s`}</TableCell>
-                    <TableCell style={styles.tableRow}>
+                    <TableCell padding="none" style={styles.tableRow}>{n.name}</TableCell>
+                    <TableCell padding="none" style={{ paddingTop: 5, ...styles.tableRow }}>
+                      <span>{AppTexts.Room.Status[n.status][this.props.language]}</span>
+                      <StatusDate date={n.createdAt} label={AppTexts.Room.CreatedAt[this.props.language]} />
+                      <StatusDate date={n.openedAt} label={AppTexts.Room.OpenedAt[this.props.language]} />
+                      <StatusDate date={n.startedAt} label={AppTexts.Room.StartedAt[this.props.language]} />
+                      <StatusDate date={n.endedAt} label={AppTexts.Room.EndedAt[this.props.language]} />
+                      {
+                        n.startedAt && !n.endedAt ?
+                          <LinearProgress variant="indeterminate" style={{ marginBottom: 10 }} />
+                          : null
+                      }
+                    </TableCell>
+                    <TableCell padding="none" style={styles.tableRow}>{n.users.length}</TableCell>
+                    <TableCell padding="none" style={styles.tableRow}>{n.questions.length}</TableCell>
+                    <TableCell padding="none" style={styles.tableRow}>{`${n.time}s`}</TableCell>
+                    <TableCell padding="none" style={styles.tableRow}>
                       <StatusButton
                         language={this.props.language}
                         status={n.status}

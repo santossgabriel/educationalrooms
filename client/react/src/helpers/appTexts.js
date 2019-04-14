@@ -245,6 +245,22 @@ export const AppTexts = {
         [EN_US]: 'ENDED'
       }
     },
+    CreatedAt: {
+      [PT_BR]: 'Criada em: ',
+      [EN_US]: 'Created at :'
+    },
+    OpenedAt: {
+      [PT_BR]: 'Aberta em: ',
+      [EN_US]: 'Opened at: '
+    },
+    StartedAt: {
+      [PT_BR]: 'Iniciada em: ',
+      [EN_US]: 'Started at: '
+    },
+    EndedAt: {
+      [PT_BR]: 'Finalizada em: ',
+      [EN_US]: 'Ended at: '
+    },
     OpenRoom: {
       [PT_BR]: 'Abrir Sala',
       [EN_US]: 'Open Room'
