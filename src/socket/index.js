@@ -201,9 +201,11 @@ const notifyFinish = async (roomId, users) => {
 export const sendNotifications = (users, notification) => {
   notification.createdAt = new Date()
   users.forEach(async userId => {
+    
     const notif = cloneObject(notification)
     notif.userId = userId
     notif.description = JSON.stringify(notif.description)
+
     await Notification.create(notif)
     notif.description = JSON.parse(notif.description)
     sockets.filter(p => p.userId === userId)
