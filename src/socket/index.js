@@ -201,8 +201,10 @@ const notifyFinish = async (roomId, users) => {
 export const sendNotifications = (users, notification) => {
   notification.createdAt = new Date()
   users.forEach(async userId => {
+
     const notif = cloneObject(notification)
     notif.userId = userId
+    
     await Notification.create(notif)
     sockets.filter(p => p.userId === userId)
       .forEach(p => p.emit(SocketEvents.Client.NOTIFICATION_RECEIVED, notif))
