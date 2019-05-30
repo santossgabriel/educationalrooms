@@ -27,7 +27,7 @@ const styles = {
   }
 }
 
-export default class Create extends React.Component {
+class Create extends React.Component {
 
   constructor(props) {
     super(props)
@@ -120,4 +120,4 @@ export default class Create extends React.Component {
 
 const mapDispatchToProps = dispatch => bindActionCreators({ userChanged }, dispatch)
 
-// export default connect(null, mapDispatchToProps)(Create)
+export default connect(null, mapDispatchToProps)(Create)

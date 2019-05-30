@@ -1,0 +1,45 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly",
+    "describe": "readonly",
+    "test": "readonly",
+    "expect": "readonly",
+    "beforeAll": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-unused-vars": 2,
+    "react/prop-types": [
+      2,
+      {
+        "ignore": [
+          "language",
+          "showError",
+          "showSuccess"
+        ]
+      }
+    ],
+    "semi": [
+      2,
+      "never"
+    ],
+    "sort-vars": "off",
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "no-func-assign": "error"
+  }
+}
