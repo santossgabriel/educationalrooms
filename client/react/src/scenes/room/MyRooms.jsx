@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as Icons from '@material-ui/icons'
@@ -77,21 +78,25 @@ const StatusButton = (props) => {
     return null
 }
 
-const StatusDate = (props) => {
-  if (!props.date)
+const StatusDate = ({ date, label }) => {
+  if (!date)
     return null
   return (
     <div style={{ lineHeight: '18px', fontSize: 12, fontFamily: 'Arial, Helvetica, sans-serif', color: '#666' }}>
-      <span>{props.label}</span>
+      <span>{label}</span>
       <span>
         <Moment format="DD/MM/YY HH:mm">
-          {props.date}
+          {date}
         </Moment>
       </span>
     </div>
   )
 }
 
+StatusDate.propTypes = {
+  date: PropTypes.string,
+  label: PropTypes.string
+}
 
 class MyRooms extends React.Component {
 
@@ -103,7 +108,7 @@ class MyRooms extends React.Component {
       page: 5,
       editModalOpen: false,
       question: {},
-      removeQuestion: null,
+      removeRoom: null,
       rooms: []
     }
   }
@@ -129,10 +134,22 @@ class MyRooms extends React.Component {
         newStatus = RoomStatus.ENDED
         break
     }
-    roomService.changeStatus(room.id, newStatus).then(res => {
-      this.refresh()
-      this.props.showSuccess(res.message)
-    }).catch(err => this.props.showError(err.message))
+    roomService.changeStatus(room.id, newStatus)
+      .then(res => {
+        this.refresh()
+        this.props.showSuccess(res.message)
+      }).catch(err => this.props.showError(err.message))
+  }
+
+  onResultRemoveRoom(confirm) {
+    if (confirm) {
+      roomService.remove(this.state.removeRoom.id)
+        .then(res => {
+          this.refresh()
+          this.props.showSuccess(res.message)
+        }).catch(err => this.props.showError(err.message))
+    }
+    this.setState({ removeRoom: null })
   }
 
   render() {
@@ -187,8 +204,8 @@ class MyRooms extends React.Component {
                               <IconButton color="primary"
                                 aria-label="Menu"
                                 onClick={event => {
-                                  event.stopPropagation();
-                                  this.setState({ removeQuestion: n })
+                                  event.stopPropagation()
+                                  this.setState({ removeRoom: n })
                                 }}>
                                 <Icons.Edit />
                               </IconButton>
@@ -198,8 +215,8 @@ class MyRooms extends React.Component {
                             <IconButton color="secondary"
                               aria-label="Menu"
                               onClick={event => {
-                                event.stopPropagation();
-                                this.setState({ removeQuestion: n })
+                                event.stopPropagation()
+                                this.setState({ removeRoom: n })
                               }}>
                               <Icons.Delete />
                             </IconButton>
@@ -242,10 +259,10 @@ class MyRooms extends React.Component {
           </Link>
         </div>
 
-        <ConfirmModal open={!!this.state.removeQuestion}
+        <ConfirmModal open={!!this.state.removeRoom}
           title={AppTexts.Question.ConfirmExclusionTitle[this.props.language]}
-          text={this.state.removeQuestion ? this.state.removeQuestion.description : ''}
-          onResult={confirm => this.onResultRemoveQuestion(confirm)}>
+          text={this.state.removeRoom ? this.state.removeRoom.description : ''}
+          onResult={confirm => this.onResultRemoveRoom(confirm)}>
         </ConfirmModal>
       </CardMain>
     )
