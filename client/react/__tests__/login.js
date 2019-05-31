@@ -1,3 +1,4 @@
+import React from 'react'
 import { configure, mount } from 'enzyme'
 import PropTypes from 'prop-types'
 
