@@ -1,6 +1,6 @@
 import httpService from './httpService'
 
-const updateToken = (token) => localStorage.setItem('TOKEN', token)
+const updateToken = token => localStorage.setItem('TOKEN', token)
 
 const login = user =>
   httpService.postNotAuthenticated('/token', user)

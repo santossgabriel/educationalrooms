@@ -12,11 +12,12 @@ import Auth from '../../scenes/auth/Auth'
 import { AlertModal } from '../main/Modal'
 import { hideAlert } from '../../actions'
 
-const mql = window.matchMedia(`(min-width: 1280px)`)
+let mql = {}
 
 class MainComponent extends React.Component {
   constructor(props) {
     super(props)
+    mql = window.matchMedia('(min-width: 1280px)')
     this.state = {
       sidebarDocked: mql.matches,
       sidebarIsOpen: false,

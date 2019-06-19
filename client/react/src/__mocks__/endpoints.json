@@ -1,0 +1,17 @@
+{
+  "/token": {
+    "POST": {
+      "401": {
+        "EN": "Invalid credentials.",
+        "BR": "Credenciais inválidas."
+      },
+      "200": {
+        "token": "da0rj82jr8902f9hfdwu9vcnud",
+        "message": {
+          "EN": "Token successfully generated",
+          "BR": "Token gerado com sucesso."
+        }
+      }
+    }
+  }
+}
