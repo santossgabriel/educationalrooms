@@ -212,9 +212,9 @@ class EditUserModal extends React.Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => this.props.close()} variant="raised" autoFocus>{AppTexts.Root.Cancel[this.props.language]}</Button>
+          <Button onClick={() => this.props.close()} variant="contained" autoFocus>{AppTexts.Root.Cancel[this.props.language]}</Button>
           <Button disabled={!this.state.description || !this.state.alternativesValid || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}
-            onClick={() => this.save()} color="primary" variant="raised" autoFocus>{AppTexts.Root.Save[this.props.language]}</Button>
+            onClick={() => this.save()} color="primary" variant="contained" autoFocus>{AppTexts.Root.Save[this.props.language]}</Button>
         </DialogActions>
       </Dialog>
     )

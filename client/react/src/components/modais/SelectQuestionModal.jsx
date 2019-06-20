@@ -36,7 +36,7 @@ class SelectQuestionModal extends React.Component {
       questions = this.props.questions || []
     if (this.props.ids)
       this.props.ids.forEach(p => selectedQuestions[p] = true)
-    setTimeout(() => this.setState({ selectedQuestions, questions }), 50);
+    setTimeout(() => this.setState({ selectedQuestions, questions }), 50)
   }
 
   selectQuestion(selected, id) {
@@ -89,8 +89,8 @@ class SelectQuestionModal extends React.Component {
                     <TableCell style={{ textAlign: 'center' }}>
                       <Stars filled={n.difficulty || 0} />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>{n.description}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>{n.answers.length}</TableCell>
                     <TableCell style={{ textAlign: 'center' }}>
                       <Checkbox
                         color="primary"
@@ -109,7 +109,7 @@ class SelectQuestionModal extends React.Component {
           </Table>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => this.ok()} color="primary" variant="raised" autoFocus>ok</Button>
+          <Button onClick={() => this.ok()} color="primary" variant="contained" autoFocus>ok</Button>
         </DialogActions>
       </Dialog>
     )

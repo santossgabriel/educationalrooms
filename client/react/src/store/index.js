@@ -8,5 +8,5 @@ const logger = createLogger()
 
 export const Store = createStore(
   Reducers,
-  applyMiddleware(thunk, logger)
+  applyMiddleware(thunk)
 )

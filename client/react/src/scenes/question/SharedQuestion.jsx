@@ -1,15 +1,14 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { questionService } from '../../services'
 import {
   TableBody,
   TableRow,
   Table,
-  TableCell,
   TableHead,
   TablePagination,
-  Paper,
+  TableFooter,
   Button
 } from '@material-ui/core'
 
@@ -18,94 +17,90 @@ import IconDownload from '@material-ui/icons/Archive'
 import Stars from '../../components/question/Stars'
 import CardMain from '../../components/main/CardMain'
 import { AppTexts } from '../../helpers/appTexts'
+import { Container, CellHead, CellRow } from './styles'
 
-class SharedQuestion extends React.Component {
+export default function SharedQuestion() {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      questions: [],
-      emptyRows: 0,
-      rowsPerPage: 5,
-      page: 5
+  const [questions, setQuestions] = useState([])
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [page, setPage] = useState(0)
+  const language = useSelector(state => state.appState.language)
+
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await questionService.getOthers()
+      setQuestions(res)
     }
+    fetchData()
+  }, [])
+
+  function getEmptyRows() { return Math.min(rowsPerPage, questions.length - (page * rowsPerPage)) }
+
+  async function getShared(id) {
+    await questionService.getShared(id)
+    setQuestions(questions.filter(p => p.id !== id))
   }
 
-  componentDidMount() {
-    questionService.getOthers().then(res => this.setState({ questions: res }))
-  }
+  function handleChangePage(event, newPage) { setPage(newPage) }
 
-  getShared(id) {
-    questionService.getShared(id).then(() => {
-      this.setState({ questions: this.state.questions.filter(p => p.id !== id) })
-    })
-  }
+  function handleChangeRowsPerPage(event) { setRowsPerPage(event.target.value) }
 
-  render() {
-    const { questions } = this.state
-    return (
-      <CardMain title={AppTexts.MainComponent.QuestionTexts.Shared[this.props.language]}>
-        <Paper style={{ marginLeft: '20px', marginRight: '20px' }}>
-          <div>
-            <Table aria-labelledby="tableTitle">
-              <TableHead>
-                <TableRow>
-                  <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>Área</TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>Dificuldade</TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>Descrição</TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>Respostas</TableCell>
-                  <TableCell style={{ textAlign: 'center' }}>Adquirir</TableCell>
+  return (
+    <CardMain title={AppTexts.MainComponent.QuestionTexts.Shared[language]}>
+      <Container>
+        <Table aria-labelledby="tableTitle">
+          <TableHead>
+            <TableRow>
+              <CellHead>Área</CellHead>
+              <CellHead>Dificuldade</CellHead>
+              <CellHead>Descrição</CellHead>
+              <CellHead>Respostas</CellHead>
+              <CellHead>Adquirir</CellHead>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {questions.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+              .map(n => (
+                <TableRow
+                  tabIndex={-1}
+                  key={n.id}>
+                  <CellRow style={{ textAlign: 'center' }} component="th" scope="row" padding="none">
+                    {n.area}
+                  </CellRow>
+                  <CellRow style={{ textAlign: 'center' }}>
+                    <Stars filled={4} />
+                  </CellRow>
+                  <CellRow style={{ textAlign: 'center' }}>{n.description}</CellRow>
+                  <CellRow style={{ textAlign: 'center' }}>{n.answers.length}</CellRow>
+                  <CellRow style={{ textAlign: 'center' }}>
+                    <Button onClick={() => getShared(n.id)} variant="text">
+                      <IconDownload color="primary" />
+                    </Button>
+                  </CellRow>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {questions
-                  .map(n => (
-                    <TableRow
-                      tabIndex={-1}
-                      key={n.id}>
-                      <TableCell style={{ textAlign: 'center' }} component="th" scope="row" padding="none">
-                        {n.area}
-                      </TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>
-                        <Stars filled={4} />
-                      </TableCell>
-                      <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>
-                        <Button onClick={() => this.getShared(n.id)} variant="fab">
-                          <IconDownload color="primary" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                {this.state.emptyRows > 0 && (
-                  <TableRow style={{ height: 49 * this.state.emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <TablePagination
-            component="div"
-            count={this.state.questions.length}
-            rowsPerPage={this.state.rowsPerPage}
-            page={this.state.page}
-            backIconButtonProps={{
-              'aria-label': 'Previous Page',
-            }}
-            nextIconButtonProps={{
-              'aria-label': 'Next Page',
-            }}
-            onChangePage={(e, p) => this.setState({ page: p })}
-            onChangeRowsPerPage={e => this.setState({ rowsPerPage: e.target.value })}
-          />
-        </Paper>
-      </CardMain>
-    )
-  }
+              ))}
+            {getEmptyRows() > 0 && (
+              <TableRow style={{ height: 49 * getEmptyRows() }}>
+                <CellRow colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                colSpan={3}
+                count={questions.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={(e, p) => handleChangePage(e, p)}
+                onChangeRowsPerPage={e => handleChangeRowsPerPage(e)}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </Container>
+    </CardMain>
+  )
 }
-
-const mapStateToProps = state => ({ language: state.appState.language })
-
-export default connect(mapStateToProps)(SharedQuestion)
