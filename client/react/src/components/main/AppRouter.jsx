@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Switch, Link } from 'react-router-dom'
-import createHistory from 'history/createHashHistory'
+import { createHashHistory } from 'history'
 import {
   MyQuestion,
   SharedQuestion,
@@ -10,7 +10,7 @@ import {
   EditRoom
 } from '../../scenes'
 
-const history = createHistory()
+const history = createHashHistory()
 const isAuthenticated = true
 const freeRoutes = ['/', '/about']
 
