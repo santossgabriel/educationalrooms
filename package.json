@@ -1,5 +1,5 @@
 {
-  "name": "quiz-room",
+  "name": "educational-rooms",
   "version": "1.0.0",
   "scripts": {
     "start": "babel-node src/run.js",

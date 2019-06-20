@@ -13,7 +13,10 @@
     "describe": "readonly",
     "test": "readonly",
     "expect": "readonly",
-    "beforeAll": "readonly"
+    "beforeAll": "readonly",
+    "window": "readonly",
+    "localStorage": "readonly",
+    "jest": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,

@@ -31,7 +31,7 @@ class IconTextInput extends React.Component {
     let hasError = false
     let errorMessage = ''
 
-    if (this.props.required && !t.trim()) {
+    if (this.props.required && !(t && t.trim && t.trim())) {
       hasError = true
       errorMessage = 'Este campo é obrigatório.'
     } else if (this.props.minlength && t.length < this.props.minlength) {
@@ -108,7 +108,6 @@ IconTextInput.propTypes = {
   patternMessage: PropTypes.string,
   validChanged: PropTypes.func,
   onChange: PropTypes.func,
-  patternMessage: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
