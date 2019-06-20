@@ -255,7 +255,7 @@ class MyRooms extends React.Component {
           <Link to="edit-room/:0"
             style={{ textDecoration: 'none' }}>
             <Button
-              color="primary" variant="raised">{AppTexts.MyRoomsTable.CreateRoom[this.props.language]}</Button>
+              color="primary" variant="contained">{AppTexts.MyRoomsTable.CreateRoom[this.props.language]}</Button>
           </Link>
         </div>
 

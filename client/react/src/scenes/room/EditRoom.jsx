@@ -259,8 +259,8 @@ class EditRoom extends React.Component {
                     <TableCell style={{ textAlign: 'center' }}>
                       <Stars filled={n.difficulty || 0} />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>
+                    <TableCell style={{ textAlign: 'center' }}>{n.description}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '14px', fontWeight: 'bold' }}>
                         <div>
                           <i onClick={() => this.changePoints(n.id, 10)} className="up arrow"> </i>

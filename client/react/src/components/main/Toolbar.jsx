@@ -83,10 +83,10 @@ class AppToolbar extends React.Component {
                   <Icons.Menu />
                 </IconButton>
             }
-            <Typography variant="title" color="inherit" style={styles.grow}>
+            <Typography variant="h5" color="inherit" style={styles.grow}>
               {AppTexts.AppTitle[this.props.language]}
             </Typography>
-            <Button variant="fab" color="secondary" onClick={this.handleClick}>
+            <Button variant="outlined" color="secondary" onClick={this.handleClick}>
               <img height="70" width="70" style={{ borderRadius: '50%' }}
                 src={this.props.user && this.props.user.picture ? this.props.user.picture : '/api/image/user-image.png'} />
             </Button>

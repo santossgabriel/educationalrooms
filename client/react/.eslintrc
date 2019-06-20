@@ -16,7 +16,8 @@
     "beforeAll": "readonly",
     "window": "readonly",
     "localStorage": "readonly",
-    "jest": "readonly"
+    "jest": "readonly",
+    "document": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,

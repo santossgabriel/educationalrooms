@@ -88,7 +88,7 @@
 }
 
 .check_mark .sa-icon.sa-success {
-  border-color: transparent\9;
+  border-color: transparent;
 }
 
 .check_mark .sa-icon.sa-success .sa-line.sa-tip {
@@ -289,7 +289,7 @@
 }
 
 .error_mark .sa-icon.sa-error {
-  border-color: transparent\9;
+  border-color: transparent;
 }
 
 .error_mark .animateErrorDown {

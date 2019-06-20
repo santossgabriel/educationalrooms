@@ -1,16 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as Icons from '@material-ui/icons'
+import IconDelete from '@material-ui/icons/Delete'
 import {
   TableBody,
   TableRow,
   Table,
-  TableCell,
   TablePagination,
   Button,
   TableHead,
-  Paper,
   Checkbox,
   IconButton
 } from '@material-ui/core'
@@ -22,6 +20,8 @@ import EditQuestionModal from '../../components/modais/EditQuestionModal'
 import { AppTexts } from '../../helpers/appTexts'
 import { ConfirmModal } from '../../components/main/Modal'
 import { showError, showSuccess } from '../../actions'
+
+import { Container, CellHead, CellRow } from './styles'
 
 class MyQuestion extends React.Component {
 
@@ -43,14 +43,13 @@ class MyQuestion extends React.Component {
   }
 
   refresh() {
-    questionService.getMy().then(res => this.setState({ questions: res }))
+    questionService.getMy().then(res => {
+      this.setState({ questions: res })
+    })
   }
 
   openEditQuestion(question) {
-    this.setState({
-      question: question || {},
-      editModalOpen: true
-    })
+    this.setState({ question: question || {}, editModalOpen: true })
   }
 
   modalQuestionCallback(hasChanges) {
@@ -62,7 +61,9 @@ class MyQuestion extends React.Component {
   changeShared(checked, id) {
     questionService.share(id, checked).then(() => {
       const questions = this.state.questions
-      questions.forEach(p => { if (p.id === id) p.shared = checked })
+      const q = questions.find(p => p.id === id)
+      if (q)
+        q.shared = checked
       this.setState({ questions: questions })
     })
   }
@@ -83,37 +84,38 @@ class MyQuestion extends React.Component {
     const { questions } = this.state
     return (
       <CardMain title={AppTexts.MainComponent.QuestionTexts.My[this.props.language]}>
-        <Paper>
+        <Container>
           <Table aria-labelledby="tableTitle">
             <TableHead>
               <TableRow>
-                <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Area[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Answers[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Shared[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.Root.Actions[this.props.language]}</TableCell>
+                <CellHead>{AppTexts.MyQuestionsTable.Area[this.props.language]}</CellHead>
+                <CellHead>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</CellHead>
+                <CellHead>{AppTexts.MyQuestionsTable.Description[this.props.language]}</CellHead>
+                <CellHead>{AppTexts.MyQuestionsTable.Answers[this.props.language]}</CellHead>
+                <CellHead>{AppTexts.MyQuestionsTable.Shared[this.props.language]}</CellHead>
+                <CellHead>{AppTexts.Root.Actions[this.props.language]}</CellHead>
               </TableRow>
             </TableHead>
             <TableBody>
               {questions
                 .map(n => (
                   <TableRow
+                    jestid="trMyQuestions"
                     hover
                     onClick={() => this.openEditQuestion(n)}
                     role="checkbox"
                     aria-checked={true}
                     tabIndex={-1}
                     key={n.id}>
-                    <TableCell component="th" scope="row" padding="none" style={{ textAlign: 'center' }}>
+                    <CellRow component="th" scope="row" padding="none">
                       {n.area}
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
+                    </CellRow>
+                    <CellRow>
                       <Stars filled={n.difficulty || 0} />
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.description}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>{n.answers.length}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }} numeric>
+                    </CellRow>
+                    <CellRow>{n.description}</CellRow>
+                    <CellRow>{n.answers.length}</CellRow>
+                    <CellRow>
                       {
                         n.sharedQuestionId ?
                           <span>{AppTexts.Root.Acquired[this.props.language]}</span> :
@@ -125,30 +127,30 @@ class MyQuestion extends React.Component {
                             />
                           </div>
                       }
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
+                    </CellRow>
+                    <CellRow>
                       {
                         n.sharedQuestionId ? null :
                           <IconButton color="secondary"
                             aria-label="Menu"
                             onClick={event => {
-                              event.stopPropagation();
+                              event.stopPropagation()
                               this.setState({ removeQuestion: n })
                             }}>
-                            <Icons.Delete />
+                            <IconDelete />
                           </IconButton>
                       }
-                    </TableCell>
+                    </CellRow>
                   </TableRow>
                 ))}
               {this.state.emptyRows > 0 && (
                 <TableRow style={{ height: 49 * this.state.emptyRows }}>
-                  <TableCell colSpan={6} />
+                  <CellRow colSpan={6} />
                 </TableRow>
               )}
             </TableBody>
           </Table>
-        </Paper>
+        </Container>
         <TablePagination
           component="div"
           count={this.state.questions.length}
@@ -169,7 +171,7 @@ class MyQuestion extends React.Component {
         <div style={{ textAlign: 'center', padding: '5px' }}>
           <Button
             onClick={() => this.openEditQuestion()}
-            color="primary" variant="raised">{AppTexts.MyQuestionsTable.CreateQuestion[this.props.language]}</Button>
+            color="primary">{AppTexts.MyQuestionsTable.CreateQuestion[this.props.language]}</Button>
         </div>
         <EditQuestionModal
           close={(hasChanges) => this.modalQuestionCallback(hasChanges)}
