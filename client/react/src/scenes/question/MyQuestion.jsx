@@ -1,10 +1,10 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import IconDelete from '@material-ui/icons/Delete'
 import {
   TableBody,
   TableRow,
+  TableFooter,
   Table,
   TablePagination,
   Button,
@@ -23,171 +23,165 @@ import { showError, showSuccess } from '../../actions'
 
 import { Container, CellHead, CellRow } from './styles'
 
-class MyQuestion extends React.Component {
+export default function MyQuestion() {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      questions: [],
-      emptyRows: 0,
-      rowsPerPage: 5,
-      page: 5,
-      editModalOpen: false,
-      question: {},
-      removeQuestion: null
-    }
+  const [questions, setQuestions] = useState([])
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [page, setPage] = useState(0)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [question, setQuestion] = useState({})
+  const [removeQuestion, setRemoveQuestion] = useState(null)
+  const [emptyRows, setEmptyRows] = useState(0)
+  const language = useSelector(state => state.appState.language)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    refresh()
+  }, [])
+
+  useEffect(() => {
+    const emptyRows = rowsPerPage - (questions.length - (page * rowsPerPage))
+    setEmptyRows(emptyRows)
+  }, [questions, page, rowsPerPage])
+
+  async function refresh() {
+    const questions = await questionService.getMy()
+    setQuestions(questions)
   }
 
-  componentDidMount() {
-    this.refresh()
+  function openEditQuestion(question) {
+    setQuestion(question || {})
+    setEditModalOpen(true)
   }
 
-  refresh() {
-    questionService.getMy().then(res => {
-      this.setState({ questions: res })
-    })
-  }
-
-  openEditQuestion(question) {
-    this.setState({ question: question || {}, editModalOpen: true })
-  }
-
-  modalQuestionCallback(hasChanges) {
-    this.setState({ editModalOpen: false })
+  function modalQuestionCallback(hasChanges) {
+    setEditModalOpen(false)
     if (hasChanges)
-      questionService.getMy().then(res => this.setState({ questions: res }))
+      refresh()
   }
 
-  changeShared(checked, id) {
-    questionService.share(id, checked).then(() => {
-      const questions = this.state.questions
-      const q = questions.find(p => p.id === id)
-      if (q)
-        q.shared = checked
-      this.setState({ questions: questions })
-    })
+  async function changeShared(checked, id) {
+    await questionService.share(id, checked)
+    const q = questions.find(p => p.id === id)
+    if (q)
+      q.shared = checked
+    setQuestions(questions)
   }
 
-  onResultRemoveQuestion(confirm) {
-    const { id } = this.state.removeQuestion
-    this.setState({ removeQuestion: null })
+  async function onResultRemoveQuestion(confirm) {
+    const { id } = removeQuestion
+    setRemoveQuestion(null)
     if (confirm) {
-      questionService.remove(id)
-        .then(res => {
-          this.props.showSuccess(res.message)
-          this.refresh()
-        }).catch(err => this.props.showError(err.message))
+      try {
+        const res = await questionService.remove(id)
+        dispatch(showSuccess(res.message))
+        this.refresh()
+      } catch (err) {
+        dispatch(showError(err.message))
+      }
     }
   }
 
-  render() {
-    const { questions } = this.state
-    return (
-      <CardMain title={AppTexts.MainComponent.QuestionTexts.My[this.props.language]}>
-        <Container>
-          <Table aria-labelledby="tableTitle">
-            <TableHead>
-              <TableRow>
-                <CellHead>{AppTexts.MyQuestionsTable.Area[this.props.language]}</CellHead>
-                <CellHead>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</CellHead>
-                <CellHead>{AppTexts.MyQuestionsTable.Description[this.props.language]}</CellHead>
-                <CellHead>{AppTexts.MyQuestionsTable.Answers[this.props.language]}</CellHead>
-                <CellHead>{AppTexts.MyQuestionsTable.Shared[this.props.language]}</CellHead>
-                <CellHead>{AppTexts.Root.Actions[this.props.language]}</CellHead>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {questions
-                .map(n => (
-                  <TableRow
-                    jestid="trMyQuestions"
-                    hover
-                    onClick={() => this.openEditQuestion(n)}
-                    role="checkbox"
-                    aria-checked={true}
-                    tabIndex={-1}
-                    key={n.id}>
-                    <CellRow component="th" scope="row" padding="none">
-                      {n.area}
-                    </CellRow>
-                    <CellRow>
-                      <Stars filled={n.difficulty || 0} />
-                    </CellRow>
-                    <CellRow>{n.description}</CellRow>
-                    <CellRow>{n.answers.length}</CellRow>
-                    <CellRow>
-                      {
-                        n.sharedQuestionId ?
-                          <span>{AppTexts.Root.Acquired[this.props.language]}</span> :
-                          <div onClick={(event) => { event.stopPropagation() }}>
-                            <Checkbox
-                              color="primary"
-                              checked={n.shared}
-                              onChange={(e, c) => this.changeShared(c, n.id)}
-                            />
-                          </div>
-                      }
-                    </CellRow>
-                    <CellRow>
-                      {
-                        n.sharedQuestionId ? null :
-                          <IconButton color="secondary"
-                            aria-label="Menu"
-                            onClick={event => {
-                              event.stopPropagation()
-                              this.setState({ removeQuestion: n })
-                            }}>
-                            <IconDelete />
-                          </IconButton>
-                      }
-                    </CellRow>
-                  </TableRow>
-                ))}
-              {this.state.emptyRows > 0 && (
-                <TableRow style={{ height: 49 * this.state.emptyRows }}>
-                  <CellRow colSpan={6} />
+  return (
+    <CardMain title={AppTexts.MainComponent.QuestionTexts.My[language]}>
+      <Container>
+        <Table aria-labelledby="tableTitle">
+          <TableHead>
+            <TableRow>
+              <CellHead>{AppTexts.MyQuestionsTable.Area[language]}</CellHead>
+              <CellHead>{AppTexts.MyQuestionsTable.Difficulty[language]}</CellHead>
+              <CellHead>{AppTexts.MyQuestionsTable.Description[language]}</CellHead>
+              <CellHead>{AppTexts.MyQuestionsTable.Answers[language]}</CellHead>
+              <CellHead>{AppTexts.MyQuestionsTable.Shared[language]}</CellHead>
+              <CellHead>{AppTexts.Root.Actions[language]}</CellHead>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {questions.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+              .map(n => (
+                <TableRow
+                  jestid="trMyQuestions"
+                  hover
+                  onClick={() => openEditQuestion(n)}
+                  role="checkbox"
+                  aria-checked={true}
+                  tabIndex={-1}
+                  key={n.id}>
+                  <CellRow component="th" scope="row" padding="none"> {n.area} </CellRow>
+                  <CellRow>
+                    <Stars filled={n.difficulty || 0} />
+                  </CellRow>
+                  <CellRow>{n.description}</CellRow>
+                  <CellRow>{n.answers.length}</CellRow>
+                  <CellRow>
+                    {
+                      n.sharedQuestionId ?
+                        <span>{AppTexts.Root.Acquired[language]}</span> :
+                        <div onClick={event => { event.stopPropagation() }}>
+                          <Checkbox
+                            color="primary"
+                            checked={n.shared}
+                            onChange={(e, c) => changeShared(c, n.id)}
+                          />
+                        </div>
+                    }
+                  </CellRow>
+                  <CellRow>
+                    {
+                      n.sharedQuestionId ? null :
+                        <IconButton color="secondary"
+                          aria-label="Menu"
+                          onClick={event => {
+                            event.stopPropagation()
+                            setRemoveQuestion(n)
+                          }}>
+                          <IconDelete />
+                        </IconButton>
+                    }
+                  </CellRow>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </Container>
-        <TablePagination
-          component="div"
-          count={this.state.questions.length}
-          rowsPerPage={this.state.rowsPerPage}
-          title="teste"
-          page={this.state.page}
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-          labelRowsPerPage="itens por página"
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-          }}
-          onChangePage={(e, p) => this.setState({ page: p })}
-          onChangeRowsPerPage={e => this.setState({ rowsPerPage: e.target.value })}
-        />
-        <div style={{ textAlign: 'center', padding: '5px' }}>
-          <Button
-            onClick={() => this.openEditQuestion()}
-            color="primary">{AppTexts.MyQuestionsTable.CreateQuestion[this.props.language]}</Button>
-        </div>
-        <EditQuestionModal
-          close={(hasChanges) => this.modalQuestionCallback(hasChanges)}
-          question={this.state.question}
-          open={this.state.editModalOpen} />
-        <ConfirmModal open={!!this.state.removeQuestion}
-          title={AppTexts.Question.ConfirmExclusionTitle[this.props.language]}
-          text={this.state.removeQuestion ? this.state.removeQuestion.description : ''}
-          onResult={confirm => this.onResultRemoveQuestion(confirm)}>
-        </ConfirmModal>
-      </CardMain>
-    )
-  }
+              ))}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 49 * emptyRows }}>
+                <CellRow colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                count={questions.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+                // labelRowsPerPage="itens por página"
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page',
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page',
+                }}
+                onChangePage={(e, p) => setPage(p)}
+                onChangeRowsPerPage={e => setRowsPerPage(e.target.value)}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </Container>
+      <div style={{ textAlign: 'center', padding: '5px' }}>
+        <Button
+          onClick={() => openEditQuestion()}
+          color="primary">{AppTexts.MyQuestionsTable.CreateQuestion[language]}</Button>
+      </div>
+      <EditQuestionModal
+        close={hasChanges => modalQuestionCallback(hasChanges)}
+        question={question}
+        open={editModalOpen} />
+      <ConfirmModal open={!!removeQuestion}
+        title={AppTexts.Question.ConfirmExclusionTitle[language]}
+        text={removeQuestion ? removeQuestion.description : ''}
+        onResult={confirm => onResultRemoveQuestion(confirm)} />
+    </CardMain>
+  )
 }
-
-const mapStateToProps = state => ({ language: state.appState.language })
-const mapDispatchToProps = dispatch => bindActionCreators({ showError, showSuccess }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyQuestion)
