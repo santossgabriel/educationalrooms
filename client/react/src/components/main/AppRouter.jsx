@@ -18,7 +18,7 @@ let currentPath = location.hash.replace('#', '')
 
 export const getCurrentPath = () => currentPath
 
-history.listen((location, action) => {
+history.listen((location) => {
   if (freeRoutes.indexOf(location.pathname) === -1 && !isAuthenticated) {
     window.location.hash = '#/'
     currentPath = '/'

@@ -1,13 +1,13 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { useSelector, useDispatch } from 'react-redux'
 import * as Icons from '@material-ui/icons'
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment'
 import {
   TableBody,
   TableRow,
+  TableFooter,
   Table,
   TableCell,
   TablePagination,
@@ -24,6 +24,8 @@ import CardMain from '../../components/main/CardMain'
 import { AppTexts, RoomStatus } from '../../helpers'
 import { ConfirmModal } from '../../components/main/Modal'
 import { showError, showSuccess } from '../../actions'
+
+import { CellHead, NoContentMessage, Container, CellRow } from './styles'
 
 const styles = {
   tableHeader: {
@@ -78,50 +80,62 @@ const StatusButton = (props) => {
     return null
 }
 
-const StatusDate = ({ date, label }) => {
-  if (!date)
-    return null
-  return (
-    <div style={{ lineHeight: '18px', fontSize: 12, fontFamily: 'Arial, Helvetica, sans-serif', color: '#666' }}>
-      <span>{label}</span>
-      <span>
-        <Moment format="DD/MM/YY HH:mm">
-          {date}
-        </Moment>
-      </span>
-    </div>
-  )
-}
+const StatusDate = ({ date, label }) => date ? (
+  <div style={{ lineHeight: '18px', fontSize: 12, fontFamily: 'Arial, Helvetica, sans-serif', color: '#666' }}>
+    <span>{label}</span>
+    <span>
+      <Moment format="DD/MM/YY HH:mm">
+        {date}
+      </Moment>
+    </span>
+  </div>
+) : null
 
 StatusDate.propTypes = {
   date: PropTypes.string,
   label: PropTypes.string
 }
 
-class MyRooms extends React.Component {
+export default function MyRooms() {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      emptyRows: 0,
-      rowsPerPage: 5,
-      page: 5,
-      editModalOpen: false,
-      question: {},
-      removeRoom: null,
-      rooms: []
-    }
+  const [rooms, setRooms] = useState([])
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [page, setPage] = useState(0)
+  const [question, setQuestion] = useState({})
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [removeRoom, setRemoveRoom] = useState(null)
+  const [emptyRows, setEmptyRows] = useState(0)
+  const language = useSelector(state => state.appState.language)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    refresh()
+  }, [])
+
+  useEffect(() => {
+    const emptyRows = rowsPerPage - (rooms.length - (page * rowsPerPage))
+    setEmptyRows(emptyRows)
+  }, [rooms, page, rowsPerPage])
+
+  // constructor(props) {
+  //   super(props)
+  //   this.state = {
+  //     emptyRows: 0,
+  //     rowsPerPage: 5,
+  //     page: 5,
+  //     editModalOpen: false,
+  //     question: {},
+  //     removeRoom: null,
+  //     rooms: []
+  //   }
+  // }
+
+  async function refresh() {
+    const rooms = roomService.getMy()
+    setRooms(rooms)
   }
 
-  componentDidMount() {
-    this.refresh()
-  }
-
-  refresh() {
-    roomService.getMy().then(res => this.setState({ rooms: res }))
-  }
-
-  changeRoomStatus(room) {
+  async function changeRoomStatus(room) {
     let newStatus = null
     switch (room.status) {
       case RoomStatus.CLOSED:
@@ -134,39 +148,42 @@ class MyRooms extends React.Component {
         newStatus = RoomStatus.ENDED
         break
     }
-    roomService.changeStatus(room.id, newStatus)
-      .then(res => {
-        this.refresh()
-        this.props.showSuccess(res.message)
-      }).catch(err => this.props.showError(err.message))
-  }
-
-  onResultRemoveRoom(confirm) {
-    if (confirm) {
-      roomService.remove(this.state.removeRoom.id)
-        .then(res => {
-          this.refresh()
-          this.props.showSuccess(res.message)
-        }).catch(err => this.props.showError(err.message))
+    try {
+      const res = await roomService.changeStatus(room.id, newStatus)
+      this.refresh()
+      dispatch(showSuccess(res.message))
+    } catch (ex) {
+      dispatch(showError(ex.message))
     }
-    this.setState({ removeRoom: null })
   }
 
-  render() {
-    const { rooms } = this.state
-    return (
-      <CardMain title={AppTexts.MainComponent.RoomTexts.My[this.props.language]}>
+  async function onResultRemoveRoom(confirm) {
+    if (confirm) {
+      try {
+        const res = roomService.remove(this.state.removeRoom.id)
+        this.refresh()
+        dispatch(showSuccess(res.message))
+      } catch (ex) {
+        dispatch(showError(ex.message))
+      }
+    }
+    setRemoveRoom(null)
+  }
+
+  return (
+    <CardMain title={AppTexts.MainComponent.RoomTexts.My[language]}>
+      {rooms.length ?
         <Paper>
           <Table aria-labelledby="tableTitle">
             <TableHead>
               <TableRow>
                 <TableCell style={styles.tableHeader}>N°</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Name[this.props.language]}</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Status[this.props.language]}</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Users[this.props.language]}</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Questions[this.props.language]}</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Duration[this.props.language]}</TableCell>
-                <TableCell padding="none" style={styles.tableActions}>{AppTexts.Root.Actions[this.props.language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Name[language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Status[language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Users[language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Questions[language]}</TableCell>
+                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Duration[language]}</TableCell>
+                <TableCell padding="none" style={styles.tableActions}>{AppTexts.Root.Actions[language]}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -177,11 +194,11 @@ class MyRooms extends React.Component {
                     <TableCell style={styles.tableRow}>{n.id}</TableCell>
                     <TableCell padding="none" style={styles.tableRow}>{n.name}</TableCell>
                     <TableCell padding="none" style={{ paddingTop: 5, ...styles.tableRow }}>
-                      <span>{AppTexts.Room.Status[n.status][this.props.language]}</span>
-                      <StatusDate date={n.createdAt} label={AppTexts.Room.CreatedAt[this.props.language]} />
-                      <StatusDate date={n.openedAt} label={AppTexts.Room.OpenedAt[this.props.language]} />
-                      <StatusDate date={n.startedAt} label={AppTexts.Room.StartedAt[this.props.language]} />
-                      <StatusDate date={n.endedAt} label={AppTexts.Room.EndedAt[this.props.language]} />
+                      <span>{AppTexts.Room.Status[n.status][language]}</span>
+                      <StatusDate date={n.createdAt} label={AppTexts.Room.CreatedAt[language]} />
+                      <StatusDate date={n.openedAt} label={AppTexts.Room.OpenedAt[language]} />
+                      <StatusDate date={n.startedAt} label={AppTexts.Room.StartedAt[language]} />
+                      <StatusDate date={n.endedAt} label={AppTexts.Room.EndedAt[language]} />
                       {
                         n.startedAt && !n.endedAt ?
                           <LinearProgress variant="indeterminate" style={{ marginBottom: 10 }} />
@@ -193,30 +210,30 @@ class MyRooms extends React.Component {
                     <TableCell padding="none" style={styles.tableRow}>{`${n.time}s`}</TableCell>
                     <TableCell padding="none" style={styles.tableRow}>
                       <StatusButton
-                        language={this.props.language}
+                        language={language}
                         status={n.status}
-                        onClick={() => this.changeRoomStatus(n)} />
+                        onClick={() => changeRoomStatus(n)} />
                       {n.status === RoomStatus.OPENED || n.status === RoomStatus.CLOSED ?
                         <span>
                           <Link to={`edit-room/:${n.id}`}
                             style={{ textDecoration: 'none' }}>
-                            <Tooltip title={AppTexts.Root.Edit[this.props.language]} placement="bottom">
+                            <Tooltip title={AppTexts.Root.Edit[language]} placement="bottom">
                               <IconButton color="primary"
                                 aria-label="Menu"
                                 onClick={event => {
                                   event.stopPropagation()
-                                  this.setState({ removeRoom: n })
+                                  setRemoveRoom(n)
                                 }}>
                                 <Icons.Edit />
                               </IconButton>
                             </Tooltip>
                           </Link>
-                          <Tooltip title={AppTexts.Root.Remove[this.props.language]} placement="bottom">
+                          <Tooltip title={AppTexts.Root.Remove[language]} placement="bottom">
                             <IconButton color="secondary"
                               aria-label="Menu"
                               onClick={event => {
                                 event.stopPropagation()
-                                this.setState({ removeRoom: n })
+                                setRemoveRoom(n)
                               }}>
                               <Icons.Delete />
                             </IconButton>
@@ -226,50 +243,50 @@ class MyRooms extends React.Component {
                     </TableCell>
                   </TableRow>
                 ))}
-              {this.state.emptyRows > 0 && (
-                <TableRow style={{ height: 49 * this.state.emptyRows }}>
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 49 * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  component="div"
+                  count={rooms.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+                  labelRowsPerPage="itens por página"
+                  backIconButtonProps={{
+                    'aria-label': 'Previous Page',
+                  }}
+                  nextIconButtonProps={{
+                    'aria-label': 'Next Page',
+                  }}
+                  onChangePage={(e, p) => setPage(p)}
+                  onChangeRowsPerPage={e => setRowsPerPage(e.target.value)}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </Paper>
-        <TablePagination
-          component="div"
-          count={this.state.rooms.length}
-          rowsPerPage={this.state.rowsPerPage}
-          page={this.state.page}
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-          labelRowsPerPage="itens por página"
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-          }}
-          onChangePage={(e, p) => this.setState({ page: p })}
-          onChangeRowsPerPage={e => this.setState({ rowsPerPage: e.target.value })}
-        />
+        : <NoContentMessage>Você ainda não criou salas.</NoContentMessage>
+      }
 
-        <div style={{ textAlign: 'center', padding: '5px' }}>
-          <Link to="edit-room/:0"
-            style={{ textDecoration: 'none' }}>
-            <Button
-              color="primary" variant="contained">{AppTexts.MyRoomsTable.CreateRoom[this.props.language]}</Button>
-          </Link>
-        </div>
+      <div style={{ textAlign: 'center', padding: '5px' }}>
+        <Link to="edit-room/:0"
+          style={{ textDecoration: 'none' }}>
+          <Button
+            color="primary" variant="contained">{AppTexts.MyRoomsTable.CreateRoom[language]}</Button>
+        </Link>
+      </div>
 
-        <ConfirmModal open={!!this.state.removeRoom}
-          title={AppTexts.Question.ConfirmExclusionTitle[this.props.language]}
-          text={this.state.removeRoom ? this.state.removeRoom.description : ''}
-          onResult={confirm => this.onResultRemoveRoom(confirm)}>
-        </ConfirmModal>
-      </CardMain>
-    )
-  }
+      <ConfirmModal open={!!removeRoom}
+        title={AppTexts.Question.ConfirmExclusionTitle[language]}
+        text={removeRoom ? removeRoom.description : ''}
+        onResult={confirm => onResultRemoveRoom(confirm)}>
+      </ConfirmModal>
+    </CardMain>
+  )
 }
-
-const mapStateToProps = state => ({ language: state.appState.language })
-const mapDispatchToProps = dispatch => bindActionCreators({ showError, showSuccess }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyRooms)
