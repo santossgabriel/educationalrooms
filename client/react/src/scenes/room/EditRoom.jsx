@@ -290,9 +290,9 @@ class EditRoom extends React.Component {
           : <div style={styles.noQuestions}><span>{AppTexts.Room.NoQuestions[this.props.language]}</span></div>}
 
         <div style={{ textAlign: 'center', padding: '5px' }}>
-          <Button style={{ marginRight: '30px' }} variant="raised">{AppTexts.Root.Cancel[this.props.language]}</Button>
+          <Button style={{ marginRight: '30px' }} variant="contained">{AppTexts.Root.Cancel[this.props.language]}</Button>
           <Button onClick={() => this.setState({ modalQuestions: true })} style={{ marginRight: '30px' }} color="primary">{AppTexts.Question.AddQuestions[this.props.language]}</Button>
-          <Button onClick={() => this.save()} disabled={!this.state.form.valid} color="primary" variant="raised">{AppTexts.Root.Save[this.props.language]}</Button>
+          <Button onClick={() => this.save()} disabled={!this.state.form.valid} color="primary" variant="contained">{AppTexts.Root.Save[this.props.language]}</Button>
         </div>
 
         <SelectQuestionModal

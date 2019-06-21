@@ -15,6 +15,7 @@ import {
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
 
 import IconTextInput from '../main/IconTextInput'
 import Stars from '../question/Stars'
@@ -218,6 +219,12 @@ class EditQuestionModal extends React.Component {
       </Dialog>
     )
   }
+}
+
+EditQuestionModal.propTypes = {
+  question: PropTypes.object,
+  close: PropTypes.func,
+  open: PropTypes.bool
 }
 
 const mapStateToProps = state => ({ language: state.appState.language })

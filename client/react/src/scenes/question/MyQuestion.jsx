@@ -21,7 +21,7 @@ import { AppTexts } from '../../helpers/appTexts'
 import { ConfirmModal } from '../../components/main/Modal'
 import { showError, showSuccess } from '../../actions'
 
-import { Container, CellHead, CellRow } from './styles'
+import { Container, CellHead, CellRow, NoContentMessage } from './styles'
 
 export default function MyQuestion() {
 
@@ -84,91 +84,94 @@ export default function MyQuestion() {
 
   return (
     <CardMain title={AppTexts.MainComponent.QuestionTexts.My[language]}>
-      <Container>
-        <Table aria-labelledby="tableTitle">
-          <TableHead>
-            <TableRow>
-              <CellHead>{AppTexts.MyQuestionsTable.Area[language]}</CellHead>
-              <CellHead>{AppTexts.MyQuestionsTable.Difficulty[language]}</CellHead>
-              <CellHead>{AppTexts.MyQuestionsTable.Description[language]}</CellHead>
-              <CellHead>{AppTexts.MyQuestionsTable.Answers[language]}</CellHead>
-              <CellHead>{AppTexts.MyQuestionsTable.Shared[language]}</CellHead>
-              <CellHead>{AppTexts.Root.Actions[language]}</CellHead>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {questions.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-              .map(n => (
-                <TableRow
-                  jestid="trMyQuestions"
-                  hover
-                  onClick={() => openEditQuestion(n)}
-                  role="checkbox"
-                  aria-checked={true}
-                  tabIndex={-1}
-                  key={n.id}>
-                  <CellRow component="th" scope="row" padding="none"> {n.area} </CellRow>
-                  <CellRow>
-                    <Stars filled={n.difficulty || 0} />
-                  </CellRow>
-                  <CellRow>{n.description}</CellRow>
-                  <CellRow>{n.answers.length}</CellRow>
-                  <CellRow>
-                    {
-                      n.sharedQuestionId ?
-                        <span>{AppTexts.Root.Acquired[language]}</span> :
-                        <div onClick={event => { event.stopPropagation() }}>
-                          <Checkbox
-                            color="primary"
-                            checked={n.shared}
-                            onChange={(e, c) => changeShared(c, n.id)}
-                          />
-                        </div>
-                    }
-                  </CellRow>
-                  <CellRow>
-                    {
-                      n.sharedQuestionId ? null :
-                        <IconButton color="secondary"
-                          aria-label="Menu"
-                          onClick={event => {
-                            event.stopPropagation()
-                            setRemoveQuestion(n)
-                          }}>
-                          <IconDelete />
-                        </IconButton>
-                    }
-                  </CellRow>
-                </TableRow>
-              ))}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 49 * emptyRows }}>
-                <CellRow colSpan={6} />
+      {questions.length ?
+        <Container>
+          <Table aria-labelledby="tableTitle">
+            <TableHead>
+              <TableRow>
+                <CellHead>{AppTexts.MyQuestionsTable.Area[language]}</CellHead>
+                <CellHead>{AppTexts.MyQuestionsTable.Difficulty[language]}</CellHead>
+                <CellHead>{AppTexts.MyQuestionsTable.Description[language]}</CellHead>
+                <CellHead>{AppTexts.MyQuestionsTable.Answers[language]}</CellHead>
+                <CellHead>{AppTexts.MyQuestionsTable.Shared[language]}</CellHead>
+                <CellHead>{AppTexts.Root.Actions[language]}</CellHead>
               </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                count={questions.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-                // labelRowsPerPage="itens por página"
-                backIconButtonProps={{
-                  'aria-label': 'Previous Page',
-                }}
-                nextIconButtonProps={{
-                  'aria-label': 'Next Page',
-                }}
-                onChangePage={(e, p) => setPage(p)}
-                onChangeRowsPerPage={e => setRowsPerPage(e.target.value)}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </Container>
+            </TableHead>
+            <TableBody>
+              {questions.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                .map(n => (
+                  <TableRow
+                    jestid="trMyQuestions"
+                    hover
+                    onClick={() => openEditQuestion(n)}
+                    role="checkbox"
+                    aria-checked={true}
+                    tabIndex={-1}
+                    key={n.id}>
+                    <CellRow component="th" scope="row" padding="none"> {n.area} </CellRow>
+                    <CellRow>
+                      <Stars filled={n.difficulty || 0} />
+                    </CellRow>
+                    <CellRow>{n.description}</CellRow>
+                    <CellRow>{n.answers.length}</CellRow>
+                    <CellRow>
+                      {
+                        n.sharedQuestionId ?
+                          <span>{AppTexts.Root.Acquired[language]}</span> :
+                          <div onClick={event => { event.stopPropagation() }}>
+                            <Checkbox
+                              color="primary"
+                              checked={n.shared}
+                              onChange={(e, c) => changeShared(c, n.id)}
+                            />
+                          </div>
+                      }
+                    </CellRow>
+                    <CellRow>
+                      {
+                        n.sharedQuestionId ? null :
+                          <IconButton color="secondary"
+                            aria-label="Menu"
+                            onClick={event => {
+                              event.stopPropagation()
+                              setRemoveQuestion(n)
+                            }}>
+                            <IconDelete />
+                          </IconButton>
+                      }
+                    </CellRow>
+                  </TableRow>
+                ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 49 * emptyRows }}>
+                  <CellRow colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  count={questions.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+                  // labelRowsPerPage="itens por página"
+                  backIconButtonProps={{
+                    'aria-label': 'Previous Page',
+                  }}
+                  nextIconButtonProps={{
+                    'aria-label': 'Next Page',
+                  }}
+                  onChangePage={(e, p) => setPage(p)}
+                  onChangeRowsPerPage={e => setRowsPerPage(e.target.value)}
+                />
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </Container>
+        : <NoContentMessage>Você ainda não criou questões.</NoContentMessage>
+      }
       <div style={{ textAlign: 'center', padding: '5px' }}>
         <Button
           onClick={() => openEditQuestion()}

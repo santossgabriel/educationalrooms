@@ -1,5 +1,5 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -9,6 +9,7 @@ import Divider from '@material-ui/core/Divider'
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
 import RoomIcon from '@material-ui/icons/RoomService'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 import { AppTexts } from '../../helpers/appTexts'
 import { getCurrentPath } from './AppRouter'
@@ -45,114 +46,115 @@ const {
   NotificationTexts
 } = AppTexts.MainComponent
 
-const MainText = (props) => (
-  <ListItemText primary={<span style={styles.mainText}>{props.text}</span>} />
+const MainText = ({ sub, text }) => (
+  <ListItemText primary={<span style={sub ? styles.subMainText : styles.mainText}>{text}</span>} />
 )
 
-const SubMainText = (props) => (
-  <ListItemText primary={<span style={styles.subMainText}>{props.text}</span>} />
-)
-
-const LinkListItem = (props) => {
+const LinkListItem = ({ to, onClick, text }) => {
   const clickHandle = (e) => {
-    if (getCurrentPath() === props.to)
+    if (getCurrentPath() === to)
       e.preventDefault()
-    props.onClick()
+    onClick()
   }
   return (
-    <Link to={props.to}
+    <Link to={to}
       onClick={e => clickHandle(e)}
       style={{ textDecoration: 'none' }}>
       <ListItem button >
-        <ListItemText primary={<span style={styles.subMainText}>{props.text}</span>} />
+        <ListItemText primary={<span style={styles.subMainText}>{text}</span>} />
       </ListItem>
     </Link>
   )
 }
 
-class SidebarContent extends React.Component {
+export default function SidebarContent(props) {
 
-  constructor(props) {
-    super(props)
-    this.state = {}
-    this.showMenu = this.showMenu.bind(this)
+  const language = useSelector(state => state.appState.language)
+  const [opened, setOpened] = useState('')
+
+  function showMenu(menu) {
+    setOpened(opened === menu ? '' : menu)
   }
 
-  showMenu(menu) {
-    menu = this.state.opened === menu ? '' : menu
-    this.setState({ opened: menu })
-  }
-
-  render() {
-    return (
-      <div>
-        <div style={styles.symbolDiv}>
-          <span style={styles.symbolSpan}>{AppTexts.AppSymbol[this.props.language]}</span>
-        </div>
-        <List>
-          <Divider />
-
-          <ListItem button onClick={() => this.showMenu('question')}>
-            <ListItemIcon>
-              <QuestionAnswerIcon style={styles.mainIcon} />
-            </ListItemIcon>
-            <MainText text={QuestionTexts.Questions[this.props.language]} />
-          </ListItem>
-
-          <Collapse in={this.state.opened === 'question'} timeout={400} unmountOnExit>
-            <List component="div" disablePadding>
-              <LinkListItem onClick={() => this.props.closeSidebar()} to="/my-questions" text={QuestionTexts.My[this.props.language]} />
-              <LinkListItem onClick={() => this.props.closeSidebar()} to="/shared-questions" text={QuestionTexts.Shared[this.props.language]} />
-            </List>
-          </Collapse>
-
-          <Divider />
-          <ListItem button onClick={() => this.showMenu('room')}>
-            <ListItemIcon>
-              <RoomIcon style={styles.mainIcon} />
-            </ListItemIcon>
-            <MainText text={RoomTexts.Rooms[this.props.language]} />
-          </ListItem>
-
-          <Collapse in={this.state.opened === 'room'} timeout={400} unmountOnExit>
-            <List component="div" disablePadding>
-              <LinkListItem onClick={() => this.props.closeSidebar()} to="/my-rooms" text={RoomTexts.My[this.props.language]} />
-              <LinkListItem onClick={() => this.props.closeSidebar()} to="/open-rooms" text={RoomTexts.Open[this.props.language]} />
-              <LinkListItem onClick={() => this.props.closeSidebar()} to="/associate-rooms" text={RoomTexts.Associate[this.props.language]} />
-            </List>
-          </Collapse>
-
-          <Divider />
-          <Link to="/score" style={{ textDecoration: 'none' }}>
-            <ListItem button onClick={() => this.showMenu('score')}>
-              <ListItemIcon>
-                <RoomIcon style={styles.mainIcon} />
-              </ListItemIcon>
-              <MainText text={ScoreTexts.Scores[this.props.language]} />
-            </ListItem>
-          </Link>
-
-          <Divider />
-          <ListItem button onClick={() => this.showMenu('notification')}>
-            <ListItemIcon>
-              <RoomIcon style={styles.mainIcon} />
-            </ListItemIcon>
-            <MainText text={NotificationTexts.Notifications[this.props.language]} />
-          </ListItem>
-          <Collapse in={this.state.opened === 'notification'} timeout={400} unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem button >
-                <SubMainText text={NotificationTexts.Notifications[this.props.language]} />
-              </ListItem>
-            </List>
-          </Collapse>
-          <Divider />
-        </List>
+  return (
+    <div>
+      <div style={styles.symbolDiv}>
+        <span style={styles.symbolSpan}>{AppTexts.AppSymbol[language]}</span>
       </div>
-    )
-  }
+      <List>
+        <Divider />
+
+        <ListItem button onClick={() => showMenu('question')}>
+          <ListItemIcon>
+            <QuestionAnswerIcon style={styles.mainIcon} />
+          </ListItemIcon>
+          <MainText text={QuestionTexts.Questions[language]} />
+        </ListItem>
+
+        <Collapse in={opened === 'question'} timeout={400} unmountOnExit>
+          <List component="div" disablePadding>
+            <LinkListItem onClick={() => props.closeSidebar()} to="/my-questions" text={QuestionTexts.My[language]} />
+            <LinkListItem onClick={() => props.closeSidebar()} to="/shared-questions" text={QuestionTexts.Shared[language]} />
+          </List>
+        </Collapse>
+
+        <Divider />
+        <ListItem button onClick={() => showMenu('room')}>
+          <ListItemIcon>
+            <RoomIcon style={styles.mainIcon} />
+          </ListItemIcon>
+          <MainText text={RoomTexts.Rooms[language]} />
+        </ListItem>
+
+        <Collapse in={opened === 'room'} timeout={400} unmountOnExit>
+          <List component="div" disablePadding>
+            <LinkListItem onClick={() => props.closeSidebar()} to="/my-rooms" text={RoomTexts.My[language]} />
+            <LinkListItem onClick={() => props.closeSidebar()} to="/open-rooms" text={RoomTexts.Open[language]} />
+            <LinkListItem onClick={() => props.closeSidebar()} to="/associate-rooms" text={RoomTexts.Associate[language]} />
+          </List>
+        </Collapse>
+
+        <Divider />
+        <Link to="/score" style={{ textDecoration: 'none' }}>
+          <ListItem button onClick={() => showMenu('score')}>
+            <ListItemIcon>
+              <RoomIcon style={styles.mainIcon} />
+            </ListItemIcon>
+            <MainText text={ScoreTexts.Scores[language]} />
+          </ListItem>
+        </Link>
+
+        <Divider />
+        <ListItem button onClick={() => showMenu('notification')}>
+          <ListItemIcon>
+            <RoomIcon style={styles.mainIcon} />
+          </ListItemIcon>
+          <MainText text={NotificationTexts.Notifications[language]} />
+        </ListItem>
+        <Collapse in={opened === 'notification'} timeout={400} unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button >
+              <MainText sub text={NotificationTexts.Notifications[language]} />
+            </ListItem>
+          </List>
+        </Collapse>
+        <Divider />
+      </List>
+    </div>
+  )
 }
 
-const mapStateToProps = state => ({ language: state.appState.language })
+MainText.propTypes = {
+  sub: PropTypes.bool,
+  text: PropTypes.string
+}
 
-export default connect(mapStateToProps)(SidebarContent)
+LinkListItem.propTypes = {
+  to: PropTypes.string,
+  onClick: PropTypes.func,
+  text: PropTypes.string
+}
+
+SidebarContent.propTypes = {
+  closeSidebar: PropTypes.func
+}
