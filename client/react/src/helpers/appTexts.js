@@ -216,7 +216,7 @@ export const AppTexts = {
   },
   Room: {
     NoQuestions: {
-      [PT_BR]: 'A sala não possui questões ainda.',
+      [PT_BR]: 'A sala ainda não possui questões.',
       [EN_US]: 'The room does not have questions yet.'
     },
     TotalTime: {

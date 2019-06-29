@@ -27,6 +27,8 @@ export const roomStatus = {
 }
 
 const toMy = (p) => {
+  if (!p)
+    return null
   return {
     id: p.id,
     name: p.name,
