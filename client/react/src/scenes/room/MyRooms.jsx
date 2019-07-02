@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import * as Icons from '@material-ui/icons'
@@ -117,21 +117,8 @@ export default function MyRooms() {
     setEmptyRows(emptyRows)
   }, [rooms, page, rowsPerPage])
 
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //     emptyRows: 0,
-  //     rowsPerPage: 5,
-  //     page: 5,
-  //     editModalOpen: false,
-  //     question: {},
-  //     removeRoom: null,
-  //     rooms: []
-  //   }
-  // }
-
   async function refresh() {
-    const rooms = roomService.getMy()
+    const rooms = await roomService.getMy()
     setRooms(rooms)
   }
 
@@ -150,7 +137,7 @@ export default function MyRooms() {
     }
     try {
       const res = await roomService.changeStatus(room.id, newStatus)
-      this.refresh()
+      refresh()
       dispatch(showSuccess(res.message))
     } catch (ex) {
       dispatch(showError(ex.message))
@@ -160,8 +147,8 @@ export default function MyRooms() {
   async function onResultRemoveRoom(confirm) {
     if (confirm) {
       try {
-        const res = roomService.remove(this.state.removeRoom.id)
-        this.refresh()
+        const res = roomService.remove(removeRoom.id)
+        refresh()
         dispatch(showSuccess(res.message))
       } catch (ex) {
         dispatch(showError(ex.message))
@@ -173,17 +160,17 @@ export default function MyRooms() {
   return (
     <CardMain title={AppTexts.MainComponent.RoomTexts.My[language]}>
       {rooms.length ?
-        <Paper>
+        <Container>
           <Table aria-labelledby="tableTitle">
             <TableHead>
               <TableRow>
-                <TableCell style={styles.tableHeader}>N°</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Name[language]}</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Status[language]}</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Users[language]}</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Questions[language]}</TableCell>
-                <TableCell padding="none" style={styles.tableHeader}>{AppTexts.MyRoomsTable.Duration[language]}</TableCell>
-                <TableCell padding="none" style={styles.tableActions}>{AppTexts.Root.Actions[language]}</TableCell>
+                <CellHead>N°</CellHead>
+                <CellHead>{AppTexts.MyRoomsTable.Name[language]}</CellHead>
+                <CellHead>{AppTexts.MyRoomsTable.Status[language]}</CellHead>
+                <CellHead>{AppTexts.MyRoomsTable.Users[language]}</CellHead>
+                <CellHead>{AppTexts.MyRoomsTable.Questions[language]}</CellHead>
+                <CellHead>{AppTexts.MyRoomsTable.Duration[language]}</CellHead>
+                <CellHead style={styles.tableActions}>{AppTexts.Root.Actions[language]}</CellHead>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -191,10 +178,10 @@ export default function MyRooms() {
                 .map(n => (
                   <TableRow
                     key={n.id}>
-                    <TableCell style={styles.tableRow}>{n.id}</TableCell>
-                    <TableCell padding="none" style={styles.tableRow}>{n.name}</TableCell>
-                    <TableCell padding="none" style={{ paddingTop: 5, ...styles.tableRow }}>
-                      <span>{AppTexts.Room.Status[n.status][language]}</span>
+                    <CellRow>{n.id}</CellRow>
+                    <CellRow>{n.name}</CellRow>
+                    <CellRow>
+                      <span style={{ fontWeight: 'bold', fontSize: 12 }}>{AppTexts.Room.Status[n.status][language]}</span>
                       <StatusDate date={n.createdAt} label={AppTexts.Room.CreatedAt[language]} />
                       <StatusDate date={n.openedAt} label={AppTexts.Room.OpenedAt[language]} />
                       <StatusDate date={n.startedAt} label={AppTexts.Room.StartedAt[language]} />
@@ -204,11 +191,11 @@ export default function MyRooms() {
                           <LinearProgress variant="indeterminate" style={{ marginBottom: 10 }} />
                           : null
                       }
-                    </TableCell>
-                    <TableCell padding="none" style={styles.tableRow}>{n.users.length}</TableCell>
-                    <TableCell padding="none" style={styles.tableRow}>{n.questions.length}</TableCell>
-                    <TableCell padding="none" style={styles.tableRow}>{`${n.time}s`}</TableCell>
-                    <TableCell padding="none" style={styles.tableRow}>
+                    </CellRow>
+                    <CellRow>{n.users.length}</CellRow>
+                    <CellRow>{n.questions.length}</CellRow>
+                    <CellRow>{`${n.time}s`}</CellRow>
+                    <CellRow>
                       <StatusButton
                         language={language}
                         status={n.status}
@@ -240,24 +227,24 @@ export default function MyRooms() {
                           </Tooltip>
                         </span>
                         : null}
-                    </TableCell>
+                    </CellRow>
                   </TableRow>
                 ))}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
+                  <CellRow colSpan={6} />
                 </TableRow>
               )}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  component="div"
+                  rowsPerPageOptions={[5, 10, 25, 50]}
                   count={rooms.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-                  labelRowsPerPage="itens por página"
+                  // labelRowsPerPage="itens por página"
                   backIconButtonProps={{
                     'aria-label': 'Previous Page',
                   }}
@@ -270,7 +257,7 @@ export default function MyRooms() {
               </TableRow>
             </TableFooter>
           </Table>
-        </Paper>
+        </Container>
         : <NoContentMessage>Você ainda não criou salas.</NoContentMessage>
       }
 
@@ -284,7 +271,7 @@ export default function MyRooms() {
 
       <ConfirmModal open={!!removeRoom}
         title={AppTexts.Question.ConfirmExclusionTitle[language]}
-        text={removeRoom ? removeRoom.description : ''}
+        text={removeRoom?.description || ''}
         onResult={confirm => onResultRemoveRoom(confirm)}>
       </ConfirmModal>
     </CardMain>

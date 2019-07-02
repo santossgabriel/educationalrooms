@@ -28,4 +28,5 @@ export const NoContentMessage = styled.span`
   text-align: center;
   display: block;
   font-family: Arial, Helvetica, sans-serif;
+  margin: 12px;
 `

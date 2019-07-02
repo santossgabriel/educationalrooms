@@ -28,9 +28,11 @@ class SelectQuestionModal extends React.Component {
       selectedQuestions: {},
       qSelected: {}
     }
+    console.log('constructor')
   }
 
   onEnter() {
+    console.log('onenter')
     this.setState({ questions: [] })
     const selectedQuestions = {},
       questions = this.props.questions || []
