@@ -147,7 +147,7 @@ export default function MyRooms() {
   async function onResultRemoveRoom(confirm) {
     if (confirm) {
       try {
-        const res = roomService.remove(removeRoom.id)
+        const res = await roomService.remove(removeRoom.id)
         refresh()
         dispatch(showSuccess(res.message))
       } catch (ex) {
@@ -271,7 +271,7 @@ export default function MyRooms() {
 
       <ConfirmModal open={!!removeRoom}
         title={AppTexts.Question.ConfirmExclusionTitle[language]}
-        text={removeRoom?.description || ''}
+        text={removeRoom ?.description || ''}
         onResult={confirm => onResultRemoveRoom(confirm)}>
       </ConfirmModal>
     </CardMain>

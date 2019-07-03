@@ -135,7 +135,7 @@ export default {
 
       question.id = req.body.id
       question.difficulty = req.body.difficulty
-      question.area = req.body.area
+      question.area = (req.body.area || '').toUpperCase()
       question.description = req.body.description
       question.shared = req.body.shared
       question.answers = req.body.answers
@@ -166,7 +166,7 @@ export default {
 
       question.id = req.body.id
       question.difficulty = req.body.difficulty
-      question.area = req.body.area
+      question.area = (req.body.area || '').toUpperCase()
       question.description = req.body.description
       question.shared = req.body.shared
       question.answers = req.body.answers

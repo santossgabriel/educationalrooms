@@ -33,11 +33,11 @@ export default function EditRoom(props) {
 
   const language = useSelector(state => state.appState.language)
   const dispatch = useDispatch()
-  // const mapDispatchToProps = dispatch => bindActionCreators({ showError, showSuccess }, dispatch)
 
   useEffect(() => {
     loadQuestions()
-    loadRoom()
+    if (id)
+      loadRoom()
   }, [])
 
   useEffect(() => {
@@ -55,10 +55,12 @@ export default function EditRoom(props) {
 
   async function loadRoom() {
     const room = await roomService.get(id)
-    setRoomName(room.name || '')
-    setTime((room.time || 0) + '')
-    ordenateQuestions(room.questions, 'order')
-    setIdsQuestions(room.questions.map(p => p.id))
+    if (room) {
+      setRoomName(room.name || '')
+      setTime((room.time || 0) + '')
+      ordenateQuestions(room.questions, 'order')
+      setIdsQuestions(room.questions.map(p => p.id))
+    }
   }
 
   function onSelectQuestions(ids) {
@@ -129,7 +131,7 @@ export default function EditRoom(props) {
     setPoints(newPoints)
   }
 
-  function save() {
+  async function save() {
     const room = {
       time,
       name: roomName,
@@ -140,13 +142,13 @@ export default function EditRoom(props) {
         points: points[p.id] || 50
       }))
     }
-
-    roomService.save(room)
-      .then(() => {
-        dispatch(showSuccess('Salvo com sucesso.'))
-        window.location.hash = '#/my-rooms'
-      })
-      .catch(err => dispatch(showError(err.message)))
+    try {
+      const result = await roomService.save(room)
+      dispatch(showSuccess(result.message))
+      window.location.hash = '#/my-rooms'
+    } catch (ex) {
+      dispatch(showError(ex.message))
+    }
   }
 
   return (
