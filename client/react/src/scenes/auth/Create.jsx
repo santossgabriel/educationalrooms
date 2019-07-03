@@ -97,7 +97,7 @@ class Create extends React.Component {
           <ButtonAuth variant="outlined"
             jestid="btnToLogin"
             onClick={this.props.changeScene}
-            color="primary">back to Login</ButtonAuth>
+            color="primary">back to login</ButtonAuth>
           <FormHelperText style={{ textTransform: 'uppercase', textAlign: 'center', marginTop: '8px' }}
             jestid="msgCreate"
             hidden={!this.state.errorMessage} error={true}>
