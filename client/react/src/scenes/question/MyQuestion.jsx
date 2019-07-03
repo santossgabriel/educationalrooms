@@ -75,7 +75,7 @@ export default function MyQuestion() {
       try {
         const res = await questionService.remove(id)
         dispatch(showSuccess(res.message))
-        this.refresh()
+        refresh()
       } catch (err) {
         dispatch(showError(err.message))
       }

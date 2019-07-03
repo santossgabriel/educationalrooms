@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import {
   Button,
   Dialog,
@@ -12,112 +13,99 @@ import {
   TableBody,
   Checkbox
 } from '@material-ui/core'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import Stars from '../question/Stars'
 
 import { AppTexts } from '../../helpers/appTexts'
+const { MyQuestionsTable: { Area, Difficulty, Description, Answers } } = AppTexts
 
-class SelectQuestionModal extends React.Component {
+export default function SelectQuestionModal(props) {
 
-  constructor(props) {
-    super(props)
+  const language = useSelector(state => state.appState.language)
+  const [questions, setQuestions] = useState([])
+  const [selectedIds, setSelectedIds] = useState({})
 
-    this.state = {
-      questions: [],
-      selectedQuestions: {},
-      qSelected: {}
-    }
-    console.log('constructor')
+  function onEnter() {
+    const questions = props.questions || []
+    questions.forEach(p => selectedIds[p.id] = (props.ids || []).indexOf(p.id) !== -1)
+    console.log(selectedIds)
+    setSelectedIds(selectedIds)
+    setQuestions(questions)
   }
 
-  onEnter() {
-    console.log('onenter')
-    this.setState({ questions: [] })
-    const selectedQuestions = {},
-      questions = this.props.questions || []
-    if (this.props.ids)
-      this.props.ids.forEach(p => selectedQuestions[p] = true)
-    setTimeout(() => this.setState({ selectedQuestions, questions }), 50)
+  function selectQuestion(selected, id) {
+    const selIds = { ...selectedIds }
+    selIds[id] = selected
+    setSelectedIds(selIds)
   }
 
-  selectQuestion(selected, id) {
-    const { selectedQuestions } = this.state
-    selectedQuestions[id] = selected
-    this.setState({ selectedQuestions })
-  }
-
-  ok() {
+  function ok() {
     const ids = []
-    const { selectedQuestions } = this.state
-    for (let id in selectedQuestions)
-      if (selectedQuestions[id])
+    for (let id in selectedIds)
+      if (selectedIds[id])
         ids.push(Number(id))
-    this.props.onResult(ids)
+    props.onResult(ids)
   }
 
-  render() {
-
-    return (
-      <Dialog
-        open={this.props.open}
-        onClose={() => this.props.close()}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        transitionDuration={300}
-        maxWidth={false}
-        onEnter={() => this.onEnter()}
-        TransitionComponent={Zoom}>
-        <DialogContent>
-          <Table aria-labelledby="tableTitle">
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Area[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Difficulty[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Description[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{AppTexts.MyQuestionsTable.Answers[this.props.language]}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.questions
-                .map(n => (
-                  <TableRow
-                    tabIndex={-1}
-                    key={n.id}>
-                    <TableCell component="th" scope="row" padding="none" style={{ textAlign: 'center' }}>
-                      {n.area}
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      <Stars filled={n.difficulty || 0} />
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{n.description}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{n.answers.length}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      <Checkbox
-                        color="primary"
-                        checked={this.state.selectedQuestions[n.id]}
-                        onChange={(_, v) => this.selectQuestion(v, n.id)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              {this.state.emptyRows > 0 && (
-                <TableRow style={{ height: 49 * this.state.emptyRows }}>
-                  <TableCell colSpan={6} />
+  return (
+    <Dialog
+      open={props.open}
+      onClose={props.close}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      transitionDuration={300}
+      maxWidth={false}
+      onEnter={() => onEnter()}
+      TransitionComponent={Zoom}>
+      <DialogContent>
+        <Table aria-labelledby="tableTitle">
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ color: '#AAA', fontWeight: 'bold', textAlign: 'center' }}>{Area[language]}</TableCell>
+              <TableCell style={{ textAlign: 'center' }}>{Difficulty[language]}</TableCell>
+              <TableCell style={{ textAlign: 'center' }}>{Description[language]}</TableCell>
+              <TableCell style={{ textAlign: 'center' }}>{Answers[language]}</TableCell>
+              <TableCell style={{ textAlign: 'center' }}></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {questions
+              .map(n => (
+                <TableRow
+                  tabIndex={-1}
+                  key={n.id}>
+                  <TableCell component="th" scope="row" padding="none" style={{ textAlign: 'center' }}>
+                    {n.area}
+                  </TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>
+                    <Stars filled={n.difficulty || 0} />
+                  </TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>{n.description}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>{n.answers.length}</TableCell>
+                  <TableCell style={{ textAlign: 'center' }}>
+                    <Checkbox
+                      color="primary"
+                      checked={selectedIds[n.id]}
+                      onChange={(_, v) => selectQuestion(v, n.id)}
+                    />
+                  </TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => this.ok()} color="primary" variant="contained" autoFocus>ok</Button>
-        </DialogActions>
-      </Dialog>
-    )
-  }
+              ))}
+          </TableBody>
+        </Table>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => ok()} color="primary" variant="contained" autoFocus>ok</Button>
+      </DialogActions>
+    </Dialog>
+  )
 }
 
-const mapStateToProps = state => ({ language: state.appState.language })
-
-export default connect(mapStateToProps)(SelectQuestionModal)
+SelectQuestionModal.propTypes = {
+  onResult: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+  open: PropTypes.bool,
+  questions: PropTypes.array,
+  ids: PropTypes.array
+}
