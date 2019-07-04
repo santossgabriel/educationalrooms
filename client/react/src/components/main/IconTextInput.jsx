@@ -106,7 +106,6 @@ IconTextInput.propTypes = {
   email: PropTypes.bool,
   pattern: PropTypes.string,
   patternMessage: PropTypes.string,
-  validChanged: PropTypes.func,
   onChange: PropTypes.func,
   name: PropTypes.string,
   label: PropTypes.string.isRequired,
