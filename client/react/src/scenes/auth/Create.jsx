@@ -1,6 +1,5 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { CardContent, Zoom, FormHelperText } from '@material-ui/core'
@@ -11,48 +10,47 @@ import { authService } from '../../services'
 import { userChanged } from '../../actions'
 import { ButtonAuth, Container } from './styles'
 
-class Create extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
+export default function Create({ changeScene }) {
+
+  const [form, setForm] = useState({ name: {}, email: {}, password: {}, confirm: {} })
+  const [errorMessage, setErrorMessage] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  const dispatch = useDispatch()
+
+  function fieldChanged(e) {
+    form[e.name] = e
+    const { name, email, password, confirm } = form
+    form.valid = name.valid && email.valid && password.valid && confirm.valid
+    setForm({ ...form })
   }
 
-  componentDidMount() { this._isMounted = true }
-  componentWillUnmount() { this._isMounted = false }
-
-  onInputChange(e) {
-    this.setState({
-      [e.name]: e.value,
-      [`${e.name}Valid`]: e.valid,
-      errorMessage: ''
-    })
+  async function send() {
+    try {
+      const user = {
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value
+      }
+      const res = await authService.createAccount(user)
+      dispatch(userChanged(res))
+    } catch (ex) {
+      setErrorMessage(ex.message)
+    }
   }
 
-  send() {
-    authService.createAccount({
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password
-    }).then(res => {
-      if (this._isMounted)
-        this.props.userChanged(res)
-    }).catch(err => {
-      if (this._isMounted)
-        this.setState({ errorMessage: err.message })
-    })
-  }
-
-  render() {
-    return (
-      <Zoom in={true}>
-        <Container>
+  return (
+    <Zoom in={true}>
+      <Container>
+        <form onSubmit={() => send()}>
           <CardContent>
             <IconTextInput
               label="Name"
               required
               minlength={5}
               name="name"
-              onChange={e => this.onInputChange(e)}
+              onChange={e => fieldChanged(e)}
               Icon={<Person />}
             />
             <IconTextInput
@@ -60,29 +58,29 @@ class Create extends React.Component {
               email
               required
               name="email"
-              onChange={e => this.onInputChange(e)}
+              onChange={e => fieldChanged(e)}
               Icon={<Email />}
             />
             <IconTextInput
-              type={this.state.showPassword ? 'text' : 'password'}
+              type={showPassword ? 'text' : 'password'}
               required
               label="Password"
               name="password"
-              onChange={e => this.onInputChange(e)}
+              onChange={e => fieldChanged(e)}
               minlength={4}
-              Icon={this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-              iconClick={() => this.setState({ showPassword: !this.state.showPassword })}
+              Icon={showPassword ? <VisibilityOff /> : <Visibility />}
+              iconClick={() => setShowPassword(!showPassword)}
             />
             <IconTextInput
               required
-              type={this.state.showConfirm ? 'text' : 'password'}
+              type={showConfirm ? 'text' : 'password'}
               label="Confirm"
               name="confirm"
-              onChange={e => this.onInputChange(e)}
-              pattern={`^${this.state.password}$`}
+              onChange={e => fieldChanged(e)}
+              pattern={`^${form.password.value}$`}
               patternMessage="The passwords do not match."
-              Icon={this.state.showConfirm ? <VisibilityOff /> : <Visibility />}
-              iconClick={() => this.setState({ showConfirm: !this.state.showConfirm })}
+              Icon={showConfirm ? <VisibilityOff /> : <Visibility />}
+              iconClick={() => setShowConfirm(!showConfirm)}
             />
           </CardContent>
           <br />
@@ -90,30 +88,25 @@ class Create extends React.Component {
             jestid="btnCreate"
             variant="contained"
             type="submit"
-            onClick={() => this.send()}
-            disabled={!this.state.nameValid || !this.state.emailValid || !this.state.passwordValid || !this.state.confirmValid}
+            onClick={() => send()}
+            disabled={!form.valid}
             color="primary">Send</ButtonAuth>
           <br /><br />
           <ButtonAuth variant="outlined"
             jestid="btnToLogin"
-            onClick={this.props.changeScene}
-            color="primary">back to login</ButtonAuth>
+            onClick={changeScene}
+            color="primary">back to Login</ButtonAuth>
           <FormHelperText style={{ textTransform: 'uppercase', textAlign: 'center', marginTop: '8px' }}
             jestid="msgCreate"
-            hidden={!this.state.errorMessage} error={true}>
-            {this.state.errorMessage}
+            hidden={!errorMessage} error={true}>
+            {errorMessage}
           </FormHelperText>
-        </Container>
-      </Zoom>
-    )
-  }
+        </form>
+      </Container>
+    </Zoom>
+  )
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({ userChanged }, dispatch)
-
-export default connect(null, mapDispatchToProps)(Create)
-
 Create.propTypes = {
-  changeScene: PropTypes.func,
-  userChanged: PropTypes.func
+  changeScene: PropTypes.func.isRequired
 }
