@@ -29,7 +29,6 @@ export default function SelectQuestionModal(props) {
   function onEnter() {
     const questions = props.questions || []
     questions.forEach(p => selectedIds[p.id] = (props.ids || []).indexOf(p.id) !== -1)
-    console.log(selectedIds)
     setSelectedIds(selectedIds)
     setQuestions(questions)
   }

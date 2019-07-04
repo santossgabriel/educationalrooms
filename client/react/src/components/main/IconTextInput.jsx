@@ -9,7 +9,7 @@ import {
   FormHelperText
 } from '@material-ui/core'
 
-const emailRegex = /^[a-zA-Z0-9!#$.%&*()_]{3,20}@[a-zA-Z0-9]{1,20}[.][a-zA-Z0-9]{1,20}([.][a-zA-Z0-9]{1,20})?$/
+const emailRegex = /^[a-zA-Z0-9!#$.%&*()_]{2,20}@[a-zA-Z0-9]{1,20}[.][a-zA-Z0-9]{1,20}([.][a-zA-Z0-9]{1,20})?$/
 
 class IconTextInput extends React.Component {
 
@@ -53,6 +53,7 @@ class IconTextInput extends React.Component {
       hasError: hasError,
       errorMessage: errorMessage
     })
+
     if (this.props.onChange)
       this.props.onChange({ valid: !hasError, value: t, name: this.props.name })
   }
