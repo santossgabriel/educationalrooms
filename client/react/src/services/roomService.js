@@ -3,6 +3,7 @@ import httpService from './httpService'
 const get = id => httpService.get(`/room/${id}`)
 const getMy = () => httpService.get('/room-my')
 const getOpened = () => httpService.get('/room-opened')
+const getAssociated = () => httpService.get('/room-associated')
 const save = q => httpService.post('/room', q)
 const changeStatus = (id, status) => httpService.put('/room-status', { id, status })
 const associate = (id, associate) => httpService.put('/room-associate', { id, associate })
@@ -12,6 +13,7 @@ export default {
   get,
   getMy,
   getOpened,
+  getAssociated,
   save,
   changeStatus,
   associate,
