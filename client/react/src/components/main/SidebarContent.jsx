@@ -110,7 +110,7 @@ export default function SidebarContent(props) {
           <List component="div" disablePadding>
             <LinkListItem onClick={() => props.closeSidebar()} to="/my-rooms" text={RoomTexts.My[language]} />
             <LinkListItem onClick={() => props.closeSidebar()} to="/open-rooms" text={RoomTexts.Open[language]} />
-            <LinkListItem onClick={() => props.closeSidebar()} to="/associate-rooms" text={RoomTexts.Associate[language]} />
+            <LinkListItem onClick={() => props.closeSidebar()} to="/associated-rooms" text={RoomTexts.Associate[language]} />
           </List>
         </Collapse>
 

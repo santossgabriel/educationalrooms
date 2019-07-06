@@ -202,11 +202,7 @@ export default function MyRooms() {
                             style={{ textDecoration: 'none' }}>
                             <Tooltip title={AppTexts.Root.Edit[language]} placement="bottom">
                               <IconButton color="primary"
-                                aria-label="Menu"
-                                onClick={event => {
-                                  event.stopPropagation()
-                                  setRemoveRoom(n)
-                                }}>
+                                aria-label="Menu">
                                 <Icons.Edit />
                               </IconButton>
                             </Tooltip>

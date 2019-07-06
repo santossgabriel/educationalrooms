@@ -1,12 +1,12 @@
 import React from 'react'
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { createHashHistory } from 'history'
 import {
   MyQuestion,
   SharedQuestion,
   MyRooms,
   OpenRooms,
-  AssociateRooms,
+  AssociatedRooms,
   EditRoom
 } from '../../scenes'
 
@@ -37,7 +37,7 @@ export default class AppRouter extends React.Component {
         <Route path="/edit-room/:id" component={EditRoom} />
         <Route path="/my-rooms" component={MyRooms} />
         <Route path="/open-rooms" component={OpenRooms} />
-        <Route path="/associate-rooms" component={AssociateRooms} />
+        <Route path="/associated-rooms" component={AssociatedRooms} />
       </Switch>
     )
   }
