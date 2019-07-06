@@ -9,11 +9,9 @@ import {
   TableRow,
   TableFooter,
   Table,
-  TableCell,
   TablePagination,
   Button,
   TableHead,
-  Paper,
   IconButton,
   Tooltip,
   LinearProgress
@@ -101,8 +99,6 @@ export default function MyRooms() {
   const [rooms, setRooms] = useState([])
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [page, setPage] = useState(0)
-  const [question, setQuestion] = useState({})
-  const [editModalOpen, setEditModalOpen] = useState(false)
   const [removeRoom, setRemoveRoom] = useState(null)
   const [emptyRows, setEmptyRows] = useState(0)
   const language = useSelector(state => state.appState.language)
@@ -271,7 +267,7 @@ export default function MyRooms() {
 
       <ConfirmModal open={!!removeRoom}
         title={AppTexts.Question.ConfirmExclusionTitle[language]}
-        text={removeRoom ?.description || ''}
+        text={(removeRoom || {}).description || ''}
         onResult={confirm => onResultRemoveRoom(confirm)}>
       </ConfirmModal>
     </CardMain>
