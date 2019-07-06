@@ -204,6 +204,36 @@ export const AppTexts = {
       [EN_US]: 'Duration'
     },
   },
+  OpenedRoomTable: {
+    Owner: {
+      [PT_BR]: 'Dono',
+      [EN_US]: 'Owner'
+    },
+    Name: {
+      [PT_BR]: 'Nome',
+      [EN_US]: 'Name'
+    },
+    Users: {
+      [PT_BR]: 'Usuários',
+      [EN_US]: 'Users'
+    },
+    Questions: {
+      [PT_BR]: 'Questões',
+      [EN_US]: 'Questions'
+    },
+    Duration: {
+      [PT_BR]: 'Duração',
+      [EN_US]: 'Duration'
+    },
+    Enter: {
+      [PT_BR]: 'Participar',
+      [EN_US]: 'Enter'
+    },
+    Leave: {
+      [PT_BR]: 'Deixar',
+      [EN_US]: 'Leave'
+    },
+  },
   Question: {
     ConfirmExclusionTitle: {
       [PT_BR]: 'Tem certeza que deseja excluir a questão ?',

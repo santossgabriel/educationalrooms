@@ -11,7 +11,7 @@ export const CellHead = styled(TableCell)`
   font-weight: bold !important;
   text-align: center !important;
   font-size: 16px !important;
-  padding-left: 0 !important;
+  padding-left: 6px !important;
   padding-right: 0 !important;
 `
 
