@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { HashRouter } from 'react-router-dom'
 
-import { Colors } from '../../helpers/themes'
-import Toobar from './Toolbar'
+import { Colors } from 'helpers/themes'
+import { Toolbar } from 'components/index'
 import SidebarContent from './SidebarContent'
 import AppRouter from './AppRouter'
 import Auth from '../../scenes/auth/Auth'
@@ -58,7 +58,7 @@ class MainComponent extends React.Component {
               onSetOpen={open => this.setState({ sidebarIsOpen: open })}
               docked={this.state.sidebarDocked}
               styles={{ sidebar: { background: Colors.AppGreen } }}>
-              <Toobar
+              <Toolbar
                 dockedMenu={this.state.sidebarDocked}
                 openSideBar={() => this.setState({ sidebarIsOpen: true })}
               />

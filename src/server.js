@@ -5,7 +5,7 @@ import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
 
 import router from './routes/index'
-import socket, { runJob } from './socket/index'
+import socket, { startJob } from './socket/index'
 import auth from './auth/auth'
 import swaggerDocument from './infra/swagger.json'
 
@@ -32,6 +32,6 @@ router(app)
 const server = http.createServer(app)
 socket(server)
 
-runJob()
+startJob()
 
 module.exports = server

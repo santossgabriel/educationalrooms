@@ -42,6 +42,7 @@ export class QuizComponent implements OnInit, SocketConnectListener {
     private router: Router,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute) {
+      this.mode = this.LOADING
     console.log('quiz constructor')
     Globals.addSocketListener(this)
     activatedRoute.params.subscribe((res: Params) => {

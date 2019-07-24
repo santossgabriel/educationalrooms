@@ -1,3 +1,4 @@
+const path = require('path')
 const webpack = require('webpack')
 
 module.exports = {
@@ -18,6 +19,11 @@ module.exports = {
     ]
   },
   resolve: {
+    alias: {
+      services: path.resolve(__dirname, 'src', 'services'),
+      components: path.resolve(__dirname, 'src', 'components'),
+      helpers: path.resolve(__dirname, 'src', 'helpers')
+    },
     extensions: ['*', '.js', '.jsx', '.ttf']
   },
   output: {

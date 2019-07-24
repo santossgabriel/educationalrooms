@@ -123,7 +123,7 @@ const updateCurrentQuestions = async () => {
   })
 }
 
-const startTimer = async () => {
+const runTimer = async () => {
   onlineRooms.forEach(async r => {
     const q = currentQuestions.filter(p => p.roomId == r.id).shift()
     const diff = Math.floor((new Date()).getTime() - q.changedAt.getTime())
@@ -201,7 +201,7 @@ const notifyFinish = async (roomId, users) => {
 export const sendNotifications = (users, notification) => {
   notification.createdAt = new Date()
   users.forEach(async userId => {
-    
+
     const notif = cloneObject(notification)
     notif.userId = userId
     notif.description = JSON.stringify(notif.description)
@@ -213,11 +213,12 @@ export const sendNotifications = (users, notification) => {
   })
 }
 
-export const runJob = async () => {
+export const startJob = async () => {
   if (process.env.NODE_ENV !== 'test') {
+    console.log('job is running')
     await updateOnlineRooms()
     await updateCurrentQuestions()
-    setInterval(startTimer, 1000)
+    setInterval(runTimer, 1000)
   }
 }
 
