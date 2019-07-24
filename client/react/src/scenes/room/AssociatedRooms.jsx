@@ -7,7 +7,8 @@ import {
   TableRow,
   Table,
   TableHead,
-  Snackbar
+  Snackbar,
+  LinearProgress
 } from '@material-ui/core'
 
 import { roomService } from '../../services'
@@ -27,7 +28,7 @@ export default function AssociatedRooms() {
     roomService.getAssociated().then(rooms => setRooms(rooms))
   }, [])
 
-  function openScores(room) {
+  function openScores() {
 
   }
 
@@ -45,30 +46,32 @@ export default function AssociatedRooms() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rooms
-                .map(n => (
-                  <TableRow key={n.id}>
-                    <CellRow>{n.name}</CellRow>
-                    <CellRow>{n.status}</CellRow>
-                    <CellRow>{n.status === RoomStatus.ENDED ? (n.score || 0) : '???'}</CellRow>
-                    <CellRow>
-                      {n.status === RoomStatus.ENDED ? // ICON 'poll'
+              {rooms.map(n => (
+                <TableRow key={n.id}>
+                  <CellRow>{n.name}</CellRow>
+                  <CellRow>
+                    {(AppTexts.RoomStatus[n.status] || {})[language]}
+                    {n.status === RoomStatus.STARTED && <LinearProgress />}
+                  </CellRow>
+                  <CellRow>{n.status === RoomStatus.ENDED ? (n.score || 0) : '???'}</CellRow>
+                  <CellRow>
+                    {n.status === RoomStatus.ENDED ? // ICON 'poll'
+                      <Button color="primary"
+                        variant="contained"
+                        onClick={() => openScores(n)}>SCORES</Button> : null
+                    }
+
+                    {n.status === RoomStatus.STARTED ? // ICON 'trending_flat'
+                      <Link to={`quiz/${n.id}`}
+                        style={{ textDecoration: 'none' }}>
                         <Button color="primary"
-                          variant="contained"
-                          onClick={() => openScores(n)}>SCORES</Button> : null
-                      }
+                          variant="contained">Abrir QUIZ</Button>
+                      </Link> : null
+                    }
 
-                      {n.status === RoomStatus.STARTED ? // ICON 'trending_flat'
-                        <Link to={`quiz/${n.id}`}
-                          style={{ textDecoration: 'none' }}>
-                          <Button color="primary"
-                            variant="contained">Abrir QUIZ</Button>
-                        </Link> : null
-                      }
-
-                    </CellRow>
-                  </TableRow>
-                ))}
+                  </CellRow>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </Container>

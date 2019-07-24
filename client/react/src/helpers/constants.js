@@ -4,3 +4,15 @@ export const RoomStatus = {
   STARTED: 'STARTED',
   ENDED: 'ENDED'
 }
+
+export const QuizStatus = {
+  TIME_OVER: 'TIME_OVER',
+  ANSWER: 'ANSWER',
+  LOADING: 'LOADING',
+  CORRECT: 'CORRECT',
+  WRONG: 'WRONG',
+  SENT: 'SENT',
+  UNAVAILABLE: 'UNAVAILABLE',
+  ENDED: 'ENDED',
+  DISCONNECTED: 'DISCONNECTED'
+}

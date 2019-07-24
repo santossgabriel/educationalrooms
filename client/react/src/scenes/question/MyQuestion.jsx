@@ -175,6 +175,7 @@ export default function MyQuestion() {
       <div style={{ textAlign: 'center', padding: '5px' }}>
         <Button
           onClick={() => openEditQuestion()}
+          variant="contained"
           color="primary">{AppTexts.MyQuestionsTable.CreateQuestion[language]}</Button>
       </div>
       <EditQuestionModal

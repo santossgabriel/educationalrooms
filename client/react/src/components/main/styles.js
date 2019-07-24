@@ -18,3 +18,7 @@ export const CardMainContainer = styled(Paper)`
     fontSize: 14px;
   }
 `
+
+export const FadeInContainer = styled.div`
+  transition: opacity .5s;
+`

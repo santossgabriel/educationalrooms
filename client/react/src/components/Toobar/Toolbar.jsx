@@ -7,10 +7,11 @@ import Menu from '@material-ui/core/Menu'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { AppTexts, Languages } from '../../helpers/appTexts'
-import { BrazilFlag, UnitedStatesFlag } from './Flags'
+import { AppTexts, Languages } from 'helpers/appTexts'
+import { BrazilFlag, UnitedStatesFlag } from 'components'
 import { languageChanged, userChanged } from '../../actions'
-import { authService } from '../../services'
+import { authService } from 'services'
+import { UserPicture } from './UserPicture'
 
 const styles = {
   root: {
@@ -86,9 +87,8 @@ class AppToolbar extends React.Component {
             <Typography variant="h5" color="inherit" style={styles.grow}>
               {AppTexts.AppTitle[this.props.language]}
             </Typography>
-            <Button variant="outlined" color="secondary" onClick={this.handleClick}>
-              <img height="70" width="70" style={{ borderRadius: '50%' }}
-                src={this.props.user && this.props.user.picture ? this.props.user.picture : '/api/image/user-image.png'} />
+            <Button onClick={this.handleClick}>
+              <UserPicture image={this.props.user && this.props.user.picture} online={true} />
             </Button>
 
             <Menu
@@ -98,8 +98,7 @@ class AppToolbar extends React.Component {
               open={Boolean(this.state.anchorEl)}
               onClose={this.handleClose}>
               <div style={{ display: 'inline-block' }}>
-                <img height="60" width="60" style={{ marginLeft: '8px', borderRadius: '50%' }}
-                  src={this.props.user && this.props.user.picture ? this.props.user.picture : '/api/image/user-image.png'} />
+                <UserPicture image={this.props.user && this.props.user.picture} online={true} />
                 <div style={{ marginLeft: '12px' }}>
                   <UnitedStatesFlag onClick={() => this.changeLanguage(Languages.EN_US)} />
                   <BrazilFlag onClick={() => this.changeLanguage(Languages.PT_BR)} />
@@ -119,7 +118,7 @@ class AppToolbar extends React.Component {
             </Menu>
           </Toolbar>
         </AppBar>
-      </div>
+      </div >
     )
   }
 }

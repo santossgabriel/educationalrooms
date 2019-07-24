@@ -256,8 +256,7 @@ export default function MyRooms() {
       <div style={{ textAlign: 'center', padding: '5px' }}>
         <Link to="edit-room/:0"
           style={{ textDecoration: 'none' }}>
-          <Button
-            color="primary" variant="contained">{AppTexts.MyRoomsTable.CreateRoom[language]}</Button>
+          <Button color="primary" variant="contained">{AppTexts.MyRoomsTable.CreateRoom[language]}</Button>
         </Link>
       </div>
 
