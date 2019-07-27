@@ -1,134 +1,152 @@
-import React from 'react'
-import { AppBar, Toolbar, Button } from '@material-ui/core/'
+import React, { useState, useEffect } from 'react'
+import { AppBar, Toolbar, Button, Badge } from '@material-ui/core/'
 import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
 import * as Icons from '@material-ui/icons'
 import Menu from '@material-ui/core/Menu'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
+
+import { Link, MenuIconButton, UserName, UserEmail, MenuFooter, NotificationTitle, NotificationContainer } from './styles'
 
 import { AppTexts, Languages } from 'helpers/appTexts'
 import { BrazilFlag, UnitedStatesFlag } from 'components'
-import { languageChanged, userChanged } from '../../actions'
-import { authService } from 'services'
+import { languageChanged, userChanged, notificationsChanged } from '../../actions'
+import { authService, notificationService } from 'services'
 import { UserPicture } from './UserPicture'
 
-const styles = {
-  root: {
-    flexGrow: 1,
-  },
-  grow: {
-    flexGrow: 2,
-    textTransform: 'uppercase'
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  userName: {
-    fontFamily: 'Roboto Helvetica Arial sans-serif',
-    color: '#777',
-    fontSize: '24px'
-  },
-  userEmail: {
-    fontFamily: 'Roboto Helvetica Arial sans-serif',
-    color: '#777'
-  },
-  userMenuFooter: {
-    padding: '10px',
-    textAlign: 'end',
-    backgroundColor: '#afafaf'
-  }
-}
+export default function AppToolbar({ dockedMenu, openSideBar }) {
 
-class AppToolbar extends React.Component {
+  const [anchorMenu, setAnchorMenu] = useState(null)
+  const [anchorNotification, setAnchorNotification] = useState(null)
+  const { language, user, online, notifications } = useSelector(state => state.appState)
+  const dispatch = useDispatch()
 
-  constructor(props) {
-    super(props)
-    this.state = {}
-    this.handleClick = this.handleClick.bind(this)
-    this.handleClose = this.handleClose.bind(this)
-    this.changeLanguage = this.changeLanguage.bind(this)
-  }
+  useEffect(() => {
+    notificationService.getAll().then(res => {
+      dispatch(notificationsChanged(res))
+    })
+  }, [])
 
-  handleClick(event) {
-    this.setState({ anchorEl: event.currentTarget })
-  }
-
-  handleClose() {
-    this.setState({ anchorEl: null })
-  }
-
-  changeLanguage(l) {
-    this.props.languageChanged(l)
+  function changeLanguage(l) {
+    dispatch(languageChanged(l))
     document.title = AppTexts.AppTitle[l]
-    this.handleClose()
+    setAnchorMenu(null)
   }
 
-  logout() {
+  function logout() {
     authService.logout()
-    this.props.userChanged(null)
+    dispatch(userChanged(null))
   }
 
-  render() {
-    return (
-      <div style={styles.root} >
-        <AppBar position='static' color='primary'>
-          <Toolbar>
-            {
-              this.props.dockedMenu ? null :
-                <IconButton style={styles.menuButton}
-                  color="inherit"
-                  aria-label="Menu"
-                  onClick={() => this.props.openSideBar()}>
-                  <Icons.Menu />
-                </IconButton>
-            }
-            <Typography variant="h5" color="inherit" style={styles.grow}>
-              {AppTexts.AppTitle[this.props.language]}
-            </Typography>
-            <Button onClick={this.handleClick}>
-              <UserPicture image={this.props.user && this.props.user.picture} online={this.props.online} />
-            </Button>
+  function markRead() {
+    notificationService.markRead().then(() => {
+      notifications.forEach(p => p.read = true)
+      dispatch(notificationsChanged(notifications))
+    })
+  }
 
-            <Menu
-              style={{ margin: '0', padding: '0' }}
-              id="simple-menu"
-              anchorEl={this.state.anchorEl}
-              open={Boolean(this.state.anchorEl)}
-              onClose={this.handleClose}>
-              <div style={{ display: 'inline-block' }}>
-                <UserPicture image={this.props.user && this.props.user.picture} online={this.props.online} />
-                <div style={{ marginLeft: '12px' }}>
-                  <UnitedStatesFlag onClick={() => this.changeLanguage(Languages.EN_US)} />
-                  <BrazilFlag onClick={() => this.changeLanguage(Languages.PT_BR)} />
+  function removeAll() {
+    notificationService.removeAll().then(() => {
+      dispatch(notificationsChanged([]))
+    })
+  }
+
+  function remove(n) {
+    notificationService.removeAll(n.id).then(() => {
+      dispatch(notificationsChanged(notifications.filter(p => p.id !== n.id)))
+    })
+  }
+
+  return (
+    <div style={{ flexGrow: 1 }} >
+      <AppBar position='static' color='primary'>
+        <Toolbar>
+          {
+            dockedMenu ? null :
+              <MenuIconButton color="inherit" aria-label="Menu"
+                onClick={() => openSideBar()}>
+                <Icons.Menu />
+              </MenuIconButton>
+          }
+          <Typography variant="h5" color="inherit" style={{ flexGrow: 2, textTransform: 'uppercase' }}>
+            {AppTexts.AppTitle[language]}
+          </Typography>
+
+          <MenuIconButton color="inherit" onClick={e => setAnchorNotification(e.currentTarget)}>
+            <Badge color="secondary" badgeContent={notifications.filter(p => !p.read).length}
+              invisible={!notifications.filter(p => !p.read).length}>
+              <Icons.Notifications />
+            </Badge>
+          </MenuIconButton>
+
+          <MenuIconButton color="inherit">
+            <Icons.Help />
+          </MenuIconButton>
+
+          <Button onClick={e => setAnchorMenu(e.currentTarget)}>
+            <UserPicture image={user && user.picture} online={online} />
+          </Button>
+
+          <Menu
+            style={{ margin: '0', padding: '0' }}
+            id="simple-menu"
+            anchorEl={anchorNotification}
+            open={!!anchorNotification && !!notifications.length}
+            onClose={() => setAnchorNotification(null)}>
+            <NotificationTitle>Notificações</NotificationTitle>
+            <NotificationContainer>
+              {notifications.map(n => (
+                <div key={n.id} style={{ borderTop: '1px solid #666', padding: '10px 10px 0px 10px' }}>
+                  <div style={{ fontSize: '10px', textAlign: 'end' }}>
+                    {!n.read && <Icons.Lens style={{ color: 'aqua' }} fontSize="inherit" />}
+                    <Icons.Close onClick={() => remove(n)} style={{ color: '#B44', cursor: 'pointer' }} fontSize="inherit" />
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: 'bold', paddingRight: '4px' }}>{n.origin}:</span>
+                    {n.description}
+                  </div>
+                  <div style={{ textAlign: 'end' }}>{n.elapsedTime}</div>
                 </div>
+              ))}
+            </NotificationContainer>
+            <MenuFooter>
+              <Link onClick={() => markRead()} href="javascript:void(0)">Marcar como lidas</Link>
+              <Link onClick={() => removeAll()} href="javascript:void(0)">Remover Todas</Link>
+            </MenuFooter>
+          </Menu>
+
+          <Menu
+            style={{ margin: '0', padding: '0' }}
+            id="simple-menu"
+            anchorEl={anchorMenu}
+            open={!!anchorMenu}
+            onClose={() => setAnchorMenu(null)}>
+            <div style={{ display: 'inline-block' }}>
+              <UserPicture image={user && user.picture} online={online} />
+              <div style={{ marginLeft: '12px' }}>
+                <UnitedStatesFlag onClick={() => changeLanguage(Languages.EN_US)} />
+                <BrazilFlag onClick={() => changeLanguage(Languages.PT_BR)} />
               </div>
-              <div style={{ display: 'inline-block', marginLeft: '8px', marginRight: '8px' }}>
-                <div style={styles.userName}>{this.props.user && this.props.user.name ? this.props.user.name : ''}</div>
-                <div style={styles.userEmail}>{this.props.user && this.props.user.email ? this.props.user.email : ''}</div>
-              </div>
-              <div style={styles.userMenuFooter}>
-                <Button autoFocus={true} variant="contained" color="primary">{AppTexts.Toolbar.EditAccount[this.props.language]}</Button>
-                <Button
-                  style={{ marginLeft: '10px' }}
-                  onClick={() => this.logout()}
-                  variant="contained">{AppTexts.Toolbar.Logout[this.props.language]}</Button>
-              </div>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </div >
-    )
-  }
+            </div>
+            <div style={{ display: 'inline-block', marginLeft: '8px', marginRight: '8px' }}>
+              <UserName>{user && user.name || ''}</UserName>
+              <UserEmail>{user && user.email || ''}</UserEmail>
+            </div>
+            <MenuFooter>
+              <Button autoFocus={true} variant="contained" color="primary">{AppTexts.Toolbar.EditAccount[language]}</Button>
+              <Button
+                style={{ marginLeft: '10px' }}
+                onClick={() => logout()}
+                variant="contained">{AppTexts.Toolbar.Logout[language]}</Button>
+            </MenuFooter>
+          </Menu>
+        </Toolbar>
+      </AppBar>
+    </div >
+  )
 }
 
-const mapStateToProps = state => ({
-  language: state.appState.language,
-  user: state.appState.user,
-  online: state.appState.online
-})
-
-const mapDispatchToProps = dispatch => bindActionCreators({ languageChanged, userChanged }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppToolbar)
+AppToolbar.propTypes = {
+  dockedMenu: PropTypes.bool,
+  openSideBar: PropTypes.func.isRequired
+}

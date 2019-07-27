@@ -30,3 +30,12 @@ export const SocketEvents = {
     FINISH_ROOM: 'finishRoom'
   }
 }
+
+export const NotificationTypes = {
+  IN_ROOM: 'IN_ROOM',
+  OUT_ROOM: 'OUT_ROOM',
+  ROOM_STARTED: 'ROOM_START',
+  ROOM_ENDED: 'ROOM_ENDED',
+  ROOM_REMOVED: 'ROOM_REMOVED',
+  ROOM_CLOSED: 'ROOM_CLOSED'
+}

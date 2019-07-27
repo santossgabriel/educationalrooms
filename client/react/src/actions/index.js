@@ -2,7 +2,8 @@ import {
   LANGUAGE_CHANGED,
   USER_CHANGED,
   CHANGE_VISIBLE_ALERT,
-  ONLINE_CHANGED
+  ONLINE_CHANGED,
+  NOTIFICATIONS_CHANGED
 } from './actionTypes'
 
 export const languageChanged = newLanguage => ({
@@ -33,4 +34,9 @@ export const showSuccess = message => ({
 export const hideAlert = () => ({
   type: CHANGE_VISIBLE_ALERT,
   payload: { message: '', show: false }
+})
+
+export const notificationsChanged = notifications => ({
+  type: NOTIFICATIONS_CHANGED,
+  payload: notifications
 })

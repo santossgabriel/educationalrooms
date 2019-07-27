@@ -1,11 +1,13 @@
 import { Languages } from '../helpers/appTexts'
-import { LANGUAGE_CHANGED, USER_CHANGED, ONLINE_CHANGED } from '../actions/actionTypes'
+import { LANGUAGE_CHANGED, USER_CHANGED, ONLINE_CHANGED, NOTIFICATIONS_CHANGED } from '../actions/actionTypes'
 import storageService from '../services/storageService'
+import { notificationResolver } from '../resolvers/notificationResolver'
 
 const initialState = {
   language: storageService.getLanguage(),
   user: storageService.getUser(),
-  online: false
+  online: false,
+  notifications: []
 }
 
 export const appReducer = (state = initialState, action) => {
@@ -13,16 +15,19 @@ export const appReducer = (state = initialState, action) => {
     case LANGUAGE_CHANGED:
       if (action.payload !== Languages.EN_US && action.payload !== Languages.PT_BR)
         return state
-      localStorage.setItem('LANGUAGE', action.payload)
+      storageService.setLanguage(action.payload)
       return { ...state, language: action.payload }
+
     case USER_CHANGED:
-      if (action.payload)
-        localStorage.setItem('USER', JSON.stringify(action.payload))
-      else
-        localStorage.removeItem('USER')
+      storageService.setUser(action.payload)
       return { ...state, user: action.payload }
+
     case ONLINE_CHANGED:
       return { ...state, online: action.payload }
+
+    case NOTIFICATIONS_CHANGED:
+      return { ...state, notifications: notificationResolver(action.payload) }
+
     default:
       return state
   }
