@@ -1,10 +1,11 @@
 import { Languages } from '../helpers/appTexts'
-import { LANGUAGE_CHANGED, USER_CHANGED } from '../actions/actionTypes'
+import { LANGUAGE_CHANGED, USER_CHANGED, ONLINE_CHANGED } from '../actions/actionTypes'
 import storageService from '../services/storageService'
 
 const initialState = {
   language: storageService.getLanguage(),
-  user: storageService.getUser()
+  user: storageService.getUser(),
+  online: false
 }
 
 export const appReducer = (state = initialState, action) => {
@@ -20,6 +21,8 @@ export const appReducer = (state = initialState, action) => {
       else
         localStorage.removeItem('USER')
       return { ...state, user: action.payload }
+    case ONLINE_CHANGED:
+      return { ...state, online: action.payload }
     default:
       return state
   }

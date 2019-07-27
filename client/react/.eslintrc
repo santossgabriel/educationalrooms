@@ -18,7 +18,8 @@
     "localStorage": "readonly",
     "jest": "readonly",
     "document": "readonly",
-    "location": "readonly"
+    "location": "readonly",
+    "navigator": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,
