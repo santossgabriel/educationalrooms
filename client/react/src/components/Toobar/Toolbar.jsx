@@ -88,7 +88,7 @@ class AppToolbar extends React.Component {
               {AppTexts.AppTitle[this.props.language]}
             </Typography>
             <Button onClick={this.handleClick}>
-              <UserPicture image={this.props.user && this.props.user.picture} online={true} />
+              <UserPicture image={this.props.user && this.props.user.picture} online={this.props.online} />
             </Button>
 
             <Menu
@@ -98,7 +98,7 @@ class AppToolbar extends React.Component {
               open={Boolean(this.state.anchorEl)}
               onClose={this.handleClose}>
               <div style={{ display: 'inline-block' }}>
-                <UserPicture image={this.props.user && this.props.user.picture} online={true} />
+                <UserPicture image={this.props.user && this.props.user.picture} online={this.props.online} />
                 <div style={{ marginLeft: '12px' }}>
                   <UnitedStatesFlag onClick={() => this.changeLanguage(Languages.EN_US)} />
                   <BrazilFlag onClick={() => this.changeLanguage(Languages.PT_BR)} />
@@ -125,7 +125,8 @@ class AppToolbar extends React.Component {
 
 const mapStateToProps = state => ({
   language: state.appState.language,
-  user: state.appState.user
+  user: state.appState.user,
+  online: state.appState.online
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({ languageChanged, userChanged }, dispatch)

@@ -19,7 +19,6 @@ const {
 
 const SocketEvents = {
   Server: {
-    SUBSCRIBE: 'subscribe',
     SEND_ANSWER: 'sendAnswer',
     IN_ROOM: 'inRoom',
   },
@@ -31,7 +30,7 @@ const SocketEvents = {
   }
 }
 
-const toQuizQuestion = (q) => {
+const toQuizQuestion = q => {
   q.answers = q.answers.map(p => {
     return {
       id: p.id,
@@ -42,9 +41,7 @@ const toQuizQuestion = (q) => {
   return q
 }
 
-const getCurrentQuestion = (roomId) => {
-  return currentQuestions.filter(p => p.roomId == roomId).shift()
-}
+const getCurrentQuestion = roomId => currentQuestions.filter(p => p.roomId == roomId).shift()
 
 let sockets = []
 let onlineRooms = []
@@ -222,7 +219,7 @@ export const startJob = async () => {
   }
 }
 
-export default (server) => {
+export default server => {
   const io = socketIo(server)
   io.on('connection', (socket) => {
 
@@ -237,7 +234,7 @@ export default (server) => {
       socket.userId = data.id
       sockets.push(socket)
 
-      socket.on(SocketEvents.Server.IN_ROOM, async (roomId) => {
+      socket.on(SocketEvents.Server.IN_ROOM, async roomId => {
         try {
           const room = onlineRooms.filter(p => p.id == roomId).shift()
           if (!room) {
@@ -274,7 +271,7 @@ export default (server) => {
         }
       })
 
-      socket.on(SocketEvents.Server.SEND_ANSWER, (answer) => {
+      socket.on(SocketEvents.Server.SEND_ANSWER, answer => {
         const question = getCurrentQuestion(answer.roomId)
         if (question.id != answer.questionId) {
           socket.emit('onError', 'O tempo acabou.')
@@ -303,4 +300,16 @@ export default (server) => {
       })
     })
   })
+}
+
+let exibirParcelas = (valor, jurosInicial) => {
+  let juros = jurosInicial
+  let total = 0
+  for (let i = 1; i <= 12; i++) {
+    const parcela = valor * (juros / 100)
+    console.log(`${i} - ${juros} - ${parcela.toFixed(2)}`)
+    total += parcela
+    juros += jurosInicial
+  }
+  console.log(total.toFixed(2))
 }

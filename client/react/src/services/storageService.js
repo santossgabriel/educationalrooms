@@ -6,5 +6,6 @@ const getDefaultLanguage = () => {
 
 export default {
   getLanguage: () => localStorage.getItem('LANGUAGE') || getDefaultLanguage(),
-  getUser: () => JSON.parse(localStorage.getItem('USER'))
+  getUser: () => JSON.parse(localStorage.getItem('USER')),
+  getToken: () => localStorage.getItem('TOKEN')
 }

@@ -1,7 +1,8 @@
 import {
   LANGUAGE_CHANGED,
   USER_CHANGED,
-  CHANGE_VISIBLE_ALERT
+  CHANGE_VISIBLE_ALERT,
+  ONLINE_CHANGED
 } from './actionTypes'
 
 export const languageChanged = newLanguage => ({
@@ -14,12 +15,17 @@ export const userChanged = user => ({
   payload: user
 })
 
-export const showError = (message) => ({
+export const onlineChanged = online => ({
+  type: ONLINE_CHANGED,
+  payload: online
+})
+
+export const showError = message => ({
   type: CHANGE_VISIBLE_ALERT,
   payload: { message, type: 'error', show: true }
 })
 
-export const showSuccess = (message) => ({
+export const showSuccess = message => ({
   type: CHANGE_VISIBLE_ALERT,
   payload: { message, type: 'success', show: true }
 })

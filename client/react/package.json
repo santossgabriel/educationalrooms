@@ -5,7 +5,8 @@
     "test-cov": "cross-env NODE_ENV=jest jest --runInBand --coverage"
   },
   "dependencies": {
-    "react-moment": "^0.9.2"
+    "react-moment": "^0.9.2",
+    "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

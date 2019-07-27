@@ -46,7 +46,7 @@ class MainComponent extends React.Component {
     //   return Promise.reject(error.response)
     // })
   }
-
+  
   render() {
     return (
       <div>
