@@ -19,6 +19,8 @@ export default function Quiz(props) {
   const id = Number(props.match.params.id.replace(':', ''))
 
   const quiz = useSelector(state => state.quizState)
+  const language = useSelector(state => state.appState.language)
+  console.log(language)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -79,7 +81,7 @@ export default function Quiz(props) {
       {quiz.status === QuizStatus.CORRECT && <Correct />}
       {quiz.status === QuizStatus.WRONG && <Wrong />}
       {quiz.status === QuizStatus.LOADING && <Loading />}
-      {quiz.status === QuizStatus.ENDED && <Ended score={quiz.score} />}
+      {quiz.status === QuizStatus.ENDED && <Ended score={quiz.score} lang={language} />}
     </Container >
   )
 }
