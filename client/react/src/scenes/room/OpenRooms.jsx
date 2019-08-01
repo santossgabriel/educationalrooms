@@ -80,7 +80,7 @@ export default function OpenRooms() {
             </TableBody>
           </Table>
         </Container>
-        : <NoContentMessage>Você ainda não criou salas.</NoContentMessage>
+        : <NoContentMessage>{AppTexts.OpenedRoomTable.NoRooms[language]}</NoContentMessage>
       }
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

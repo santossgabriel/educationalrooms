@@ -23,7 +23,11 @@ export const MyRoomsTable = {
   Status,
   Users,
   Questions,
-  Duration
+  Duration,
+  NoRooms: {
+    [PT_BR]: 'Você ainda não criou salas.',
+    [EN_US]: 'You haven\'t created rooms yet.'
+  }
 }
 
 export const OpenedRoomTable = {
@@ -33,7 +37,11 @@ export const OpenedRoomTable = {
   Questions,
   Duration,
   Enter: { [PT_BR]: 'Participar', [EN_US]: 'Enter' },
-  Leave: { [PT_BR]: 'Deixar', [EN_US]: 'Leave' }
+  Leave: { [PT_BR]: 'Deixar', [EN_US]: 'Leave' },
+  NoRooms: {
+    [PT_BR]: 'Não há salas abertas no momento.',
+    [EN_US]: 'There are currently no open rooms.'
+  }
 }
 
 export const AssociatedRoomTable = {
@@ -41,5 +49,17 @@ export const AssociatedRoomTable = {
   Status,
   Score: { [PT_BR]: 'Pontuação', [EN_US]: 'Scores' },
   Duration,
-  Actions: { [PT_BR]: 'Participar', [EN_US]: 'Enter' }
+  Actions: { [PT_BR]: 'Participar', [EN_US]: 'Enter' },
+  NoRooms: {
+    [PT_BR]: 'você não está em nenhuma sala.',
+    [EN_US]: 'You are not in any room.'
+  },
+  OpenQuiz: {
+    [PT_BR]: 'abrir quiz',
+    [EN_US]: 'open aqui'
+  },
+  ShowScore: {
+    [PT_BR]: 'pontuação',
+    [EN_US]: 'scores'
+  },
 }

@@ -157,6 +157,14 @@ export default function MyRooms() {
     <CardMain title={AppTexts.MainComponent.RoomTexts.My[language]}>
       {rooms.length ?
         <Container>
+
+          <div style={{ textAlign: 'center', padding: '5px' }}>
+            <Link to="edit-room/:0"
+              style={{ textDecoration: 'none' }}>
+              <Button color="primary" variant="contained">{AppTexts.MyRoomsTable.CreateRoom[language]}</Button>
+            </Link>
+          </div>
+
           <Table aria-labelledby="tableTitle">
             <TableHead>
               <TableRow>
@@ -250,7 +258,7 @@ export default function MyRooms() {
             </TableFooter>
           </Table>
         </Container>
-        : <NoContentMessage>Você ainda não criou salas.</NoContentMessage>
+        : <NoContentMessage>{AppTexts.MyRoomsTable.NoRooms[language]}</NoContentMessage>
       }
 
       <div style={{ textAlign: 'center', padding: '5px' }}>

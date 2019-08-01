@@ -20,7 +20,7 @@ export default function Quiz(props) {
 
   const quiz = useSelector(state => state.quizState)
   const language = useSelector(state => state.appState.language)
-  console.log(language)
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -30,12 +30,19 @@ export default function Quiz(props) {
   async function loadRoom() {
     const room = await roomService.getQuiz(id)
     setRoom(room)
-    if (room.endedAt) {
-      dispatch(SocketActions.roomFinished())
-    } else {
-      dispatch(startQuiz(id))
-      ClientSocket.send(SocketEvents.Server.IN_ROOM, id)
-    }
+
+    dispatch(startQuiz(id))
+
+    setTimeout(() => {
+      if (room.endedAt) {
+        dispatch(SocketActions.roomFinished({
+          roomId: id,
+          score: room.score
+        }))
+      } else {
+        ClientSocket.send(SocketEvents.Server.IN_ROOM, id)
+      }
+    }, 300)
   }
 
   // onInit(){

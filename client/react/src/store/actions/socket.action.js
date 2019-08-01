@@ -12,9 +12,9 @@ const feedbackReceived = feedback => ({
   payload: feedback
 })
 
-const roomFinished = () => ({
+const roomFinished = (data) => ({
   type: Client.FINISH_ROOM,
-  payload: {}
+  payload: data
 })
 
 const questionReceived = question => ({

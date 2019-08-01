@@ -58,14 +58,18 @@ export default function AssociatedRooms() {
                     {n.status === RoomStatus.ENDED ? // ICON 'poll'
                       <Button color="primary"
                         variant="contained"
-                        onClick={() => openScores(n)}>SCORES</Button> : null
+                        onClick={() => openScores(n)}>
+                          {AppTexts.AssociatedRoomTable.ShowScore[language]}
+                        </Button> : null
                     }
 
                     {n.status === RoomStatus.STARTED ? // ICON 'trending_flat'
                       <Link to={`quiz/${n.id}`}
                         style={{ textDecoration: 'none' }}>
                         <Button color="primary"
-                          variant="contained">Abrir QUIZ</Button>
+                          variant="contained">
+                            {AppTexts.AssociatedRoomTable.OpenQuiz[language]}
+                          </Button>
                       </Link> : null
                     }
 
@@ -75,7 +79,7 @@ export default function AssociatedRooms() {
             </TableBody>
           </Table>
         </Container>
-        : <NoContentMessage>Você ainda não criou salas.</NoContentMessage>
+        : <NoContentMessage>{AppTexts.AssociatedRoomTable.NoRooms[language]}</NoContentMessage>
       }
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
