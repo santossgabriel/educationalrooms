@@ -241,7 +241,6 @@ export default {
 
     const users = room.RoomUsers.map(p => p.userId)
     const notification = {
-      description: { [EN]: 'Room was removed.', [BR]: 'Sala foi removida.' },
       type: NotificationTypes.ROOM_REMOVED,
       origin: room.name
     }
@@ -293,11 +292,6 @@ export default {
         }
       })
 
-      notification.description = {
-        [EN]: 'Came into the room.',
-        [BR]: 'Entrou na sala.'
-      }
-
       notification.type = NotificationTypes.IN_ROOM
       sendNotifications([room.userId], notification)
 
@@ -310,7 +304,6 @@ export default {
       await RoomUser.destroy({ where: { roomId: id, userId: req.claims.id } })
       res.json({ message: { [EN]: 'Leave the room.', [BR]: 'Saiu da sala.' } })
 
-      notification.description = { [EN]: 'Leave the room.', [BR]: 'Saiu da sala.' }
       notification.type = NotificationTypes.OUT_ROOM
       sendNotifications([room.userId], notification)
     }
@@ -490,11 +483,6 @@ export default {
       updateOnlineRooms()
 
       const notif = {
-        description: started ? {
-          [EN]: 'was started.', [BR]: 'foi iniciada.'
-        } : {
-            [EN]: 'was closed.', [BR]: 'foi fechada.'
-          },
         type: started ? NotificationTypes.ROOM_STARTED : NotificationTypes.ROOM_CLOSED,
         origin: `${id} ${roomDb.name}`
       }

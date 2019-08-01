@@ -4,14 +4,14 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { Button } from '@material-ui/core'
 
-import { AppTexts } from '../../helpers'
+import { AppTexts } from 'helpers'
 import {
   CardMain,
   IconTextInput,
   SelectQuestionModal
-} from '../../components'
-import { questionService, roomService } from '../../services'
-import { showError, showSuccess } from '../../actions'
+} from 'components'
+import { questionService, roomService } from 'services'
+import { showError, showSuccess } from 'store/actions'
 import { NoContentMessage } from './styles'
 import EditRoomQuestionsTable from './EditRoomQuestionsTable'
 

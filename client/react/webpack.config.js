@@ -20,9 +20,12 @@ module.exports = {
   },
   resolve: {
     alias: {
-      services: path.resolve(__dirname, 'src', 'services'),
+      helpers: path.resolve(__dirname, 'src', 'helpers'),
       components: path.resolve(__dirname, 'src', 'components'),
-      helpers: path.resolve(__dirname, 'src', 'helpers')
+      resolvers: path.resolve(__dirname, 'src', 'resolvers'),
+      scenes: path.resolve(__dirname, 'src', 'scenes'),
+      services: path.resolve(__dirname, 'src', 'services'),
+      store: path.resolve(__dirname, 'src', 'store')
     },
     extensions: ['*', '.js', '.jsx', '.ttf']
   },
@@ -47,5 +50,5 @@ module.exports = {
       }
     }
   },
-  // devtool: 'inline-source-map'
+  devtool: 'inline-source-map'
 }

@@ -26,9 +26,15 @@ const SocketEvents = {
     NOTIFICATION_RECEIVED: 'notificationReceived',
     QUESTION_RECEIVED: 'questionReceived',
     FEEDBACK_ANSWER: 'feedbackAnswer',
-    FINISH_ROOM: 'finishRoom'
+    FINISH_ROOM: 'finishRoom',
+    ON_ERROR: 'onError'
   }
 }
+
+const {
+  Server: { SEND_ANSWER, IN_ROOM },
+  Client: { NOTIFICATION_RECEIVED, QUESTION_RECEIVED, FEEDBACK_ANSWER, FINISH_ROOM, ON_ERROR }
+} = SocketEvents
 
 const toQuizQuestion = q => {
   q.answers = q.answers.map(p => {
@@ -164,7 +170,7 @@ const sendFeedback = async (roomId, questionId, users) => {
       feedback = 'TIME_OVER'
     }
     sockets.filter(p => p.userId === u)
-      .forEach(p => p.emit(SocketEvents.Client.FEEDBACK_ANSWER, {
+      .forEach(p => p.emit(FEEDBACK_ANSWER, {
         roomId: roomId,
         feedback: feedback
       }))
@@ -174,7 +180,7 @@ const sendFeedback = async (roomId, questionId, users) => {
 const notifyChangedQuestion = (question, users) => {
   users.forEach(u => {
     sockets.filter(p => p.userId === u)
-      .forEach(p => p.emit(SocketEvents.Client.QUESTION_RECEIVED, question))
+      .forEach(p => p.emit(QUESTION_RECEIVED, question))
   })
 }
 
@@ -188,7 +194,7 @@ const notifyFinish = async (roomId, users) => {
     if (userAnswers.length > 0)
       score = userAnswers.map(p => p.score).reduce((x, y) => x + y) || 0
     sockets.filter(p => p.userId == u)
-      .forEach(p => p.emit(SocketEvents.Client.FINISH_ROOM, {
+      .forEach(p => p.emit(FINISH_ROOM, {
         roomId: roomId,
         score: score
       }))
@@ -206,13 +212,12 @@ export const sendNotifications = (users, notification) => {
     await Notification.create(notif)
     notif.description = JSON.parse(notif.description)
     sockets.filter(p => p.userId === userId)
-      .forEach(p => p.emit(SocketEvents.Client.NOTIFICATION_RECEIVED, notif))
+      .forEach(p => p.emit(NOTIFICATION_RECEIVED, notif))
   })
 }
 
 export const startJob = async () => {
   if (process.env.NODE_ENV !== 'test') {
-    console.log('job is running')
     await updateOnlineRooms()
     await updateCurrentQuestions()
     setInterval(runTimer, 1000)
@@ -221,34 +226,34 @@ export const startJob = async () => {
 
 export default server => {
   const io = socketIo(server)
-  io.on('connection', (socket) => {
+  io.on('connection', socket => {
 
     const token = socket.handshake.query.token
 
     jwt.verify(token, config.SECRET, (err, data) => {
       if (err) {
         Log.create({ description: 'Não foi possível inscrever socket', date: new Date() })
-        socket.emit('onError', 'Não foi possível inscrever socket')
+        socket.emit(ON_ERROR, 'Não foi possível inscrever socket')
         return
       }
       socket.userId = data.id
       sockets.push(socket)
 
-      socket.on(SocketEvents.Server.IN_ROOM, async roomId => {
+      socket.on(IN_ROOM, async roomId => {
         try {
           const room = onlineRooms.filter(p => p.id == roomId).shift()
           if (!room) {
-            socket.emit('onError', `Sala não está online: ${roomId}`)
+            socket.emit(ON_ERROR, `Sala não está online: ${roomId}`)
             return
           }
 
           if (!socket.userId) {
-            socket.emit('onError', 'Socket sem UserId')
+            socket.emit(ON_ERROR, 'Socket sem UserId')
             return
           }
 
           if (room.users.filter(p => p.id === socket.userId).length == 0) {
-            socket.emit('onError', 'Usuário não está escrito na sala.')
+            socket.emit(ON_ERROR, 'Usuário não está escrito na sala.')
             return
           }
 
@@ -265,16 +270,16 @@ export default server => {
             currentQuestion.answered = answered != null
           }
 
-          socket.emit(SocketEvents.Client.QUESTION_RECEIVED, currentQuestion)
+          socket.emit(QUESTION_RECEIVED, currentQuestion)
         } catch (ex) {
-          socket.emit('onError', 'ERRO AO ENTRAR NA SALA')
+          socket.emit(ON_ERROR, 'ERRO AO ENTRAR NA SALA')
         }
       })
 
-      socket.on(SocketEvents.Server.SEND_ANSWER, answer => {
+      socket.on(SEND_ANSWER, answer => {
         const question = getCurrentQuestion(answer.roomId)
         if (question.id != answer.questionId) {
-          socket.emit('onError', 'O tempo acabou.')
+          socket.emit(ON_ERROR, 'O tempo acabou.')
           return
         }
         const diff = Math.floor((new Date()).getTime() - question.changedAt.getTime())
@@ -300,16 +305,4 @@ export default server => {
       })
     })
   })
-}
-
-let exibirParcelas = (valor, jurosInicial) => {
-  let juros = jurosInicial
-  let total = 0
-  for (let i = 1; i <= 12; i++) {
-    const parcela = valor * (juros / 100)
-    console.log(`${i} - ${juros} - ${parcela.toFixed(2)}`)
-    total += parcela
-    juros += jurosInicial
-  }
-  console.log(total.toFixed(2))
 }

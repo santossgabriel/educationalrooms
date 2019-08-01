@@ -6,10 +6,10 @@ import { Email, Lock } from '@material-ui/icons'
 import { CardContent, Zoom, FormHelperText, CircularProgress } from '@material-ui/core'
 
 
-import GoogleButton from '../../components/main/GoogleButton'
-import IconTextInput from '../../components/main/IconTextInput'
-import { userChanged } from '../../actions'
-import { authService } from '../../services'
+import GoogleButton from 'components/main/GoogleButton'
+import IconTextInput from 'components/main/IconTextInput'
+import { userChanged } from 'store/actions'
+import { authService } from 'services'
 import { ButtonAuth, Or, Container } from './styles'
 
 export default function Login({ changeScene }) {

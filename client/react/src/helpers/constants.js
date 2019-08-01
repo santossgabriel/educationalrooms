@@ -19,7 +19,6 @@ export const QuizStatus = {
 
 export const SocketEvents = {
   Server: {
-    SUBSCRIBE: 'subscribe',
     SEND_ANSWER: 'sendAnswer',
     IN_ROOM: 'inRoom',
   },
@@ -27,6 +26,16 @@ export const SocketEvents = {
     NOTIFICATION_RECEIVED: 'notificationReceived',
     QUESTION_RECEIVED: 'questionReceived',
     FEEDBACK_ANSWER: 'feedbackAnswer',
-    FINISH_ROOM: 'finishRoom'
+    FINISH_ROOM: 'finishRoom',
+    ON_ERROR: 'onError'
   }
+}
+
+export const NotificationTypes = {
+  IN_ROOM: 'IN_ROOM',
+  OUT_ROOM: 'OUT_ROOM',
+  ROOM_STARTED: 'ROOM_START',
+  ROOM_ENDED: 'ROOM_ENDED',
+  ROOM_REMOVED: 'ROOM_REMOVED',
+  ROOM_CLOSED: 'ROOM_CLOSED'
 }

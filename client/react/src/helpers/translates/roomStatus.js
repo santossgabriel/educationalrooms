@@ -1,4 +1,4 @@
-import { Languages } from 'helpers'
+import Languages  from './languages'
 
 const { PT_BR, EN_US } = Languages
 
