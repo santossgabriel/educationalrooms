@@ -8,10 +8,6 @@ export const modelAttributes = {
     autoIncrement: true,
     type: Sequelize.INTEGER
   },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
   userId: {
     type: Sequelize.INTEGER,
     references: { model: 'User', key: 'id' },

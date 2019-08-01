@@ -10,7 +10,7 @@ import { Link, MenuIconButton, UserName, UserEmail, MenuFooter, NotificationTitl
 
 import { AppTexts, Languages } from 'helpers/appTexts'
 import { BrazilFlag, UnitedStatesFlag } from 'components'
-import { languageChanged, userChanged, notificationsChanged } from '../../actions'
+import { languageChanged, userChanged, notificationsChanged } from 'store/actions'
 import { authService, notificationService } from 'services'
 import { UserPicture } from './UserPicture'
 

@@ -8,9 +8,9 @@ import { Colors } from 'helpers/themes'
 import { Toolbar } from 'components/index'
 import SidebarContent from './SidebarContent'
 import AppRouter from './AppRouter'
-import Auth from '../../scenes/auth/Auth'
+import Auth from 'scenes/auth/Auth'
 import { AlertModal } from '../main/Modal'
-import { hideAlert } from '../../actions'
+import { hideAlert } from 'store/actions'
 
 let mql = {}
 
@@ -46,7 +46,7 @@ class MainComponent extends React.Component {
     //   return Promise.reject(error.response)
     // })
   }
-  
+
   render() {
     return (
       <div>

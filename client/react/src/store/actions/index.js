@@ -1,10 +1,22 @@
-import {
+export { SocketActions } from './socket.action'
+
+const LANGUAGE_CHANGED = 'LANGUAGE_CHANGED'
+const USER_CHANGED = 'USER_CHANGED'
+
+const CHANGE_VISIBLE_ALERT = 'CHANGE_VISIBLE_ALERT'
+const ONLINE_CHANGED = 'ONLINE_CHANGED'
+const NOTIFICATIONS_CHANGED = 'NOTIFICATIONS_CHANGED'
+const START_QUIZ = 'START_QUIZ'
+const ANSWER_SENT = 'ANSWER_SENT'
+export const ActionTypes = {
   LANGUAGE_CHANGED,
   USER_CHANGED,
   CHANGE_VISIBLE_ALERT,
   ONLINE_CHANGED,
-  NOTIFICATIONS_CHANGED
-} from './actionTypes'
+  NOTIFICATIONS_CHANGED,
+  START_QUIZ,
+  ANSWER_SENT
+}
 
 export const languageChanged = newLanguage => ({
   type: LANGUAGE_CHANGED,
@@ -39,4 +51,14 @@ export const hideAlert = () => ({
 export const notificationsChanged = notifications => ({
   type: NOTIFICATIONS_CHANGED,
   payload: notifications
+})
+
+export const startQuiz = roomId => ({
+  type: START_QUIZ,
+  payload: roomId
+})
+
+export const answerSent = answer => ({
+  type: ANSWER_SENT,
+  payload: answer
 })

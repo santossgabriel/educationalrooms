@@ -20,9 +20,9 @@ import PropTypes from 'prop-types'
 import IconTextInput from '../main/IconTextInput'
 import Stars from '../question/Stars'
 import EditQuestionAlternatives from '../question/EditQuestionAlternatives'
-import { questionService } from '../../services'
-import { showError, showSuccess } from '../../actions'
-import { AppTexts } from '../../helpers/appTexts'
+import { questionService } from 'services'
+import { showError, showSuccess } from 'store/actions'
+import { AppTexts } from 'helpers/appTexts'
 
 const styles = {
   legend: {

@@ -21,7 +21,7 @@ import { roomService } from '../../services'
 import CardMain from '../../components/main/CardMain'
 import { AppTexts, RoomStatus } from '../../helpers'
 import { ConfirmModal } from '../../components/main/Modal'
-import { showError, showSuccess } from '../../actions'
+import { showError, showSuccess } from 'store/actions'
 
 import { CellHead, NoContentMessage, Container, CellRow } from './styles'
 

@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Check, Close, SentimentDissatisfied, Send } from '@material-ui/icons'
+import { CircularProgress } from '@material-ui/core'
 import PropTypes from 'prop-types'
 
 import { Feedback as FeedbackContainer } from './styles'
-
-export const STATUS = {
-  TIME_OVER: 'TIME_OVER',
-  SENT: 'SENT',
-  CORRECT: 'CORRECT',
-  WRONG: 'WRONG',
-  ANSWER: 'ANSWER'
-}
 
 function Feedback({ children, style }) {
   const [opacity, setOpacity] = useState(0)
@@ -53,6 +46,28 @@ export const Wrong = () => (
       <Close fontSize="inherit" />
     </div>
     <span>errado!</span>
+  </Feedback>
+)
+
+export const Loading = () => (
+  <div style={{
+    textAlign: 'center',
+    height: '150px',
+    marginTop: '80px'
+  }}>
+    <CircularProgress size={80} variant="indeterminate" />
+  </div>
+)
+
+export const Ended = ({ score }) => (
+  <Feedback style={{
+    fontSize: '30px',
+    marginBottom: '30px',
+    fontWeight: 'bold',
+    color: '#555'
+  }}>
+    <div>ESTA SALA FOI FINALIZADA</div>
+    <div>VOCÊ FEZ <small style={{ color: '#4b9372', fontSize: '32px' }}>{score}</small> PONTOS.</div>
   </Feedback>
 )
 

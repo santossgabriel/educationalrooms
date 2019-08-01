@@ -1,85 +1,39 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { LinearProgress } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import openSocket from 'socket.io-client'
+import { ClientSocket } from 'store/client-socket'
 
-
-import { Wrong, Sent, Correct, TimeOver, STATUS } from './Feedbacks'
-import { Container, Title, TextPoints, TextQuestion, ContainerAnswers, AnswerButton } from './styles'
+import { Wrong, Sent, Correct, TimeOver, Loading, Ended } from './Feedbacks'
+import {
+  Container, Title, TextPoints,
+  TextQuestion, ContainerAnswers, AnswerButton
+} from './styles'
 import { QuizStatus, SocketEvents } from 'helpers'
-import { roomService, storageService } from 'services'
-import { onlineChanged } from '../../actions'
-
-const question = {
-  'id': 1,
-  'order': 1,
-  'points': 50,
-  'description': 'SSD é um',
-  'area': 'TI',
-  'difficulty': 2,
-  'answers': [{
-    'id': 1,
-    'description': 'Dispositivo de armazenamento de dados',
-    'classification': 'A'
-  }, {
-    'id': 2,
-    'description': 'Um processador de última geração',
-    'classification': 'B'
-  }],
-  'roomId': 1,
-  'changedAt': '2019-07-24T03:41:33.240Z',
-  'time': 17280000,
-  'answered': false
-}
+import { roomService } from 'services'
+import { startQuiz, answerSent, SocketActions } from 'store/actions'
 
 export default function Quiz(props) {
 
-  const [status, setStatus] = useState(STATUS.ANSWER)
   const [room, setRoom] = useState({})
   const id = Number(props.match.params.id.replace(':', ''))
 
+  const quiz = useSelector(state => state.quizState)
+  const dispatch = useDispatch()
+
   useEffect(() => {
     loadRoom()
-    return function cleanup() {
-      dispatch(onlineChanged(false))
-    }
   }, [])
-
-  const dispatch = useDispatch()
 
   async function loadRoom() {
     const room = await roomService.getQuiz(id)
     setRoom(room)
-    const token = storageService.getToken()
-    const socket = openSocket({ query: `token=${token}` })
-    socket.on('connect', () => {
-      socket.emit('subscribe', token)
-      socket.on('onError', (message) => console.error('Erro Socket', message))
-      dispatch(onlineChanged(true))
-      console.log('me conectei!')
-    })
-    socket.on('disconnect', () => console.log('fui disconectado!'))
-  }
-
-
-
-  function changeStatus() {
-
-    // switch (status) {
-    //   case STATUS.TIME_OVER:
-    //     setStatus(STATUS.SENT)
-    //     break
-    //   case STATUS.SENT:
-    //     setStatus(STATUS.CORRECT)
-    //     break
-    //   case STATUS.CORRECT:
-    //     setStatus(STATUS.WRONG)
-    //     break
-    //   default:
-    //     setStatus(STATUS.TIME_OVER)
-    //     break
-    // }
+    if (room.endedAt) {
+      dispatch(SocketActions.roomFinished())
+    } else {
+      dispatch(startQuiz(id))
+      ClientSocket.send(SocketEvents.Server.IN_ROOM, id)
+    }
   }
 
   // onInit(){
@@ -95,65 +49,37 @@ export default function Quiz(props) {
   //         this.mode = this.UNAVAILABLE
   //     }
 
-  // answer(a: Answer) {
-  //   this.answered = true
-  //   this.mode = this.SENT
-  //   this.socket.emit(SocketEvents.Server.SEND_ANSWER, {
-  //     roomId: this.room.id,
-  //     questionId: this.question.id,
-  //     answerId: a.id
-  //   })
-  // }
-
-  // initSocket() {
-
-  //   if (this.room && this.room.id > 0) {
-  //     this.socket.emit(SocketEvents.Server.IN_ROOM, this.room.id)
-
-  //     this.socket.on(SocketEvents.Client.QUESTION_RECEIVED, (q) => {
-  //       if (q.roomId == this.room.id) {
-  //         this.question = q
-  //         this.mode = q.answered ? this.SENT : this.ANSWER
-  //         this.runTimer()
-  //         this.progress = 0
-  //       }
-  //     })
-
-  //     this.socket.on(SocketEvents.Client.FEEDBACK_ANSWER, (q) => {
-  //       if (q.roomId == this.room.id) {
-  //         this.question = q
-  //         this.mode = q.feedback
-  //       }
-  //     })
-
-  //     this.socket.on(SocketEvents.Client.FINISH_ROOM, res => {
-  //       if (res.roomId == this.room.id) {
-  //         this.room.score = res.score || 0
-  //         this.mode = this.ENDED
-  //       }
-  //     })
-  //   }
-  // }
+  function sendAnswer(answer) {
+    dispatch(answerSent(answer))
+    ClientSocket.send(SocketEvents.Server.SEND_ANSWER, {
+      roomId: quiz.roomId,
+      questionId: quiz.question.id,
+      answerId: answer.id
+    })
+  }
 
   return (
-    <Container onClick={() => changeFeedBack()}>
+    <Container>
       <Title>{room.name}</Title>
       {
-        status === STATUS.ANSWER &&
+        quiz.status === QuizStatus.ANSWER &&
         <div>
           <LinearProgress variant="indeterminate" style={{ marginBottom: 10 }} />
-          <TextPoints>Valendo {question.points} pontos</TextPoints>
-          <TextQuestion>{question.description}</TextQuestion>
+          <TextPoints>Valendo {quiz.question.points} pontos</TextPoints>
+          <TextQuestion>{quiz.question.description}</TextQuestion>
           <ContainerAnswers>
-            {question.answers.map(a => <AnswerButton key={a.id}>{a.description}</AnswerButton>)}
+            {quiz.question.answers.map(a => <AnswerButton
+              onClick={() => sendAnswer(a)}
+              key={a.id}>{a.description}</AnswerButton>)}
           </ContainerAnswers>
         </div>
       }
-
-      {status === STATUS.TIME_OVER && <TimeOver />}
-      {status === STATUS.SENT && <Sent />}
-      {status === STATUS.CORRECT && <Correct />}
-      {status === STATUS.WRONG && <Wrong />}
+      {quiz.status === QuizStatus.TIME_OVER && <TimeOver />}
+      {quiz.status === QuizStatus.SENT && <Sent />}
+      {quiz.status === QuizStatus.CORRECT && <Correct />}
+      {quiz.status === QuizStatus.WRONG && <Wrong />}
+      {quiz.status === QuizStatus.LOADING && <Loading />}
+      {quiz.status === QuizStatus.ENDED && <Ended score={quiz.score} />}
     </Container >
   )
 }

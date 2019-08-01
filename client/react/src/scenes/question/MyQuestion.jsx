@@ -13,13 +13,13 @@ import {
   IconButton
 } from '@material-ui/core'
 
-import { questionService } from '../../services'
-import Stars from '../../components/question/Stars'
-import CardMain from '../../components/main/CardMain'
-import EditQuestionModal from '../../components/modais/EditQuestionModal'
-import { AppTexts } from '../../helpers/appTexts'
-import { ConfirmModal } from '../../components/main/Modal'
-import { showError, showSuccess } from '../../actions'
+import { questionService } from 'services'
+import Stars from 'components/question/Stars'
+import CardMain from 'components/main/CardMain'
+import EditQuestionModal from 'components/modais/EditQuestionModal'
+import { AppTexts } from 'helpers/appTexts'
+import { ConfirmModal } from 'components/main/Modal'
+import { showError, showSuccess } from 'store/actions'
 
 import { Container, CellHead, CellRow, NoContentMessage } from './styles'
 

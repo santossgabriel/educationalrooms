@@ -1,5 +1,5 @@
-import { NotificationTypes, } from 'helpers/constants'
-import { EN_US as EN, PT_BR as BR } from 'helpers/translates/languages'
+import { NotificationTypes, } from '../constants'
+import { EN_US as EN, PT_BR as BR } from './languages'
 
 export const notificationMessage = {
   [NotificationTypes.IN_ROOM]: {

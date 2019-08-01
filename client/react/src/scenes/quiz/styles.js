@@ -69,6 +69,10 @@ export const ContainerAnswers = styled.div`
 `
 
 export const AnswerButton = styled.div`
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
   margin: 10px auto 0;
   background-color: #4b9372;
   min-width: 400px;

@@ -26,7 +26,7 @@ export const authError = (err, res, req) => {
   handlerError({ status: httpStatus.UNAUTHORIZED, error: msg }, res, req)
 }
 
-const requestToLog = (request) => {
+const requestToLog = request => {
   let log = {}
   log.hostname = request.hostname
   log.ip = request.ip

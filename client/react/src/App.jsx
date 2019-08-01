@@ -5,7 +5,7 @@ import { MuiThemeProvider } from '@material-ui/core'
 import MainComponent from './components/main/MainComponent'
 
 import { AppTheme } from './helpers/themes'
-import { Store } from './store'
+import Store from './store'
 
 import './App.css'
 
