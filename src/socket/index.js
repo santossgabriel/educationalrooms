@@ -207,10 +207,7 @@ export const sendNotifications = (users, notification) => {
 
     const notif = cloneObject(notification)
     notif.userId = userId
-    notif.description = JSON.stringify(notif.description)
-
     await Notification.create(notif)
-    notif.description = JSON.parse(notif.description)
     sockets.filter(p => p.userId === userId)
       .forEach(p => p.emit(NOTIFICATION_RECEIVED, notif))
   })

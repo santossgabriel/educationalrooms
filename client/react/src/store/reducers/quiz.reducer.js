@@ -25,13 +25,9 @@ export const quizReducer = (state = INITIAL_STATE, action) => {
       return state
 
     case SocketEvents.Client.FINISH_ROOM:
-      console.log('state: ', state)
-      console.log('payload: ', action.payload)
       if (state.roomId === action.payload.roomId) {
         return { ...state, status: QuizStatus.ENDED, score: action.payload.score || 0 }
-        console.log('alterou estado')
       }
-      console.log('mesmo estado')
       return state
 
     case SocketEvents.Client.FEEDBACK_ANSWER:
