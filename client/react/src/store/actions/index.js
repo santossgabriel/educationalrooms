@@ -8,6 +8,8 @@ const ONLINE_CHANGED = 'ONLINE_CHANGED'
 const NOTIFICATIONS_CHANGED = 'NOTIFICATIONS_CHANGED'
 const START_QUIZ = 'START_QUIZ'
 const ANSWER_SENT = 'ANSWER_SENT'
+const ROOM_STARTED = 'ROOM_STARTED'
+
 export const ActionTypes = {
   LANGUAGE_CHANGED,
   USER_CHANGED,
@@ -15,7 +17,8 @@ export const ActionTypes = {
   ONLINE_CHANGED,
   NOTIFICATIONS_CHANGED,
   START_QUIZ,
-  ANSWER_SENT
+  ANSWER_SENT,
+  ROOM_STARTED
 }
 
 export const languageChanged = newLanguage => ({
@@ -62,3 +65,8 @@ export const answerSent = answer => ({
   type: ANSWER_SENT,
   payload: answer
 })
+
+export const roomStarted = room => ({
+  type: ROOM_STARTED,
+  payload: room
+}) 

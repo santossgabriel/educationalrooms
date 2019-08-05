@@ -20,6 +20,7 @@ export const notificationResolver = arr => {
     return arr
   const lang = storageService.getLanguage()
   arr.forEach(p => {
+    p.id = p.id || new Date().getTime()
     p.description = (notificationMessage[p.type] || {})[lang] || ''
     p.elapsedTime = dateToElapsedTime(p.createdAt, lang)
   })

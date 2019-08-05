@@ -2,10 +2,10 @@ import React from 'react'
 import Sidebar from 'react-sidebar'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { HashRouter } from 'react-router-dom'
+import { HashRouter,  } from 'react-router-dom'
 
 import { Colors } from 'helpers/themes'
-import { Toolbar } from 'components/index'
+import { Toolbar, Footer, OpenedQuizLinkList } from 'components/index'
 import SidebarContent from './SidebarContent'
 import AppRouter from './AppRouter'
 import Auth from 'scenes/auth/Auth'
@@ -17,7 +17,7 @@ let mql = {}
 class MainComponent extends React.Component {
   constructor(props) {
     super(props)
-    mql = window.matchMedia('(min-width: 1280px)')
+    mql = window.matchMedia('(min-width: 800px)')
     this.state = {
       sidebarDocked: mql.matches,
       sidebarIsOpen: false,
@@ -63,6 +63,7 @@ class MainComponent extends React.Component {
                 openSideBar={() => this.setState({ sidebarIsOpen: true })}
               />
               <AppRouter />
+              <OpenedQuizLinkList />
             </Sidebar>
           </HashRouter>
           :
@@ -72,6 +73,7 @@ class MainComponent extends React.Component {
           text={this.props.modal.message}
           show={this.props.modal.show}
           onClose={() => this.props.hideAlert()} />
+        <Footer />
       </div>
     )
   }
