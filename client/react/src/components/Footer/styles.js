@@ -16,7 +16,6 @@ export const ContainerFooter = styled.div`
 
 export const ContainerOpenedRooms = styled.div`
   background-color: #DDD;
-  /* border: solid 1px #AAA; */
   border-radius: 4px;
   position: fixed;
   width: 200px;

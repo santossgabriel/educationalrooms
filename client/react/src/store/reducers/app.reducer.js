@@ -36,6 +36,8 @@ export const appReducer = (state = initialState, action) => {
       return { ...state, notifications: notificationResolver(state.notifications) }
 
     case ActionTypes.ROOM_STARTED:
+      if (state.onlineQuizList.includes(p => p.id === action.payload.id))
+        return state
       state.onlineQuizList.push(action.payload)
       return { ...state, onlineQuizList: state.onlineQuizList }
 

@@ -21,3 +21,5 @@ export { default as SelectQuestionModal } from './modais/SelectQuestionModal'
 
 export { default as EditQuestionAlternatives } from './question/EditQuestionAlternatives'
 export { default as Stars } from './question/Stars'
+
+export { default as InputHookForm } from './hook-form/InputHookForm'
