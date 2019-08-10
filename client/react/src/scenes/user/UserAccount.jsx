@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import useForm from 'react-hook-form'
 
 import {
@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 
 import { InputHookForm } from 'components'
-
+import { SAGA_SHOW_TOAST_ERROR, SAGA_SHOW_TOAST_SUCCESS } from 'store/sagas/actions'
 import { authService } from 'services'
 import CardMain from 'components/main/CardMain'
 import { AppTexts } from 'helpers/appTexts'
@@ -27,16 +27,19 @@ export default function UserAccount() {
 
   const watchChangePassword = watch('changePassword', false)
 
+  const dispatch = useDispatch()
+
   function onSubmit(form) {
     if (!loading) {
       setLoading(true)
       authService.updateAccount(form)
-        .then(res => {
+        .then(({ message }) => {
           setLoading(false)
-          console.log(res)
-        }).catch(err => {
+          dispatch({ type: SAGA_SHOW_TOAST_SUCCESS, payload: message })
+        })
+        .catch(({ message }) => {
           setLoading(false)
-          console.log(err)
+          dispatch({ type: SAGA_SHOW_TOAST_ERROR, payload: message })
         })
     }
   }

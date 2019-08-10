@@ -2,10 +2,10 @@ import React from 'react'
 import Sidebar from 'react-sidebar'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { HashRouter,  } from 'react-router-dom'
+import { HashRouter, } from 'react-router-dom'
 
 import { Colors } from 'helpers/themes'
-import { Toolbar, Footer, OpenedQuizLinkList } from 'components/index'
+import { Toolbar, Footer, OpenedQuizLinkList, GlobalToast } from 'components'
 import SidebarContent from './SidebarContent'
 import AppRouter from './AppRouter'
 import Auth from 'scenes/auth/Auth'
@@ -64,6 +64,7 @@ class MainComponent extends React.Component {
               />
               <AppRouter />
               <OpenedQuizLinkList />
+              <GlobalToast />
             </Sidebar>
           </HashRouter>
           :

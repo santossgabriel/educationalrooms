@@ -23,3 +23,5 @@ export { default as EditQuestionAlternatives } from './question/EditQuestionAlte
 export { default as Stars } from './question/Stars'
 
 export { default as InputHookForm } from './hook-form/InputHookForm'
+
+export { default as GlobalToast } from './GlobalToast/GlobalToast'
