@@ -3,7 +3,7 @@ import createSagaMiddleware from 'redux-saga'
 import { ClientSocket } from './client-socket'
 
 import { Reducers } from './reducers'
-import rootSaga from './sagas'
+import rootSaga from './sagas/index'
 
 const sagaMiddleware = createSagaMiddleware()
 
