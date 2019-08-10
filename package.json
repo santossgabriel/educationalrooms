@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "babel-node src/run.js",
-    "dev": "concurrently \"nodemon --watch src --exec babel-node src/run.js\" \"node start-client.js\"",
+    "api": "nodemon --watch src --exec babel-node src/run.js",
+    "api-front": "concurrently \"nodemon --watch src --exec babel-node src/run.js\" \"node start-client.js\"",
     "test": "node before.test.js && npm run mockdb && npm run nyc && node cucumber.report.js",
     "nyc": "nyc cucumber-js __tests__ --format=json >> cucumber.json",
     "cucumber": "node before.test.js && npm run mockdb && cucumber-js --require-module babel-register --require-module babel-polyfill __tests__",

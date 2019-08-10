@@ -27,6 +27,7 @@
   },
   "rules": {
     "no-unused-vars": 2,
+    "no-useless-escape": "off",
     "react/prop-types": [
       2,
       {

@@ -1,5 +1,26 @@
 import { PT_BR, EN_US } from './languages'
 
+export const FormErrors = {
+  RequiredField: {
+    [PT_BR]: 'Este campo é obrigatório',
+    [EN_US]: 'This field is required'
+  },
+  MinLength: (lang, length) => {
+    if (lang === PT_BR)
+      return `Entre com pelo menos ${length} caracteres`
+    else
+      return `Enter at least ${length} characters`
+  },
+  Email: {
+    [PT_BR]: 'Email inválido',
+    [EN_US]: 'Invalid email'
+  },
+  PasswordNotMatch: {
+    [PT_BR]: 'As senhas não batem',
+    [EN_US]: 'Passwords don\'t match'
+  }
+}
+
 export const AppTitle = {
   [PT_BR]: 'Salas Educacionais',
   [EN_US]: 'Educational Rooms'

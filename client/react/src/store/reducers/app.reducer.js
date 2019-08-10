@@ -3,12 +3,12 @@ import { ActionTypes } from 'store/actions'
 import storageService from 'services/storageService'
 import { notificationResolver } from 'resolvers/notificationResolver'
 import { SocketEvents } from 'helpers/constants'
-import { NotificationTypes } from 'helpers'
+import { ClientSocket } from 'store/client-socket'
 
 const initialState = {
   language: storageService.getLanguage(),
   user: storageService.getUser(),
-  online: false,
+  online: ClientSocket.isConnected(),
   notifications: [],
   onlineQuizList: []
 }
@@ -36,6 +36,8 @@ export const appReducer = (state = initialState, action) => {
       return { ...state, notifications: notificationResolver(state.notifications) }
 
     case ActionTypes.ROOM_STARTED:
+      if (state.onlineQuizList.find(p => p.id === action.payload.id))
+        return state
       state.onlineQuizList.push(action.payload)
       return { ...state, onlineQuizList: state.onlineQuizList }
 

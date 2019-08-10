@@ -1,6 +1,6 @@
 import { throwValidationError } from './error'
 
-export const validateAccount = (account) => {
+export const validateAccount = (account, isUpdateWithNoChangePassword) => {
   if (!account || !account.email || !/.{3,}@.{3,}/.test(account.email))
     throwValidationError({ br: 'Email inválido.', en: 'Invalid email.' })
 
@@ -9,6 +9,6 @@ export const validateAccount = (account) => {
 
   const { password } = account
 
-  if (!password || password.length < 6)
+  if (!isUpdateWithNoChangePassword && (!password || password.length < 6))
     throwValidationError({ br: 'A senha deve possuir pelo menos 6 caracteres.', en: 'The password must be at least 6 characters long.' })
 }

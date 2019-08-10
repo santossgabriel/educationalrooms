@@ -10,11 +10,7 @@ import { Languages } from '../helpers/utils'
 const { User } = sequelize
 const { EN, BR } = Languages
 
-export const isMobile = async (userId) => {
-  return await User.findOne({ attributes: ['mobile'], where: { id: userId } })
-}
-
-const generateToken = (user) => {
+const generateToken = user => {
   return jwt.sign({
     id: user.id,
     type: user.type,
@@ -85,11 +81,22 @@ export default {
   },
 
   update: async (req, res) => {
-    let account = req.body
+    const { name, email, changePassword, currentPassword, newPassword } = req.body || {}
 
-    validateAccount(account)
+    const account = { name, email, updatedAt: new Date() }
 
-    const userDB = await User.findOne({
+    if (changePassword) {
+      if (!currentPassword)
+        throwValidationError({
+          [BR]: 'A senha atual é inválida.',
+          [EN]: 'Invalid current password.'
+        })
+      account.password = newPassword
+    }
+
+    validateAccount(account, true)
+
+    let userDB = await User.findOne({
       where: sequelize.sequelize.and(
         {
           [sequelize.sequelize.Op.or]: [
@@ -110,15 +117,23 @@ export default {
       throwValidationError({ [BR]: 'Este nome já está em uso.', [EN]: 'This name is already in use.' })
     }
 
-    await User.update({
-      email: account.email,
-      name: account.name,
-      updatedAt: new Date()
-    }, { where: { id: req.claims.id } })
+
+    if (changePassword) {
+      userDB = await User.findOne({ where: { id: req.claims.id } })
+      if (sha1(currentPassword) !== userDB.password)
+        throwValidationError({
+          [BR]: 'A senha atual está incorreta.',
+          [EN]: 'Current password is wrong.'
+        })
+      account.password = sha1(account.password)
+    }
+
+    await User.update(account, { where: { id: req.claims.id } })
     account.id = req.claims.id
     const token = generateToken(account)
     res.json({
-      token: token, message: {
+      token: token,
+      message: {
         [BR]: 'Atualizado com sucesso.',
         [EN]: 'Updated successfully.'
       }

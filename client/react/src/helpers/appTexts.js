@@ -1,7 +1,7 @@
 export { default as Languages } from './translates/languages'
 
-import { AppSymbol, AppTitle, MainComponent, Root, Toolbar } from './translates/main'
-import { Question, Room } from './translates/scenes'
+import { AppSymbol, AppTitle, MainComponent, Root, Toolbar, FormErrors } from './translates/main'
+import { Question, Room, UserAccount } from './translates/scenes'
 import { MyQuestionsTable, MyRoomsTable, OpenedRoomTable, AssociatedRoomTable } from './translates/tables'
 import { RoomStatus } from './translates/roomStatus'
 
@@ -17,5 +17,7 @@ export const AppTexts = {
   AssociatedRoomTable,
   Question,
   Room,
-  RoomStatus
+  RoomStatus,
+  UserAccount,
+  FormErrors
 }

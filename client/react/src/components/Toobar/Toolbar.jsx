@@ -5,6 +5,7 @@ import * as Icons from '@material-ui/icons'
 import Menu from '@material-ui/core/Menu'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { Link as LinkRouter } from 'react-router-dom'
 
 import { Link, MenuIconButton, UserName, UserEmail, MenuFooter, NotificationTitle, NotificationContainer } from './styles'
 
@@ -133,7 +134,13 @@ export default function AppToolbar({ dockedMenu, openSideBar }) {
               <UserEmail>{user && user.email || ''}</UserEmail>
             </div>
             <MenuFooter>
-              <Button autoFocus={true} variant="contained" color="primary">{AppTexts.Toolbar.EditAccount[language]}</Button>
+              <LinkRouter to="/user-account">
+                <Button
+                  autoFocus={true}
+                  variant="contained"
+                  onClick={() => setAnchorMenu(null)}
+                  color="primary">{AppTexts.Toolbar.EditAccount[language]}</Button>
+              </LinkRouter>
               <Button
                 style={{ marginLeft: '10px' }}
                 onClick={() => logout()}

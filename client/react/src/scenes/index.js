@@ -11,3 +11,5 @@ export { default as MyRooms } from './room/MyRooms'
 export { default as OpenRooms } from './room/OpenRooms'
 
 export { default as Quiz } from './quiz/Quiz'
+
+export { default as UserAccount } from './user/UserAccount'

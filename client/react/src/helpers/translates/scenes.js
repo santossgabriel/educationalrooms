@@ -72,3 +72,30 @@ export const Room = {
     [EN_US]: 'Finish Room'
   }
 }
+
+export const UserAccount = {
+  Name: {
+    [PT_BR]: 'Nome',
+    [EN_US]: 'Name'
+  },
+  CurrentPassword: {
+    [PT_BR]: 'Senha Atual',
+    [EN_US]: 'Current Password'
+  },
+  NewPassword: {
+    [PT_BR]: 'Nova Senha',
+    [EN_US]: 'new Password'
+  },
+  ConfirmPassword: {
+    [PT_BR]: 'Confirme a senha',
+    [EN_US]: 'Confirm Password'
+  },
+  Title: {
+    [PT_BR]: 'Dados da Conta',
+    [EN_US]: 'Account'
+  },
+  ChangePassword: {
+    [PT_BR]: 'Alterar Senha',
+    [EN_US]: 'Change Password'
+  }
+}

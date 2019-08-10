@@ -8,7 +8,8 @@ import {
   OpenRooms,
   AssociatedRooms,
   EditRoom,
-  Quiz
+  Quiz,
+  UserAccount
 } from '../../scenes'
 
 const history = createHashHistory()
@@ -41,6 +42,8 @@ export default class AppRouter extends React.Component {
         <Route path="/associated-rooms" component={AssociatedRooms} />
 
         <Route path="/quiz/:id" component={Quiz} />
+
+        <Route path="/user-account" component={UserAccount} />
       </Switch>
     )
   }
