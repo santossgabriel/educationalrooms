@@ -138,6 +138,7 @@ export default function AppToolbar({ dockedMenu, openSideBar }) {
                 <Button
                   autoFocus={true}
                   variant="contained"
+                  onClick={() => setAnchorMenu(null)}
                   color="primary">{AppTexts.Toolbar.EditAccount[language]}</Button>
               </LinkRouter>
               <Button

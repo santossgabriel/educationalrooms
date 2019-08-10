@@ -10,6 +10,14 @@ export const FormErrors = {
       return `Entre com pelo menos ${length} caracteres`
     else
       return `Enter at least ${length} characters`
+  },
+  Email: {
+    [PT_BR]: 'Email inválido',
+    [EN_US]: 'Invalid email'
+  },
+  PasswordNotMatch: {
+    [PT_BR]: 'As senhas não batem',
+    [EN_US]: 'Passwords don\'t match'
   }
 }
 

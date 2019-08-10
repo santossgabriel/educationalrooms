@@ -9,25 +9,28 @@ import {
 
 import { AppTexts } from 'helpers'
 
-export default function InputHookForm({ register, validateProps, name, errors, label, type, email }) {
+export default function InputHookForm({ register, validateProps, name, errors, label, type, email, defaultValue, validateError }) {
   const language = useSelector(state => state.appState.language)
 
   if (email)
     validateProps.pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
   return (
-    <FormControl>
+    <FormControl style={{ height: '65px' }}>
       <TextField error={!!errors[name]}
         inputRef={register(validateProps)}
         name={name}
         label={label}
         variant="outlined"
-        style={{ padding: '2px', marginTop: '8px' }}
+        margin="dense"
+        defaultValue={defaultValue}
         type={type || 'text'} />
-      <FormHelperText hidden={!errors[name]} error={!!errors[name]}>
+      <FormHelperText margin="dense" hidden={!errors[name]} error={!!errors[name]}>
         {errors[name] && errors[name].type === 'required' && AppTexts.FormErrors.RequiredField[language]}
         {errors[name] && errors[name].type === 'minLength'
           && AppTexts.FormErrors.MinLength(language, validateProps.minLength)}
-        {errors[name] && errors[name].type === 'pattern' && email && 'Email inválido'}
+        {errors[name] && errors[name].type === 'pattern' && email && AppTexts.FormErrors.Email[language]}
+        {errors[name] && errors[name].type === 'validate' && validateError}
       </FormHelperText>
     </FormControl>
   )
@@ -40,5 +43,7 @@ InputHookForm.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   type: PropTypes.string,
-  email: PropTypes.bool
+  email: PropTypes.bool,
+  defaultValue: PropTypes.string,
+  validateError: PropTypes.string
 }

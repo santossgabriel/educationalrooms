@@ -36,6 +36,8 @@ const clientSocket = (() => {
       queue.push({ event, data })
   }
 
+  _self.isConnected = () => connected
+
   return _self
 })()
 
