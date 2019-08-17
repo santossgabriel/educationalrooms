@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 
 export const ContainerFooter = styled.div`
   background-color: #000;
-  position: fixed;
+  position: relative;
   width: 100%;
   height: 30px;
+  margin-top: 20px;
   padding-top: 12px;
   color: #AAA;
   bottom: 0;
@@ -18,13 +19,32 @@ export const ContainerOpenedRooms = styled.div`
   background-color: #DDD;
   border-radius: 4px;
   position: fixed;
-  width: 200px;
+  width: 15px;
   transition: 200ms;
-  height: ${({ show }) => show ? '200px' : '30px'};
+  height: 200px;
   color: #888;
-  right: 16px;
-  bottom: 42px;
+  right: 0;
+  bottom: 150px;
   font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  div {
+    display: none;
+  }
+
+  i {
+    margin-top: 90px;
+    margin-left: 5px;
+  }
+
+  &:hover {
+    width: 200px;
+    div {
+      display: block;
+    }
+    i {
+      display: none;
+    }
+  }
 `
 
 export const Title = styled.div`
