@@ -1,50 +1,21 @@
 import React from 'react'
-import Sidebar from 'react-sidebar'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { HashRouter, } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 
 import { Colors } from 'helpers/themes'
 import { Toolbar, Footer, OpenedQuizLinkList, GlobalToast } from 'components'
-import SidebarContent from './SidebarContent'
 import AppRouter from './AppRouter'
 import Auth from 'scenes/auth/Auth'
 import { AlertModal } from '../main/Modal'
 import { hideAlert } from 'store/actions'
 
-let mql = {}
-
 class MainComponent extends React.Component {
   constructor(props) {
     super(props)
-    mql = window.matchMedia('(min-width: 800px)')
     this.state = {
-      sidebarDocked: mql.matches,
-      sidebarIsOpen: false,
       showModal: false
     }
-    this.mediaQueryChanged = this.mediaQueryChanged.bind(this)
-  }
-
-  componentWillMount() {
-    mql.addListener(this.mediaQueryChanged)
-  }
-
-  componentWillUnmount() {
-    mql.removeListener(this.mediaQueryChanged)
-  }
-
-  mediaQueryChanged() {
-    this.setState({ sidebarDocked: mql.matches })
-  }
-
-  componentDidMount() {
-    // axios.interceptors.response.use(response => response, error => {
-    //   console.log(error.response)
-    //   if (error.response && error.response.status === 401)
-    //     this.setState({ showModal: true })
-    //   return Promise.reject(error.response)
-    // })
   }
 
   render() {
@@ -52,20 +23,12 @@ class MainComponent extends React.Component {
       <div>
         {this.props.user ?
           <HashRouter>
-            <Sidebar
-              sidebar={<SidebarContent closeSidebar={() => this.setState({ sidebarIsOpen: false })} />}
-              open={this.state.sidebarIsOpen}
-              onSetOpen={open => this.setState({ sidebarIsOpen: open })}
-              docked={this.state.sidebarDocked}
-              styles={{ sidebar: { background: Colors.AppGreen } }}>
-              <Toolbar
-                dockedMenu={this.state.sidebarDocked}
-                openSideBar={() => this.setState({ sidebarIsOpen: true })}
-              />
+            <>
+              <Toolbar />
               <AppRouter />
               <OpenedQuizLinkList />
               <GlobalToast />
-            </Sidebar>
+            </>
           </HashRouter>
           :
           <Auth />

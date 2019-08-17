@@ -1,3 +1,11 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* margin: 0 0 60px; */
+}
+
 @font-face {
   font-family: 'FrederickaGreat';
   src: url('./fredericka-great.ttf') format('truetype');

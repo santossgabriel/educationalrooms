@@ -9,7 +9,6 @@ export {
 export { default as IconTextInput } from './main/IconTextInput'
 export { default as MainComponen } from './main/MainComponent'
 export { AlertModal, ConfirmModal } from './main/Modal'
-export { default as SidebarConten } from './main/SidebarContent'
 export { default as Toolbar } from 'components/Toobar/Toolbar'
 export { default as FadeInContainer } from './main/FadeInContainer'
 export { default as Footer } from './Footer/Footer'

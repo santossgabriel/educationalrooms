@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { ArrowUp, ArrowDown } from 'components'
+import { ArrowLeft, ArrowUp, ArrowDown } from 'components'
 
 import { roomStarted } from 'store/actions'
 import { ContainerOpenedRooms, Title, ListItem, ContainerListItem } from './styles'
@@ -22,9 +22,7 @@ export default function OpenedQuizLinkList() {
 
   return (
     <ContainerOpenedRooms show={show}>
-      <Title onClick={() => setShow(!show)}>Quiz
-        {show ? <ArrowDown style={{ marginLeft: '10px' }} /> : <ArrowUp style={{ marginLeft: '10px' }} />}
-      </Title>
+      <Title>Quiz</Title>
       {onlineQuizList.map(p => (
         <ContainerListItem key={p.id}>
           <div onClick={() => setShow(false)}>
@@ -32,6 +30,7 @@ export default function OpenedQuizLinkList() {
           </div>
         </ContainerListItem>
       ))}
-    </ContainerOpenedRooms>
+      <ArrowLeft />
+    </ContainerOpenedRooms >
   )
 }
