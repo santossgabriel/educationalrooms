@@ -190,11 +190,7 @@ export default function MyRooms() {
                       <StatusDate date={n.openedAt} label={AppTexts.Room.OpenedAt[language]} />
                       <StatusDate date={n.startedAt} label={AppTexts.Room.StartedAt[language]} />
                       <StatusDate date={n.endedAt} label={AppTexts.Room.EndedAt[language]} />
-                      {
-                        n.startedAt && !n.endedAt ?
-                          <LinearProgress variant="indeterminate" style={{ marginBottom: 10 }} />
-                          : null
-                      }
+                      {n.startedAt && !n.endedAt && <LinearProgress variant="indeterminate" style={{ marginBottom: 10 }} />}
                     </CellRow>
                     <CellRow>{n.users.length}</CellRow>
                     <CellRow>{n.questions.length}</CellRow>

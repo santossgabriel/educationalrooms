@@ -10,7 +10,7 @@ const {
   sequelize
 } = db
 
-const toMyRooms = (room) => {
+const toMyRooms = room => {
   let result = {
     id: room.id,
     name: room.name,
@@ -38,7 +38,7 @@ const toMyRooms = (room) => {
     }
 
     const userAnswers = room.RoomAnswers.filter(x => x.userId == user.id).map(x => x.score)
-    if (userAnswers.length > 0)
+    if (userAnswers.length)
       user.score = userAnswers.reduce((x, y) => x + y)
 
     user.questions = room.RoomAnswers.filter(x => x.userId == user.id).map(x => {

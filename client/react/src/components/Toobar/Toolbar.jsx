@@ -68,8 +68,17 @@ export default function AppToolbar() {
   return (
     <Container>
       <Toolbar style={{ backgroundColor: '#000A', color: 'white', margin: 0, padding: 0, boxShadow: '2px 2px 2px black' }}>
-        <School style={{ marginLeft: '10px' }} />
-        <Title>{AppTexts.AppTitle[language]}</Title>
+        <LinkRouter to="/"
+        style={{
+          marginLeft: '10px',
+          display: 'flex',
+          color: 'inherit',
+          textDecoration: 'none',
+          flexDirection: 'row'
+        }} >
+          <School />
+          <Title>{AppTexts.AppTitle[language]}</Title>
+        </LinkRouter>
 
         <AppMenu>
           <li>

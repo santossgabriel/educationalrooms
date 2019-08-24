@@ -9,7 +9,8 @@ import {
   AssociatedRooms,
   EditRoom,
   Quiz,
-  UserAccount
+  UserAccount,
+  Home
 } from '../../scenes'
 
 const history = createHashHistory()
@@ -32,7 +33,7 @@ export default class AppRouter extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/" exact={true} component={MyQuestion} />
+        <Route path="/" exact={true} component={Home} />
         <Route path="/my-questions" component={MyQuestion} />
         <Route path="/shared-questions" component={SharedQuestion} />
 

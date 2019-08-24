@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "react-moment": "^0.9.2",
+    "recharts": "^1.7.1",
     "reduxsauce": "^1.1.0",
     "socket.io-client": "^2.2.0"
   },

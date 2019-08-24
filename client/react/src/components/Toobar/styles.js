@@ -25,6 +25,7 @@ export const Title = styled.div`
   padding-left: 20px;
   font-family: Arial;
   text-transform: uppercase;
+  font-size: 20px;
 `
 
 export const OnlineRipple = styled.div`
