@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 
 import { LabelList, Bar, BarChart, CartesianGrid, XAxis, Tooltip, YAxis, Legend } from 'recharts'
 import { Card } from '@material-ui/core'
 
 import { scoreService } from 'services'
-import CardMain from 'components/main/CardMain'
-import { AppTexts } from 'helpers/appTexts'
 import { toDateFormat } from 'helpers'
 import { Title, SubTitle } from './styles'
 
@@ -27,7 +24,6 @@ export default function UserAccount() {
           totPoints += p.points
           totScores += p.score
           p.date = toDateFormat(p.endedAt)
-          console.log(p.date)
         })
         setTotalScores(totScores)
         setTotalPoints(totPoints)
@@ -35,8 +31,6 @@ export default function UserAccount() {
       })
       .catch(err => console.log(err))
   }, [])
-
-  console.log(scores)
 
   return (
     <Card>

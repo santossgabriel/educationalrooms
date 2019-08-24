@@ -14,6 +14,7 @@ import { authService } from 'services'
 import CardMain from 'components/main/CardMain'
 import { AppTexts } from 'helpers/appTexts'
 import { FormContainer } from './styles'
+import UploadUserPicture from './UploadUserPicture'
 
 const Texts = AppTexts.UserAccount
 
@@ -48,82 +49,89 @@ export default function UserAccount() {
     <CardMain title={Texts.Title[appState.language]}>
       <FormContainer expanded={watchChangePassword} onSubmit={handleSubmit(onSubmit)}>
 
-        <InputHookForm
-          register={register}
-          defa
-          validateProps={{ required: true, minLength: 3 }}
-          name="name"
-          label={Texts.Name[appState.language]}
-          variant="outlined"
-          defaultValue={appState.user.name}
-          errors={errors} />
-
-        <br />
-
-        <InputHookForm
-          register={register}
-          validateProps={{ required: true }}
-          name="email"
-          label="Email"
-          email
-          defaultValue={appState.user.email}
-          variant="outlined"
-          errors={errors} />
-
-        <br />
-
-        <Checkbox
-          color="primary"
-          name="changePassword"
-          inputRef={register} />
-        <span style={{ fontSize: '12px', fontFamily: 'Arial' }}>
-          {Texts.ChangePassword[appState.language]}
-        </span>
-
-        {watchChangePassword &&
-          <>
-            <br />
-
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <InputHookForm
               register={register}
-              validateProps={{ required: true, minLength: 4 }}
-              name="currentPassword"
-              label={Texts.CurrentPassword[appState.language]}
+              defa
+              validateProps={{ required: true, minLength: 3 }}
+              name="name"
+              label={Texts.Name[appState.language]}
               variant="outlined"
-              type="password"
+              defaultValue={appState.user.name}
               errors={errors} />
 
             <br />
 
             <InputHookForm
               register={register}
-              validateProps={{ required: true, minLength: 4 }}
-              name="newPassword"
-              label={Texts.NewPassword[appState.language]}
+              validateProps={{ required: true }}
+              name="email"
+              label="Email"
+              email
+              defaultValue={appState.user.email}
               variant="outlined"
-              type="password"
               errors={errors} />
 
-            <br />
+            <div>
+              <Checkbox
+                color="primary"
+                name="changePassword"
+                inputRef={register} />
+              <span style={{ fontSize: '12px', fontFamily: 'Arial' }}>
+                {Texts.ChangePassword[appState.language]}
+              </span>
+            </div>
 
-            <InputHookForm
-              register={register}
-              validateProps={{
-                required: true,
-                minLength: 4,
-                validate: val => val === getValues().newPassword
-              }}
-              validateError={AppTexts.FormErrors.PasswordNotMatch[appState.language]}
-              name="confirmPassword"
-              label={Texts.ConfirmPassword[appState.language]}
-              variant="outlined"
-              type="password"
-              validateEquals="teste"
-              errors={errors} />
-          </>
-        }
+            {watchChangePassword &&
+              <>
+                <br />
 
-        <br />
+                <InputHookForm
+                  register={register}
+                  validateProps={{ required: true, minLength: 4 }}
+                  name="currentPassword"
+                  label={Texts.CurrentPassword[appState.language]}
+                  variant="outlined"
+                  type="password"
+                  errors={errors} />
+
+                <br />
+
+                <InputHookForm
+                  register={register}
+                  validateProps={{ required: true, minLength: 4 }}
+                  name="newPassword"
+                  label={Texts.NewPassword[appState.language]}
+                  variant="outlined"
+                  type="password"
+                  errors={errors} />
+
+                <br />
+
+                <InputHookForm
+                  register={register}
+                  validateProps={{
+                    required: true,
+                    minLength: 4,
+                    validate: val => val === getValues().newPassword
+                  }}
+                  validateError={AppTexts.FormErrors.PasswordNotMatch[appState.language]}
+                  name="confirmPassword"
+                  label={Texts.ConfirmPassword[appState.language]}
+                  variant="outlined"
+                  type="password"
+                  validateEquals="teste"
+                  errors={errors} />
+              </>
+            }
+
+
+          </div>
+
+          <UploadUserPicture />
+
+        </div>
 
         <div style={{ marginBottom: '20px' }} hidden={!loading}>
           <CircularProgress />

@@ -19,7 +19,9 @@
     "jest": "readonly",
     "document": "readonly",
     "location": "readonly",
-    "navigator": "readonly"
+    "navigator": "readonly",
+    "FileReader": "readonly",
+    "FormData": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,

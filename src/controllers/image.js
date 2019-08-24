@@ -10,12 +10,12 @@ import sequelize from '../infra/db/models/index'
 
 const { User } = sequelize
 
-const _50KB = 50 * 1024
+const _500KB = 500 * 1024
 
 const upload = Multer({
   storage: Multer.memoryStorage(),
   limits: {
-    fileSize: _50KB
+    fileSize: _500KB
   }
 }).single('image')
 
@@ -79,16 +79,20 @@ export default {
   },
 
   createImagePerfil: async (req, res) => {
-    upload(req, res, async (err) => {
+    console.log(req.file)
+    upload(req, res, async err => {
       if (err) {
         const errSize = err.message === 'File too large'
-        res.status(422).end(errSize ? 'Imagem não pode exceder 50KB.' : err.message)
+        res.status(422).end(errSize ? 'Imagem não pode exceder 500KB.' : err.message)
         return
       }
+
+      console.log('PASSOU AKI')
 
       const user = await User.findOne({ where: { id: req.claims.id } })
 
       const fileName = generateHashFile(req.file.originalname)
+      console.log('PASSOU AKI', fileName)
       await dbx.filesUpload({ path: '/' + fileName, contents: req.file.buffer })
       await User.update({ picture: `api/image/${fileName}` }, { where: { id: req.claims.id } })
       res.json({ fileName: fileName })
