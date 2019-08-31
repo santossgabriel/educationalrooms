@@ -50,13 +50,13 @@ export const MenuIconButton = styled(IconButton)`
 `
 
 export const UserName = styled.div`
-  font-family: 'Roboto Helvetica Arial sans-serif';
+  font-family: 'Arial,Helvetica,sans-serif';
   color: #777;
   font-size: 24px;
 `
 
 export const UserEmail = styled.div`
-  font-family: 'Roboto Helvetica Arial sans-serif';
+  font-family: 'Arial,Helvetica,sans-serif';
   color: #777;
 `
 

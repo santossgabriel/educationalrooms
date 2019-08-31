@@ -22,6 +22,7 @@ import CardMain from '../../components/main/CardMain'
 import { AppTexts, RoomStatus } from '../../helpers'
 import { ConfirmModal } from '../../components/main/Modal'
 import { showError, showSuccess } from 'store/actions'
+import RoomScoresModal from './RoomScoresModal'
 
 import { CellHead, NoContentMessage, Container, CellRow } from './styles'
 
@@ -101,6 +102,7 @@ export default function MyRooms() {
   const [page, setPage] = useState(0)
   const [removeRoom, setRemoveRoom] = useState(null)
   const [emptyRows, setEmptyRows] = useState(0)
+  const [showedRoom, setShowedRoom] = useState()
   const language = useSelector(state => state.appState.language)
   const dispatch = useDispatch()
 
@@ -151,6 +153,10 @@ export default function MyRooms() {
       }
     }
     setRemoveRoom(null)
+  }
+
+  async function openScores(room) {
+    setShowedRoom(room)
   }
 
   return (
@@ -223,6 +229,18 @@ export default function MyRooms() {
                           </Tooltip>
                         </span>
                         : null}
+                      {
+                        n.status === RoomStatus.ENDED &&
+                        <Tooltip title={AppTexts.Root.Scores[language]} placement="bottom">
+                          <IconButton color="primary"
+                            onClick={event => {
+                              event.stopPropagation()
+                              openScores(n)
+                            }}>
+                            <Icons.Poll />
+                          </IconButton>
+                        </Tooltip>
+                      }
                     </CellRow>
                   </TableRow>
                 ))}
@@ -269,6 +287,9 @@ export default function MyRooms() {
         text={(removeRoom || {}).description || ''}
         onResult={confirm => onResultRemoveRoom(confirm)}>
       </ConfirmModal>
+
+      <RoomScoresModal room={showedRoom} onClose={() => setShowedRoom(null)} />
+
     </CardMain>
   )
 }

@@ -99,3 +99,22 @@ export const UserAccount = {
     [EN_US]: 'Change Password'
   }
 }
+
+export const Home = {
+  Participations: {
+    [PT_BR]: 'Participações',
+    [EN_US]: 'Participations'
+  },
+  Scores: {
+    [PT_BR]: 'Total de pontos já realizados',
+    [EN_US]: 'Total scores already made'
+  },
+  ScorePossible: {
+    [PT_BR]: 'Pontos possíveis',
+    [EN_US]: 'Score possible'
+  },
+  ScoreMade: {
+    [PT_BR]: 'Pontos realizados',
+    [EN_US]: 'Score made'
+  }
+}
