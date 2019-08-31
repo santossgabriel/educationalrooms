@@ -94,6 +94,10 @@ export const Root = {
   Edit: {
     [PT_BR]: 'Editar',
     [EN_US]: 'Edit'
+  },
+  Scores: {
+    [PT_BR]: 'Pontuações',
+    [EN_US]: 'Scores'
   }
 }
 

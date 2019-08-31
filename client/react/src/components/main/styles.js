@@ -10,7 +10,7 @@ export const CardMainContainer = styled(Paper)`
     color: #666;
     border: inset 2px #ccc;
     font-size: 30px;
-    font-family: 'Roboto Helvetica Arial sans-serif';
+    font-family: 'Arial,Helvetica,sans-serif';
     text-transform: uppercase;
   }
   div {
