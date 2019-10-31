@@ -15,7 +15,7 @@ const isFree = (req) => {
 export default (req, res, next) => {
   if (isFree(req))
     return next()
-  const { token } = req.headers
+  const token = req.headers.token || req.query.token
   if (!token)
     return authError({ en: 'Provide the token.', br: 'Forneça o token.' }, res, req)
   jwt.verify(token, config.SECRET, (err, data) => {

@@ -16,14 +16,14 @@ export const Toolbar = styled(ToolbarApp)`
   color: white;
   margin: 0;
   padding: 0;
-  boxShadow: 2px 2px 2px black;
+  box-shadow: 2px 2px 2px black;
 `
 
 export const Title = styled.div`
   text-transform: 'uppercase';
   margin: 0;
   padding-left: 20px;
-  font-family: Arial;
+  font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
   font-size: 20px;
 `
@@ -99,7 +99,7 @@ export const AppMenu = styled.ul`
   list-style: none;
   flex-grow: 1;
   font-size: 14px;
-  font-family: Arial;
+  font-family: Arial, Helvetica, sans-serif;
   text-transform: uppercase;
   > li {
     float: left;

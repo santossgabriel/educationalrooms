@@ -1,6 +1,5 @@
 import { Given, When, Then } from 'cucumber'
 import supertest from 'supertest'
-import { expect } from 'chai'
 import { validProps } from '../stepsHelper'
 
 import app from '../../../../src/server'

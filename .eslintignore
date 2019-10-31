@@ -9,3 +9,5 @@ src/infra/db/migrations
 mocks
 before.test.js
 cucumber.report.js
+client
+public

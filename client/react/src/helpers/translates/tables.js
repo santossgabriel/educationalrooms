@@ -13,6 +13,8 @@ export const MyQuestionsTable = {
   Answers: { [PT_BR]: 'Respostas', [EN_US]: 'Answers' },
   Shared: { [PT_BR]: 'Compartilhada?', [EN_US]: 'Shared?' },
   CreateQuestion: { [PT_BR]: 'Criar Questão', [EN_US]: 'Create Question' },
+  ExportQuestions: { [PT_BR]: 'Exportar', [EN_US]: 'Export' },
+  ImportQuestions: { [PT_BR]: 'Importar', [EN_US]: 'Import' },
   Order: { [PT_BR]: 'Ordem', [EN_US]: 'Order' },
   Points: { [PT_BR]: 'Pontos', [EN_US]: 'Points' },
 }

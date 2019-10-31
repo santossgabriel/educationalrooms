@@ -36,7 +36,8 @@
     "process": true,
     "setTimeout": true,
     "setInterval": true,
-    "Promise": true
+    "Promise": true,
+    "require": true
   },
   "parserOptions": {
     "ecmaVersion": 8,

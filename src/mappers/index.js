@@ -1,0 +1,1 @@
+export { questionToResult, questionToExportResult } from './questionsMapper'

@@ -79,7 +79,6 @@ export default {
   },
 
   createImagePerfil: async (req, res) => {
-    console.log(req.file)
     upload(req, res, async err => {
       if (err) {
         const errSize = err.message === 'File too large'
@@ -87,12 +86,9 @@ export default {
         return
       }
 
-      console.log('PASSOU AKI')
-
       const user = await User.findOne({ where: { id: req.claims.id } })
 
       const fileName = generateHashFile(req.file.originalname)
-      console.log('PASSOU AKI', fileName)
       await dbx.filesUpload({ path: '/' + fileName, contents: req.file.buffer })
       await User.update({ picture: `api/image/${fileName}` }, { where: { id: req.claims.id } })
       res.json({ fileName: fileName })
@@ -100,9 +96,7 @@ export default {
       try {
         if (user.picture)
           await removeFile(user.picture)
-      } catch (ex) {
-        console.log(ex)
-      }
+      } catch (ex) { }
     })
   }
 }
