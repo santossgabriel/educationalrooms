@@ -51,7 +51,6 @@ const handlerError = async (error, res, req) => {
     else {
       log.error.message = error.message
     }
-    console.log(JSON.stringify(log))
     const logDB = await Log.create({ date: new Date(), description: JSON.stringify(log) })
     res.status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ message: `Ocorreu um erro interno. Nos envie uma solicitação com o código ${logDB.id}` })

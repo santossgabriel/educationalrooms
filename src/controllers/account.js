@@ -34,13 +34,11 @@ export default {
   },
 
   getToken: async (req, res) => {
-    const { email, password, mobile } = req.body
+    const { email, password } = req.body
     const user = await User.findOne({ where: { email: email } })
     if (!user || !password || user.password !== sha1(password))
       throwAuthError({ [EN]: 'Invalid credentials.', [BR]: 'Credenciais inválidas.' })
     const token = generateToken(user)
-    if (mobile)
-      User.update({ mobile: true }, { where: { email: email } })
     res.json({
       token: token,
       message: {

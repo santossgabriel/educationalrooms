@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core'
 
 import { questionService } from 'services'
+import { httpService } from 'services'
 import Stars from 'components/question/Stars'
 import CardMain from 'components/main/CardMain'
 import EditQuestionModal from 'components/modais/EditQuestionModal'
@@ -80,6 +81,17 @@ export default function MyQuestion() {
         dispatch(showError(err.message))
       }
     }
+  }
+
+  async function exportQuestions() {
+    const a = document.createElement('a')
+    a.setAttribute('href', `/api/questions-export?token=${httpService.getToken()}`)
+    a.setAttribute('download', 'questions.json')
+    a.setAttribute('target', '_blank')
+    a.style.display = 'none'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
   }
 
   return (
@@ -177,6 +189,17 @@ export default function MyQuestion() {
           onClick={() => openEditQuestion()}
           variant="contained"
           color="primary">{AppTexts.MyQuestionsTable.CreateQuestion[language]}</Button>
+        <br />
+        <Button
+          onClick={() => exportQuestions()}
+          variant="contained"
+          color="primary">{AppTexts.MyQuestionsTable.ImportQuestions[language]}</Button>
+        <a>
+          <Button
+            onClick={() => exportQuestions()}
+            variant="contained"
+            color="primary">{AppTexts.MyQuestionsTable.ExportQuestions[language]}</Button>
+        </a>
       </div>
       <EditQuestionModal
         close={hasChanges => modalQuestionCallback(hasChanges)}

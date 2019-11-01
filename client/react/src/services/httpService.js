@@ -25,6 +25,7 @@ const sendRequest = (method, url, headers, data) => {
 const getHeaders = () => ({ token: getToken() })
 
 const service = process.env.NODE_ENV === 'jest' ? httpServiceMock : {
+  getToken,
   getNotAuthenticated: url => sendRequest('get', `/api${url}`),
   postNotAuthenticated: (url, body) => sendRequest('post', `/api${url}`, null, body),
   get: url => sendRequest('get', `/api${url}`, getHeaders()),

@@ -1,11 +1,12 @@
 import {
   throwValidationError,
   throwForbiddenError,
-  answerErros,
   questionErros
 } from '../helpers/error'
 import db from '../infra/db/models/index'
 import { Languages } from '../helpers/utils'
+import { questionToResult, questionToExportResult } from '../mappers'
+import { validateQuestion } from '../validators'
 
 export const questionStatus = {
   NEW: 'N',
@@ -16,76 +17,12 @@ export const questionStatus = {
 const { sequelize, Question, Answer, RoomQuestion, Room } = db
 const { EN, BR } = Languages
 
-const validateAnswers = (answers) => {
-  let corrects = 0
-  let classifications = []
-  let descriptions = []
-  for (let i = 0; i < answers.length; i++) {
-    const answer = answers[i]
-    if (answer.correct)
-      corrects++
-
-    if (!answer.classification || typeof answer.classification !== 'string')
-      throwValidationError(answerErros.HAS_CLASSIFICATION)
-
-    if (!answer.description)
-      throwValidationError(answerErros.HAS_DESCRIPTION)
-
-    classifications.push(answer.classification)
-    descriptions.push(answer.description)
-  }
-
-  if (corrects != 1)
-    throwValidationError(answerErros.HAS_CORRECT_ANSWER)
-
-  if (classifications.filter((v, i, arr) => arr.indexOf(v) === i).length !== answers.length)
-    throwValidationError(answerErros.HAS_CLASSIFICATION_NEEDED)
-
-  if (descriptions.filter((v, i, arr) => arr.indexOf(v) === i).length !== answers.length)
-    throwValidationError(answerErros.NO_ANSWER_REPEATED)
-}
-
-const validateQuestion = (question) => {
-
-  if (!question || !question.description)
-    throwValidationError(questionErros.HAS_DESCRIPTION)
-
-  const { answers, difficulty, area } = question
-
-  if (!area)
-    throwValidationError(questionErros.HAS_AREA)
-
-  if (!difficulty || difficulty < 1 || difficulty > 5)
-    throwValidationError(questionErros.INVALID_DIFFICULTY)
-
-  if (!Array.isArray(question.answers) || question.answers.length < 2 || question.answers.length > 6)
-    throwValidationError(questionErros.HAS_BETWEEN_ANSWERS)
-
-  validateAnswers(answers)
-}
-
-const toResult = (questions) => {
-  if (Array.isArray(questions))
-    return questions.map(q => toResult(q))
-  else
-    return {
-      id: questions.id,
-      description: questions.description,
-      difficulty: questions.difficulty,
-      area: questions.area,
-      answers: questions.Answers,
-      shared: questions.shared,
-      userId: questions.userId,
-      sharedQuestionId: questions.sharedQuestionId
-    }
-}
-
 export default {
 
   getById: async (req, res) => {
     const { id } = req.params
     const question = await Question.findOne({ include: Answer, where: { id: id } })
-    res.json(toResult(question))
+    res.json(questionToResult(question))
   },
 
   getMy: async (req, res) => {
@@ -97,7 +34,7 @@ export default {
       ),
       order: [[Answer, 'classification']]
     })
-    res.json(toResult(questions))
+    res.json(questionToResult(questions))
   },
 
   getOthers: async (req, res) => {
@@ -116,7 +53,7 @@ export default {
         { shared: true }
       )
     })
-    res.json(toResult(questions))
+    res.json(questionToResult(questions))
   },
 
   getAreas: async (req, res) => {
@@ -327,5 +264,11 @@ export default {
       transaction.rollback()
       throw ex
     }
+  },
+
+  exportMyQuestions: async (req, res) => {
+    const questions = await Question.findAll({ include: Answer, where: { userId: req.claims.id } })
+    res.set('Content-Disposition', 'attachment; filename=questions.json')
+    res.end(JSON.stringify(questionToExportResult(questions)))
   }
 }

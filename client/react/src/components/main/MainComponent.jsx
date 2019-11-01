@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { HashRouter } from 'react-router-dom'
 
-import { Colors } from 'helpers/themes'
 import { Toolbar, Footer, OpenedQuizLinkList, GlobalToast } from 'components'
 import AppRouter from './AppRouter'
 import Auth from 'scenes/auth/Auth'
@@ -13,31 +12,30 @@ import { hideAlert } from 'store/actions'
 class MainComponent extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      showModal: false
-    }
   }
 
   render() {
     return (
-      <div>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         {this.props.user ?
           <HashRouter>
             <>
               <Toolbar />
-              <AppRouter />
+              <div style={{ flex: 1 }}>
+                <AppRouter />
+              </div>
               <OpenedQuizLinkList />
               <GlobalToast />
+              <AlertModal type={this.props.modal.type}
+                text={this.props.modal.message}
+                show={this.props.modal.show}
+                onClose={() => this.props.hideAlert()} />
+              <Footer />
             </>
           </HashRouter>
           :
           <Auth />
         }
-        <AlertModal type={this.props.modal.type}
-          text={this.props.modal.message}
-          show={this.props.modal.show}
-          onClose={() => this.props.hideAlert()} />
-        <Footer />
       </div>
     )
   }

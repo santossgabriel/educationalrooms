@@ -1,0 +1,1 @@
+export { validateAnswers, validateQuestion } from './questionValidators'

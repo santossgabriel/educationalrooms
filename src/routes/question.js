@@ -12,4 +12,5 @@ export default (app) => {
   app.post('/api/question-sync', asyncErrorHandler(question.sync))
   app.put('/api/question', asyncErrorHandler(question.update))
   app.delete('/api/question/:id', asyncErrorHandler(question.remove))
+  app.get('/api/questions-export', asyncErrorHandler(question.exportMyQuestions))
 }
