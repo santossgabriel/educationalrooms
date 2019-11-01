@@ -2,8 +2,8 @@ import styled from 'styled-components'
 import { Paper, TableCell } from '@material-ui/core'
 
 export const Container = styled(Paper)`
-  marginLeft: 20px; 
-  marginRight: 20px;
+  margin-left: 20px; 
+  margin-right: 20px;
 `
 
 export const CellHead = styled(TableCell)`
@@ -28,4 +28,14 @@ export const NoContentMessage = styled.span`
   text-align: center;
   display: block;
   font-family: Arial, Helvetica, sans-serif;
+`
+
+export const ContainerActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  & > button:not(:last-child) {
+    margin-right: 10px;
+  }
 `

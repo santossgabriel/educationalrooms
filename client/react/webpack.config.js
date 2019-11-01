@@ -1,5 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
+const ProgressBar = require('progress-bar-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   entry: './src/App.jsx',
@@ -30,12 +33,17 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.ttf']
   },
   output: {
-    path: __dirname + '/dist',
+    path: path.resolve(__dirname, '..', '..', 'public'),
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: `bundle${(new Date()).getTime()}.js`
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new ProgressBar(),
+    new HtmlWebpackPlugin({
+      template: __dirname + '/dist/index.html'
+    }),
+    new CleanWebpackPlugin()
   ],
   devServer: {
     contentBase: './dist',

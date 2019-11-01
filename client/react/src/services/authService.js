@@ -2,18 +2,20 @@ import httpService from './httpService'
 
 const updateToken = token => localStorage.setItem('TOKEN', token)
 
+const getAccount = () => httpService.get('/account')
+
 const login = user =>
   httpService.postNotAuthenticated('/token', user)
     .then(res => {
       updateToken(res.token)
-      return httpService.get('/account')
+      return getAccount()
     }).catch(err => { throw err })
 
 const createAccount = account =>
   httpService.postNotAuthenticated('/account', account)
     .then(res => {
       updateToken(res.token)
-      return httpService.get('/account')
+      return getAccount()
     }).catch(err => { throw err })
 
 const updateAccount = account => httpService.put('/account', account)
@@ -21,8 +23,9 @@ const updateAccount = account => httpService.put('/account', account)
 const logout = () => updateToken(null)
 
 export default {
-  logout,
+  getAccount,
   login,
   createAccount,
-  updateAccount
+  updateAccount,
+  logout
 }

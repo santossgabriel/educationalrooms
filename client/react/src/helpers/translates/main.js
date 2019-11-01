@@ -1,6 +1,6 @@
 import { PT_BR, EN_US } from './languages'
 
-export const FormErrors = {
+export const FormError = {
   RequiredField: {
     [PT_BR]: 'Este campo é obrigatório',
     [EN_US]: 'This field is required'
