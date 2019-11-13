@@ -12,6 +12,7 @@ if [ -f "$FILE" ]; then
 fi
 
 cd client/react
+npm install
 npm run build
 
 if [ $? -eq 0 ]
