@@ -10,3 +10,6 @@ yarn-error.log
 test.json
 temp
 client/react/.vscode/settings.json
+client/dist
+deploy
+public

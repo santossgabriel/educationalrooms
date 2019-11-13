@@ -6,12 +6,21 @@ import { HashRouter } from 'react-router-dom'
 import { Toolbar, Footer, OpenedQuizLinkList, GlobalToast } from 'components'
 import AppRouter from './AppRouter'
 import Auth from 'scenes/auth/Auth'
-import { AlertModal } from '../main/Modal'
-import { hideAlert } from 'store/actions'
+import { AlertModal } from '../main/Moda'
+import { hideAlert, userChanged } from 'store/actions'
+import { authService } from 'services'
+
 
 class MainComponent extends React.Component {
-  constructor(props) {
-    super(props)
+
+  componentDidMount() {
+    if (this.props.user) {
+      authService.getAccount()
+        .then(res => {
+          if (!res)
+            this.props.userChanged(null)
+        })
+    }
   }
 
   render() {
@@ -46,6 +55,7 @@ const mapStateToProps = state => ({
   modal: state.modalState,
   language: state.appState.language
 })
-const mapDispatchToProps = dispatch => bindActionCreators({ hideAlert }, dispatch)
+
+const mapDispatchToProps = dispatch => bindActionCreators({ hideAlert, userChanged }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainComponent)

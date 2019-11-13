@@ -83,5 +83,10 @@
       "html"
     ],
     "report-dir": "./.test_output/coverage"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
   }
 }

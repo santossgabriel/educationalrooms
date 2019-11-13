@@ -22,7 +22,7 @@ import { AppTexts } from 'helpers/appTexts'
 import { ConfirmModal } from 'components/main/Modal'
 import { showError, showSuccess } from 'store/actions'
 
-import { Container, CellHead, CellRow, NoContentMessage } from './styles'
+import { Container, CellHead, CellRow, NoContentMessage, ContainerActions } from './styles'
 
 export default function MyQuestion() {
 
@@ -184,23 +184,23 @@ export default function MyQuestion() {
         </Container>
         : <NoContentMessage>Você ainda não criou questões.</NoContentMessage>
       }
-      <div style={{ textAlign: 'center', padding: '5px' }}>
+      <ContainerActions>
         <Button
           onClick={() => openEditQuestion()}
           variant="contained"
           color="primary">{AppTexts.MyQuestionsTable.CreateQuestion[language]}</Button>
-        <br />
         <Button
-          onClick={() => exportQuestions()}
+          onClick={() => { }}
           variant="contained"
           color="primary">{AppTexts.MyQuestionsTable.ImportQuestions[language]}</Button>
-        <a>
+        {questions.length ?
           <Button
             onClick={() => exportQuestions()}
             variant="contained"
             color="primary">{AppTexts.MyQuestionsTable.ExportQuestions[language]}</Button>
-        </a>
-      </div>
+          : null
+        }
+      </ContainerActions>
       <EditQuestionModal
         close={hasChanges => modalQuestionCallback(hasChanges)}
         question={question}
