@@ -6,7 +6,7 @@ import { HashRouter } from 'react-router-dom'
 import { Toolbar, Footer, OpenedQuizLinkList, GlobalToast } from 'components'
 import AppRouter from './AppRouter'
 import Auth from 'scenes/auth/Auth'
-import { AlertModal } from '../main/Moda'
+import { AlertModal } from '../main/Modal'
 import { hideAlert, userChanged } from 'store/actions'
 import { authService } from 'services'
 
