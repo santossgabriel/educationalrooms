@@ -71,10 +71,10 @@ Feature: Gerenciamento de questões
     Then Então eu devo obter a mensagem <mensagem> depois de tentar remover a questão
 
     Examples:
-      | id | caso                  | mensagem                                                                                                     |
-      | 4  | 'que me pertence'     | '{ "en": "Question removed successfully.", "br":"Questão removida com sucesso." }'                           |
+      | id | caso                  | mensagem                                                                                             |
+      | 4  | 'que me pertence'     | '{ "en": "Question removed successfully.", "br":"Questão removida com sucesso." }'                   |
       | 2  | 'que não me pertence' | '{ "en": "Not allowed to remove this question.", "br": "Sem permissão para remover esta questão." }' |
-      | 99 | 'que não existe'      | '{ "en": "The question was not found.", "br": "A questão não foi encontrada." }'                             |
+      | 99 | 'que não existe'      | '{ "en": "The question was not found.", "br": "A questão não foi encontrada." }'                     |
 
   Scenario Outline: Compartilhamento da questão
     Given Dado que eu queira alterar o compartilhamento de uma questão
@@ -82,7 +82,17 @@ Feature: Gerenciamento de questões
     Then Então eu devo obter a mensagem <mensagem> depois de alterar o compartilhamento
 
     Examples:
-      | id | caso                          | mensagem                                                                                           |
-      | 6  | 'questão que me pertence'     | '{"en": "Shared successfully.", "br": "Compartilhada com sucesso." }'                              |
+      | id | caso                          | mensagem                                                                                            |
+      | 6  | 'questão que me pertence'     | '{"en": "Shared successfully.", "br": "Compartilhada com sucesso." }'                               |
       | 5  | 'questão que não me pertence' | '{"en": "Not allowed to change this question.", "br": "Sem permissão para alterar esta questão." }' |
-      | 99 | 'questão que não existe'      | '{"en": "The question was not found.", "br": "A questão não foi encontrada." }'                    |
+      | 99 | 'questão que não existe'      | '{"en": "The question was not found.", "br": "A questão não foi encontrada." }'                     |
+
+  Scenario: Exportar questões
+    Given Dado que eu queira exportar minhas questões cadastradas
+    When Quando eu chamar o método de exportar
+    Then Então quero obter um arquivo com as minhas questões exportadas
+
+  Scenario: Adquirir questão compartilihada
+    Given Dado que eu queira adquirir uma questão compartilhada
+    When Quando eu solicitar uma questão compartilhada
+    Then Então eu devo obter a questão compartilhada

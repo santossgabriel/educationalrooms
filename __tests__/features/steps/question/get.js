@@ -117,3 +117,53 @@ When('Quando eu buscar as áreas', () => {
 Then('Então eu quero obter uma lista das áreas', () => {
   assert.isTrue(areas.length > 0, 'Deve retornar mais de uma áreas')
 })
+
+/**
+ * Exportar questões do usuário logado
+ */
+Given('Dado que eu queira exportar minhas questões cadastradas', () => {
+  return request
+    .post('/api/token')
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+
+When('Quando eu chamar o método de exportar', () => {
+  return request
+    .get('/api/questions-export')
+    .set({ token: token })
+    .then((result) => {
+      questions = JSON.parse(result.text)
+    })
+})
+
+Then('Então quero obter um arquivo com as minhas questões exportadas', () => {
+  assert.isOk(questions.length, 'Não retornou questões exportadas.')
+})
+
+/**
+ * Adquirir questão compartilhada
+ */
+Given('Dado que eu queira adquirir uma questão compartilhada', () => {
+  return request
+    .post('/api/token')
+    .send({ email: 'questionmock3@mail.com', password: '123qwe' })
+    .then((result) => {
+      token = result.body.token
+    })
+})
+
+When('Quando eu solicitar uma questão compartilhada', () => {
+  return request
+    .get('/api/question-get-shared/3')
+    .set({ token: token })
+    .then((result) => {
+      question = result.body
+    })
+})
+
+Then('Então eu devo obter a questão compartilhada', () => {
+  expect(question.message.en).to.eql('Question acquired successfully.')
+})
