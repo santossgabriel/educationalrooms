@@ -116,7 +116,7 @@ export default function UserAccount() {
                     minLength: 4,
                     validate: val => val === getValues().newPassword
                   }}
-                  validateError={AppTexts.FormErrors.PasswordNotMatch[appState.language]}
+                  validateError={AppTexts.FormError.PasswordNotMatch[appState.language]}
                   name="confirmPassword"
                   label={Texts.ConfirmPassword[appState.language]}
                   variant="outlined"

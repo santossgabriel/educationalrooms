@@ -54,11 +54,13 @@ let onlineRooms = []
 let currentQuestions = []
 let correctAnswers = []
 
-export const updateOnlineRooms = async () => {
+export const updateOnlineRooms = async() => {
   const rooms = await Room.findAll({
     attributes: ['id', 'name', 'time'],
     where: {
-      startedAt: { [sequelize.Op.ne]: null },
+      startedAt: {
+        [sequelize.Op.ne]: null
+      },
       endedAt: null
     },
     include: [
@@ -66,15 +68,13 @@ export const updateOnlineRooms = async () => {
       {
         model: RoomQuestion,
         attributes: ['questionId', 'order', 'points'],
-        include: [
-          {
-            model: Question,
-            attributes: ['id', 'description', 'area', 'difficulty'],
-            include: [
-              { model: Answer, attributes: ['id', 'description', 'correct', 'classification'] }
-            ]
-          }
-        ]
+        include: [{
+          model: Question,
+          attributes: ['id', 'description', 'area', 'difficulty'],
+          include: [
+            { model: Answer, attributes: ['id', 'description', 'correct', 'classification'] }
+          ]
+        }]
       }
     ]
   })
@@ -110,7 +110,7 @@ const updateCorrectAnswers = () => {
   })
 }
 
-const updateCurrentQuestions = async () => {
+const updateCurrentQuestions = async() => {
   currentQuestions = []
   await OnlineRoom.findAll().map(p => {
     const onlineRoom = onlineRooms.filter(x => x.id == p.id).shift()
@@ -126,9 +126,11 @@ const updateCurrentQuestions = async () => {
   })
 }
 
-const runTimer = async () => {
+const runTimer = async() => {
   onlineRooms.forEach(async r => {
     const q = currentQuestions.filter(p => p.roomId == r.id).shift()
+    if (!q)
+      return
     const diff = Math.floor((new Date()).getTime() - q.changedAt.getTime())
     const seconds = Math.floor(diff / 1000)
     const users = r.users.map(p => p.id)
@@ -156,7 +158,7 @@ const runTimer = async () => {
   })
 }
 
-const sendFeedback = async (roomId, questionId, users) => {
+const sendFeedback = async(roomId, questionId, users) => {
   const answers = await RoomAnswer.findAll({ where: { roomId: roomId, questionId: questionId } })
   users.forEach(u => {
     const userAnswer = answers.filter(p => p.userId == u).shift()
@@ -184,7 +186,7 @@ const notifyChangedQuestion = (question, users) => {
   })
 }
 
-const notifyFinish = async (roomId, users) => {
+const notifyFinish = async(roomId, users) => {
   const usersAnswers = await RoomAnswer.findAll({
     where: { roomId: roomId }
   })
@@ -213,7 +215,7 @@ export const sendNotifications = (users, notification) => {
   })
 }
 
-export const startJob = async () => {
+export const startJob = async() => {
   if (process.env.NODE_ENV !== 'test') {
     await updateOnlineRooms()
     await updateCurrentQuestions()
