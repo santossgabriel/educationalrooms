@@ -26,10 +26,10 @@ export default function InputHookForm({ register, validateProps, name, errors, l
         defaultValue={defaultValue}
         type={type || 'text'} />
       <FormHelperText margin="dense" hidden={!errors[name]} error={!!errors[name]}>
-        {errors[name] && errors[name].type === 'required' && AppTexts.FormErrors.RequiredField[language]}
+        {errors[name] && errors[name].type === 'required' && AppTexts.FormError.RequiredField[language]}
         {errors[name] && errors[name].type === 'minLength'
-          && AppTexts.FormErrors.MinLength(language, validateProps.minLength)}
-        {errors[name] && errors[name].type === 'pattern' && email && AppTexts.FormErrors.Email[language]}
+          && AppTexts.FormError.MinLength(language, validateProps.minLength)}
+        {errors[name] && errors[name].type === 'pattern' && email && AppTexts.FormError.Email[language]}
         {errors[name] && errors[name].type === 'validate' && validateError}
       </FormHelperText>
     </FormControl>

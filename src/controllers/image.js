@@ -8,7 +8,7 @@ import Multer from 'multer'
 
 import sequelize from '../infra/db/models/index'
 
-const { User } = sequelize
+const { User, Log } = sequelize
 
 const _500KB = 500 * 1024
 
@@ -24,7 +24,7 @@ const generateHashFile = (fileName) => {
   return sha1(new Date()).substring(0, 8) + fileName.toLowerCase()
 }
 
-const dropboxFileNames = async () => {
+const dropboxFileNames = async() => {
   const response = await dbx.filesListFolder({ path: '' })
   let names = []
   for (let i = 0; i < response.entries.length; i++)
@@ -32,53 +32,48 @@ const dropboxFileNames = async () => {
   return names
 }
 
-const existsInDropBox = async (name) => {
+const existsInDropBox = async(name) => {
   const names = await dropboxFileNames()
-  let exists = false
-  for (let i = 0; i < names.length && !exists; i++)
-    if (names[i] == name)
-      exists = true
-  return exists
+  return !!names.find(p => p === name)
 }
 
-const removeFile = async (name) => {
+const removeFile = async(name) => {
   if (existsInDropBox(name))
     dbx.filesDelete(name)
 }
 
 export default {
 
-  get: async (req, res) => {
+  get: async(req, res) => {
     const { name } = req.params
 
     const filePath = path.join(__dirname, '../../temp', name)
-    fs.stat(filePath, async (err) => {
-      if (err) {
-        const exists = await existsInDropBox(name)
-        if (exists) {
-          const file = await dbx.filesDownload({ path: '/' + name })
-          fs.writeFile(filePath, file.fileBinary, 'binary', (err) => {
-            if (err) {
-              throw err
-            } else {
-              res.sendFile(filePath, { root: '/' })
-            }
-          })
-        } else {
-          res.status(HttpStatus.NOT_FOUND)
-          res.end('File not found.')
-        }
-      } else {
+    try {
+      if (fs.existsSync(filePath))
+        return res.sendFile(filePath, { root: '/' })
+
+      const exists = await existsInDropBox(name)
+      if (exists) {
+        const file = await dbx.filesDownload({ path: '/' + name })
+        fs.writeFileSync(filePath, file.fileBinary, 'binary')
         res.sendFile(filePath, { root: '/' })
+      } else {
+        res.status(HttpStatus.NOT_FOUND)
+        res.end('File not found.')
       }
-    })
+    } catch (ex) {
+      res.status(HttpStatus.NOT_FOUND)
+      res.end('File not found.')
+      const { status, text } = ex.response || {}
+      Log.create({ date: new Date(), description: JSON.stringify({ status, text }) })
+    }
   },
 
-  getAllImageNames: async (req, res) => {
+  getAllImageNames: async(req, res) => {
     res.json(await dropboxFileNames())
   },
 
-  createImagePerfil: async (req, res) => {
+  createImagePerfil: async(req, res) => {
     upload(req, res, async err => {
       if (err) {
         const errSize = err.message === 'File too large'
@@ -96,7 +91,7 @@ export default {
       try {
         if (user.picture)
           await removeFile(user.picture)
-      } catch (ex) { }
+      } catch (ex) {}
     })
   }
 }
