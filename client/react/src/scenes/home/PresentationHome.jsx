@@ -1,6 +1,9 @@
 import { Zoom } from '@material-ui/core'
 import React, { useState } from 'react'
-import { PresentationContainer, PresentationTitle, ImageContainer } from './styles'
+import {
+  PresentationContainer, PresentationTitle, ImageContainer,
+  CarouselContainer, CarouselFooter, CarouselFooterItem
+} from './styles'
 
 const containers = [
   {
@@ -40,16 +43,23 @@ export function PresentationHome() {
   return (
     <Zoom in={true}>
       <PresentationContainer>
-        <div>
-          <i className="arrow left lg"
-            onClick={() => setIndex(index ? index - 1 : 0)}></i>
-        </div>
-        <PresentationTitle>{containers[index].title}</PresentationTitle>
-        <ImageContainer src={containers[index].image} />
-        <div>
-          <i className="arrow right lg"
-            onClick={() => setIndex(index === containers.length - 1 ? index : index + 1)}></i>
-        </div>
+        <CarouselContainer>
+          <div>
+            <i className="arrow left lg"
+              onClick={() => setIndex(index ? index - 1 : 0)}></i>
+          </div>
+          <PresentationTitle>{containers[index].title}</PresentationTitle>
+          <ImageContainer src={containers[index].image} />
+          <div>
+            <i className="arrow right lg"
+              onClick={() => setIndex(index === containers.length - 1 ? index : index + 1)}></i>
+          </div>
+        </CarouselContainer>
+        <CarouselFooter>
+          {containers.map((c, i) =>
+            <CarouselFooterItem key={i + ''} selected={i === index}></CarouselFooterItem>)
+          }
+        </CarouselFooter>
       </PresentationContainer>
     </Zoom >
   )

@@ -66,7 +66,7 @@ export default function AppToolbar() {
   return (
     <Container>
       <Toolbar style={{
-        backgroundColor: '#000A',
+        backgroundColor: '#002900AA',
         color: 'white',
         margin: 0,
         padding: 0,
