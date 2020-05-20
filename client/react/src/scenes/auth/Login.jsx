@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux'
 import { Email, Lock } from '@material-ui/icons'
 import { CardContent, Zoom, FormHelperText, CircularProgress } from '@material-ui/core'
 
-
 import GoogleButton from 'components/main/GoogleButton'
 import IconTextInput from 'components/main/IconTextInput'
 import { userChanged } from 'store/actions'
@@ -35,8 +34,10 @@ export default function Login({ changeScene }) {
         email: form.email.value,
         password: form.password.value
       })
-      setLoading(false)
-      dispatch(userChanged(user))
+      setTimeout(() => {
+        setLoading(false)
+        dispatch(userChanged(user))
+      }, 500)
     } catch (ex) {
       setLoading(false)
       setErrorMessage(ex.message)
@@ -46,7 +47,7 @@ export default function Login({ changeScene }) {
   return (
     <Zoom in={true}>
       <Container>
-        <form onSubmit={() => login()}>
+        <form onSubmit={e => { e.preventDefault(); login() }}>
           <GoogleButton label="Login with google" disabled={loading} />
           <Or>OR</Or>
           <CardContent>
@@ -86,7 +87,11 @@ export default function Login({ changeScene }) {
               variant="outlined"
               onClick={changeScene}
               color="primary">Create Account</ButtonAuth>
-            <FormHelperText jestid="msgLogin" style={{ textTransform: 'uppercase', textAlign: 'center', marginTop: '8px' }}
+            <FormHelperText jestid="msgLogin" style={{
+              textTransform: 'uppercase',
+              textAlign: 'center',
+              marginTop: '8px'
+            }}
               hidden={!errorMessage} error={true}>
               {errorMessage}
             </FormHelperText>

@@ -19,3 +19,14 @@ export const Container = styled(Card)`
   margin: 0 auto;
   margin-top: 30px;
 `
+
+export const PresentationContainer = styled.div`
+  margin: 30px;
+  background-color: #ddd;
+  padding: 20px;
+  box-shadow: 5px 5px 20px black;
+  > img {
+    height: 400px;
+    width: 800px;
+  }
+`

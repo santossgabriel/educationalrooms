@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { ArrowLeft, ArrowUp, ArrowDown } from 'components'
-
-import { roomStarted } from 'store/actions'
-import { ContainerOpenedRooms, Title, ListItem, ContainerListItem } from './styles'
+import { ArrowLeft } from 'components'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { roomService } from 'services'
+import { roomStarted } from 'store/actions'
+import { ContainerListItem, ContainerOpenedRooms, ListItem, Title } from './styles'
 
 export default function OpenedQuizLinkList() {
 
   const [show, setShow] = useState(false)
 
-  const { onlineQuizList } = useSelector(state => state.appState)
+  const { onlineQuizList, user } = useSelector(state => state.appState)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export default function OpenedQuizLinkList() {
   }, [])
 
   return (
-    <ContainerOpenedRooms show={show}>
+    <ContainerOpenedRooms show={user && show}>
       <Title>Quiz</Title>
       {onlineQuizList.map(p => (
         <ContainerListItem key={p.id}>

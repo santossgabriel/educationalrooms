@@ -1,51 +1,40 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
 import { createHashHistory } from 'history'
+import React, { useEffect } from 'react'
+import { Route, Switch } from 'react-router-dom'
 import {
-  MyQuestion,
-  SharedQuestion,
-  MyRooms,
-  OpenRooms,
-  AssociatedRooms,
-  EditRoom,
-  Quiz,
-  UserAccount,
-  Home
+  AssociatedRooms, Auth, EditRoom, Home, MyQuestion, MyRooms,
+  OpenRooms, PresentationHome, Quiz, SharedQuestion, UserAccount
 } from '../../scenes'
 
 const history = createHashHistory()
-const isAuthenticated = true
-const freeRoutes = ['/', '/about']
 
-let currentPath = location.hash.replace('#', '')
+export function AppRouter() {
+  return (
+    <Switch>
+      <Route path="/" exact={true} component={Home} />
+      <Route path="/my-questions" component={MyQuestion} />
+      <Route path="/shared-questions" component={SharedQuestion} />
 
-export const getCurrentPath = () => currentPath
+      <Route path="/edit-room/:id" component={EditRoom} />
+      <Route path="/my-rooms" component={MyRooms} />
+      <Route path="/open-rooms" component={OpenRooms} />
+      <Route path="/associated-rooms" component={AssociatedRooms} />
 
-history.listen((location) => {
-  if (freeRoutes.indexOf(location.pathname) === -1 && !isAuthenticated) {
-    window.location.hash = '#/'
-    currentPath = '/'
-  } else
-    currentPath = location.pathname
-})
+      <Route path="/quiz/:id" component={Quiz} />
 
-export default class AppRouter extends React.Component {
-  render() {
-    return (
-      <Switch>
-        <Route path="/" exact={true} component={Home} />
-        <Route path="/my-questions" component={MyQuestion} />
-        <Route path="/shared-questions" component={SharedQuestion} />
+      <Route path="/user-account" component={UserAccount} />
+    </Switch>
+  )
+}
 
-        <Route path="/edit-room/:id" component={EditRoom} />
-        <Route path="/my-rooms" component={MyRooms} />
-        <Route path="/open-rooms" component={OpenRooms} />
-        <Route path="/associated-rooms" component={AssociatedRooms} />
-
-        <Route path="/quiz/:id" component={Quiz} />
-
-        <Route path="/user-account" component={UserAccount} />
-      </Switch>
-    )
-  }
+export function PresentationRouter() {
+  useEffect(() => {
+    history.push('/')
+  }, [])
+  return (
+    <Switch>
+      <Route path="/" exact={true} component={PresentationHome} />
+      <Route path="/register" component={Auth} />
+    </Switch>
+  )
 }
