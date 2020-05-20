@@ -423,6 +423,10 @@ i.arrow {
   margin: 3px;
 }
 
+i.arrow.lg {
+  padding: 10px;
+}
+
 i.right {
   transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);

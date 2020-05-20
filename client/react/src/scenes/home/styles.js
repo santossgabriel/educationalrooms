@@ -25,8 +25,23 @@ export const PresentationContainer = styled.div`
   background-color: #ddd;
   padding: 20px;
   box-shadow: 5px 5px 20px black;
-  > img {
-    height: 400px;
-    width: 800px;
-  }
+  flex-direction: row;
+  display: flex;
+`
+
+export const PresentationTitle = styled.div`
+  padding: 20px;
+  color: #4b7d47;
+  font-size: 50px;
+  font-weight: bold;
+  margin: 0;
+  border-bottom: solid 5px;
+  flex: 1;
+`
+
+export const ImageContainer = styled.img`
+  margin: 20px;
+  height: 400px;
+  width: 800px;
+  flex: 2;
 `
