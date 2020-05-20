@@ -1,6 +1,6 @@
-import React from 'react'
-import { PresentationContainer } from './styles'
 import { Zoom } from '@material-ui/core'
+import React, { useState } from 'react'
+import { PresentationContainer, PresentationTitle, ImageContainer } from './styles'
 
 const containers = [
   {
@@ -12,7 +12,7 @@ const containers = [
     image: 'api/image/shared-questions-br.png'
   },
   {
-    title: 'Crie uma sala quiz',
+    title: 'Crie uma sala e inclua suas questões nela',
     image: 'api/image/new-room-br.png'
   },
   {
@@ -28,23 +28,29 @@ const containers = [
     image: 'api/image/end-score-br.png'
   },
   {
-    title: 'Confira sua pontuação dos participantes nas salas que você criou',
+    title: 'Confira a pontuação dos participantes nas salas que você criou',
     image: 'api/image/score-users.png'
   }
 ]
 
 export function PresentationHome() {
 
+  const [index, setIndex] = useState(0)
+
   return (
-    <>
-      {containers.map((p, i) =>
-        <Zoom in={true} key={'' + i}>
-          <PresentationContainer>
-            <h3>{p.title}</h3>
-            <img src={p.image} />
-          </PresentationContainer>
-        </Zoom>
-      )}
-    </>
+    <Zoom in={true}>
+      <PresentationContainer>
+        <div>
+          <i className="arrow left lg"
+            onClick={() => setIndex(index ? index - 1 : 0)}></i>
+        </div>
+        <PresentationTitle>{containers[index].title}</PresentationTitle>
+        <ImageContainer src={containers[index].image} />
+        <div>
+          <i className="arrow right lg"
+            onClick={() => setIndex(index === containers.length - 1 ? index : index + 1)}></i>
+        </div>
+      </PresentationContainer>
+    </Zoom >
   )
 }

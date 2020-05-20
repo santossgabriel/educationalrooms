@@ -186,7 +186,14 @@ export default function AppToolbar() {
           </>
           :
           <>
-            <AppMenu></AppMenu>
+            <AppMenu>
+              <li>
+                <label>About</label>
+              </li>
+              <li>
+                <label>Contact</label>
+              </li>
+            </AppMenu>
             <LinkRouter to="/register">
               <Button
                 style={{ marginLeft: '10px', marginRight: '10px' }}
