@@ -20,6 +20,10 @@ const containers = [
     image: 'api/image/opened-rooms-br.png'
   },
   {
+    title: 'Participe da sala do quiz',
+    image: 'api/image/quiz.png'
+  },
+  {
     title: 'Confira sua pontuação ao fim de cada participação',
     image: 'api/image/end-score-br.png'
   },
