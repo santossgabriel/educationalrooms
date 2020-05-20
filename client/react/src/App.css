@@ -374,8 +374,6 @@
   }
 }
 
-
-
 @keyframes errorPlaceholder {
   0% {
     transform: rotate(-45deg);
@@ -394,8 +392,6 @@
   }
 }
 
-
-
 html {
   position: relative;
   min-height: 100%;
@@ -407,7 +403,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #bbb;
+  background-color: #69a267;
 }
 
 .MuiList-padding-2 {
