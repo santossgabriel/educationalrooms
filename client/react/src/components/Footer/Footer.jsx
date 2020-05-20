@@ -1,8 +1,7 @@
+import { AppTexts } from 'helpers/appTexts'
 import React from 'react'
 import { useSelector } from 'react-redux'
-
 import { ContainerFooter } from './styles'
-import { AppTexts } from 'helpers/appTexts'
 
 export default function Footer() {
 

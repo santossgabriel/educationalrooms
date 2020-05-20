@@ -2,7 +2,7 @@ import { Zoom } from '@material-ui/core'
 import React, { useState } from 'react'
 import {
   PresentationContainer, PresentationTitle, ImageContainer,
-  CarouselContainer, CarouselFooter, CarouselFooterItem
+  CarouselContainer, CarouselFooter, CarouselFooterItem, ArrowContainer
 } from './styles'
 
 const containers = [
@@ -40,21 +40,39 @@ export function PresentationHome() {
 
   const [index, setIndex] = useState(0)
 
+  function next() {
+    setIndex(-1)
+    setTimeout(() => {
+      setIndex(index === containers.length - 1 ? 0 : index + 1)
+    }, 0)
+  }
+
+  function prev() {
+    setIndex(-1)
+    setTimeout(() => {
+      setIndex(index ? index - 1 : containers.length - 1)
+    }, 0)
+  }
+
   return (
     <Zoom in={true}>
       <PresentationContainer>
-        <CarouselContainer>
-          <div>
-            <i className="arrow left lg"
-              onClick={() => setIndex(index ? index - 1 : 0)}></i>
-          </div>
-          <PresentationTitle>{containers[index].title}</PresentationTitle>
-          <ImageContainer src={containers[index].image} />
-          <div>
-            <i className="arrow right lg"
-              onClick={() => setIndex(index === containers.length - 1 ? index : index + 1)}></i>
-          </div>
-        </CarouselContainer>
+        {
+          containers[index] ?
+            <CarouselContainer className="fade">
+              <ArrowContainer>
+                <i className="arrow left lg"
+                  onClick={() => prev()}></i>
+              </ArrowContainer>
+              <PresentationTitle>{containers[index].title}</PresentationTitle>
+              <ImageContainer src={containers[index].image} />
+              <ArrowContainer>
+                <i className="arrow right lg"
+                  onClick={() => next()}></i>
+              </ArrowContainer>
+            </CarouselContainer>
+            : <div style={{ height: '440px' }}></div>
+        }
         <CarouselFooter>
           {containers.map((c, i) =>
             <CarouselFooterItem key={i + ''} selected={i === index}></CarouselFooterItem>)
