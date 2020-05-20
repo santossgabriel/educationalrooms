@@ -30,6 +30,19 @@
   "rules": {
     "no-unused-vars": 2,
     "no-useless-escape": "off",
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 1,
+        "maxEOF": 0
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 120
+      }
+    ],
     "react/prop-types": [
       2,
       {
