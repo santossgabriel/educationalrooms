@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react'
-import { Clear, Check } from '@material-ui/icons'
+import { Check, Clear } from '@material-ui/icons'
+import React from 'react'
 import { useSelector } from 'react-redux'
-
-import { ContainerGlobalToast, ContainerText, ContainerContent } from './styles'
-import { showToastError, showToastSuccess } from 'store/actions'
+import { ContainerContent, ContainerGlobalToast, ContainerText } from './styles'
 
 const ErrorIcon = () => (
   <div style={{ borderRight: 'solid 1px #a88' }}>

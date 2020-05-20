@@ -1,18 +1,15 @@
+import { FormControl, FormHelperText, TextField } from '@material-ui/core'
+import { AppTexts } from 'helpers'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
-import {
-  FormControl,
-  TextField,
-  FormHelperText
-} from '@material-ui/core'
 
-import { AppTexts } from 'helpers'
-
-export default function InputHookForm({ register, validateProps, name, errors, label, type, email, defaultValue, validateError }) {
+export default function InputHookForm({ register,
+  validateProps, name, errors, label, type, email, defaultValue, validateError }) {
   const language = useSelector(state => state.appState.language)
 
   if (email)
+    // eslint-disable-next-line max-len
     validateProps.pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   return (

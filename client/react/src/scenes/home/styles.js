@@ -21,10 +21,12 @@ export const Container = styled(Card)`
 `
 
 export const PresentationContainer = styled.div`
+  margin-top: 200px;
   margin: 30px;
   background-color: #ddd;
-  padding: 20px;
+  padding: 20px 0;
   box-shadow: 5px 5px 20px black;
+  margin-top: 100px;
 `
 
 export const CarouselContainer = styled.div`
@@ -48,6 +50,14 @@ export const ImageContainer = styled.img`
   flex: 5;
 `
 
+export const ArrowContainer = styled.div`
+  margin: 0 10px;
+  padding: 0 10px;
+  > i {
+    margin-top: 200px !important;
+  }
+`
+
 export const CarouselFooter = styled.div`
   display: flex;
   flexDirection: row;
@@ -57,7 +67,7 @@ export const CarouselFooter = styled.div`
 `
 
 export const CarouselFooterItem = styled.div`
-  background-color: ${({ selected }) => selected ? '#4b7d47' : 'gray'};
+  background-color: ${({ selected }) => selected ? '#4b7d47' : '#bbb'};
   flex: 1;
   height: 5px;
 `
