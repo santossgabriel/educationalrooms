@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Badge } from '@material-ui/core/'
-import { School, Notifications, Help, Lens, Close } from '@material-ui/icons'
+import { Badge, Button } from '@material-ui/core/'
 import Menu from '@material-ui/core/Menu'
+import { Close, Help, Lens, Notifications, School } from '@material-ui/icons'
+import { BrazilFlag, UnitedStatesFlag } from 'components'
+import { AppTexts, Languages } from 'helpers/appTexts'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link as LinkRouter } from 'react-router-dom'
-
-import {
-  Title, Container, Link, MenuIconButton, UserName, UserEmail, MenuFooter,
-  NotificationTitle, NotificationContainer, AppMenu, LinkMenu, Toolbar
-} from './styles'
-
-import { AppTexts, Languages } from 'helpers/appTexts'
-import { BrazilFlag, UnitedStatesFlag } from 'components'
-import { languageChanged, userChanged, notificationsChanged } from 'store/actions'
 import { authService, notificationService } from 'services'
+import { languageChanged, notificationsChanged, userChanged } from 'store/actions'
+import {
+  AppMenu, Container, Link, LinkMenu, MenuFooter, MenuIconButton,
+  NotificationContainer, NotificationTitle, Title, Toolbar, UserEmail, UserName
+} from './styles'
 import { UserPicture } from './UserPicture'
 
 const {
@@ -67,15 +65,21 @@ export default function AppToolbar() {
 
   return (
     <Container>
-      <Toolbar style={{ backgroundColor: '#000A', color: 'white', margin: 0, padding: 0, boxShadow: '2px 2px 2px black' }}>
+      <Toolbar style={{
+        backgroundColor: '#000A',
+        color: 'white',
+        margin: 0,
+        padding: 0,
+        boxShadow: '2px 2px 2px black'
+      }}>
         <LinkRouter to="/"
-        style={{
-          marginLeft: '10px',
-          display: 'flex',
-          color: 'inherit',
-          textDecoration: 'none',
-          flexDirection: 'row'
-        }} >
+          style={{
+            marginLeft: '10px',
+            display: 'flex',
+            color: 'inherit',
+            textDecoration: 'none',
+            flexDirection: 'row'
+          }} >
           <School />
           <Title>{AppTexts.AppTitle[language]}</Title>
         </LinkRouter>

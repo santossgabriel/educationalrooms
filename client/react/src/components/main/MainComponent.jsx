@@ -1,61 +1,50 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { Footer, GlobalToast, OpenedQuizLinkList, Toolbar } from 'components'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { HashRouter } from 'react-router-dom'
-
-import { Toolbar, Footer, OpenedQuizLinkList, GlobalToast } from 'components'
-import AppRouter from './AppRouter'
 import Auth from 'scenes/auth/Auth'
-import { AlertModal } from '../main/Modal'
-import { hideAlert, userChanged } from 'store/actions'
 import { authService } from 'services'
+import { hideAlert, userChanged } from 'store/actions'
+import { AlertModal } from '../main/Modal'
+import AppRouter from './AppRouter'
 
+export function MainComponent() {
 
-class MainComponent extends React.Component {
+  const user = useSelector(state => state.appState.user)
+  const modal = useSelector(state => state.modalState)
 
-  componentDidMount() {
-    if (this.props.user) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (user)
       authService.getAccount()
         .then(res => {
           if (!res)
-            this.props.userChanged(null)
+            dispatch(userChanged(null))
         })
-    }
-  }
+  }, [])
 
-  render() {
-    return (
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        {this.props.user ?
-          <HashRouter>
-            <>
-              <Toolbar />
-              <div style={{ flex: 1 }}>
-                <AppRouter />
-              </div>
-              <OpenedQuizLinkList />
-              <GlobalToast />
-              <AlertModal type={this.props.modal.type}
-                text={this.props.modal.message}
-                show={this.props.modal.show}
-                onClose={() => this.props.hideAlert()} />
-              <Footer />
-            </>
-          </HashRouter>
-          :
-          <Auth />
-        }
-      </div>
-    )
-  }
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {user ?
+        <HashRouter>
+          <>
+            <Toolbar />
+            <div style={{ flex: 1 }}>
+              <AppRouter />
+            </div>
+            <OpenedQuizLinkList />
+            <GlobalToast />
+            <AlertModal type={modal.type}
+              text={modal.message}
+              show={modal.show}
+              onClose={() => dispatch(hideAlert())} />
+            <Footer />
+          </>
+        </HashRouter>
+        :
+        <Auth />
+      }
+    </div>
+  )
 }
-
-const mapStateToProps = state => ({
-  user: state.appState.user,
-  modal: state.modalState,
-  language: state.appState.language
-})
-
-const mapDispatchToProps = dispatch => bindActionCreators({ hideAlert, userChanged }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainComponent)
