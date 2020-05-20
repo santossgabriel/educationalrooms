@@ -1,12 +1,11 @@
 import { Footer, GlobalToast, OpenedQuizLinkList, Toolbar } from 'components'
 import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { HashRouter } from 'react-router-dom'
-import Auth from 'scenes/auth/Auth'
 import { authService } from 'services'
 import { hideAlert, userChanged } from 'store/actions'
 import { AlertModal } from '../main/Modal'
-import AppRouter from './AppRouter'
+import { AppRouter, PresentationRouter } from './AppRouter'
 
 export function MainComponent() {
 
@@ -26,10 +25,10 @@ export function MainComponent() {
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {user ?
-        <HashRouter>
+      <HashRouter>
+        <Toolbar />
+        {user ?
           <>
-            <Toolbar />
             <div style={{ flex: 1 }}>
               <AppRouter />
             </div>
@@ -41,10 +40,10 @@ export function MainComponent() {
               onClose={() => dispatch(hideAlert())} />
             <Footer />
           </>
-        </HashRouter>
-        :
-        <Auth />
-      }
+          :
+          <PresentationRouter />
+        }
+      </HashRouter>
     </div>
   )
 }

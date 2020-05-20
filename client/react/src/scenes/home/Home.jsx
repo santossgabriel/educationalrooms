@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import { AppTexts, toDateFormat } from 'helpers'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { LabelList, Bar, BarChart, CartesianGrid, XAxis, Tooltip, YAxis, Legend } from 'recharts'
-
+import { Bar, BarChart, CartesianGrid, LabelList, Legend, Tooltip, XAxis, YAxis } from 'recharts'
 import { scoreService } from 'services'
-import { toDateFormat,AppTexts } from 'helpers'
-import { Title, SubTitle, Container } from './styles'
 import { showToastError } from 'store/sagas/actions'
+import { Container, SubTitle, Title } from './styles'
 
 const styles = {
   label: { fontSize: '12px', fontFamily: 'Arial, Helvetica, sans-serif', color: '#666' },
   tooltip: { fontSize: '12px', fontFamily: 'Arial, Helvetica, sans-serif' }
 }
 
-export default function UserAccount() {
+export default function Home() {
   const [scores, setScores] = useState([])
   const [totalScores, setTotalScores] = useState(0)
   const [totalPoints, setTotalPoints] = useState(0)

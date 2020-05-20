@@ -14,3 +14,4 @@ export { default as Quiz } from './quiz/Quiz'
 
 export { default as UserAccount } from './user/UserAccount'
 export { default as Home } from './home/Home'
+export { PresentationHome } from './home/PresentationHome'

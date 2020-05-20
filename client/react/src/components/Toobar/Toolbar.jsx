@@ -84,101 +84,117 @@ export default function AppToolbar() {
           <Title>{AppTexts.AppTitle[language]}</Title>
         </LinkRouter>
 
-        <AppMenu>
-          <li>
-            <label>{QuestionTexts.Questions[language]}</label>
-            <ul>
-              <LinkMenu to="/my-questions"><li>{QuestionTexts.My[language]}</li></LinkMenu>
-              <LinkMenu to="/shared-questions"><li>{QuestionTexts.Shared[language]}</li></LinkMenu>
-            </ul>
-          </li>
-          <li>
-            <label>{RoomTexts.Rooms[language]}</label>
-            <ul>
-              <LinkMenu to="/my-rooms"><li>{RoomTexts.My[language]}</li></LinkMenu>
-              <LinkMenu to="/open-rooms"><li>{RoomTexts.Open[language]}</li></LinkMenu>
-              <LinkMenu to="/associated-rooms"><li>{RoomTexts.Associate[language]}</li></LinkMenu>
-            </ul>
-          </li>
-          <li>
-            <label>{ScoreTexts.Scores[language]}</label>
-          </li>
-        </AppMenu>
+        {user ?
+          <>
+            <AppMenu>
+              <li>
+                <label>{QuestionTexts.Questions[language]}</label>
+                <ul>
+                  <LinkMenu to="/my-questions"><li>{QuestionTexts.My[language]}</li></LinkMenu>
+                  <LinkMenu to="/shared-questions"><li>{QuestionTexts.Shared[language]}</li></LinkMenu>
+                </ul>
+              </li>
+              <li>
+                <label>{RoomTexts.Rooms[language]}</label>
+                <ul>
+                  <LinkMenu to="/my-rooms"><li>{RoomTexts.My[language]}</li></LinkMenu>
+                  <LinkMenu to="/open-rooms"><li>{RoomTexts.Open[language]}</li></LinkMenu>
+                  <LinkMenu to="/associated-rooms"><li>{RoomTexts.Associate[language]}</li></LinkMenu>
+                </ul>
+              </li>
+              <li>
+                <label>{ScoreTexts.Scores[language]}</label>
+              </li>
+            </AppMenu>
 
-        <MenuIconButton color="inherit" onClick={e => setAnchorNotification(e.currentTarget)}>
-          <Badge color="secondary" badgeContent={notifications.filter(p => !p.read).length}
-            invisible={!notifications.filter(p => !p.read).length}>
-            <Notifications />
-          </Badge>
-        </MenuIconButton>
+            <MenuIconButton color="inherit" onClick={e => setAnchorNotification(e.currentTarget)}>
+              <Badge color="secondary" badgeContent={notifications.filter(p => !p.read).length}
+                invisible={!notifications.filter(p => !p.read).length}>
+                <Notifications />
+              </Badge>
+            </MenuIconButton>
 
-        <MenuIconButton color="inherit">
-          <Help />
-        </MenuIconButton>
+            <MenuIconButton color="inherit">
+              <Help />
+            </MenuIconButton>
 
-        <Button onClick={e => setAnchorMenu(e.currentTarget)}>
-          <UserPicture image={user && user.picture} online={online} />
-        </Button>
+            <Button onClick={e => setAnchorMenu(e.currentTarget)}>
+              <UserPicture image={user && user.picture} online={online} />
+            </Button>
 
-        <Menu
-          style={{ margin: '0', padding: '0' }}
-          id="simple-menu"
-          anchorEl={anchorNotification}
-          open={!!anchorNotification && !!notifications.length}
-          onClose={() => setAnchorNotification(null)}>
-          <NotificationTitle>Notificações</NotificationTitle>
-          <NotificationContainer>
-            {notifications.map(n => (
-              <div key={n.id} style={{ borderTop: '1px solid #666', padding: '10px 10px 0px 10px' }}>
-                <div style={{ fontSize: '10px', textAlign: 'end' }}>
-                  {!n.read && <Lens style={{ color: 'aqua' }} fontSize="inherit" />}
-                  <Close onClick={() => remove(n)} style={{ color: '#B44', cursor: 'pointer' }} fontSize="inherit" />
+            <Menu
+              style={{ margin: '0', padding: '0' }}
+              id="simple-menu"
+              anchorEl={anchorNotification}
+              open={!!anchorNotification && !!notifications.length}
+              onClose={() => setAnchorNotification(null)}>
+              <NotificationTitle>Notificações</NotificationTitle>
+              <NotificationContainer>
+                {notifications.map(n => (
+                  <div key={n.id} style={{ borderTop: '1px solid #666', padding: '10px 10px 0px 10px' }}>
+                    <div style={{ fontSize: '10px', textAlign: 'end' }}>
+                      {!n.read && <Lens style={{ color: 'aqua' }} fontSize="inherit" />}
+                      <Close onClick={() => remove(n)}
+                        style={{ color: '#B44', cursor: 'pointer' }}
+                        fontSize="inherit" />
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: 'bold', paddingRight: '4px' }}>{n.origin}:</span>
+                      {n.description}
+                    </div>
+                    <div style={{ textAlign: 'end' }}>{n.elapsedTime}</div>
+                  </div>
+                ))}
+              </NotificationContainer>
+              <MenuFooter>
+                <Link onClick={() => markRead()} href="javascript:void(0)">Marcar como lidas</Link>
+                <Link onClick={() => removeAll()} href="javascript:void(0)">Remover Todas</Link>
+              </MenuFooter>
+            </Menu>
+
+            <Menu
+              style={{ margin: '0', padding: '0' }}
+              id="simple-menu"
+              anchorEl={anchorMenu}
+              open={!!anchorMenu}
+              onClose={() => setAnchorMenu(null)}>
+              <div style={{ display: 'inline-block' }}>
+                <UserPicture image={user && user.picture} online={online} />
+                <div style={{ marginLeft: '12px' }}>
+                  <UnitedStatesFlag onClick={() => changeLanguage(Languages.EN_US)} />
+                  <BrazilFlag onClick={() => changeLanguage(Languages.PT_BR)} />
                 </div>
-                <div>
-                  <span style={{ fontWeight: 'bold', paddingRight: '4px' }}>{n.origin}:</span>
-                  {n.description}
-                </div>
-                <div style={{ textAlign: 'end' }}>{n.elapsedTime}</div>
               </div>
-            ))}
-          </NotificationContainer>
-          <MenuFooter>
-            <Link onClick={() => markRead()} href="javascript:void(0)">Marcar como lidas</Link>
-            <Link onClick={() => removeAll()} href="javascript:void(0)">Remover Todas</Link>
-          </MenuFooter>
-        </Menu>
-
-        <Menu
-          style={{ margin: '0', padding: '0' }}
-          id="simple-menu"
-          anchorEl={anchorMenu}
-          open={!!anchorMenu}
-          onClose={() => setAnchorMenu(null)}>
-          <div style={{ display: 'inline-block' }}>
-            <UserPicture image={user && user.picture} online={online} />
-            <div style={{ marginLeft: '12px' }}>
-              <UnitedStatesFlag onClick={() => changeLanguage(Languages.EN_US)} />
-              <BrazilFlag onClick={() => changeLanguage(Languages.PT_BR)} />
-            </div>
-          </div>
-          <div style={{ display: 'inline-block', marginLeft: '8px', marginRight: '8px' }}>
-            <UserName>{user && user.name || ''}</UserName>
-            <UserEmail>{user && user.email || ''}</UserEmail>
-          </div>
-          <MenuFooter>
-            <LinkRouter to="/user-account">
+              <div style={{ display: 'inline-block', marginLeft: '8px', marginRight: '8px' }}>
+                <UserName>{user && user.name || ''}</UserName>
+                <UserEmail>{user && user.email || ''}</UserEmail>
+              </div>
+              <MenuFooter>
+                <LinkRouter to="/user-account">
+                  <Button
+                    autoFocus={true}
+                    variant="contained"
+                    onClick={() => setAnchorMenu(null)}
+                    color="primary">{AppTexts.Toolbar.EditAccount[language]}</Button>
+                </LinkRouter>
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  onClick={() => logout()}
+                  variant="contained">{AppTexts.Toolbar.Logout[language]}</Button>
+              </MenuFooter>
+            </Menu>
+          </>
+          :
+          <>
+            <AppMenu></AppMenu>
+            <LinkRouter to="/register">
               <Button
-                autoFocus={true}
-                variant="contained"
-                onClick={() => setAnchorMenu(null)}
-                color="primary">{AppTexts.Toolbar.EditAccount[language]}</Button>
+                style={{ marginLeft: '10px', marginRight: '10px' }}
+                onClick={() => logout()}
+                variant="contained">Sign In</Button>
             </LinkRouter>
-            <Button
-              style={{ marginLeft: '10px' }}
-              onClick={() => logout()}
-              variant="contained">{AppTexts.Toolbar.Logout[language]}</Button>
-          </MenuFooter>
-        </Menu>
+          </>
+        }
       </Toolbar>
     </Container >
   )
