@@ -60,15 +60,13 @@ export function PresentationHome() {
         {
           containers[index] ?
             <CarouselContainer className="fade">
-              <ArrowContainer>
-                <i className="arrow left lg"
-                  onClick={() => prev()}></i>
+              <ArrowContainer onClick={() => prev()}>
+                <i className="arrow left lg"></i>
               </ArrowContainer>
               <PresentationTitle>{containers[index].title}</PresentationTitle>
               <ImageContainer src={containers[index].image} />
-              <ArrowContainer>
-                <i className="arrow right lg"
-                  onClick={() => next()}></i>
+              <ArrowContainer onClick={() => next()}>
+                <i className="arrow right lg"></i>
               </ArrowContainer>
             </CarouselContainer>
             : <div style={{ height: '440px' }}></div>

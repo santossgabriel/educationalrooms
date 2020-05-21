@@ -24,7 +24,7 @@ const generateHashFile = (fileName) => {
   return sha1(new Date()).substring(0, 8) + fileName.toLowerCase()
 }
 
-const dropboxFileNames = async() => {
+const dropboxFileNames = async () => {
   const response = await dbx.filesListFolder({ path: '' })
   let names = []
   for (let i = 0; i < response.entries.length; i++)
@@ -32,19 +32,19 @@ const dropboxFileNames = async() => {
   return names
 }
 
-const existsInDropBox = async(name) => {
+const existsInDropBox = async (name) => {
   const names = await dropboxFileNames()
   return !!names.find(p => p === name)
 }
 
-const removeFile = async(name) => {
+const removeFile = async (name) => {
   if (existsInDropBox(name))
     dbx.filesDelete(name)
 }
 
 export default {
 
-  get: async(req, res) => {
+  get: async (req, res) => {
     const { name } = req.params
 
     const filePath = path.join(__dirname, '../../temp', name)
@@ -69,15 +69,15 @@ export default {
     }
   },
 
-  getAllImageNames: async(req, res) => {
+  getAllImageNames: async (req, res) => {
     res.json(await dropboxFileNames())
   },
 
-  createImagePerfil: async(req, res) => {
+  createImagePerfil: async (req, res) => {
     upload(req, res, async err => {
       if (err) {
         const errSize = err.message === 'File too large'
-        res.status(422).end(errSize ? 'Imagem não pode exceder 500KB.' : err.message)
+        res.status(422).end(errSize ? 'Limit image size exceeded (500KB).' : err.message)
         return
       }
 
@@ -91,7 +91,7 @@ export default {
       try {
         if (user.picture)
           await removeFile(user.picture)
-      } catch (ex) {}
+      } catch (ex) { }
     })
   }
 }

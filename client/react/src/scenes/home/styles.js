@@ -21,12 +21,11 @@ export const Container = styled(Card)`
 `
 
 export const PresentationContainer = styled.div`
-  margin-top: 200px;
   margin: 30px;
   background-color: #ddd;
   padding: 20px 0;
   box-shadow: 5px 5px 20px black;
-  margin-top: 100px;
+  margin-top: 50px;
 `
 
 export const CarouselContainer = styled.div`
@@ -37,7 +36,7 @@ export const CarouselContainer = styled.div`
 export const PresentationTitle = styled.div`
   padding: 20px;
   color: #4b7d47;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
   margin: 0;
   flex: 1;
@@ -53,6 +52,11 @@ export const ImageContainer = styled.img`
 export const ArrowContainer = styled.div`
   margin: 0 10px;
   padding: 0 10px;
+  transition: 200ms;
+  &:hover {
+    background-color: #ccc;
+    cursor: pointer;
+  }
   > i {
     margin-top: 200px !important;
   }

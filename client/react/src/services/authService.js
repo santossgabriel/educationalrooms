@@ -22,10 +22,15 @@ const updateAccount = account => httpService.put('/account', account)
 
 const logout = () => updateToken(null)
 
+const sendGoogleToken = token => httpService.post('/token-google', {
+  googleToken: token
+})
+
 export default {
   getAccount,
   login,
   createAccount,
   updateAccount,
-  logout
+  logout,
+  sendGoogleToken
 }

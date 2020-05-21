@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
 import { Email, Lock } from '@material-ui/icons'
 import { CardContent, Zoom, FormHelperText, CircularProgress } from '@material-ui/core'
 
-import GoogleButton from 'components/main/GoogleButton'
+import { GoogleButton } from 'components'
 import IconTextInput from 'components/main/IconTextInput'
 import { userChanged } from 'store/actions'
 import { authService } from 'services'
@@ -16,6 +16,8 @@ export default function Login({ changeScene }) {
   const [form, setForm] = useState({ email: {}, password: {} })
   const [errorMessage, setErrorMessage] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => startGoogleApi(), [])
 
   const dispatch = useDispatch()
 
@@ -36,11 +38,42 @@ export default function Login({ changeScene }) {
       })
       setTimeout(() => {
         setLoading(false)
+        console.log(user)
         dispatch(userChanged(user))
       }, 500)
     } catch (ex) {
       setLoading(false)
       setErrorMessage(ex.message)
+    }
+  }
+
+  function startGoogleApi() {
+    let auth2
+    window.gapi.load('auth2', () => {
+      auth2 = window.gapi.auth2.init({
+        client_id: '177211292368-ro5aar6klvjkustdlga8616m8cds2iru.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin'
+      })
+      auth2.attachClickHandler(document.getElementById('btnGoogle'), {},
+        googleUser => googleCallback(googleUser),
+        error => console.log(error))
+    })
+  }
+
+  async function googleCallback(googleUser) {
+    const perfil = googleUser.getBasicProfile()
+    const user = {
+      id: perfil.getId(),
+      name: perfil.getName(),
+      email: perfil.getEmail(),
+      image: perfil.getImageUrl(),
+      googleToken: googleUser.getAuthResponse().id_token
+    }
+    try {
+      const result = await authService.sendGoogleToken(user.googleToken)
+      dispatch(userChanged({ token: result.token }))
+    } catch (ex) {
+      console.log(ex)
     }
   }
 
