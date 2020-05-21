@@ -17,7 +17,7 @@ import { questionService } from 'services'
 import { httpService } from 'services'
 import Stars from 'components/question/Stars'
 import CardMain from 'components/main/CardMain'
-import EditQuestionModal from 'components/modais/EditQuestionModal'
+import { EditQuestionModal } from 'components/modais/EditQuestionModal'
 import { AppTexts } from 'helpers/appTexts'
 import { ConfirmModal } from 'components/main/Modal'
 import { showError, showSuccess } from 'store/actions'
@@ -203,7 +203,7 @@ export default function MyQuestion() {
       </ContainerActions>
       <EditQuestionModal
         close={hasChanges => modalQuestionCallback(hasChanges)}
-        question={question}
+        editQuestion={question}
         open={editModalOpen} />
       <ConfirmModal open={!!removeQuestion}
         title={AppTexts.Question.ConfirmExclusionTitle[language]}

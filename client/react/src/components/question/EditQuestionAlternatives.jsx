@@ -52,22 +52,25 @@ export function EditQuestionAlternatives({ currentAlternatives, onAlternativeCha
 
   return (
     <div>
-      <div style={{ textAlign: 'right', fontSize: '8px', fontWeight: 'bold' }}>
+      <div style={{ textAlign: 'right', marginRight: '4px', fontSize: '8px', fontWeight: 'bold' }}>
         <span>{AppTexts.Root.Correct[language]}</span>
         <span style={{ marginLeft: '5px' }}>{AppTexts.Root.Remove[language]}</span>
       </div>
-      {alternatives.map((p, i) => (
-        <div key={i}>
-          <IconTextInput required label={p.classification} defaultValue={p.description}
-            onChange={e => descriptionChanged(p, e.value)} />
-          <Radio color="primary" style={{ marginTop: '15px' }} checked={p.classification === correct}
-            onChange={() => setCorrectAlternative(p.classification)} />
-          <IconButton color="secondary" style={{ marginTop: '15px' }} size="small" aria-label="Delete"
-            onClick={() => removeAlternative(p)}
-            disabled={alternatives.length < 3}>
-            <Delete />
-          </IconButton>
-        </div>))
+      {
+        alternatives.map((p, i) => (
+          <div key={i}>
+            <IconTextInput required label={p.classification} defaultValue={p.description}
+              onChange={e => descriptionChanged(p, e.value)} />
+            <Radio color="primary" style={{ marginTop: '15px', marginLeft: '10px' }}
+              checked={p.classification === correct}
+              onChange={() => setCorrectAlternative(p.classification)} />
+            <IconButton color="secondary" style={{ marginTop: '15px', marginLeft: '10px' }}
+              size="small" aria-label="Delete"
+              onClick={() => removeAlternative(p)}
+              disabled={alternatives.length < 3}>
+              <Delete />
+            </IconButton>
+          </div>))
       }
       <div style={{ textAlign: 'center', marginTop: '10px' }}
         hidden={alternatives.length > 5}>
