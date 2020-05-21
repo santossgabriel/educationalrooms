@@ -7,7 +7,7 @@ module.exports = {
       difficulty: 1,
       shared: false,
       sync: '',
-      area: 'Matemática',
+      area: 'MATEMÁTICA',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -16,7 +16,7 @@ module.exports = {
       difficulty: 1,
       shared: false,
       sync: '',
-      area: 'Matemática',
+      area: 'MATEMÁTICA',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -25,7 +25,7 @@ module.exports = {
       shared: true,
       difficulty: 1,
       sync: '',
-      area: 'Matemática',
+      area: 'MATEMÁTICA',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -34,7 +34,7 @@ module.exports = {
       shared: true,
       difficulty: 1,
       sync: '',
-      area: 'Matemática',
+      area: 'MATEMÁTICA',
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -45,45 +45,45 @@ module.exports = {
       sync: '',
       createdAt: new Date(),
       updatedAt: new Date(),
-      area: 'Matemática'
+      area: 'MATEMÁTICA'
     }, {
       userId: 3, // id = 6
       description: 'teste',
       shared: false,
       difficulty: 1,
-      area: 'Matemática',
+      area: 'MATEMÁTICA',
       sync: '',
       createdAt: new Date(),
       updatedAt: new Date()
     },
     // id = 7
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
     // id = 8
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
     // id = 9
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
     // id = 10
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
     // id = 11
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
     // id = 12
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: '', createdAt: new Date(), updatedAt: new Date() },
     // id = 13
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: 'R', updatedAt: new Date(), createdAt: new Date() },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: 'R', updatedAt: new Date(), createdAt: new Date() },
     // id = 14
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date('1/1/2016'), createdAt: new Date('1/1/2016') },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date('1/1/2016'), createdAt: new Date('1/1/2016') },
     // id = 15
-    { userId: 5, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
+    { userId: 5, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
     // id = 16
-    { userId: 6, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
+    { userId: 6, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
     // id = 17
-    { userId: 6, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
+    { userId: 6, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
     // id = 18
-    { userId: 6, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
+    { userId: 6, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
     // id = 19
-    { userId: 6, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
+    { userId: 6, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() },
     // id = 20
-    { userId: 6, description: 'teste', area: 'Matemática', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() }
+    { userId: 6, description: 'teste', area: 'MATEMÁTICA', shared: false, difficulty: 1, sync: 'U', updatedAt: new Date(), createdAt: new Date() }
     ])
   }
 }
