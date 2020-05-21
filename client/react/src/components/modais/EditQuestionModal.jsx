@@ -1,38 +1,17 @@
-import React from 'react'
 import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Zoom,
-  MobileStepper,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
+  Button, Dialog, DialogActions, DialogContent,
+  DialogTitle, FormControl, InputLabel, MenuItem, Select, Zoom
 } from '@material-ui/core'
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
+import { AppTexts } from 'helpers/appTexts'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import PropTypes from 'prop-types'
-
-import IconTextInput from '../main/IconTextInput'
-import Stars from '../question/Stars'
-import EditQuestionAlternatives from '../question/EditQuestionAlternatives'
 import { questionService } from 'services'
 import { showError, showSuccess } from 'store/actions'
-import { AppTexts } from 'helpers/appTexts'
-
-const styles = {
-  legend: {
-    color: '#666',
-    border: 'solid 1px #ccc',
-    fontSize: '20px',
-    fontFamily: 'sans-serif',
-    textTransform: 'uppercase'
-  }
-}
+import IconTextInput from '../main/IconTextInput'
+import { EditQuestionAlternatives } from '../question/EditQuestionAlternatives'
+import Stars from '../question/Stars'
 
 const tutorialSteps = [
   {
@@ -142,79 +121,83 @@ class EditQuestionModal extends React.Component {
         aria-describedby="alert-dialog-description"
         transitionDuration={300}
         onEnter={this.onEnter}
-        TransitionComponent={Zoom}>
+        TransitionComponent={Zoom}
+        maxWidth={false}>
         <DialogTitle id="alert-dialog-title">
-          {this.props.question.id > 0 ? AppTexts.Root.Edition[this.props.language] : AppTexts.Root.New[this.props.language]}</DialogTitle>
+          {
+            this.props.question.id > 0 ?
+              AppTexts.Root.Edition[this.props.language] :
+              AppTexts.Root.New[this.props.language]
+          }
+        </DialogTitle>
         <DialogContent>
-          <fieldset style={styles.legend}>
+          <fieldset style={{
+            color: '#666',
+            border: 'solid 1px #ccc',
+            fontSize: '20px',
+            fontFamily: 'sans-serif',
+            textTransform: 'uppercase',
+            display: 'flex',
+            flexDirection: 'row'
+          }}>
             <legend>
               {tutorialSteps[activeStep].title[this.props.language]}
             </legend>
-            {activeStep === 0 ?
-              <div>
-                <FormControl>
-                  <InputLabel>{AppTexts.MyQuestionsTable.Area[this.props.language]}</InputLabel>
-                  <Select
-                    style={{ width: '250px' }}
-                    value={this.state.areaSelected}
-                    onChange={(e) => this.setState({ areaSelected: e.target.value })}
-                    displayEmpty>
-                    {this.state.areas.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
-                  </Select>
-                  <div hidden={this.state.areaSelected !== OUTRAS}>
-                    <IconTextInput
-                      value={this.state.areaCustomName}
-                      defaultValue={this.state.areaCustomName}
-                      minlength={2}
-                      required
-                      onChange={(e) => this.setState({ areaCustomName: e.value })}
-                      label={AppTexts.MyQuestionsTable.Area[this.props.language]} />
-                  </div>
-                </FormControl>
-                <Stars style={{ marginTop: '20px' }}
-                  filled={difficulty}
-                  label={AppTexts.MyQuestionsTable.Difficulty[this.props.language]}
-                  onClick={(i) => this.setState({ difficulty: i })} />
-                <IconTextInput
-                  style={{ marginTop: '20px' }}
-                  required
-                  multiline={true}
-                  rowsMax="3"
-                  name="teste"
-                  rows="3"
-                  maxlength={100}
-                  value={this.state.description}
-                  onChange={t => this.setState({ description: t.value, descriptionValid: t.valid })}
-                  label={AppTexts.MyQuestionsTable.Description[this.props.language]} />
-              </div>
-              : <EditQuestionAlternatives
-                alternatives={this.state.alternatives}
+            <div>
+              <FormControl>
+                <InputLabel>{AppTexts.MyQuestionsTable.Area[this.props.language]}</InputLabel>
+                <Select
+                  style={{ width: '250px' }}
+                  value={this.state.areaSelected}
+                  onChange={(e) => this.setState({ areaSelected: e.target.value })}
+                  displayEmpty>
+                  {this.state.areas.map((p, i) => <MenuItem key={i} value={p}>{p}</MenuItem>)}
+                </Select>
+                <div hidden={this.state.areaSelected !== OUTRAS}>
+                  <IconTextInput
+                    value={this.state.areaCustomName}
+                    defaultValue={this.state.areaCustomName}
+                    minlength={2}
+                    required
+                    onChange={(e) => this.setState({ areaCustomName: e.value })}
+                    label={AppTexts.MyQuestionsTable.Area[this.props.language]} />
+                </div>
+              </FormControl>
+              <Stars style={{ marginTop: '20px' }}
+                filled={difficulty}
+                label={AppTexts.MyQuestionsTable.Difficulty[this.props.language]}
+                onClick={(i) => this.setState({ difficulty: i })} />
+              <IconTextInput
+                style={{ marginTop: '20px' }}
+                required
+                multiline={true}
+                rowsMax="3"
+                name="teste"
+                rows="3"
+                maxlength={100}
+                value={this.state.description}
+                onChange={t => this.setState({ description: t.value, descriptionValid: t.valid })}
+                label={AppTexts.MyQuestionsTable.Description[this.props.language]} />
+            </div>
+            <div style={{ width: '380px', marginLeft: '20px' }}>
+              <EditQuestionAlternatives
+                currentAlternatives={this.state.alternatives}
                 onAlternativeChange={(e) => this.alternativeChanged(e)} />
-            }
+            </div>
           </fieldset>
-          <MobileStepper
-            steps={2}
-            position="static"
-            activeStep={activeStep}
-            backButton={
-              <Button size="small" color="primary"
-                onClick={() => this.setState({ activeStep: 0 })}
-                disabled={activeStep === 0}>
-                {<KeyboardArrowLeft />}{AppTexts.Root.Prev[this.props.language]}</Button>
-            }
-            nextButton={
-              <Button size="small" color="primary"
-                onClick={() => this.setState({ activeStep: 1 })}
-                disabled={activeStep === 1 || !this.state.description || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}>
-                {AppTexts.Root.Next[this.props.language]}{<KeyboardArrowRight />}
-              </Button>
-            }
-          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => this.props.close()} variant="contained" autoFocus>{AppTexts.Root.Cancel[this.props.language]}</Button>
-          <Button disabled={!this.state.description || !this.state.alternativesValid || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}
-            onClick={() => this.save()} color="primary" variant="contained" autoFocus>{AppTexts.Root.Save[this.props.language]}</Button>
+          <Button onClick={() => this.props.close()}
+            variant="contained"
+            autoFocus>{AppTexts.Root.Cancel[this.props.language]}</Button>
+          <Button
+            disabled={!this.state.description
+              || !this.state.alternativesValid
+              || (this.state.areaSelected === OUTRAS && !this.state.areaCustomName)}
+            onClick={() => this.save()}
+            color="primary"
+            variant="contained"
+            autoFocus>{AppTexts.Root.Save[this.props.language]}</Button>
         </DialogActions>
       </Dialog>
     )
