@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
-
+import { CardContent, CircularProgress, FormHelperText, Zoom } from '@material-ui/core'
 import { Email, Lock } from '@material-ui/icons'
-import { CardContent, Zoom, FormHelperText, CircularProgress } from '@material-ui/core'
-
 import { GoogleButton } from 'components'
 import IconTextInput from 'components/main/IconTextInput'
-import { userChanged } from 'store/actions'
+import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { authService } from 'services'
-import { ButtonAuth, Or, Container } from './styles'
+import { userChanged } from 'store/actions'
+import { History } from 'utils'
+import { ButtonAuth, Container, Or } from './styles'
 
 export default function Login({ changeScene }) {
 
@@ -38,7 +37,6 @@ export default function Login({ changeScene }) {
       })
       setTimeout(() => {
         setLoading(false)
-        console.log(user)
         dispatch(userChanged(user))
       }, 500)
     } catch (ex) {
@@ -72,6 +70,7 @@ export default function Login({ changeScene }) {
     try {
       const result = await authService.sendGoogleToken(user.googleToken)
       dispatch(userChanged(result))
+      History.push('/')
     } catch (ex) {
       console.log(ex)
     }
