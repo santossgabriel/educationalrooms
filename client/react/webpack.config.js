@@ -58,6 +58,5 @@ module.exports = {
         ws: true
       }
     }
-  },
-  devtool: 'inline-source-map'
+  }
 }

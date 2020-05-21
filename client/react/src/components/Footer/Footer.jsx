@@ -12,7 +12,7 @@ export default function Footer() {
     <>
       <ContainerFooter>
         <span>
-          {`@ ${year} ${AppTexts.AppTitle[language]} - educationalrooms@gmail.com`}
+          {`@ ${year} ${AppTexts.AppTitle[language]} - salaseducacionais@gmail.com`}
         </span>
       </ContainerFooter>
     </>
