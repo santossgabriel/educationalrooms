@@ -1,13 +1,14 @@
-import jwt from 'jsonwebtoken'
 import sha1 from 'sha1'
 
 import config from '../infra/config'
 import sequelize from '../infra/db/models/index'
 import { OAuth2Client } from 'google-auth-library'
+import { Languages, generateToken } from '../helpers/utils'
 
 const auth = new OAuth2Client('177211292368-ro5aar6klvjkustdlga8616m8cds2iru.apps.googleusercontent.com', config.GOOGLE_SECRET)
 
 const { User } = sequelize
+const { EN, BR } = Languages
 
 export default {
 
@@ -35,12 +36,13 @@ export default {
       user.google = true
       userDB = await User.create(user)
     }
+    const token = generateToken({ id: userDB.id, type: userDB.type, name: user.name })
 
-    const token = jwt.sign({
-      id: userDB.id,
-      type: userDB.type,
-      name: user.name
-    }, config.SECRET, { expiresIn: 60 * 60 * 24 * 360 })
-    res.json({ token: token, message: 'Criado com sucesso.' })
+    res.json({
+      token: token, message: {
+        [EN]: 'Token successfully generated',
+        [BR]: 'Token gerado com sucesso.'
+      }
+    })
   }
 }

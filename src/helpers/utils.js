@@ -1,3 +1,6 @@
+import jwt from 'jsonwebtoken'
+import config from '../infra/config'
+
 export const cloneObject = (obj) => {
   if (obj === null || 'object' != typeof obj)
     return obj
@@ -12,4 +15,14 @@ export const cloneObject = (obj) => {
 export const Languages = {
   EN: 'en',
   BR: 'br'
+}
+
+export const generateToken = user => {
+  return jwt.sign({
+    id: user.id,
+    type: user.type,
+    name: user.name
+  },
+    config.SECRET,
+    { expiresIn: 60 * 60 * 24 * 360 })
 }

@@ -1,24 +1,12 @@
-import jwt from 'jsonwebtoken'
 import sha1 from 'sha1'
 
 import { throwValidationError, throwAuthError } from '../helpers/error'
-import config from '../infra/config'
 import sequelize from '../infra/db/models/index'
 import { validateAccount } from '../helpers/validation'
-import { Languages } from '../helpers/utils'
+import { Languages, generateToken } from '../helpers/utils'
 
 const { User } = sequelize
 const { EN, BR } = Languages
-
-const generateToken = user => {
-  return jwt.sign({
-    id: user.id,
-    type: user.type,
-    name: user.name
-  },
-    config.SECRET,
-    { expiresIn: 60 * 60 * 24 * 360 })
-}
 
 export default {
   getUserData: async (req, res) => {
