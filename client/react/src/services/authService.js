@@ -24,7 +24,10 @@ const logout = () => updateToken(null)
 
 const sendGoogleToken = token => httpService.post('/token-google', {
   googleToken: token
-})
+}).then(res => {
+  updateToken(res.token)
+  return getAccount()
+}).catch(err => { throw err })
 
 export default {
   getAccount,

@@ -71,7 +71,7 @@ export default function Login({ changeScene }) {
     }
     try {
       const result = await authService.sendGoogleToken(user.googleToken)
-      dispatch(userChanged({ token: result.token }))
+      dispatch(userChanged(result))
     } catch (ex) {
       console.log(ex)
     }
