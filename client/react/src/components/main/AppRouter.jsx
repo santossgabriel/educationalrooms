@@ -1,4 +1,3 @@
-import { createHashHistory } from 'history'
 import React, { useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import {
@@ -6,7 +5,7 @@ import {
   OpenRooms, PresentationHome, Quiz, SharedQuestion, UserAccount
 } from '../../scenes'
 
-const history = createHashHistory()
+import { History } from 'utils'
 
 export function AppRouter() {
   return (
@@ -29,7 +28,7 @@ export function AppRouter() {
 
 export function PresentationRouter() {
   useEffect(() => {
-    history.push('/')
+    History.push('/')
   }, [])
   return (
     <Switch>

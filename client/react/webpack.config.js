@@ -28,7 +28,8 @@ module.exports = {
       resolvers: path.resolve(__dirname, 'src', 'resolvers'),
       scenes: path.resolve(__dirname, 'src', 'scenes'),
       services: path.resolve(__dirname, 'src', 'services'),
-      store: path.resolve(__dirname, 'src', 'store')
+      store: path.resolve(__dirname, 'src', 'store'),
+      utils: path.resolve(__dirname, 'src', 'utils')
     },
     extensions: ['*', '.js', '.jsx', '.ttf']
   },
