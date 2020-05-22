@@ -8,27 +8,28 @@ import IconTextInput from '../main/IconTextInput'
 import { AppTexts } from '../../helpers/appTexts'
 
 const classifications = ['A', 'B', 'C', 'D', 'E', 'F']
-const defaultAlternatives = [
-  { correct: true, classification: 'A' },
-  { correct: false, classification: 'B' }
-]
 
-export function EditQuestionAlternatives({ currentAlternatives, onAlternativeChange }) {
+export function EditQuestionAlternatives({ defaultAlternatives, onAlternativeChange }) {
 
-  const [alternatives, setAlternatives] = useState((currentAlternatives || []).length
-    ? currentAlternatives : defaultAlternatives)
-  const [correct, setCorrect] = useState(alternatives.filter(p => p.correct)[0].classification)
+  const [alternatives, setAlternatives] = useState([])
+  const [correct, setCorrect] = useState('')
+
   const language = useSelector(state => state.appState.language)
 
   useEffect(() => {
-    onAlternativeChange(alternatives)
+    setAlternatives(defaultAlternatives)
+    setCorrect((defaultAlternatives.find(p => p.correct) || {}).classification || '')
   }, [])
 
   function removeAlternative(alt) {
     const alts = alternatives.filter(p => p.classification !== alt.classification)
-    alts.forEach((v, i) => v.classification = classifications[i])
-    setAlternatives(alts)
+    alts.forEach((v, i) => {
+      v.classification = classifications[i]
+      v.correct = i === 0
+    })
+
     setCorrect(classifications[0])
+    setAlternatives(alts)
     onAlternativeChange(alts)
   }
 
@@ -40,6 +41,7 @@ export function EditQuestionAlternatives({ currentAlternatives, onAlternativeCha
 
   function descriptionChanged(alternative, value) {
     alternative.description = value
+    setAlternatives(alternatives)
     onAlternativeChange(alternatives)
   }
 
@@ -47,6 +49,7 @@ export function EditQuestionAlternatives({ currentAlternatives, onAlternativeCha
     alternatives.forEach(p => p.correct = false)
     alternatives.find(p => p.classification === classification).correct = true
     setCorrect(classification)
+    setAlternatives(alternatives)
     onAlternativeChange(alternatives)
   }
 
@@ -84,5 +87,5 @@ export function EditQuestionAlternatives({ currentAlternatives, onAlternativeCha
 
 EditQuestionAlternatives.propTypes = {
   onAlternativeChange: PropTypes.func,
-  currentAlternatives: PropTypes.array
+  defaultAlternatives: PropTypes.array
 }

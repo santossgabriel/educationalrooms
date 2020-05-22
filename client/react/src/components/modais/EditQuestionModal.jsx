@@ -14,6 +14,11 @@ import Stars from '../question/Stars'
 
 const OUTRAS = 'OUTRA...'
 
+const defaultAlternatives = [
+  { correct: true, classification: 'A' },
+  { correct: false, classification: 'B' }
+]
+
 export function EditQuestionModal({ editQuestion, close, open }) {
 
   const [difficulty, setDifficulty] = useState(1)
@@ -22,7 +27,7 @@ export function EditQuestionModal({ editQuestion, close, open }) {
   const [areaCustomName, setAreaCustomName] = useState('')
   const [description, setDescription] = useState('')
   const [alternativesIsValid, setAlternativesIsValid] = useState(false)
-  const [alternatives, setAlternatives] = useState([])
+  const [alternatives, setAlternatives] = useState(null)
 
   const language = useSelector(state => state.appState.language)
 
@@ -46,10 +51,12 @@ export function EditQuestionModal({ editQuestion, close, open }) {
         areas.push(selected)
     }
 
-    const alts = q.answers ? q.answers.map(p => Object.assign({}, p)) : []
+    let alts = q.answers && q.answers.length > 1 ? q.answers.map(p => Object.assign({}, p)) : defaultAlternatives
+
+    setAlternatives(alts)
 
     setAlternativesIsValid(alts.length > 1 && alts.filter(p => !p.description).length === 0)
-    setAlternatives(alts)
+
     setDifficulty(q.difficulty || 1)
     setAreas(areas)
     setSelectedArea(selected)
@@ -74,6 +81,7 @@ export function EditQuestionModal({ editQuestion, close, open }) {
     const caller = promise =>
       promise.then(res => {
         dispatch(showSuccess(res.message))
+        setAlternatives(null)
         close(true)
       }).catch(err => dispatch(showError(err.message)))
 
@@ -83,7 +91,7 @@ export function EditQuestionModal({ editQuestion, close, open }) {
   return (
     <Dialog
       open={open}
-      onClose={() => close()}
+      onClose={() => { setAlternatives(null); close() }}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       transitionDuration={300}
@@ -143,14 +151,17 @@ export function EditQuestionModal({ editQuestion, close, open }) {
               label={AppTexts.MyQuestionsTable.Description[language]} />
           </div>
           <div style={{ width: '380px', marginLeft: '20px' }}>
-            <EditQuestionAlternatives
-              currentAlternatives={alternatives}
-              onAlternativeChange={e => alternativeChanged(e)} />
+            {
+              alternatives ?
+                <EditQuestionAlternatives defaultAlternatives={alternatives}
+                  onAlternativeChange={e => alternativeChanged(e)} />
+                : null
+            }
           </div>
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => close()}
+        <Button onClick={() => { setAlternatives(null); close() }}
           variant="contained"
           autoFocus>{AppTexts.Root.Cancel[language]}</Button>
         <Button
