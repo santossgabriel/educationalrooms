@@ -13,3 +13,4 @@ client/react/.vscode/settings.json
 client/dist
 deploy
 public
+lib

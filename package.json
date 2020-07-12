@@ -3,7 +3,8 @@
   "name": "educational-rooms",
   "version": "2.0.0",
   "scripts": {
-    "start": "babel-node src/run.js",
+    "start": "babel-node lib/run.js",
+    "build": "babel src --out-dir lib --copy-files",
     "api": "nodemon --watch src --exec babel-node src/run.js",
     "start:dev": "concurrently \"nodemon --watch src --exec babel-node src/run.js\" \"node start-client.js\"",
     "test": "node before.test.js && npm run mockdb && npm run nyc && node cucumber.report.js",
