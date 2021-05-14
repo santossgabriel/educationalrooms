@@ -1,0 +1,65 @@
+{
+  "issues": [
+    {
+      "engineId": "njsscan",
+      "primaryLocation": {
+        "filePath": "src/helpers/validation.js",
+        "message": "Ensure that the regex used to compare with user supplied input is safe from regular expression denial of service.",
+        "textRange": {
+          "endColumn": 71,
+          "endLine": 4,
+          "startColumn": 38,
+          "startLine": 4
+        }
+      },
+      "ruleId": "regex_dos",
+      "severity": "MAJOR",
+      "type": "VULNERABILITY"
+    },
+    {
+      "engineId": "njsscan",
+      "primaryLocation": {
+        "filePath": "src/controllers/account.js",
+        "message": "Untrusted user input in findOne() function can result in NoSQL Injection.",
+        "textRange": {
+          "endColumn": 6,
+          "endLine": 98,
+          "startColumn": 24,
+          "startLine": 85
+        }
+      },
+      "ruleId": "node_nosqli_injection",
+      "severity": "CRITICAL",
+      "type": "VULNERABILITY"
+    },
+    {
+      "engineId": "njsscan",
+      "primaryLocation": {
+        "filePath": "src/controllers/google.js",
+        "message": "A hardcoded username in plain text is identified. Store it properly in an environment variable.",
+        "textRange": {
+          "endColumn": 21,
+          "endLine": 34,
+          "startColumn": 7,
+          "startLine": 34
+        }
+      },
+      "ruleId": "node_username",
+      "secondaryLocations": [
+        {
+          "filePath": "client/react/src/store/actions/index.js",
+          "message": "A hardcoded username in plain text is identified. Store it properly in an environment variable.",
+          "textRange": {
+            "endColumn": 35,
+            "endLine": 4,
+            "startColumn": 7,
+            "startLine": 4
+          }
+        }
+      ],
+      "severity": "CRITICAL",
+      "type": "VULNERABILITY"
+    }
+  ],
+  "njsscan_version": "0.2.4"
+}
