@@ -1,9 +1,10 @@
-require('babel-core/register')
-
 try {
   const dotenv = require('dotenv')
-  dotenv.load()
-} catch (ex) { }
+  dotenv.config()
+} catch (ex) {
+  if (!process.env.NODE_ENV)
+    console.log(ex)
+}
 
 module.exports = {
   NODE_ENV: process.env.NODE_ENV,
@@ -15,14 +16,11 @@ module.exports = {
     url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
     dialect: 'postgres',
-    operatorsAliases: false,
     logging: true
   },
   test: {
     dialect: 'sqlite',
     storage: './quiz-room.db',
-    operatorsAliases: false,
-    operatorsAliases: false,
     logging: false
   },
   prod: {
@@ -30,7 +28,6 @@ module.exports = {
     url: process.env.DATABASE_URL,
     dialectOptions: { ssl: true },
     dialect: 'postgres',
-    operatorsAliases: false,
     logging: true
   }
 }

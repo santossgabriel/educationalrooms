@@ -1,6 +1,6 @@
 import HttpStatus from 'http-status'
 import sha1 from 'sha1'
-import Dropbox from 'dropbox'
+import { Dropbox } from 'dropbox'
 import fs from 'fs'
 import path from 'path'
 import config from '../infra/config'

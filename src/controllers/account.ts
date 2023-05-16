@@ -1,18 +1,22 @@
 import sha1 from 'sha1'
+import { Request, Response } from 'express'
+import { Op } from 'sequelize'
 
 import { throwValidationError, throwAuthError } from '../helpers/error'
 import sequelize from '../infra/db/models/index'
 import { validateAccount } from '../helpers/validation'
 import { Languages, generateToken } from '../helpers/utils'
+import { AppRequest } from '../models/app.model'
+import { AccountModel } from '../models/account.model'
 
 const { User } = sequelize
 const { EN, BR } = Languages
 
 export default {
-  getUserData: async (req, res) => {
-    const user = await User.findOne({ where: { id: req.claims.id } })
+  getUserData: async (req: Request, res: Response) => {
+    const user = await User.findOne({ where: { id: (req as any).claims.id } })
     res.json(user ? {
-      id: req.claims.id,
+      id: (req as any).claims.id,
       name: user.name,
       email: user.email,
       type: user.type,
@@ -21,11 +25,14 @@ export default {
     } : null)
   },
 
-  getToken: async (req, res) => {
-    const { email, password } = req.body
+  getToken: async (req: Request, res: Response) => {
+    const authError = { [EN]: 'Invalid credentials.', [BR]: 'Credenciais inválidas.' }
+    const { email, password } = req.body || {}
+    if (!email || !password)
+      throwAuthError(authError)
     const user = await User.findOne({ where: { email: email } })
     if (!user || !password || user.password !== sha1(password))
-      throwAuthError({ [EN]: 'Invalid credentials.', [BR]: 'Credenciais inválidas.' })
+      throwAuthError(authError)
     const token = generateToken(user)
     res.json({
       token: token,
@@ -36,23 +43,16 @@ export default {
     })
   },
 
-  create: async (req, res) => {
+  create: async (req: Request, res: Response) => {
     let account = req.body
     validateAccount(account)
+
     const userDB = await User.findOne({
-      where: {
-        [sequelize.sequelize.Op.or]: [
-          { email: account.email },
-          { name: account.name }
-        ]
-      }
+      where: { email: account.email }
     })
 
-    if (userDB) {
-      if (userDB.email === account.email)
-        throwValidationError({ [BR]: 'Este email já está em uso.', [EN]: 'This email is already in use.' })
-      throwValidationError({ [BR]: 'Este nome já está em uso.', [EN]: 'This name is already in use.' })
-    }
+    if (userDB)
+      throwValidationError({ [BR]: 'Este email já está em uso.', [EN]: 'This email is already in use.' })
 
     account.password = sha1(account.password)
     account.createdAt = new Date()
@@ -66,10 +66,11 @@ export default {
     })
   },
 
-  update: async (req, res) => {
+  update: async (req: AppRequest, res: Response) => {
+
     const { name, email, changePassword, currentPassword, newPassword } = req.body || {}
 
-    const account = { name, email, updatedAt: new Date() }
+    const account = new AccountModel(undefined, name, email, undefined, new Date())
 
     if (changePassword) {
       if (!currentPassword)
@@ -84,23 +85,16 @@ export default {
 
     let userDB = await User.findOne({
       where: sequelize.sequelize.and(
-        {
-          [sequelize.sequelize.Op.or]: [
-            { email: account.email },
-            { name: account.name }
-          ]
-        },
+        { email: account.email },
         {
           id: {
-            [sequelize.sequelize.Op.ne]: req.claims.id
+            [Op.ne]: (req as any).claims.id
           }
         })
     })
 
     if (userDB) {
-      if (userDB.email === account.email)
-        throwValidationError({ [BR]: 'Este email já está em uso.', [EN]: 'This email is already in use.' })
-      throwValidationError({ [BR]: 'Este nome já está em uso.', [EN]: 'This name is already in use.' })
+      throwValidationError({ [BR]: 'Este email já está em uso.', [EN]: 'This email is already in use.' })
     }
 
 
@@ -111,7 +105,7 @@ export default {
           [BR]: 'A senha atual está incorreta.',
           [EN]: 'Current password is wrong.'
         })
-      account.password = sha1(account.password)
+      account.password = sha1(account.password || '')
     }
 
     await User.update(account, { where: { id: req.claims.id } })

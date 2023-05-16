@@ -1,6 +1,9 @@
 import { expect } from 'chai'
+import supertest from 'supertest'
 
-export const validProps = (json, obj) => {
+import app from '../../../src/server'
+
+export const validProps = (json: string, obj: any) => {
   const jsonObj = JSON.parse(json)
 
   if (!jsonObj || !Object.keys(jsonObj).length) {
@@ -13,3 +16,5 @@ export const validProps = (json, obj) => {
   for (let k in jsonObj)
     expect(obj[k]).to.eql(jsonObj[k])
 }
+
+export const createHttpClient = () => supertest(app)
