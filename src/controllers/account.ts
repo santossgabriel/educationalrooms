@@ -30,12 +30,12 @@ export default {
     const { email, password } = req.body || {}
     if (!email || !password)
       throwAuthError(authError)
-    const user = await User.findOne({ where: { email: email } })
+    const user = await User.findOne({ where: { email } })
     if (!user || !password || user.password !== sha1(password))
       throwAuthError(authError)
     const token = generateToken(user)
     res.json({
-      token: token,
+      token,
       message: {
         [EN]: 'Token successfully generated',
         [BR]: 'Token gerado com sucesso.'
@@ -44,7 +44,7 @@ export default {
   },
 
   create: async (req: Request, res: Response) => {
-    let account = req.body
+    const account = req.body
     validateAccount(account)
 
     const userDB = await User.findOne({
@@ -60,7 +60,7 @@ export default {
     const user = await User.create(account)
     const token = generateToken(user)
     res.json({
-      token: token, message: {
+      token, message: {
         [BR]: 'Criado com sucesso.', [EN]: 'Created successfully'
       }
     })
@@ -112,7 +112,7 @@ export default {
     account.id = req.claims.id
     const token = generateToken(account)
     res.json({
-      token: token,
+      token,
       message: {
         [BR]: 'Atualizado com sucesso.',
         [EN]: 'Updated successfully.'

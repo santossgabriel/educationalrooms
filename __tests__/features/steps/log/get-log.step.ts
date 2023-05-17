@@ -11,16 +11,16 @@ class GetLogSteps {
   private body: any = ''
 
   @given(/Dado que eu esteja logado com email (.*) e senha (.*)/)
-  public givenLoggedUser(user: string, password: string): Promise<any> {
+  givenLoggedUser(user: string, password: string): Promise<any> {
     return httpClient
       .post('/api/token')
-      .send({ email: user, password: password })
+      .send({ email: user, password })
       .expect(200)
       .then((result) => this.token = result.body.token)
   }
 
   @when(/Quando eu buscar os logs/)
-  public getLogs(): Promise<any> {
+  getLogs(): Promise<any> {
     return httpClient
       .get('/api/log')
       .set({ token: this.token })
@@ -28,7 +28,7 @@ class GetLogSteps {
   }
 
   @then(/Então eu devo obter dos logs a mensagem (.*)/)
-  public validarLogs(json: string): void {
+  validarLogs(json: string): void {
     if (Array.isArray(this.body))
       expect('Logs retornados com sucesso.').to.eql(json)
     else {

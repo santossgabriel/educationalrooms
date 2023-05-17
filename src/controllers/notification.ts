@@ -1,6 +1,7 @@
 import db from '../infra/db/models/index'
 import { throwValidationError } from '../helpers/error'
 import { Languages } from '../helpers/utils'
+import { AppRequest, AppResponse } from '../models/app.model'
 
 const { sequelize, Notification } = db
 const { EN, BR } = Languages
@@ -16,7 +17,7 @@ export const NotificationTypes = {
 
 export default {
 
-  getAll: async (req, res) => {
+  getAll: async (req: AppRequest, res: AppResponse) => {
     res.json(await Notification.findAll({
       where: {
         userId: req.claims.id
@@ -25,7 +26,7 @@ export default {
     }))
   },
 
-  remove: async (req, res) => {
+  remove: async (req: AppRequest, res: AppResponse) => {
     const { id } = req.params
     const notification = await Notification.findOne({ where: { id: id } })
 
@@ -45,12 +46,12 @@ export default {
     res.json({ message: { [BR]: 'Removido com sucesso.', [EN]: 'Removed successfully.' } })
   },
 
-  removeAll: async (req, res) => {
+  removeAll: async (req: AppRequest, res: AppResponse) => {
     await Notification.destroy({ where: { userId: req.claims.id } })
     res.json({ message: { [BR]: 'Removidas com sucesso.', [EN]: 'Removed successfully.' } })
   },
 
-  maskAsRead: async (req, res) => {
+  maskAsRead: async (req: AppRequest, res: AppResponse) => {
     await Notification.update({ read: true }, { where: { userId: req.claims.id } })
     res.json({
       message: {

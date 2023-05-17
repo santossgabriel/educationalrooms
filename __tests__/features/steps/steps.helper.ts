@@ -13,7 +13,7 @@ export const validProps = (json: string, obj: any) => {
   if (!obj)
     expect(obj).to.eql(true, 'Obj is invalid.')
 
-  for (let k in jsonObj)
+  for (const k in jsonObj)
     expect(obj[k]).to.eql(jsonObj[k])
 }
 

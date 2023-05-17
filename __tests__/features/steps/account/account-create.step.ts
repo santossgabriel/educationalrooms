@@ -11,7 +11,7 @@ class AccountCreateSteps {
   private account: CreateAccountModel | undefined
 
   @given(/Dado que eu queira me cadastrar/)
-  public wantToCreateAccount() {
+  wantToCreateAccount() {
     this.account = {
       name: `teste${new Date().getMilliseconds()}`,
       email: `teste${new Date().getMilliseconds()}@mail.com`,
@@ -20,18 +20,18 @@ class AccountCreateSteps {
   }
 
   @when(/Quando eu enviar (.*) atribuindo (.*)/)
-  public sendNewAccount(caso: string, prop: string) {
+  sendNewAccount(caso: string, prop: string) {
     if (prop === 'null')
       this.account = undefined
     else {
       const props = JSON.parse(prop)
-      for (let key in props)
+      for (const key in props)
         (this.account as any)[key] = props[key]
     }
   }
 
   @then(/Ao tentar me cadastrar devo obter a mensagem (.*)/)
-  public getMessage(json: string) {
+  getMessage(json: string) {
     httpClient
       .post('/api/account')
       .send(this.account)

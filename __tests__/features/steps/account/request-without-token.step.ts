@@ -10,12 +10,12 @@ class RequestWithoutToken {
   private response: any
 
   @given(/Dado que eu queira acessar um endpoint permissionado/)
-  public initResponse() {
+  initResponse() {
     this.response = {}
   }
 
   @when(/Quando eu não enviar o token/)
-  public sendRequestWithoutToken(): Promise<any> {
+  sendRequestWithoutToken(): Promise<any> {
     return httpClient
       .get('/api/question')
       .then((result) => {
@@ -24,7 +24,7 @@ class RequestWithoutToken {
   }
 
   @then(/Então eu devo obter o retorno (.*)/)
-  public validadeResponse(json: string) {
+  validadeResponse(json: string) {
     validProps(json, this.response)
   }
 

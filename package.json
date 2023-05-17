@@ -10,8 +10,8 @@
     "test": "node before.test.js && npm run mockdb && npm run nyc && node cucumber.report.js",
     "nyc": "nyc cucumber-js __tests__ --format=json >> cucumber.json",
     "cucumber": "node before.test.js && npm run mockdb && cucumber-js __tests__",
-    "cucumber:postgres": "npm run restoredb && cucumber-js --require-module babel-register --require-module babel-polyfill __tests__",
-    "lint": "eslint -c .eslintrc . --ignore-path .eslintignore",
+    "cucumber:postgres": "npm run restoredb && cucumber-js __tests__",
+    "tslint": "tslint -p tsconfig.json \"src/**/*.ts\" \"__tests__/**/*.ts\" -e \"src/run.ts\"",
     "migrate": "sequelize db:migrate --config=./src/infra/config.js --options-path=./src/infra/options.json",
     "migrate:undo": "sequelize db:migrate:undo:all --config=./src/infra/config.js --options-path=./src/infra/options.json",
     "seeders": "sequelize db:seed:all --config=./src/infra/config.js --options-path=./src/infra/options.json",
@@ -40,7 +40,10 @@
     "sqlite3": "^5.1.6",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^5.0.4",
+    "typescript-tslint-plugin": "^1.0.2"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -66,11 +69,7 @@
     "functions": 3,
     "branches": 3,
     "include": [
-      "src/**/*.js"
-    ],
-    "require": [
-      "babel-register",
-      "babel-polyfill"
+      "src/**/*.ts"
     ],
     "exclude": [
       "src/helpers/error.js",

@@ -10,10 +10,10 @@ class ValidateCredentialsSteps {
   private response: any
 
   @given(/Dado que eu esteja cadastrado/)
-  public initResponse() { this.response = {} }
+  initResponse() { this.response = {} }
 
   @when(/Quando eu enviar as credenciais (.*)/)
-  public sendCredentials(credentials: string): Promise<any> {
+  sendCredentials(credentials: string): Promise<any> {
     return httpClient
       .post('/api/token')
       .send(JSON.parse(credentials))
@@ -23,7 +23,7 @@ class ValidateCredentialsSteps {
   }
 
   @then(/Para obter o token eu devo obter a mensagem (.*)/)
-  public validateResponse(json: string) {
+  validateResponse(json: string) {
     validProps(json, this.response)
   }
 

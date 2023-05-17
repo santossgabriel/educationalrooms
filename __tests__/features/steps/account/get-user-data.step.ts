@@ -12,7 +12,7 @@ class GetUserDataSteps {
   private email: string | undefined
 
   @given(/Dado que eu queira obter os dados da minha conta/)
-  public login() {
+  login() {
     return httpClient
       .post('/api/token')
       .send({ email: 'questionmock1@mail.com', password: '123qwe' })
@@ -20,7 +20,7 @@ class GetUserDataSteps {
   }
 
   @when(/Quando eu buscar os dados/)
-  public getUserData() {
+  getUserData() {
     return httpClient
       .get('/api/account')
       .set({ token: this.token })
@@ -30,7 +30,7 @@ class GetUserDataSteps {
   }
 
   @then(/Então eu devo obter a propriedade Email igual a (.*)/)
-  public validateResponse(expectedEmail: string) {
+  validateResponse(expectedEmail: string) {
     expect(expectedEmail).to.eql(this.email)
   }
 }
