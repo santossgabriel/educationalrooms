@@ -12,7 +12,7 @@ class MarkNotificationAsReadSteps {
     private resultMessage = ''
 
     @given(/Dado que eu queira marcar minhas notificações como lidas/)
-    authenticate(): Promise<any> {
+    async authenticate() {
         return httpClient
             .post('/api/token')
             .send({ email: 'test_room@mail.com', password: '123qwe' })
@@ -20,7 +20,7 @@ class MarkNotificationAsReadSteps {
     }
 
     @when(/Quando eu marcar minhas notificações como lidas/)
-    markAsRead(): Promise<any> {
+    async markAsRead() {
         return httpClient
             .put('/api/notification-read')
             .set({ token: this.token })

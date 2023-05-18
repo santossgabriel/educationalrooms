@@ -15,12 +15,10 @@ class RequestWithoutToken {
   }
 
   @when(/Quando eu não enviar o token/)
-  sendRequestWithoutToken(): Promise<any> {
+  async sendRequestWithoutToken() {
     return httpClient
       .get('/api/question')
-      .then((result) => {
-        this.response = result.body.message
-      })
+      .then(res => this.response = res.body.message)
   }
 
   @then(/Então eu devo obter o retorno (.*)/)

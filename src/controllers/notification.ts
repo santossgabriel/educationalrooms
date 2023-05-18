@@ -28,7 +28,7 @@ export default {
 
   remove: async (req: AppRequest, res: AppResponse) => {
     const { id } = req.params
-    const notification = await Notification.findOne({ where: { id: id } })
+    const notification = await Notification.findOne({ where: { id } })
 
     if (!notification)
       throwValidationError({
@@ -42,7 +42,7 @@ export default {
         [EN]: 'Not allowed to remove this notification.'
       })
 
-    await Notification.destroy({ where: { id: id } })
+    await Notification.destroy({ where: { id } })
     res.json({ message: { [BR]: 'Removido com sucesso.', [EN]: 'Removed successfully.' } })
   },
 

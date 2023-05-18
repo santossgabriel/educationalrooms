@@ -12,7 +12,7 @@ class RemoveNotificationSteps {
     private resultMessage = ''
 
     @given(/Dado que eu queira remover a notificação/)
-    authenticate() {
+    async authenticate() {
         return httpClient
             .post('/api/token')
             .send({ email: 'test_room@mail.com', password: '123qwe' })
@@ -20,7 +20,7 @@ class RemoveNotificationSteps {
     }
 
     @when(/Quando eu remover uma notificação de id (\d*)/)
-    removeNotification(id: string) {
+    async removeNotification(id: string) {
         return httpClient
             .delete(`/api/notification/${id}`)
             .set({ token: this.token })

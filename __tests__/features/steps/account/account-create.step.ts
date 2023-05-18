@@ -31,11 +31,11 @@ class AccountCreateSteps {
   }
 
   @then(/Ao tentar me cadastrar devo obter a mensagem (.*)/)
-  getMessage(json: string) {
-    httpClient
+  async getMessage(json: string) {
+    return httpClient
       .post('/api/account')
       .send(this.account)
-      .then((result) => validProps(json, result.body.message))
+      .then(res => validProps(json, res.body.message))
   }
 }
 

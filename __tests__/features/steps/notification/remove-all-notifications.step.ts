@@ -12,7 +12,7 @@ class RemoveAllNotificationsSteps {
     private resultMessage = ''
 
     @given(/Dado remover todas minhas notificações/)
-    authenticate(): Promise<any> {
+    async authenticate() {
         return httpClient
             .post('/api/token')
             .send({ email: 'test_room@mail.com', password: '123qwe' })
@@ -20,7 +20,7 @@ class RemoveAllNotificationsSteps {
     }
 
     @when(/Quando eu remover todas minhas notificações/)
-    removeAllNotifications(): Promise<any> {
+    async removeAllNotifications() {
         return httpClient
             .delete('/api/notification')
             .set({ token: this.token })

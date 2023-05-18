@@ -17,9 +17,7 @@ class ValidateCredentialsSteps {
     return httpClient
       .post('/api/token')
       .send(JSON.parse(credentials))
-      .then((result) => {
-        this.response = result.body.message
-      })
+      .then(res => this.response = res.body.message)
   }
 
   @then(/Para obter o token eu devo obter a mensagem (.*)/)

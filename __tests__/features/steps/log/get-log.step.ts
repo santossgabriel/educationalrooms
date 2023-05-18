@@ -7,24 +7,26 @@ const httpClient = createHttpClient()
 
 @binding()
 class GetLogSteps {
+
   private token = ''
+
   private body: any = ''
 
   @given(/Dado que eu esteja logado com email (.*) e senha (.*)/)
-  givenLoggedUser(user: string, password: string): Promise<any> {
+  async givenLoggedUser(user: string, password: string) {
     return httpClient
       .post('/api/token')
       .send({ email: user, password })
       .expect(200)
-      .then((result) => this.token = result.body.token)
+      .then(res => this.token = res.body.token)
   }
 
   @when(/Quando eu buscar os logs/)
-  getLogs(): Promise<any> {
+  async getLogs() {
     return httpClient
       .get('/api/log')
       .set({ token: this.token })
-      .then((result) => this.body = result.body)
+      .then(res => this.body = res.body)
   }
 
   @then(/Então eu devo obter dos logs a mensagem (.*)/)

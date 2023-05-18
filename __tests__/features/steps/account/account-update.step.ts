@@ -12,7 +12,7 @@ class AccountUpdateSteps {
   private token: string | undefined
 
   @given(/Dado que eu queira atualizar meus dados/)
-  initAccount(): Promise<any> {
+  async initAccount() {
     this.account = {
       name: 'questionmock1',
       email: 'questionmock1@mail.com',
@@ -21,10 +21,7 @@ class AccountUpdateSteps {
     return httpClient
       .post('/api/token')
       .send({ email: 'questionmock1@mail.com', password: '123qwe' })
-      .then(result => {
-
-        this.token = result.body.token
-      })
+      .then(res => this.token = res.body.token)
   }
 
   @when(/Quando eu atualizar meus dados (.*) atribuindo (.*)/)
@@ -39,12 +36,12 @@ class AccountUpdateSteps {
   }
 
   @then(/Então eu devo obter a mensagem (.*) ao tentar atualizar/)
-  validateResponse(json: string): Promise<any> {
+  async validateResponse(json: string) {
     return httpClient
       .put('/api/account')
       .set({ token: this.token })
       .send(this.account)
-      .then(result => validProps(json, result.body.message))
+      .then(res => validProps(json, res.body.message))
   }
 }
 

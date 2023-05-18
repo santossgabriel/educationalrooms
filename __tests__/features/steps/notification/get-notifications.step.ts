@@ -13,7 +13,7 @@ class GetNotificationsSteps {
     private notifications = []
 
     @given(/Dado que eu queira obter minhas notificações/)
-    authenticate(): Promise<any> {
+    async authenticate() {
         return httpClient
             .post('/api/token')
             .send({ email: 'test_room@mail.com', password: '123qwe' })
@@ -21,7 +21,7 @@ class GetNotificationsSteps {
     }
 
     @when(/Quando eu buscar minhas notificações/)
-    getNotifications(): Promise<any> {
+    async getNotifications() {
         return httpClient
             .get('/api/notification')
             .set({ token: this.token })

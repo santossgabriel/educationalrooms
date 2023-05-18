@@ -7,6 +7,8 @@ import db from '../infra/db/models/index'
 import { Languages } from '../helpers/utils'
 import { questionToResult, questionToExportResult } from '../mappers'
 import { validateQuestion } from '../validators'
+import { Op } from 'sequelize'
+import { AppRequest, AppResponse } from '../models/app.model'
 
 export const questionStatus = {
   NEW: 'N',
@@ -19,54 +21,55 @@ const { EN, BR } = Languages
 
 export default {
 
-  getById: async (req, res) => {
+  getById: async (req: AppRequest, res: AppResponse) => {
     const { id } = req.params
-    const question = await Question.findOne({ include: Answer, where: { id: id } })
+    const question = await Question.findOne({ include: Answer, where: { id } })
     res.json(questionToResult(question))
   },
 
-  getMy: async (req, res) => {
+  getMy: async (req: AppRequest, res: AppResponse) => {
     const questions = await Question.findAll({
       include: { model: Answer },
       where: sequelize.and(
         { userId: req.claims.id },
-        { sync: { [sequelize.Op.ne]: questionStatus.REMOVED } },
+        { sync: { [Op.ne]: questionStatus.REMOVED } },
       ),
       order: [[Answer, 'classification']]
     })
     res.json(questionToResult(questions))
   },
 
-  getOthers: async (req, res) => {
-    const addedIds = await Question.findAll({
+  getOthers: async (req: AppRequest, res: AppResponse) => {
+    const addedIds = (await Question.findAll({
       attributes: ['sharedQuestionId'],
       where: sequelize.and(
         { userId: req.claims.id },
-        { sharedQuestionId: { [sequelize.Op.ne]: null } }
+        { sharedQuestionId: { [Op.ne]: null } }
       )
-    }).map(p => p.sharedQuestionId)
+    })).map((p: any) => p.sharedQuestionId)
+
     const questions = await Question.findAll({
       include: Answer,
       where: sequelize.and(
-        { userId: { [sequelize.Op.ne]: req.claims.id } },
-        addedIds.length > 0 ? { id: { [sequelize.Op.notIn]: addedIds } } : null,
+        { userId: { [Op.ne]: req.claims.id } },
+        addedIds.length > 0 ? { id: { [Op.notIn]: addedIds } } : null,
         { shared: true }
       )
     })
     res.json(questionToResult(questions))
   },
 
-  getAreas: async (req, res) => {
+  getAreas: async (req: AppRequest, res: AppResponse) => {
     const areas = await Question.findAll({
       attributes: ['area'],
       group: ['area'],
       order: sequelize.literal('count(1) desc')
     })
-    res.json(areas.map(p => p.area))
+    res.json(areas.map((p: any) => p.area))
   },
 
-  create: async (req, res) => {
-    let question = {}
+  create: async (req: AppRequest, res: AppResponse) => {
+    const question: any = {}
     const transaction = await sequelize.transaction()
     try {
 
@@ -82,11 +85,11 @@ export default {
       question.sync = questionStatus.NEW
       question.createdAt = new Date()
       question.updatedAt = new Date()
-      const questionDB = await Question.create(question, { transaction: transaction })
+      const questionDB = await Question.create(question, { transaction })
       const { answers } = question
-      for (let i = 0; i < answers.length; i++) {
-        answers[i].questionId = questionDB.id
-        await Answer.create(answers[i], { transaction: transaction })
+      for (const answer of answers) {
+        answer.questionId = questionDB.id
+        await Answer.create(answer, { transaction })
       }
       transaction.commit()
       res.json({ message: { [BR]: 'Criado com sucesso.', [EN]: 'Created successfully.' } })
@@ -96,9 +99,9 @@ export default {
     }
   },
 
-  update: async (req, res) => {
-    let question = {}
-    let transaction = await sequelize.transaction()
+  update: async (req: AppRequest, res: AppResponse) => {
+    const question: any = {}
+    const transaction = await sequelize.transaction()
     try {
 
       question.id = req.body.id
@@ -113,7 +116,7 @@ export default {
       if (!questionDb)
         throwForbiddenError(questionErros.NOT_FOUND)
 
-      if (questionDb.userId != req.claims.id)
+      if (questionDb.userId !== req.claims.id)
         throwForbiddenError(questionErros.NOT_ALLOWED_CHANGE)
 
       validateQuestion(question)
@@ -127,30 +130,25 @@ export default {
           required: true,
           where: { questionId: question.id }
         }],
-        where: { startedAt: { [sequelize.Op.ne]: null } }
+        where: { startedAt: { [Op.ne]: null } }
       })
 
       if (roomQuestion)
         throwForbiddenError(questionErros.IN_ROOM_EDIT)
 
-      await Question.update(question, {
-        where: { id: question.id },
-        transaction: transaction
-      })
+      await Question.update(question, { where: { id: question.id }, transaction })
 
-      await Answer.destroy({ where: { questionId: question.id }, transaction: transaction })
+      await Answer.destroy({ where: { questionId: question.id }, transaction })
 
       const { answers } = question
 
-      for (let i = 0; i < answers.length; i++) {
-        let answer = answers[i]
+      for (const answer of answers)
         await Answer.create({
           correct: answer.correct,
           description: answer.description,
           questionId: question.id,
           classification: answer.classification
-        }, { transaction: transaction })
-      }
+        }, { transaction })
       transaction.commit()
       res.json({ message: { [BR]: 'Atualizada com sucesso.', [EN]: 'Updated successfully.' } })
     } catch (ex) {
@@ -160,14 +158,14 @@ export default {
     }
   },
 
-  remove: async (req, res) => {
+  remove: async (req: AppRequest, res: AppResponse) => {
     const { id } = req.params
     const transaction = await sequelize.transaction()
     try {
-      const question = await Question.findOne({ where: { id: id } })
+      const question = await Question.findOne({ where: { id } })
       if (!question)
         throwValidationError(questionErros.NOT_FOUND)
-      if (question.userId != req.claims.id)
+      if (question.userId !== req.claims.id)
         throwForbiddenError(questionErros.NOT_ALLOWED_REMOVE)
 
       const roomQuestion = await RoomQuestion.findOne({ where: { questionId: id } })
@@ -175,8 +173,8 @@ export default {
       if (roomQuestion)
         throwValidationError(questionErros.IN_ROOM_REMOVE)
 
-      await Answer.destroy({ where: { questionId: id }, transaction: transaction })
-      await Question.destroy({ where: { id: id }, transaction: transaction })
+      await Answer.destroy({ where: { questionId: id }, transaction })
+      await Question.destroy({ where: { id }, transaction })
 
       transaction.commit()
       res.json({
@@ -191,14 +189,14 @@ export default {
     }
   },
 
-  share: async (req, res) => {
+  share: async (req: AppRequest, res: AppResponse) => {
     const question = req.body
     const questionDb = await Question.findOne({ where: { id: question.id } })
 
     if (!questionDb)
       throwValidationError(questionErros.NOT_FOUND)
 
-    if (questionDb.userId != req.claims.id)
+    if (questionDb.userId !== req.claims.id)
       throwForbiddenError(questionErros.NOT_ALLOWED_CHANGE)
 
     await Question.update({ shared: question.shared }, {
@@ -213,10 +211,10 @@ export default {
     })
   },
 
-  getShared: async (req, res) => {
+  getShared: async (req: AppRequest, res: AppResponse) => {
     const { id } = req.params
     const questionDb = await Question.findOne({
-      where: { id: id, shared: true },
+      where: { id, shared: true },
       include: [{ model: Answer }]
     })
 
@@ -243,15 +241,15 @@ export default {
 
     const transaction = await sequelize.transaction()
     try {
-      const added = await Question.create(q, { transaction: transaction })
-      for (let i = 0; i < questionDb.Answers.length; i++) {
+      const added = await Question.create(q, { transaction })
+      for (const answer of questionDb.Answers) {
         const a = {
-          description: questionDb.Answers[i].description,
-          correct: questionDb.Answers[i].correct,
+          description: answer.description,
+          correct: answer.correct,
           questionId: added.id,
-          classification: questionDb.Answers[i].classification
+          classification: answer.classification
         }
-        await Answer.create(a, { transaction: transaction })
+        await Answer.create(a, { transaction })
       }
       transaction.commit()
       res.json({
@@ -266,7 +264,7 @@ export default {
     }
   },
 
-  exportMyQuestions: async (req, res) => {
+  exportMyQuestions: async (req: AppRequest, res: AppResponse) => {
     const questions = await Question.findAll({ include: Answer, where: { userId: req.claims.id } })
     res.set('Content-Disposition', 'attachment; filename=questions.json')
     res.end(JSON.stringify(questionToExportResult(questions)))
