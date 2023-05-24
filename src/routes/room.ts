@@ -1,7 +1,8 @@
+import { Application } from 'express'
 import room from '../controllers/room'
 import { asyncErrorHandler } from '../helpers/error'
 
-export default (app) => {
+export default (app: Application) => {
   app.get('/api/room/:id', asyncErrorHandler(room.get))
   app.get('/api/room-my', asyncErrorHandler(room.getMy))
   app.get('/api/room-associated', asyncErrorHandler(room.getMyAssociated))

@@ -1,3 +1,5 @@
+import { Op } from 'sequelize'
+
 import db from '../infra/db/models/index'
 import { throwForbiddenError, throwValidationError } from '../helpers/error'
 import { questionStatus } from './question'
@@ -5,6 +7,7 @@ import { sendNotifications, updateOnlineRooms } from '../socket'
 
 import { NotificationTypes } from './notification'
 import { Languages } from '../helpers/utils'
+import { AppRequest, AppResponse } from '../models/app.model'
 
 const { BR, EN } = Languages
 
@@ -26,7 +29,7 @@ export const roomStatus = {
   ENDED: 'ENDED',
 }
 
-const toMy = (p) => {
+const toMy = (p: any) => {
   if (!p)
     return null
   return {
@@ -39,30 +42,29 @@ const toMy = (p) => {
     startedAt: p.startedAt,
     status: getStatusRoom(p),
     userId: p.userId,
-    users: p.RoomUsers.map(x => ({
+    users: p.RoomUsers.map((x: any) => ({
       roomUserId: x.id,
       userId: x.userId,
       accepted: x.accepted,
       name: x.User.name,
       email: x.User.email
     })),
-    questions: p.RoomQuestions.map(x => ({
+    questions: p.RoomQuestions.map((x: any) => ({
       id: x.Question.id,
       description: x.Question.description,
       points: x.points,
       shared: x.Question.shared,
       area: x.Question.area,
       difficulty: x.Question.difficulty,
-      sync: x.Question.sync,
       createdAt: x.Question.createdAt,
       updatedAt: x.Question.updatedAt,
       order: x.order
-    })).filter(p => p.sync !== questionStatus.REMOVED)
+    }))
   }
 }
 
-const toMyAssoc = (rooms) => {
-  return rooms.map(p => ({
+const toMyAssoc = (rooms: any) => {
+  return rooms.map((p: any) => ({
     id: p.id,
     name: p.name,
     time: p.time,
@@ -75,7 +77,7 @@ const toMyAssoc = (rooms) => {
   }))
 }
 
-const getStatusRoom = (room) => {
+const getStatusRoom = (room: any) => {
   if (room.endedAt)
     return roomStatus.ENDED
   if (room.startedAt)
@@ -85,7 +87,7 @@ const getStatusRoom = (room) => {
   return roomStatus.CLOSED
 }
 
-const toOpened = (room, userId) => {
+const toOpened = (room: any, userId: any) => {
   return {
     id: room.id,
     name: room.name,
@@ -95,13 +97,13 @@ const toOpened = (room, userId) => {
     users: room.RoomUsers.length,
     questions: room.RoomQuestions.length,
     owner: room.User.name,
-    associate: room.RoomUsers.filter(p => p.userId === userId).length > 0
+    associate: room.RoomUsers.filter((p: any) => p.userId === userId).length > 0
   }
 }
 
 export default {
 
-  get: async (req, res) => {
+  get: async (req: AppRequest, res: AppResponse) => {
     const room = await Room.findOne({
       where: { userId: req.claims.id, id: req.params.id },
       include: [
@@ -112,8 +114,8 @@ export default {
     res.json(toMy(room))
   },
 
-  getQuiz: async (req, res) => {
-    let room = await Room.findOne({
+  getQuiz: async (req: AppRequest, res: AppResponse) => {
+    const room = await Room.findOne({
       where: {
         id: req.params.id,
         startedAt: { [sequelize.Op.ne]: null }
@@ -140,7 +142,7 @@ export default {
         where: { roomId: req.params.id, userId: req.claims.id }
       })
       if (answers.length > 0)
-        score = answers.map(p => p.score).reduce((x, y) => x + y)
+        score = answers.map((p: any) => p.score).reduce((x: any, y: any) => x + y)
     }
 
     res.json({
@@ -151,11 +153,11 @@ export default {
       openedAt: room.openedAt,
       startedAt: room.startedAt,
       time: room.time,
-      score: score
+      score
     })
   },
 
-  getMy: async (req, res) => {
+  getMy: async (req: AppRequest, res: AppResponse) => {
     const rooms = await Room.findAll({
       where: { userId: req.claims.id },
       include: [
@@ -169,10 +171,10 @@ export default {
         ['createdAt', 'desc']
       ]
     })
-    res.json(rooms.map(p => toMy(p)))
+    res.json(rooms.map((p: any) => toMy(p)))
   },
 
-  getMyAssociated: async (req, res) => {
+  getMyAssociated: async (req: AppRequest, res: AppResponse) => {
     const rooms = await Room.findAll({
       include: [{
         model: RoomUser,
@@ -188,7 +190,7 @@ export default {
     res.json(toMyAssoc(rooms))
   },
 
-  getOpened: async (req, res) => {
+  getOpened: async (req: AppRequest, res: AppResponse) => {
     const rooms = await Room.findAll({
       include: [
         { model: RoomUser },
@@ -197,18 +199,18 @@ export default {
       ],
       order: [['openedAt', 'desc']],
       where: {
-        openedAt: { [sequelize.Op.ne]: null },
+        openedAt: { [Op.ne]: null },
         startedAt: null
       }
     })
-    res.json(rooms.map(p => toOpened(p, req.claims.id)))
+    res.json(rooms.map((p: any) => toOpened(p, req.claims.id)))
   },
 
-  remove: async (req, res) => {
+  remove: async (req: AppRequest, res: AppResponse) => {
     const { id } = req.params
     const room = await Room.findOne({
       include: [{ model: RoomUser }],
-      where: { id: id }
+      where: { id }
     })
 
     if (!room)
@@ -217,7 +219,7 @@ export default {
         [BR]: 'A sala não existe.'
       })
 
-    if (room.userId != req.claims.id)
+    if (room.userId !== req.claims.id)
       throwForbiddenError({
         [EN]: 'Without permission to remove this room.',
         [BR]: 'Sem permissão para remover esta sala.'
@@ -231,7 +233,7 @@ export default {
 
     await RoomUser.destroy({ where: { roomId: id } })
     await RoomQuestion.destroy({ where: { roomId: id } })
-    await Room.destroy({ where: { id: id } })
+    await Room.destroy({ where: { id } })
     res.json({
       message: {
         [EN]: 'Room removed successfully.',
@@ -239,7 +241,7 @@ export default {
       }
     })
 
-    const users = room.RoomUsers.map(p => p.userId)
+    const users = room.RoomUsers.map((p: any) => p.userId)
     const notification = {
       type: NotificationTypes.ROOM_REMOVED,
       origin: room.name
@@ -247,11 +249,11 @@ export default {
     sendNotifications(users, notification)
   },
 
-  associate: async (req, res) => {
+  associate: async (req: AppRequest, res: AppResponse) => {
     const { id, associate } = req.body
     const room = await Room.findOne({
       include: [{ model: RoomUser }],
-      where: { id: id }
+      where: { id }
     })
 
     if (!room)
@@ -260,9 +262,9 @@ export default {
         [BR]: 'A sala não existe.'
       })
 
-    const associated = room.RoomUsers.filter(p => p.userId === req.claims.id).length > 0
+    const associated = room.RoomUsers.filter((p: any) => p.userId === req.claims.id).length > 0
 
-    let notification = { origin: `${id}-${req.claims.name}` }
+    const notification = { origin: `${id}-${req.claims.name}` } as any
 
     if (associate) {
 
@@ -309,7 +311,7 @@ export default {
     }
   },
 
-  save: async (req, res) => {
+  save: async (req: AppRequest, res: AppResponse) => {
     const { questions, id, name, time } = req.body
 
     if (!name)
@@ -324,48 +326,48 @@ export default {
         [BR]: 'Informe o tempo de cada questão.'
       })
 
-    if (!Array.isArray(questions) || questions.length == 0)
+    if (!Array.isArray(questions) || questions.length === 0)
       throwValidationError({ [EN]: 'Provide the questions', [BR]: 'Informe as questões.' })
 
-    const questionIds = questions.map(p => {
+    const questionIds = questions.map((p: any) => {
       p.points = Math.floor(p.points / 10) * 10
       return p.id
     })
 
-    if (questions.filter(p => !p.points).length > 0)
+    if (questions.filter((p: any) => !p.points).length > 0)
       throwValidationError({
         [EN]: 'There are questions without score.',
         [BR]: 'Há questões sem pontuação.'
       })
 
-    if (questions.filter(p => p.points < 10 || p.points > 100).length > 0)
+    if (questions.filter((p: any) => p.points < 10 || p.points > 100).length > 0)
       throwValidationError({
         [EN]: 'There are questions with scores out of range 10-100.',
         [BR]: 'Há questões com pontuação fora do intervalo 10-100.'
       })
 
     const questionsDb = await Question.findAll({ where: { id: questionIds } })
-    const questionsIdsDb = questionsDb.map(p => p.id)
-    if (questionIds.filter(p => questionsIdsDb.indexOf(p) === -1).length > 0)
+    const questionsIdsDb = questionsDb.map((p: any) => p.id)
+    if (questionIds.filter((p: any) => questionsIdsDb.indexOf(p) === -1).length > 0)
       throwValidationError({
         [EN]: 'There are informed questions that do not exist.',
         [BR]: 'Há questões informadas que não existem.'
       })
 
-    if (questionsDb.filter(p => p.userId !== req.claims.id).length > 0)
+    if (questionsDb.filter((p: any) => p.userId !== req.claims.id).length > 0)
       throwValidationError({
         [EN]: 'There are informed questions that do not belong to the user.',
         [BR]: 'Há questões informadas que não pertencem ao usuário.'
       })
 
     let room = null
-    let msgResult = ''
+    let msgResult: any
 
     if (id > 0) {
 
       room = await Room.findOne({
         include: [{ model: RoomQuestion }],
-        where: { id: id }
+        where: { id }
       })
 
       if (!room)
@@ -381,16 +383,16 @@ export default {
         })
 
       await Room.update(
-        { name: name, time: time },
-        { where: { id: id } }
+        { name, time },
+        { where: { id } }
       )
 
       msgResult = { [EN]: 'Room updated successfully.', [BR]: 'Sala atualizada com sucesso.' }
 
     } else {
       room = {
-        name: name,
-        time: time,
+        name,
+        time,
         userId: req.claims.id,
         createdAt: new Date()
       }
@@ -400,8 +402,8 @@ export default {
 
     await RoomQuestion.destroy({ where: { roomId: id } })
 
-    for (let i = 0; i < questionIds.length; i++) {
-      const q = questions.filter(p => p.id === questionIds[i]).shift()
+    for (const questionId of questionIds) {
+      const q = questions.filter((p: any) => p.id === questionId).shift()
       await RoomQuestion.create({
         roomId: id || room.id,
         questionId: q.id,
@@ -413,9 +415,9 @@ export default {
     res.json({ message: msgResult })
   },
 
-  changeStatus: async (req, res) => {
+  changeStatus: async (req: AppRequest, res: AppResponse) => {
     const { status, id } = req.body
-    let room = {}
+    const room = {} as any
     let msg
     switch (status) {
       case roomStatus.CLOSED:
@@ -442,7 +444,7 @@ export default {
 
     const roomDb = await Room.findOne({
       include: [{ model: RoomQuestion }, { model: RoomUser }],
-      where: { id: id }
+      where: { id }
     })
 
     if (!roomDb)
@@ -463,20 +465,20 @@ export default {
         [BR]: 'A sala já foi finalizada.'
       })
 
-    await Room.update(room, { where: { id: id } })
-    res.json({ message: msg })
+    await Room.update(room, { where: { id } })
+
 
     if (status === roomStatus.STARTED || status === roomStatus.CLOSED) {
       const started = status === roomStatus.STARTED
       if (started) {
         await OnlineRoom.create({
-          id: id,
+          id,
           currentOrder: 1,
           changedAt: new Date()
         })
         await RoomAnswer.destroy({ where: { roomId: id } })
       } else {
-        await OnlineRoom.destroy({ where: { id: id } })
+        await OnlineRoom.destroy({ where: { id } })
         await RoomAnswer.destroy({ where: { roomId: id } })
       }
 
@@ -487,8 +489,10 @@ export default {
         origin: `${id} ${roomDb.name}`
       }
 
-      const users = roomDb.RoomUsers.map(p => p.userId)
+      const users = roomDb.RoomUsers.map((p: any) => p.userId)
       sendNotifications(users, notif)
     }
+
+    res.json({ message: msg })
   }
 }
