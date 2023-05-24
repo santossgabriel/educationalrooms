@@ -1,5 +1,7 @@
 import socketIo from 'socket.io'
 import jwt from 'jsonwebtoken'
+import { Op } from 'sequelize'
+
 import config from '../infra/config'
 import db from '../infra/db/models/index'
 import { cloneObject } from '../helpers/utils'
@@ -54,12 +56,12 @@ let onlineRooms = []
 let currentQuestions = []
 let correctAnswers = []
 
-export const updateOnlineRooms = async() => {
+export const updateOnlineRooms = async () => {
   const rooms = await Room.findAll({
     attributes: ['id', 'name', 'time'],
     where: {
       startedAt: {
-        [sequelize.Op.ne]: null
+        [Op.ne]: null
       },
       endedAt: null
     },
@@ -110,9 +112,10 @@ const updateCorrectAnswers = () => {
   })
 }
 
-const updateCurrentQuestions = async() => {
+const updateCurrentQuestions = async () => {
   currentQuestions = []
-  await OnlineRoom.findAll().map(p => {
+  const resultDb = await OnlineRoom.findAll()
+  resultDb.map(p => {
     const onlineRoom = onlineRooms.filter(x => x.id == p.id).shift()
     if (onlineRoom) {
       let question = onlineRoom.questions.filter(x => x.order == p.currentOrder).shift()
@@ -126,7 +129,7 @@ const updateCurrentQuestions = async() => {
   })
 }
 
-const runTimer = async() => {
+const runTimer = async () => {
   onlineRooms.forEach(async r => {
     const q = currentQuestions.filter(p => p.roomId == r.id).shift()
     if (!q)
@@ -158,7 +161,7 @@ const runTimer = async() => {
   })
 }
 
-const sendFeedback = async(roomId, questionId, users) => {
+const sendFeedback = async (roomId, questionId, users) => {
   const answers = await RoomAnswer.findAll({ where: { roomId: roomId, questionId: questionId } })
   users.forEach(u => {
     const userAnswer = answers.filter(p => p.userId == u).shift()
@@ -186,7 +189,7 @@ const notifyChangedQuestion = (question, users) => {
   })
 }
 
-const notifyFinish = async(roomId, users) => {
+const notifyFinish = async (roomId, users) => {
   const usersAnswers = await RoomAnswer.findAll({
     where: { roomId: roomId }
   })
@@ -215,7 +218,7 @@ export const sendNotifications = (users, notification) => {
   })
 }
 
-export const startJob = async() => {
+export const startJob = async () => {
   if (process.env.NODE_ENV !== 'test') {
     await updateOnlineRooms()
     await updateCurrentQuestions()

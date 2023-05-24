@@ -1,3 +1,5 @@
-const rimraf = require('rimraf')
-rimraf('quiz-room.db', err => { if (err) throw err })
-rimraf('cucumber.json', err => { if (err) throw err })
+const fs = require('fs')
+if (fs.existsSync('quiz-room.db'))
+    fs.unlinkSync('quiz-room.db', err => { if (err) throw err })
+if (fs.existsSync('cucumber.json'))
+    fs.unlinkSync('cucumber.json', err => { if (err) throw err })
