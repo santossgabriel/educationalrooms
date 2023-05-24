@@ -1,4 +1,6 @@
 import db from '../infra/db/models/index'
+import { Op } from 'sequelize'
+import { AppRequest, AppResponse } from '../models/app.model'
 
 const {
   Room,
@@ -10,40 +12,40 @@ const {
   sequelize
 } = db
 
-const toMyRooms = room => {
-  let result = {
+const toMyRooms = (room: any) => {
+  const result = {
     id: room.id,
     name: room.name,
-    questions: room.RoomQuestions.map(p => ({
+    questions: room.RoomQuestions.map((p: any) => ({
       id: p.Question.id,
       order: p.order,
       points: p.points,
       description: p.Question.description,
       score: null
     }))
-  }
+  } as any
 
-  room.RoomAnswers.forEach(p => {
-    const q = result.questions.filter(x => x.id == p.questionId).shift()
+  room.RoomAnswers.forEach((p: any) => {
+    const q = result.questions.filter((x: any) => x.id === p.questionId).shift()
     if (q)
       q.score = p.score
   })
 
-  result.users = room.RoomUsers.map(p => {
-    let user = {
+  result.users = room.RoomUsers.map((p: any) => {
+    const user = {
       score: 0,
       id: p.User.id,
       name: p.User.name,
       picture: p.User.picture
-    }
+    } as any
 
-    const userAnswers = room.RoomAnswers.filter(x => x.userId == user.id).map(x => x.score)
+    const userAnswers = room.RoomAnswers.filter((x: any) => x.userId === user.id).map((x: any) => x.score)
     if (userAnswers.length)
-      user.score = userAnswers.reduce((x, y) => x + y)
+      user.score = userAnswers.reduce((x: any, y: any) => x + y)
 
-    user.questions = room.RoomAnswers.filter(x => x.userId == user.id).map(x => {
+    user.questions = room.RoomAnswers.filter((x: any) => x.userId === user.id).map((x: any) => {
       let question = {}
-      const q = result.questions.filter(y => y.id == x.questionId).shift()
+      const q = result.questions.filter((y: any) => y.id === x.questionId).shift()
       if (q)
         question = {
           id: q.id,
@@ -63,10 +65,10 @@ const toMyRooms = room => {
 
 export default {
 
-  getScores: async (req, res) => {
+  getScores: async (req: AppRequest, res: AppResponse) => {
 
     const myRoomsScores = (await Room.findAll({
-      where: { endedAt: { [sequelize.Op.ne]: null } },
+      where: { endedAt: { [Op.ne]: null } },
       attributes: ['id', 'name'],
       include: [
         {
@@ -92,14 +94,14 @@ export default {
           required: false
         }
       ]
-    })).map(p => toMyRooms(p))
+    })).map((p: any) => toMyRooms(p))
 
-    let roomsScores = []
-    myRoomsScores.forEach(p => {
-      let q = { roomId: p.id, score: 0, points: 0 }
+    const roomsScores = [] as any
+    myRoomsScores.forEach((p: any) => {
+      const q = { roomId: p.id, score: 0, points: 0 }
       if (p.questions.length > 0) {
-        q.score = p.questions.map(x => x.score).reduce((x, y) => x + y)
-        q.points = p.questions.map(x => x.points).reduce((x, y) => x + y)
+        q.score = p.questions.map((x: any) => x.score).reduce((x: any, y: any) => x + y)
+        q.points = p.questions.map((x: any) => x.points).reduce((x: any, y: any) => x + y)
       }
       roomsScores.push(q)
     })
@@ -111,13 +113,13 @@ export default {
     })
 
     res.json({
-      roomsScores: roomsScores,
-      myRoomsScores: myRoomsScores,
-      allUserScores: allUserScores
+      roomsScores,
+      myRoomsScores,
+      allUserScores
     })
   },
 
-  getScoresGraph: async (req, res) => {
+  getScoresGraph: async (req: AppRequest, res: AppResponse) => {
 
     const userScores = await RoomAnswer.findAll({
       attributes: ['roomId', [sequelize.fn('sum', sequelize.col('score')), 'score']],
@@ -127,7 +129,7 @@ export default {
 
     const rooms = await Room.findAll({
       attributes: ['id', 'endedAt'],
-      where: { endedAt: { [sequelize.Op.ne]: null } },
+      where: { endedAt: { [Op.ne]: null } },
       include: [{
         model: RoomAnswer,
         attributes: [],
@@ -141,10 +143,10 @@ export default {
       group: ['roomId']
     })
 
-    const scores = []
-    rooms.forEach(p => {
-      const us = userScores.find(x => x.roomId == p.id)
-      const points = roomPoints.find(x => x.roomId == p.id)
+    const scores = [] as any
+    rooms.forEach((p: any) => {
+      const us = userScores.find((x: any) => x.roomId === p.id)
+      const points = roomPoints.find((x: any) => x.roomId === p.id)
       if (us)
         scores.push({
           roomId: p.id,
